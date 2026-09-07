@@ -25,6 +25,11 @@ A **Responses** tab is created automatically the first time the script runs.
 
 ## 2. The script
 
+Emails are sent by whichever Google account deploys the script, so do this
+part signed in as the account you want guests to hear from
+(ashley.plus.charles@gmail.com). Transferring ownership of the sheet to
+that account first keeps everything in one place.
+
 1. In the sheet, open **Extensions → Apps Script**.
 2. Delete the placeholder and paste the contents of `Code.gs`.
 3. Set `SITE_URL` at the top to your domain, with a trailing slash. The
@@ -49,8 +54,9 @@ codes are never changed. To disable a link, delete its code.
 
 ## 4. Sending the invitations
 
-Emails go out from the Google account that owns the script, under the sender
-name set in `FROM_NAME`.
+Emails go out from the Google account that deployed the script, under the
+sender name set in `FROM_NAME`. Replies from guests land in that account's
+inbox unless `REPLY_TO` is set.
 
 1. **Invitations → Send a test invitation to me** emails you the invitation
    for the first row, so you can see it before anyone else does.
