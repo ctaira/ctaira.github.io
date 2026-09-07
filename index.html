@@ -440,6 +440,25 @@ hr.rule{border:0;border-top:1px solid rgba(36,39,34,.2);margin:2.5em 0}
 .seats-box .val{font-family:var(--serif);font-size:clamp(26px,5vw,32px);line-height:1.1;margin-top:.15em}
 .seats-box .num{font-family:var(--serif);font-size:clamp(52px,12vw,72px);line-height:.9;color:var(--palm)}
 
+/* FAQ */
+.faq{list-style:none;margin:2.5em 0 0;padding:0;border-top:1px solid rgba(255,255,255,.18);max-width:640px}
+.faq details{border-bottom:1px solid rgba(255,255,255,.18)}
+.faq summary{
+  list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:baseline;gap:1.5em;
+  padding:1.05em 0;font-family:var(--serif);font-size:clamp(21px,4.6vw,26px);line-height:1.2;
+}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{
+  content:"+";flex:0 0 auto;font-family:var(--mono);font-size:18px;color:var(--gold);
+  transition:transform .25s;transform-origin:50% 50%;
+}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq summary:focus-visible{outline:2px solid var(--gold);outline-offset:4px;border-radius:4px}
+.faq .answer{padding:0 0 1.4em;max-width:56ch;font-size:16px;color:rgba(238,240,232,.85)}
+.faq .answer p{margin:0 0 .8em}
+.faq .answer p:last-child{margin:0}
+.faq .answer a{color:#EEF0E8;text-decoration-color:var(--gold);text-underline-offset:3px}
+
 /* RSVP */
 .rsvp form{max-width:520px}
 .field{margin-bottom:1.5em}
@@ -828,11 +847,93 @@ hr.rule{border:0;border-top:1px solid rgba(36,39,34,.2);margin:2.5em 0}
 </section>
 
 <!-- =======================================================================
-     6 · RSVP
+     6 · FAQ
+     ======================================================================= -->
+<section class="section is-palm" id="faq">
+  <div class="inner">
+    <span class="eyebrow">06 — Questions</span>
+    <h2>Things you might be wondering</h2>
+    <p class="lede">The short answers. If yours isn't here, write to us.</p>
+
+    <div class="faq">
+      <details>
+        <summary>When should I fly in?</summary>
+        <div class="answer">
+          <p>There's no nonstop from Los Angeles, so you'll connect once and lose a day to the date line. Aim to land at Denpasar (DPS) by Friday afternoon so you're at Rock Bar for sunset. If you can spare it, arriving Thursday gives you a day to find your feet.</p>
+          <p>AYANA is 25 minutes from the airport and we'll have cars waiting for anyone who tells us their flight.</p>
+        </div>
+      </details>
+      <details>
+        <summary>Do I need a visa?</summary>
+        <div class="answer">
+          <p>US passport holders can get a 30-day visa on arrival, either at the airport or online beforehand, and there's a small Bali tourist levy paid on entry. Your passport needs at least six months' validity past your arrival date and a blank page.</p>
+          <p>Rules change, so we'll send a reminder with the current requirements in the spring.</p>
+        </div>
+      </details>
+      <details>
+        <summary>Where do I stay?</summary>
+        <div class="answer">
+          <p>On the estate. Rooms are held for our guests across AYANA Resort, AYANA Villas and RIMBA, which share the same grounds, pools and shuttle. Once you've replied we'll send booking details and the group rate.</p>
+        </div>
+      </details>
+      <details>
+        <summary>Do I need a car?</summary>
+        <div class="answer">
+          <p>No. Everything happens on the estate, and the resort shuttle runs between the three hotels around the clock. The only drive you'll make is from the airport, and we're sorting that.</p>
+        </div>
+      </details>
+      <details>
+        <summary>Can I bring a plus-one, or the kids?</summary>
+        <div class="answer">
+          <p>Your invitation says exactly how many seats it admits, and the RSVP form only lets you reply for that many. The weekend is adults only, which we say more about <a href="#adults">just above</a>.</p>
+        </div>
+      </details>
+      <details>
+        <summary>What's the weather like in late August?</summary>
+        <div class="answer">
+          <p>Dry season, and the best of it. Around 29°C in the afternoon, 24°C at night, humid, and very little chance of rain. The sun sets a little after six, which is why the ceremony is at half past four.</p>
+        </div>
+      </details>
+      <details>
+        <summary>What should I wear?</summary>
+        <div class="answer">
+          <p>Tropical formal. Linen, color, shoes that can handle stone and rock. The <a href="#dress">dress code section</a> has swatches and the practical bits.</p>
+        </div>
+      </details>
+      <details>
+        <summary>Is there a registry?</summary>
+        <div class="answer">
+          <p>Getting yourself to Bali is the gift, and we mean that. If you'd still like to give something, we'll add details here closer to the date.</p>
+        </div>
+      </details>
+      <details>
+        <summary>What about money?</summary>
+        <div class="answer">
+          <p>Indonesia uses the rupiah. The resort takes cards for everything. A little cash is handy for taxis, markets and tips if you head off the estate, and the airport ATMs are the easiest place to get it.</p>
+        </div>
+      </details>
+      <details>
+        <summary>Can I make a longer trip of it?</summary>
+        <div class="answer">
+          <p>Please do. Sunday is wide open, and Bali rewards a few extra days. Uluwatu's cliffs and temple are twenty minutes south, and Ubud's rice terraces are a couple of hours north. We're happy to share what we've loved.</p>
+        </div>
+      </details>
+      <details>
+        <summary>When do I need to reply by?</summary>
+        <div class="answer">
+          <p>1 March 2027, using the form <a href="#rsvp">below</a>. Earlier helps us hold the rooms.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- =======================================================================
+     7 · RSVP
      ======================================================================= -->
 <section class="section is-andesite rsvp" id="rsvp">
   <div class="inner">
-    <span class="eyebrow">06 — RSVP</span>
+    <span class="eyebrow">07 — RSVP</span>
     <h2>Will you come?</h2>
     <p class="deadline" id="deadline">Kindly reply by 1 March 2027</p>
 
