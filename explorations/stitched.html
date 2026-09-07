@@ -32,8 +32,15 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
 /* doors */
-.doors{position:fixed;inset:0;z-index:50;display:flex;pointer-events:none}
-.doors .d{flex:1 1 50%;position:relative;background:var(--linen);overflow:hidden;transition:transform 1.9s cubic-bezier(.7,0,.3,1) .5s}
+.doors{position:fixed;inset:0;z-index:50;display:flex}
+.doors .bow{position:absolute;left:50%;top:0;width:min(100vw,430px);height:100%;transform:translateX(-50%);pointer-events:none;z-index:2;transition:transform 1.25s cubic-bezier(.55,0,.7,.6),opacity .5s ease .95s}
+.doors .bow svg{position:absolute;left:0;top:30%;width:100%;height:auto;overflow:visible}
+.doors.is-untied .bow{transform:translate(-50%,115vh) rotate(4deg);opacity:0}
+.doors .tap{position:absolute;inset:0;z-index:3;cursor:pointer}
+.doors .tap span{position:absolute;left:0;right:0;bottom:max(34px,env(safe-area-inset-bottom));text-align:center;font-family:var(--sans);font-size:10px;letter-spacing:.34em;text-transform:uppercase;color:var(--green);transition:opacity .4s}
+.doors.is-untied .tap{pointer-events:none}
+.doors.is-untied .tap span{opacity:0}
+.doors .d{flex:1 1 50%;position:relative;background:var(--linen);overflow:hidden;transition:transform 1.9s cubic-bezier(.7,0,.3,1) .15s}
 .doors .d svg{position:absolute;top:50%;left:0;width:100%;height:auto;transform:translateY(-50%)}
 .doors .d.l{box-shadow:inset -2px 0 0 rgba(194,161,91,.6)}
 .doors .d.r{box-shadow:inset 2px 0 0 rgba(194,161,91,.6)}
@@ -126,6 +133,31 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 
 <div class="doors" id="doors" aria-hidden="true">
   <div class="d l"><svg viewBox="0 0 195 844"><g filter="url(#stitch)"><rect x="10" y="10" width="175" height="824" rx="6" fill="none" stroke="#C2A15B" stroke-width="2"/><rect x="14" y="14" width="167" height="816" rx="4" fill="none" stroke="#E6D3A2" stroke-width=".8" stroke-dasharray="1 3"/><path d="M40 60C120 40 120 140 60 150C10 160 30 240 100 230C170 220 150 320 90 320C30 320 40 410 110 400C180 390 160 480 90 490C30 500 40 580 110 570C180 560 150 650 90 660C30 670 40 760 110 750" fill="none" stroke="#C2A15B" stroke-width="2.2" stroke-linecap="round"/><path d="M40 60C120 40 120 140 60 150C10 160 30 240 100 230C170 220 150 320 90 320C30 320 40 410 110 400C180 390 160 480 90 490C30 500 40 580 110 570C180 560 150 650 90 660C30 670 40 760 110 750" fill="none" stroke="#E6D3A2" stroke-width=".8" stroke-dasharray="2 4" stroke-linecap="round"/><path d="M100 40C60 120 150 200 100 280C50 360 150 440 100 520C50 600 150 680 100 780" fill="none" stroke="#4E6B44" stroke-width="2.4" stroke-linecap="round"/><use href="#frangi" transform="translate(100.0 40.0) rotate(10) scale(1.30)"/><use href="#leaf" transform="translate(72.0 90.0) rotate(-40) scale(1.10)"/><use href="#leaf" transform="translate(124.0 120.0) rotate(30) scale(1.10)"/><use href="#hibi" transform="translate(132.0 190.0) rotate(15) scale(1.20)"/><use href="#mons" transform="translate(66.0 230.0) rotate(-20) scale(1.10)"/><use href="#boug" transform="translate(100.0 280.0) rotate(0) scale(1.30)"/><use href="#leaf" transform="translate(130.0 330.0) rotate(25) scale(1.10)"/><use href="#palm" transform="translate(60.0 360.0) rotate(-30) scale(1.00)"/><use href="#frangi" transform="translate(128.0 430.0) rotate(-15) scale(1.20)"/><use href="#leaf" transform="translate(70.0 470.0) rotate(-30) scale(1.10)"/><use href="#hibi" transform="translate(100.0 520.0) rotate(5) scale(1.20)"/><use href="#mons" transform="translate(134.0 590.0) rotate(25) scale(1.00)"/><use href="#leaf" transform="translate(68.0 620.0) rotate(-40) scale(1.10)"/><use href="#boug" transform="translate(96.0 680.0) rotate(10) scale(1.20)"/><use href="#frangi" transform="translate(130.0 740.0) rotate(20) scale(1.10)"/><use href="#leaf" transform="translate(80.0 780.0) rotate(-20) scale(1.10)"/></g></svg></div>
+  <div class="bow" id="bow" aria-hidden="true">
+    <svg viewBox="0 0 390 560">
+      <defs>
+        <linearGradient id="silk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FBF7EE"/><stop offset=".5" stop-color="#F1EADB"/><stop offset="1" stop-color="#E2D9C5"/></linearGradient>
+        <linearGradient id="silkV" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#E4DBC7"/><stop offset=".35" stop-color="#FBF7EE"/><stop offset=".7" stop-color="#F0E9DA"/><stop offset="1" stop-color="#DDD3BE"/></linearGradient>
+        <filter id="soft" x="-10%" y="-10%" width="120%" height="120%"><feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#5A4B2E" flood-opacity=".28"/></filter>
+      </defs>
+      <g filter="url(#soft)">
+        <!-- band across both doors -->
+        <path d="M-10 92C60 86 130 86 195 90C260 86 330 86 400 92V132C330 126 260 126 195 130C130 126 60 126 -10 132Z" fill="url(#silk)"/>
+        <!-- tails -->
+        <path d="M178 122C150 200 120 300 96 420C86 470 74 520 60 560L108 560C124 500 146 420 168 330C182 270 194 200 200 150Z" fill="url(#silkV)"/>
+        <path d="M212 122C240 200 270 300 294 420C304 470 316 520 330 560L282 560C266 500 244 420 222 330C208 270 196 200 190 150Z" fill="url(#silkV)"/>
+        <!-- loops -->
+        <path d="M188 106C150 60 80 60 70 100C62 136 130 150 186 128Z" fill="url(#silk)"/>
+        <path d="M202 106C240 60 310 60 320 100C328 136 260 150 204 128Z" fill="url(#silk)"/>
+        <path d="M186 118C160 108 120 106 92 112" fill="none" stroke="#D8CEB8" stroke-width="1.2"/>
+        <path d="M204 118C230 108 270 106 298 112" fill="none" stroke="#D8CEB8" stroke-width="1.2"/>
+        <!-- knot -->
+        <path d="M176 100C186 94 204 94 214 100C220 110 220 124 214 134C204 140 186 140 176 134C170 124 170 110 176 100Z" fill="url(#silkV)"/>
+        <path d="M182 104C190 112 190 124 184 132" fill="none" stroke="#D8CEB8" stroke-width="1"/>
+      </g>
+    </svg>
+  </div>
+  <button class="tap" id="tapOpen" type="button" aria-label="Untie the bow and open the invitation"><span>Tap to open</span></button>
   <div class="d r"><svg viewBox="0 0 195 844"><g filter="url(#stitch)"><rect x="10" y="10" width="175" height="824" rx="6" fill="none" stroke="#C2A15B" stroke-width="2"/><rect x="14" y="14" width="167" height="816" rx="4" fill="none" stroke="#E6D3A2" stroke-width=".8" stroke-dasharray="1 3"/><path d="M155 60C75 40 75 140 135 150C185 160 165 240 95 230C25 220 45 320 105 320C165 320 155 410 85 400C15 390 35 480 105 490C165 500 155 580 85 570C15 560 45 650 105 660C165 670 155 760 85 750" fill="none" stroke="#C2A15B" stroke-width="2.2" stroke-linecap="round"/><path d="M155 60C75 40 75 140 135 150C185 160 165 240 95 230C25 220 45 320 105 320C165 320 155 410 85 400C15 390 35 480 105 490C165 500 155 580 85 570C15 560 45 650 105 660C165 670 155 760 85 750" fill="none" stroke="#E6D3A2" stroke-width=".8" stroke-dasharray="2 4" stroke-linecap="round"/><path d="M95 40C135 120 45 200 95 280C145 360 45 440 95 520C145 600 45 680 95 780" fill="none" stroke="#4E6B44" stroke-width="2.4" stroke-linecap="round"/><use href="#frangi" transform="translate(95 40.0) rotate(-10) scale(1.30)"/><use href="#leaf" transform="translate(123 90.0) rotate(40) scale(1.10)"/><use href="#leaf" transform="translate(71 120.0) rotate(-30) scale(1.10)"/><use href="#hibi" transform="translate(63 190.0) rotate(-15) scale(1.20)"/><use href="#mons" transform="translate(129 230.0) rotate(20) scale(1.10)"/><use href="#boug" transform="translate(95 280.0) rotate(-0) scale(1.30)"/><use href="#leaf" transform="translate(65 330.0) rotate(-25) scale(1.10)"/><use href="#palm" transform="translate(135 360.0) rotate(30) scale(1.00)"/><use href="#frangi" transform="translate(67 430.0) rotate(15) scale(1.20)"/><use href="#leaf" transform="translate(125 470.0) rotate(30) scale(1.10)"/><use href="#hibi" transform="translate(95 520.0) rotate(-5) scale(1.20)"/><use href="#mons" transform="translate(61 590.0) rotate(-25) scale(1.00)"/><use href="#leaf" transform="translate(127 620.0) rotate(40) scale(1.10)"/><use href="#boug" transform="translate(99 680.0) rotate(-10) scale(1.20)"/><use href="#frangi" transform="translate(65 740.0) rotate(-20) scale(1.10)"/><use href="#leaf" transform="translate(115 780.0) rotate(20) scale(1.10)"/></g></svg></div>
 </div>
 
@@ -244,8 +276,10 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
       setTimeout(function(){ txt.classList.add('in'); },1500);
       setTimeout(function(){ document.body.style.overflow=''; if(doors.parentNode) doors.parentNode.removeChild(doors); },2700);
     }
-    setTimeout(open,700);
-    $('skip').addEventListener('click',open);
+    var untied=false;
+    function untie(){ if(untied) return; untied=true; doors.classList.add('is-untied'); setTimeout(open,1050); }
+    $('tapOpen').addEventListener('click',untie);
+    $('skip').addEventListener('click',function(){ doors.classList.add('is-untied'); open(); });
   }
   /* countdown */
   var target=new Date('2027-08-28T16:30:00+08:00').getTime();
