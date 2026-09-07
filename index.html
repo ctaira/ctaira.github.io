@@ -111,13 +111,16 @@ button,input,select,textarea{font:inherit;color:inherit}
 .open-btn:focus-visible{outline:2px solid var(--gold);outline-offset:6px}
 .open-btn.is-hidden{visibility:hidden}
 
-/* Bali starlings cross the sky while the envelope opens. */
+/* Egrets cross the sky while the envelope opens. */
 .flock{position:absolute;inset:0;left:0;top:0;width:100%;height:100%;z-index:0;pointer-events:none;overflow:visible}
 .flock .bird{visibility:hidden}
-.flock .b-body{fill:#F7F3EA;stroke:#2A2C27;stroke-width:.7;stroke-linejoin:round}
-.flock .b-wing{fill:#F7F3EA;stroke:#2A2C27;stroke-width:.7;stroke-linejoin:round}
-.flock .b-tip{fill:#2A2C27}
-.flock .b-crest{fill:none;stroke:#2A2C27;stroke-width:.7;stroke-linecap:round}
+.flock .b-body{fill:#F7F3EA;stroke:#2A2C27;stroke-width:.6;stroke-linejoin:round}
+.flock .b-wing{fill:#F7F3EA;stroke:#2A2C27;stroke-width:.6;stroke-linejoin:round}
+.flock .b-wing.far{fill:#E4DFD3}
+.flock .b-neck{fill:none;stroke:#2A2C27;stroke-width:.6;stroke-linecap:round}
+.flock .b-head{fill:#F7F3EA;stroke:#2A2C27;stroke-width:.6}
+.flock .b-bill{fill:none;stroke:#C0A264;stroke-width:1;stroke-linecap:round}
+.flock .b-legs{fill:none;stroke:#2A2C27;stroke-width:.7;stroke-linecap:round}
 
 /* Envelope parts share size and centre; JS applies the same transform to each. */
 .env{width:var(--ew);height:var(--eh);margin-left:calc(var(--ew) / -2);margin-top:calc(var(--eh) / -2)}
@@ -926,32 +929,31 @@ var RSVP_ENDPOINT = "";
   } else {
     var vh = window.innerHeight, vw = window.innerWidth, eh = envBack.offsetHeight;
 
-    /* ---- Flock of Bali starlings (Leucopsar rothschildi): white, black wingtips, a crest.
-       Each bird is a group; wings scale in y around the body to beat. All driven by p. ---- */
+    /* ---- Egrets, as they come in over Jimbaran Bay at dusk: broad rounded wings on a slow
+       beat, neck tucked in an S, legs trailing. Each bird is a group flying toward +x; the
+       wings scale in y around the body to beat. All driven by p. ---- */
     var SVG_NS = 'http://www.w3.org/2000/svg';
     var BIRDS = [
       /* offset in p, lane (fraction of vh), depth scale, wingbeat phase */
       { off: 0.000, lane: 0.00, scale: 1.00, phase: 0.0 },
-      { off: 0.014, lane: -0.07, scale: 0.86, phase: 1.9 },
-      { off: 0.022, lane: 0.06, scale: 0.92, phase: 3.4 },
-      { off: 0.034, lane: -0.13, scale: 0.72, phase: 0.8 },
-      { off: 0.040, lane: 0.12, scale: 0.78, phase: 4.6 },
-      { off: 0.052, lane: -0.03, scale: 0.62, phase: 2.7 },
-      { off: 0.060, lane: 0.17, scale: 0.68, phase: 5.5 }
+      { off: 0.018, lane: -0.09, scale: 0.82, phase: 2.1 },
+      { off: 0.030, lane: 0.08, scale: 0.90, phase: 4.0 },
+      { off: 0.046, lane: -0.16, scale: 0.66, phase: 1.2 },
+      { off: 0.060, lane: 0.15, scale: 0.72, phase: 5.1 }
     ];
     var birdEls = BIRDS.map(function () {
       var g = document.createElementNS(SVG_NS, 'g');
       g.setAttribute('class', 'bird');
       g.innerHTML =
+        '<path class="b-legs" d="M-5 1.4L-15.5 3.6M-4.4 1.9L-14.6 4.6"/>' +
         '<g class="wings">' +
-          '<path class="b-wing" d="M-1.5 0C-4 -4 -8 -8 -15 -10.5C-11 -6.5 -8 -3 -6 0Z"/>' +
-          '<path class="b-wing" d="M1.5 0C4 -4 8 -8 15 -10.5C11 -6.5 8 -3 6 0Z"/>' +
-          '<path class="b-tip" d="M-15 -10.5C-13.2 -9.3 -12 -8 -11 -6.6L-12.6 -7.6Z"/>' +
-          '<path class="b-tip" d="M15 -10.5C13.2 -9.3 12 -8 11 -6.6L12.6 -7.6Z"/>' +
+          '<path class="b-wing far" transform="translate(-2 0) scale(.82)" d="M-3.5 -0.5C-8 -5 -7 -12 -1 -15.5C4.5 -13 5.5 -6 3.5 -0.5Z"/>' +
+          '<path class="b-wing" d="M-3.5 -0.5C-8 -5 -7 -12 -1 -15.5C4.5 -13 5.5 -6 3.5 -0.5Z"/>' +
         '</g>' +
-        '<path class="b-body" d="M-7 0.6L-5 -0.6C-2.5 -2 2.5 -2 5.2 -0.3L7.5 -0.8L6 1.2C3 2.6 -2 2.6 -5 1.6Z"/>' +
-        '<path class="b-tip" d="M-7 0.6L-5 -0.6L-4.6 1.4Z"/>' +
-        '<path class="b-crest" d="M4 -1.4C4.8 -2.6 5.8 -3 6.8 -3"/>';
+        '<path class="b-body" d="M-8 0.4C-5 -1.8 3 -2.3 7 -1C8.6 -0.4 8.9 1 7.6 1.7C3 3.2 -3.5 3.2 -8 0.4Z"/>' +
+        '<path class="b-neck" d="M6.6 -1C7.6 -2.8 8.8 -3.4 10 -2.6"/>' +
+        '<circle class="b-head" cx="10.8" cy="-2.2" r="1.4"/>' +
+        '<path class="b-bill" d="M12 -2.1L16.4 -1.5"/>';
       flock.appendChild(g);
       return { g: g, wings: g.querySelector('.wings') };
     });
@@ -967,11 +969,11 @@ var RSVP_ENDPOINT = "";
         var y = vh * (0.50 + b.lane) - t * vh * 0.34 - Math.sin(t * Math.PI) * vh * 0.06;
         var dx = vw + 120, dy = -vh * 0.34 - Math.cos(t * Math.PI) * Math.PI * vh * 0.06;
         var ang = Math.atan2(dy, dx) * 180 / Math.PI;
-        var beat = Math.cos(p * Math.PI * 2 * 44 + b.phase);        /* -1 down … 1 up */
+        var beat = Math.cos(p * Math.PI * 2 * 18 + b.phase);        /* slow beat: -1 down … 1 up */
         var fade = Math.min(1, t * 8, (1 - t) * 8);
-        el.g.setAttribute('transform', 'translate(' + x.toFixed(1) + ' ' + y.toFixed(1) + ') rotate(' + ang.toFixed(1) + ') scale(' + (b.scale * 1.15).toFixed(2) + ')');
+        el.g.setAttribute('transform', 'translate(' + x.toFixed(1) + ' ' + y.toFixed(1) + ') rotate(' + ang.toFixed(1) + ') scale(' + (b.scale * 1.5).toFixed(2) + ')');
         el.g.style.opacity = fade;
-        el.wings.setAttribute('transform', 'scale(1 ' + (0.25 + 0.75 * beat).toFixed(3) + ')');
+        el.wings.setAttribute('transform', 'scale(1 ' + (0.15 + 0.85 * beat).toFixed(3) + ')');
       }
     }
 
@@ -983,7 +985,7 @@ var RSVP_ENDPOINT = "";
       hint.style.opacity = 1 - seg(p, 0, .05);
       openBtn.classList.toggle('is-hidden', p > .04);
 
-      /* -- Birds cross while the envelope opens ------------------- 0.06–0.46 */
+      /* -- Egrets cross while the envelope opens ------------------ 0.06–0.46 */
       renderFlock(p);
 
       /* -- 1. Wax seal cracks: scales up, rotates, fades ---------- 0.04–0.14 */
