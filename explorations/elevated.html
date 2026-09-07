@@ -488,15 +488,15 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
     var scratching=false, strokes=0;
     function pos(e){ var r=cv.getBoundingClientRect(); return {x:e.clientX-r.left,y:e.clientY-r.top}; }
     function erase(p){
-      ctx.globalCompositeOperation='destination-out';
+      ctx.globalCompositeOperation='destination-out'; ctx.fillStyle='#000';
       ctx.beginPath(); ctx.arc(p.x,p.y,16,0,Math.PI*2); ctx.fill();
       ctx.globalCompositeOperation='source-over';
       if(++strokes%8===0) check();
     }
     function check(){
       var w=cv.width,h=cv.height, d=ctx.getImageData(0,0,w,h).data, clear=0, total=0;
-      for(var i=3;i<d.length;i+=4*16){ total++; if(d[i]===0) clear++; }
-      if(clear/total>.5) reveal(card);
+      for(var i=3;i<d.length;i+=4*16){ total++; if(d[i]<40) clear++; }
+      if(clear/total>.4) reveal(card);
     }
     cv.addEventListener('pointerdown',function(e){ scratching=true; cv.setPointerCapture(e.pointerId); erase(pos(e)); });
     cv.addEventListener('pointermove',function(e){ if(scratching) erase(pos(e)); });
