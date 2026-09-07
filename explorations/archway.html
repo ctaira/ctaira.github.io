@@ -31,34 +31,45 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 
 /* ---------------- Envelope: four flaps peel open ---------------- */
 .env{position:fixed;inset:0;z-index:50;background:transparent;perspective:1400px;transition:opacity .6s ease}
-.env .flap{position:absolute;inset:0;background:var(--paper);backface-visibility:hidden;-webkit-backface-visibility:hidden;transition:transform 1.1s cubic-bezier(.7,0,.3,1)}
+.env .flap{position:absolute;inset:0;background:var(--paper);backface-visibility:hidden;-webkit-backface-visibility:hidden;transition:transform 3s cubic-bezier(.6,0,.3,1)}
+.env .flap::before{content:"";position:absolute;inset:0;z-index:1;opacity:0;transition:opacity 1.4s ease;pointer-events:none}
+.env .flap.t::before{background:linear-gradient(180deg,rgba(42,51,64,.16),rgba(42,51,64,0) 16%)}
+.env .flap.b::before{background:linear-gradient(0deg,rgba(42,51,64,.16),rgba(42,51,64,0) 16%)}
+.env .flap.l::before{background:linear-gradient(90deg,rgba(42,51,64,.16),rgba(42,51,64,0) 16%)}
+.env .flap.r::before{background:linear-gradient(270deg,rgba(42,51,64,.16),rgba(42,51,64,0) 16%)}
+.env.is-open .flap::before{opacity:1}
 .env .flap::after{content:"";position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.95' numOctaves='1' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .2 0 0 0 0 .2 0 0 0 0 .2 0 0 0 .6 -.45'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 .env .flap.t{clip-path:polygon(0 0,100% 0,50% 50%);transform-origin:50% 0;box-shadow:inset 0 -1px 0 rgba(42,51,64,.08)}
 .env .flap.b{clip-path:polygon(0 100%,100% 100%,50% 50%);transform-origin:50% 100%}
 .env .flap.l{clip-path:polygon(0 0,50% 50%,0 100%);transform-origin:0 50%}
 .env .flap.r{clip-path:polygon(100% 0,50% 50%,100% 100%);transform-origin:100% 50%}
 .env .crease{position:absolute;inset:0;pointer-events:none;background:linear-gradient(45deg,transparent 49.7%,rgba(42,51,64,.10) 50%,transparent 50.3%),linear-gradient(-45deg,transparent 49.7%,rgba(42,51,64,.10) 50%,transparent 50.3%)}
-.env.is-open .flap.t{transform:rotateX(180deg)}
-.env.is-open .flap.l{transform:rotateY(-180deg);transition-delay:.18s}
-.env.is-open .flap.r{transform:rotateY(180deg);transition-delay:.18s}
-.env.is-open .flap.b{transform:rotateX(-180deg);transition-delay:.36s}
-.env.is-open .crease{opacity:0;transition:opacity .3s}
+.env.is-open .flap.t{transform:rotateX(180deg);transition-delay:.5s}
+.env.is-open .flap.l{transform:rotateY(-180deg);transition-delay:1.3s}
+.env.is-open .flap.r{transform:rotateY(180deg);transition-delay:1.3s}
+.env.is-open .flap.b{transform:rotateX(-180deg);transition-delay:2.1s}
+.env.is-open .crease{opacity:0;transition:opacity .6s .4s}
 .env.is-gone{opacity:0;pointer-events:none}
 .seal{position:absolute;left:50%;top:50%;width:92px;height:92px;margin:-46px 0 0 -46px;z-index:4;border-radius:50%;
   background:radial-gradient(circle at 36% 30%,#F8ECC2 0,#DEC271 38%,#BD9A42 72%,#8E6F2A 100%);
   box-shadow:inset 0 2px 3px rgba(255,250,220,.7),inset 0 -3px 5px rgba(80,55,10,.45),0 8px 16px -8px rgba(60,40,5,.5);
-  display:grid;place-items:center;transition:transform .5s ease,opacity .45s ease}
+  display:grid;place-items:center;transition:transform 1s cubic-bezier(.3,.6,.2,1),opacity .7s ease .3s,box-shadow 1s ease}
 .seal::before{content:"";position:absolute;inset:7px;border-radius:50%;box-shadow:inset 0 1px 1px rgba(255,250,220,.6),inset 0 -1px 2px rgba(80,55,10,.5)}
 .seal svg{width:44px;height:44px;display:block}
-.env.is-open .seal{transform:scale(.3);opacity:0}
-.env .hint{position:absolute;left:0;right:0;top:calc(50% + 60px);text-align:center;font-family:var(--serif);font-size:19px;color:var(--navy);transition:opacity .3s}
+.env.is-open .seal{transform:translateY(-36px) scale(1.12);opacity:0;box-shadow:inset 0 2px 3px rgba(255,250,220,.7),inset 0 -3px 5px rgba(80,55,10,.45),0 0 0 18px rgba(212,177,95,0),0 24px 40px -14px rgba(60,40,5,.35)}
+.env.is-pressed .seal{transform:scale(.94)}
+.env .hint{position:absolute;left:0;right:0;top:calc(50% + 60px);text-align:center;font-family:var(--serif);font-size:19px;color:var(--navy);transition:opacity .5s}
 .env.is-open .hint{opacity:0}
 .env-btn{position:absolute;inset:0;z-index:5}
 @media (prefers-reduced-motion:reduce){.env{display:none}}
 
 /* ---------------- Hero: the archway ---------------- */
 .hero{color:#FFFDF7;min-height:100svh;padding-bottom:max(64px,10vh);justify-content:center}
-.hero svg.bg{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+.hero svg.bg{position:absolute;inset:0;width:100%;height:100%;z-index:0;transition:transform 4s cubic-bezier(.2,.6,.2,1),filter 3s ease}
+.hero.pre-scene svg.bg{transform:scale(1.07);filter:blur(3px) saturate(.9)}
+.hero .txt,.hero .cue{transition:opacity 1.4s ease,transform 1.4s cubic-bezier(.2,.7,.2,1)}
+.hero.pre-text .txt,.hero.pre-text .cue{opacity:0;transform:translateY(12px)}
+.hero .cue{transition-delay:.5s}
 .hero .names{font-size:clamp(50px,13vw,80px);line-height:1;color:#2A3340;text-shadow:0 1px 0 rgba(255,255,255,.6)}
 .hero .sub{font-size:clamp(20px,5vw,26px);margin-top:.2em;color:#2A3340}
 .hero .txt{background:radial-gradient(ellipse at center,rgba(248,246,242,.72) 0%,rgba(248,246,242,.45) 45%,rgba(248,246,242,0) 72%);padding:28px 30px 34px;margin-top:-6vh}
@@ -341,16 +352,20 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
   if(to) $('envName').textContent='For '+to;
 
   /* Envelope: tap the seal, the flap lifts, the envelope drops away. */
-  var env=$('env');
+  var env=$('env'), hero=$('hero');
   if(reduce){ env.parentNode.removeChild(env); }
   else{
     document.body.style.overflow='hidden';
+    hero.classList.add('pre-scene'); hero.classList.add('pre-text');
     var opened=false;
     function open(){
       if(opened) return; opened=true;
-      env.classList.add('is-open');
-      setTimeout(function(){ env.classList.add('is-gone'); document.body.style.overflow=''; },1500);
-      setTimeout(function(){ if(env.parentNode) env.parentNode.removeChild(env); },2200);
+      env.classList.add('is-pressed');
+      setTimeout(function(){ env.classList.remove('is-pressed'); env.classList.add('is-open'); },140);   /* seal lifts, flaps follow */
+      setTimeout(function(){ hero.classList.remove('pre-scene'); },900);                                 /* scene settles into focus */
+      setTimeout(function(){ hero.classList.remove('pre-text'); },3500);                                  /* names arrive as the last flap clears */
+      setTimeout(function(){ env.classList.add('is-gone'); document.body.style.overflow=''; },3900);
+      setTimeout(function(){ if(env.parentNode) env.parentNode.removeChild(env); },4700);
     }
     $('envBtn').addEventListener('click',open);
     $('skip').addEventListener('click',function(){ open(); });
