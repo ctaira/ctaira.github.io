@@ -88,6 +88,19 @@ button,input,select,textarea{font:inherit;color:inherit}
 }
 .hint svg{display:block;margin:10px auto 0;width:18px;height:18px}
 
+/* Appears once the passport is stamped: the sequence is over, the details are below. */
+.more{
+  position:absolute;left:0;right:0;top:auto;bottom:calc(max(30px,env(safe-area-inset-bottom)) + 10px);
+  text-align:center;text-decoration:none;
+  font-family:var(--mono);font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);
+  opacity:0;visibility:hidden;
+}
+.more svg{display:block;margin:10px auto 0;width:18px;height:18px;animation:bob 1.8s ease-in-out infinite}
+.more:focus-visible{outline:2px solid var(--gold);outline-offset:6px;border-radius:4px}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
+@media (prefers-reduced-motion:reduce){.more svg{animation:none}}
+.stage.is-static .more{opacity:1;visibility:visible}
+
 /* Tap target over the envelope: opening on demand is not autoplay. */
 .open-btn{
   position:absolute;left:50%;top:calc(50% + 6vh);width:var(--ew);height:var(--eh);
@@ -498,6 +511,10 @@ hr.rule{border:0;border-top:1px solid rgba(36,39,34,.2);margin:2.5em 0}
 
       <button class="open-btn" id="openBtn" type="button" aria-label="Open the invitation"></button>
 
+      <a class="more" id="more" href="#letter">Swipe up for the details
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9l8 8 8-8" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+      </a>
+
       <!-- Passport -->
       <div class="passport" id="passport">
         <div class="pp-page">
@@ -875,7 +892,7 @@ var RSVP_ENDPOINT = "";
   var pocketText = envPocket.querySelectorAll('.addr, .par-avion');
   var bpass = $('bpass'), passport = $('passport'), cover = $('ppCover');
   var arc = $('arc'), arcMask = $('arcMask'), plane = $('plane'), stamp = $('stamp');
-  var openBtn = $('openBtn'), flock = $('flock');
+  var openBtn = $('openBtn'), flock = $('flock'), more = $('more');
   var envParts = [envBack, envPocket, envFlap];
 
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1026,6 +1043,11 @@ var RSVP_ENDPOINT = "";
       stamp.style.transform = 'rotate(-12deg) scale(' + (1.9 - .9 * ease(s8b)) + ')';
       stamp.style.visibility = s8b > 0 ? 'visible' : 'hidden';
 
+      /* -- "More below" link fades in as the stamp lands ---------- 0.96–1.00 */
+      var s9 = seg(p, .96, 1);
+      more.style.opacity = s9;
+      more.style.visibility = s9 > 0 ? 'visible' : 'hidden';
+
       skip.classList.toggle('is-hidden', p >= 1);
     }
 
@@ -1062,12 +1084,13 @@ var RSVP_ENDPOINT = "";
     function playOpen() {
       cancelOpen();
       var start = window.pageYOffset;
-      var end = stage.offsetTop + stage.offsetHeight - vh;
-      var dur = 5200, t0 = performance.now();
+      /* Run past the end of the stage so the letter's top edge shows below the passport. */
+      var end = stage.offsetTop + stage.offsetHeight - vh + vh * 0.16;
+      var dur = 9500, t0 = performance.now();
       document.documentElement.style.scrollBehavior = 'auto';
       function step(now) {
         var t = clamp((now - t0) / dur, 0, 1);
-        var e = t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+        var e = -(Math.cos(Math.PI * t) - 1) / 2;   /* sine in-out: no rush through the middle */
         window.scrollTo(0, start + (end - start) * e);
         if (t < 1 && opening) opening = requestAnimationFrame(step);
         else cancelOpen();
