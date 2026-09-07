@@ -82,11 +82,29 @@ button,input,select,textarea{font:inherit;color:inherit}
 .scene>*{position:absolute;left:50%;top:50%}
 
 .hint{
-  position:absolute;left:0;right:0;top:auto;bottom:max(28px,env(safe-area-inset-bottom));
-  text-align:center;font-family:var(--mono);font-size:12px;letter-spacing:.14em;
-  text-transform:uppercase;color:var(--ink-soft);
+  position:absolute;left:0;right:0;top:calc(50% + 6vh + var(--eh) / 2 + 26px);
+  text-align:center;font-family:var(--mono);font-size:12.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--ink);
 }
 .hint svg{display:block;margin:10px auto 0;width:18px;height:18px}
+
+/* Tap target over the envelope: opening on demand is not autoplay. */
+.open-btn{
+  position:absolute;left:50%;top:calc(50% + 6vh);width:var(--ew);height:var(--eh);
+  margin-left:calc(var(--ew) / -2);margin-top:calc(var(--eh) / -2);
+  z-index:8;background:transparent;border:0;padding:0;cursor:pointer;border-radius:6px;
+  -webkit-tap-highlight-color:transparent;
+}
+.open-btn:focus-visible{outline:2px solid var(--gold);outline-offset:6px}
+.open-btn.is-hidden{visibility:hidden}
+
+/* Bali starlings cross the sky while the envelope opens. */
+.flock{position:absolute;inset:0;left:0;top:0;width:100%;height:100%;z-index:0;pointer-events:none;overflow:visible}
+.flock .bird{visibility:hidden}
+.flock .b-body{fill:#F7F3EA;stroke:#2A2C27;stroke-width:.7;stroke-linejoin:round}
+.flock .b-wing{fill:#F7F3EA;stroke:#2A2C27;stroke-width:.7;stroke-linejoin:round}
+.flock .b-tip{fill:#2A2C27}
+.flock .b-crest{fill:none;stroke:#2A2C27;stroke-width:.7;stroke-linecap:round}
 
 /* Envelope parts share size and centre; JS applies the same transform to each. */
 .env{width:var(--ew);height:var(--eh);margin-left:calc(var(--ew) / -2);margin-top:calc(var(--eh) / -2)}
@@ -113,14 +131,46 @@ button,input,select,textarea{font:inherit;color:inherit}
   -webkit-clip-path:polygon(0 0,100% 0,50% 58%);
 }
 .seal{
-  position:absolute;left:50%;top:58%;width:58px;height:58px;margin:-29px 0 0 -29px;
-  border-radius:50%;
-  background:radial-gradient(circle at 38% 32%,#A88762 0%,#8C6E4F 45%,#6E543A 100%);
-  display:grid;place-items:center;
-  font-family:var(--serif);font-size:20px;color:var(--gold);letter-spacing:.06em;
+  position:absolute;left:50%;top:58%;width:78px;height:78px;margin:-39px 0 0 -39px;
   will-change:transform,opacity;
 }
-.seal::after{content:"";position:absolute;inset:6px;border-radius:50%;border:1px solid rgba(192,162,100,.55)}
+/* Wax puddle: two uneven lobes, a lit rim, a heavy lower shadow, and grain from an SVG filter. */
+.seal .wax{
+  position:absolute;inset:0;
+  border-radius:53% 47% 49% 51% / 48% 52% 47% 53%;
+  background:
+    radial-gradient(circle at 34% 26%,rgba(255,226,196,.55) 0,rgba(255,226,196,0) 30%),
+    radial-gradient(circle at 68% 80%,rgba(20,8,2,.35) 0,rgba(20,8,2,0) 46%),
+    radial-gradient(circle at 50% 48%,#8E5A3A 0,#6F4229 52%,#4B2814 100%);
+  box-shadow:
+    inset 0 2px 3px rgba(255,222,190,.38),
+    inset 0 -4px 6px rgba(28,10,3,.6),
+    0 3px 4px -1px rgba(28,10,3,.45);
+  filter:url(#waxGrain);
+}
+.seal .wax::before{
+  content:"";position:absolute;inset:4px -3px -2px 2px;z-index:-1;
+  border-radius:46% 54% 57% 43% / 56% 44% 52% 48%;
+  background:radial-gradient(circle at 50% 40%,#7A4A2E 0,#59321B 70%,#41210F 100%);
+  transform:rotate(21deg);
+  box-shadow:0 2px 3px rgba(28,10,3,.35);
+}
+/* The die impression: a pressed ring and lettering, lit from above so it reads as sunk in. */
+.seal .die{
+  position:absolute;inset:10px;border-radius:50%;
+  box-shadow:
+    inset 0 1.5px 1px rgba(255,225,200,.32),
+    inset 0 -1.5px 2px rgba(28,10,3,.65),
+    0 1px 0 rgba(255,225,200,.28),
+    0 -1px 0 rgba(28,10,3,.45);
+}
+.seal svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.seal .die-ring{fill:none;stroke:rgba(28,10,3,.55);stroke-width:1.1;stroke-dasharray:.1 2.6;stroke-linecap:round}
+.seal .die-ring-hi{fill:none;stroke:rgba(255,225,200,.32);stroke-width:1.1;stroke-dasharray:.1 2.6;stroke-linecap:round}
+.seal .die-text{font-family:var(--serif);font-size:15.5px;letter-spacing:.06em;fill:rgba(28,10,3,.62)}
+.seal .die-text-hi{font-family:var(--serif);font-size:15.5px;letter-spacing:.06em;fill:rgba(255,225,200,.34)}
+.seal .die-flower{fill:rgba(28,10,3,.5)}
+.seal .die-flower-hi{fill:rgba(255,225,200,.3)}
 
 /* Boarding pass ------------------------------------------------------------ */
 .bpass{
@@ -384,7 +434,18 @@ hr.rule{border:0;border-top:1px solid rgba(36,39,34,.2);margin:2.5em 0}
   <div class="stage-viewport">
     <div class="scene" id="scene">
 
-      <div class="hint" id="hint" aria-hidden="true">Scroll to open
+      <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+        <filter id="waxGrain" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">
+          <feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="7" result="noise"/>
+          <feColorMatrix in="noise" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .16 0" result="grain"/>
+          <feComposite in="grain" in2="SourceGraphic" operator="in" result="grainIn"/>
+          <feBlend in="SourceGraphic" in2="grainIn" mode="multiply"/>
+        </filter>
+      </svg>
+
+      <svg class="flock" id="flock" aria-hidden="true"></svg>
+
+      <div class="hint" id="hint" aria-hidden="true">Tap the seal, or swipe up, to open
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9l8 8 8-8" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
       </div>
 
@@ -421,8 +482,21 @@ hr.rule{border:0;border-top:1px solid rgba(36,39,34,.2);margin:2.5em 0}
 
       <div class="env env-flap" id="envFlap" aria-hidden="true">
         <div class="flap-face"></div>
-        <div class="seal" id="seal">A·C</div>
+        <div class="seal" id="seal">
+          <div class="wax"></div>
+          <div class="die"></div>
+          <svg viewBox="0 0 78 78" aria-hidden="true">
+            <circle class="die-ring-hi" cx="39" cy="39.8" r="24"/>
+            <circle class="die-ring" cx="39" cy="39" r="24"/>
+            <path class="die-flower-hi" transform="translate(39 25.7) scale(.55)" d="M0-6c2.2-2.8 5.6-1.8 5.7 1.4 3.3.6 4 4 1.2 5.9 1.4 3-1.3 5.4-4.1 3.8C1.4 7.9-1.4 7.9-2.8 5.1c-2.8 1.6-5.5-.8-4.1-3.8-2.8-1.9-2.1-5.3 1.2-5.9C-5.6-7.8-2.2-8.8 0-6z"/>
+            <path class="die-flower" transform="translate(39 25) scale(.55)" d="M0-6c2.2-2.8 5.6-1.8 5.7 1.4 3.3.6 4 4 1.2 5.9 1.4 3-1.3 5.4-4.1 3.8C1.4 7.9-1.4 7.9-2.8 5.1c-2.8 1.6-5.5-.8-4.1-3.8-2.8-1.9-2.1-5.3 1.2-5.9C-5.6-7.8-2.2-8.8 0-6z"/>
+            <text class="die-text-hi" x="39" y="46.2" text-anchor="middle">A &amp; C</text>
+            <text class="die-text" x="39" y="45.5" text-anchor="middle">A &amp; C</text>
+          </svg>
+        </div>
       </div>
+
+      <button class="open-btn" id="openBtn" type="button" aria-label="Open the invitation"></button>
 
       <!-- Passport -->
       <div class="passport" id="passport">
@@ -801,6 +875,7 @@ var RSVP_ENDPOINT = "";
   var pocketText = envPocket.querySelectorAll('.addr, .par-avion');
   var bpass = $('bpass'), passport = $('passport'), cover = $('ppCover');
   var arc = $('arc'), arcMask = $('arcMask'), plane = $('plane'), stamp = $('stamp');
+  var openBtn = $('openBtn'), flock = $('flock');
   var envParts = [envBack, envPocket, envFlap];
 
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -822,6 +897,8 @@ var RSVP_ENDPOINT = "";
     envParts.forEach(function (el) { el.parentNode.removeChild(el); });
     bpass.parentNode.removeChild(bpass);
     hint.parentNode.removeChild(hint);
+    openBtn.parentNode.removeChild(openBtn);
+    flock.parentNode.removeChild(flock);
     stage.classList.add('is-static');
     passport.classList.add('is-out');
     arcMask.style.strokeDashoffset = 0;
@@ -830,7 +907,56 @@ var RSVP_ENDPOINT = "";
     stamp.style.opacity = 1;
     stamp.style.transform = 'rotate(-12deg)';
   } else {
-    var vh = window.innerHeight, eh = envBack.offsetHeight;
+    var vh = window.innerHeight, vw = window.innerWidth, eh = envBack.offsetHeight;
+
+    /* ---- Flock of Bali starlings (Leucopsar rothschildi): white, black wingtips, a crest.
+       Each bird is a group; wings scale in y around the body to beat. All driven by p. ---- */
+    var SVG_NS = 'http://www.w3.org/2000/svg';
+    var BIRDS = [
+      /* offset in p, lane (fraction of vh), depth scale, wingbeat phase */
+      { off: 0.000, lane: 0.00, scale: 1.00, phase: 0.0 },
+      { off: 0.014, lane: -0.07, scale: 0.86, phase: 1.9 },
+      { off: 0.022, lane: 0.06, scale: 0.92, phase: 3.4 },
+      { off: 0.034, lane: -0.13, scale: 0.72, phase: 0.8 },
+      { off: 0.040, lane: 0.12, scale: 0.78, phase: 4.6 },
+      { off: 0.052, lane: -0.03, scale: 0.62, phase: 2.7 },
+      { off: 0.060, lane: 0.17, scale: 0.68, phase: 5.5 }
+    ];
+    var birdEls = BIRDS.map(function () {
+      var g = document.createElementNS(SVG_NS, 'g');
+      g.setAttribute('class', 'bird');
+      g.innerHTML =
+        '<g class="wings">' +
+          '<path class="b-wing" d="M-1.5 0C-4 -4 -8 -8 -15 -10.5C-11 -6.5 -8 -3 -6 0Z"/>' +
+          '<path class="b-wing" d="M1.5 0C4 -4 8 -8 15 -10.5C11 -6.5 8 -3 6 0Z"/>' +
+          '<path class="b-tip" d="M-15 -10.5C-13.2 -9.3 -12 -8 -11 -6.6L-12.6 -7.6Z"/>' +
+          '<path class="b-tip" d="M15 -10.5C13.2 -9.3 12 -8 11 -6.6L12.6 -7.6Z"/>' +
+        '</g>' +
+        '<path class="b-body" d="M-7 0.6L-5 -0.6C-2.5 -2 2.5 -2 5.2 -0.3L7.5 -0.8L6 1.2C3 2.6 -2 2.6 -5 1.6Z"/>' +
+        '<path class="b-tip" d="M-7 0.6L-5 -0.6L-4.6 1.4Z"/>' +
+        '<path class="b-crest" d="M4 -1.4C4.8 -2.6 5.8 -3 6.8 -3"/>';
+      flock.appendChild(g);
+      return { g: g, wings: g.querySelector('.wings') };
+    });
+
+    function renderFlock(p) {
+      for (var i = 0; i < BIRDS.length; i++) {
+        var b = BIRDS[i], el = birdEls[i];
+        var t = seg(p, .06 + b.off, .40 + b.off);          /* crossing the sky */
+        if (t <= 0 || t >= 1) { el.g.style.visibility = 'hidden'; continue; }
+        el.g.style.visibility = 'visible';
+        /* a shallow arc from low-left to upper-right, lanes spread the formation */
+        var x = -60 + t * (vw + 120);
+        var y = vh * (0.50 + b.lane) - t * vh * 0.34 - Math.sin(t * Math.PI) * vh * 0.06;
+        var dx = vw + 120, dy = -vh * 0.34 - Math.cos(t * Math.PI) * Math.PI * vh * 0.06;
+        var ang = Math.atan2(dy, dx) * 180 / Math.PI;
+        var beat = Math.cos(p * Math.PI * 2 * 44 + b.phase);        /* -1 down … 1 up */
+        var fade = Math.min(1, t * 8, (1 - t) * 8);
+        el.g.setAttribute('transform', 'translate(' + x.toFixed(1) + ' ' + y.toFixed(1) + ') rotate(' + ang.toFixed(1) + ') scale(' + (b.scale * 1.15).toFixed(2) + ')');
+        el.g.style.opacity = fade;
+        el.wings.setAttribute('transform', 'scale(1 ' + (0.25 + 0.75 * beat).toFixed(3) + ')');
+      }
+    }
 
     function render(p) {
       /* Envelope resting position, then it sinks in phase 6. */
@@ -838,6 +964,10 @@ var RSVP_ENDPOINT = "";
 
       /* -- Hint fades out immediately ------------------------------ 0.00–0.05 */
       hint.style.opacity = 1 - seg(p, 0, .05);
+      openBtn.classList.toggle('is-hidden', p > .04);
+
+      /* -- Birds cross while the envelope opens ------------------- 0.06–0.46 */
+      renderFlock(p);
 
       /* -- 1. Wax seal cracks: scales up, rotates, fades ---------- 0.04–0.14 */
       var s1 = seg(p, .04, .14);
@@ -913,12 +1043,41 @@ var RSVP_ENDPOINT = "";
     }
     function onResize() {
       vh = window.innerHeight;
+      vw = window.innerWidth;
       eh = envBack.offsetHeight;
       onScroll();
     }
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onResize, { passive: true });
     onResize();
+
+    /* ---- Tap to open: tween the scroll position through the stage. Any touch,
+       wheel or key hands control straight back to the guest. ---- */
+    var opening = null;
+    function cancelOpen() {
+      if (opening) cancelAnimationFrame(opening);
+      opening = null;
+      document.documentElement.style.scrollBehavior = '';
+    }
+    function playOpen() {
+      cancelOpen();
+      var start = window.pageYOffset;
+      var end = stage.offsetTop + stage.offsetHeight - vh;
+      var dur = 5200, t0 = performance.now();
+      document.documentElement.style.scrollBehavior = 'auto';
+      function step(now) {
+        var t = clamp((now - t0) / dur, 0, 1);
+        var e = t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+        window.scrollTo(0, start + (end - start) * e);
+        if (t < 1 && opening) opening = requestAnimationFrame(step);
+        else cancelOpen();
+      }
+      opening = requestAnimationFrame(step);
+    }
+    openBtn.addEventListener('click', playOpen);
+    ['pointerdown', 'wheel', 'touchmove', 'keydown'].forEach(function (ev) {
+      window.addEventListener(ev, function () { if (opening) cancelOpen(); }, { passive: true });
+    });
   }
 
   /* -------------------------------------------------------------------------
