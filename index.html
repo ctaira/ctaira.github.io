@@ -450,6 +450,8 @@ hr.rule{border:0;border-top:1px solid rgba(36,39,34,.2);margin:2.5em 0}
 .confirm.is-visible{display:block}
 .confirm h3{font-size:clamp(30px,6vw,42px);margin-bottom:.4em}
 .confirm .mono{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);display:block;margin-top:1.6em}
+.gate{max-width:46ch;font-size:16.5px}
+.gate p{margin-bottom:.8em}
 .rsvp .deadline{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin:-1.6em 0 2.6em}
 
 /* Footer */
@@ -798,6 +800,11 @@ hr.rule{border:0;border-top:1px solid rgba(36,39,34,.2);margin:2.5em 0}
     <h2>Will you come?</h2>
     <p class="deadline" id="deadline">Kindly reply by 1 March 2027</p>
 
+    <div class="gate" id="rsvpGate" hidden>
+      <p>We couldn't find your invitation. Please open the link from the message we sent you, which carries your name and seats, and reply from there.</p>
+      <p class="muted">If the link isn't working, just write to us and we'll sort it out.</p>
+    </div>
+
     <form id="rsvpForm" novalidate>
       <div class="field" id="fName">
         <label for="name">Your name</label>
@@ -875,8 +882,11 @@ hr.rule{border:0;border-top:1px solid rgba(36,39,34,.2);margin:2.5em 0}
 
 <script>
 /* ---------------------------------------------------------------------------
-   RSVP backend. Leave empty for preview mode (logs the payload, no request).
-   Set to a Google Apps Script web-app URL to POST replies.
+   RSVP backend: the Google Apps Script web-app URL from rsvp/README.md.
+   With it set, guests are looked up by the ?i= invite code on their link and
+   every reply is validated against the sheet. Leave it empty for preview
+   mode: ?to= and ?seats= personalise the page directly and submissions are
+   logged to the console instead of sent.
 --------------------------------------------------------------------------- */
 var RSVP_ENDPOINT = "";
 
@@ -893,27 +903,34 @@ var RSVP_ENDPOINT = "";
      Per-guest personalisation from ?to= and ?seats=
   ------------------------------------------------------------------------- */
   var params = new URLSearchParams(location.search);
-  var guestName = (params.get('to') || '').replace(/\s+/g, ' ').trim().slice(0, 60);
-  var seats = parseInt(params.get('seats'), 10);
-  seats = isFinite(seats) ? clamp(seats, 1, 6) : 1;
-  var hasName = guestName.length > 0;
+  var inviteCode = (params.get('i') || '').trim().toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 32);
   var words = ['one', 'two', 'three', 'four', 'five', 'six'];
-
-  var displayName = hasName ? guestName : 'Our dearest guest';
-  $('ppName').textContent = displayName;
-  $('envName').textContent = displayName;
-  $('bpName').textContent = hasName ? guestName.toUpperCase() : 'GUEST';
-  $('ppSeats').textContent = seats + (seats === 1 ? ' guest' : ' guests');
-  $('bpSeats').textContent = String(seats);
-    $('seatsNum').textContent = String(seats);
-  $('seatsLine').textContent = 'Admits ' + words[seats - 1] + (seats === 1 ? ' guest' : ' guests');
-  if (hasName) $('name').value = guestName;
-
-  /* MRZ line 1 carries the guest's name, OCR-B style. */
-  var mrzName = (hasName ? guestName : 'GUEST').toUpperCase().replace(/&/g, ' AND ').replace(/[^A-Z ]/g, '').trim().replace(/ +/g, '<');
+  var guestName = '', seats = 1;
   var padMrz = function (s) { s = s.slice(0, 44); while (s.length < 44) s += '<'; return s; };
-  $('mrz1').textContent = padMrz('P<IDNBALI<<' + mrzName + '<<');
-  $('mrz2').textContent = padMrz('AC28082027' + seats + 'IDN2708279<2708300<JIMBARAN<<');
+
+  /* Writes a guest's name and seat count everywhere they appear: envelope, boarding
+     pass, passport, MRZ, the adults-only box and the RSVP form. */
+  function applyGuest(name, n) {
+    guestName = String(name || '').replace(/\s+/g, ' ').trim().slice(0, 60);
+    seats = isFinite(n) ? clamp(parseInt(n, 10) || 1, 1, 6) : 1;
+    var hasName = guestName.length > 0;
+    var displayName = hasName ? guestName : 'Our dearest guest';
+    $('ppName').textContent = displayName;
+    $('envName').textContent = displayName;
+    $('bpName').textContent = hasName ? guestName.toUpperCase() : 'GUEST';
+    $('ppSeats').textContent = seats + (seats === 1 ? ' guest' : ' guests');
+    $('bpSeats').textContent = String(seats);
+    $('seatsNum').textContent = String(seats);
+    $('seatsNum').hidden = false;
+    $('seatsLine').textContent = 'Admits ' + words[seats - 1] + (seats === 1 ? ' guest' : ' guests');
+    if (hasName && !$('name').value) $('name').value = guestName;
+
+    /* MRZ line 1 carries the guest's name, OCR-B style. */
+    var mrzName = (hasName ? guestName : 'GUEST').toUpperCase().replace(/&/g, ' AND ').replace(/[^A-Z ]/g, '').trim().replace(/ +/g, '<');
+    $('mrz1').textContent = padMrz('P<IDNBALI<<' + mrzName + '<<');
+    $('mrz2').textContent = padMrz('AC28082027' + seats + 'IDN2708279<2708300<JIMBARAN<<');
+    if (typeof buildPartyOptions === 'function') buildPartyOptions();
+  }
 
   /* -------------------------------------------------------------------------
      Opening sequence
@@ -1168,15 +1185,20 @@ var RSVP_ENDPOINT = "";
   var partySel = $('party'), partyHint = $('partyHint');
 
   /* Party-size dropdown is capped at the invitation's seat count. Hidden when it's 1. */
-  for (var n = 1; n <= seats; n++) {
-    var opt = document.createElement('option');
-    opt.value = n;
-    opt.textContent = n === 1 ? 'Just me' : n + ' of us';
-    if (n === seats) opt.selected = true;
-    partySel.appendChild(opt);
+  var partyAllowed = false;
+  function buildPartyOptions() {
+    partySel.innerHTML = '';
+    for (var n = 1; n <= seats; n++) {
+      var opt = document.createElement('option');
+      opt.value = n;
+      opt.textContent = n === 1 ? 'Just me' : n + ' of us';
+      if (n === seats) opt.selected = true;
+      partySel.appendChild(opt);
+    }
+    partyHint.textContent = 'Your invitation admits up to ' + words[seats - 1] + '.';
+    partyAllowed = seats > 1;
+    syncVisibility();
   }
-  partyHint.textContent = 'Your invitation admits up to ' + words[seats - 1] + '.';
-  var partyAllowed = seats > 1;
 
   function attendingValue() {
     var r = form.querySelector('input[name="attending"]:checked');
@@ -1196,6 +1218,41 @@ var RSVP_ENDPOINT = "";
   }
   syncVisibility();
 
+  /* ---- Who is this? With a backend, the invite code decides. Without one, ?to= and ?seats= do. */
+  var gate = $('rsvpGate');
+  function closeGate(reason) {
+    form.hidden = true;
+    $('deadline').hidden = true;
+    gate.hidden = false;
+    $('seatsLine').textContent = 'Seats are on your invitation link';
+    $('seatsNum').hidden = true;
+    console.warn('RSVP gated:', reason);
+  }
+  if (RSVP_ENDPOINT) {
+    applyGuest('', 1);
+    if (!inviteCode) {
+      closeGate('no invite code in the URL');
+    } else {
+      fetch(RSVP_ENDPOINT + (RSVP_ENDPOINT.indexOf('?') < 0 ? '?' : '&') + 'i=' + encodeURIComponent(inviteCode), { method: 'GET' })
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+          if (d && d.ok) {
+            applyGuest(d.name, d.seats);
+            if (d.email && !$('email').value) $('email').value = d.email;
+          } else {
+            closeGate('code not found');
+          }
+        })
+        .catch(function (err) {
+          /* Lookup failed (offline, script error). Leave the form open; the backend still validates on submit. */
+          console.warn('Invitation lookup failed', err);
+        });
+    }
+  } else {
+    var n = parseInt(params.get('seats'), 10);
+    applyGuest(params.get('to') || '', isFinite(n) ? n : 1);
+  }
+
   var emailOk = function (v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v); };
   $('name').addEventListener('input', function () { if (this.value.trim()) fName.classList.remove('is-invalid'); });
   $('email').addEventListener('input', function () { if (emailOk(this.value.trim())) fEmail.classList.remove('is-invalid'); });
@@ -1213,7 +1270,7 @@ var RSVP_ENDPOINT = "";
 
   function showConfirmation(declined) {
     form.hidden = true;
-    $('deadline') && ($('deadline').hidden = true);
+    $('deadline').hidden = true;
     var el = $(declined ? 'confirmNo' : 'confirmYes');
     el.classList.add('is-visible');
     el.setAttribute('tabindex', '-1');
@@ -1234,10 +1291,10 @@ var RSVP_ENDPOINT = "";
       party: party,
       dietary: declined ? '' : $('diet').value.trim(),
       note: $('note').value.trim(),
-      invitedName: guestName,     /* from ?to=   — so mismatches are visible */
-      allowedSeats: seats,        /* from ?seats= */
-      submittedAt: new Date().toISOString(),
-      page: location.href
+      code: inviteCode,           /* the backend looks this up and enforces the seat count */
+      invitedName: guestName,     /* what the page showed, so mismatches are visible */
+      allowedSeats: seats,
+      submittedAt: new Date().toISOString()
     };
 
     if (!RSVP_ENDPOINT) {
@@ -1248,21 +1305,29 @@ var RSVP_ENDPOINT = "";
 
     submitBtn.disabled = true;
     submitBtn.textContent = 'Sending…';
-    /* Apps Script web apps answer via a redirect that carries no CORS headers,
-       so the response is opaque; a resolved fetch is the success signal. */
-    fetch(RSVP_ENDPOINT, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify(payload)
-    }).then(function () {
-      showConfirmation(declined);
-    }).catch(function (err) {
+    var body = JSON.stringify(payload);
+    function failed(err, message) {
       console.error('RSVP send failed', err);
       submitBtn.disabled = false;
       submitBtn.textContent = 'Send reply';
+      formError.textContent = message || 'Something went wrong sending your reply. Please try again, or message us directly.';
       formError.classList.add('is-visible');
-    });
+    }
+    /* A plain-text POST is a "simple" request, so Apps Script's redirect can be followed and
+       its JSON read. If the browser still refuses the response, fall back to an opaque send:
+       the reply is delivered either way, we just can't read the verdict. */
+    fetch(RSVP_ENDPOINT, { method: 'POST', body: body })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (d && d.ok) showConfirmation(declined);
+        else if (d && d.error === 'not_found') failed(d, "We couldn't match your invitation. Please reply from the link we sent you, or message us directly.");
+        else failed(d);
+      })
+      .catch(function () {
+        fetch(RSVP_ENDPOINT, { method: 'POST', mode: 'no-cors', body: body })
+          .then(function () { showConfirmation(declined); })
+          .catch(function (err) { failed(err); });
+      });
   });
 })();
 </script>
