@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ashley &amp; Charles, Bali</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F6F2EA;--paper-2:#EFE9DE;--powder:#D7E2EC;--powder-2:#C3D3E1;--dusk:#8FA6BE;--deep:#4C6480;
+  --gold:#C9A85C;--gold-2:#F1E3A8;--gold-3:#9C7F3A;--ink:#2E3136;--ink-2:#6A6E72;--stone:#3A3C38;
+  --script:'Pinyon Script','Snell Roundhand','Brush Script MT',cursive;
+  --serif:'Cormorant Garamond','Cormorant',Georgia,'Times New Roman',serif;
+  --sans:'Jost','Futura','Avenir Next','Helvetica Neue',Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:18px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+h1,h2,h3{margin:0;font-weight:400}
+p{margin:0 0 1em}
+:focus-visible{outline:2px solid var(--gold);outline-offset:4px}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+.script{font-family:var(--script);font-weight:400}
+.label{font-family:var(--sans);font-weight:400;font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--ink-2)}
+.scene{position:relative;min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:clamp(56px,10vh,96px) 24px;text-align:center;overflow:hidden}
+.scene>*{position:relative;z-index:1}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.skip{position:fixed;top:14px;right:14px;z-index:60;font-family:var(--sans);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink);text-decoration:none;background:rgba(246,242,234,.8);padding:8px 14px;border-radius:999px;border:1px solid rgba(46,49,54,.15)}
+
+/* ---------------- Envelope overlay ---------------- */
+.env{position:fixed;inset:0;z-index:50;display:grid;place-items:center;background:var(--paper);transition:transform 1.1s cubic-bezier(.6,0,.4,1) 1.15s,opacity .6s ease 1.6s}
+.env::before{content:"";position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");pointer-events:none}
+.env.is-open{transform:translateY(105%);opacity:0}
+.env .body{position:relative;width:min(88vw,420px);aspect-ratio:1.38;}
+.env .back{position:absolute;inset:0;background:#E9E3D7;border-radius:6px}
+.env .pocket{position:absolute;inset:0;border-radius:6px;overflow:hidden}
+.env .pocket i{position:absolute;inset:0;display:block}
+.env .pocket .l{background:#F6F2EA;clip-path:polygon(0 0,50% 56%,0 100%)}
+.env .pocket .r{background:#F6F2EA;clip-path:polygon(100% 0,50% 56%,100% 100%)}
+.env .pocket .b{background:#F1ECE2;clip-path:polygon(0 100%,50% 56%,100% 100%)}
+.env .flap{position:absolute;inset:0;transform-origin:50% 0;transform-style:preserve-3d;transition:transform 1s cubic-bezier(.65,0,.35,1) .35s;z-index:3}
+.env.is-open .flap{transform:rotateX(-178deg);z-index:0}
+.env .flap i{position:absolute;inset:0;display:block;background:linear-gradient(180deg,#F8F5EF,#ECE6DA);clip-path:polygon(0 0,100% 0,50% 58%);backface-visibility:hidden}
+.env .flap b{position:absolute;inset:0;display:block;background:#E3DCCF;clip-path:polygon(0 0,100% 0,50% 58%);transform:rotateX(180deg);backface-visibility:hidden}
+.env .addr{position:absolute;left:0;right:0;bottom:12%;text-align:center;font-family:var(--script);font-size:clamp(26px,7vw,36px);color:var(--ink);z-index:2}
+.seal{position:absolute;left:50%;top:58%;width:84px;height:84px;margin:-42px 0 0 -42px;z-index:4;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#F7ECBF 0,#D9BC6A 35%,#B8963F 70%,#8C6E2A 100%);
+  box-shadow:inset 0 2px 3px rgba(255,250,220,.7),inset 0 -3px 5px rgba(80,55,10,.45),0 6px 14px -6px rgba(60,40,5,.5);
+  transition:transform .45s ease,opacity .4s ease;display:grid;place-items:center}
+.seal::before{content:"";position:absolute;inset:7px;border-radius:50%;box-shadow:inset 0 1px 1px rgba(255,250,220,.6),inset 0 -1px 2px rgba(80,55,10,.5)}
+.seal span{font-family:var(--script);font-size:34px;color:rgba(80,55,10,.75);text-shadow:0 1px 0 rgba(255,250,220,.5);padding-top:4px}
+.env.is-open .seal{transform:scale(.2);opacity:0}
+.env .hint{position:absolute;left:0;right:0;bottom:max(36px,env(safe-area-inset-bottom));text-align:center}
+.env .hint .label{color:var(--ink)}
+.env-btn{position:absolute;inset:0;z-index:5;border-radius:6px}
+@media (prefers-reduced-motion:reduce){.env{display:none}}
+
+/* ---------------- Hero ---------------- */
+.hero{color:#FFFDF7;min-height:100svh;padding-bottom:max(64px,10vh)}
+.hero svg.bg{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+.hero .names{font-size:clamp(54px,15vw,92px);line-height:1;text-shadow:0 2px 24px rgba(40,30,20,.35)}
+.hero .sub{font-style:italic;font-size:clamp(22px,5.4vw,28px);margin-top:.2em;text-shadow:0 1px 12px rgba(40,30,20,.35)}
+.hero .where{margin-top:2.2em;color:rgba(255,253,247,.85)}
+.hero .cue{position:absolute;left:0;right:0;bottom:max(28px,env(safe-area-inset-bottom));color:rgba(255,253,247,.8)}
+.hero .cue svg{display:block;margin:8px auto 0;width:18px;height:18px}
+.egrets .e{fill:#FFFDF7;opacity:.9;animation:fly linear infinite}
+@keyframes fly{from{transform:translateX(-80px)}to{transform:translateX(480px)}}
+@media (prefers-reduced-motion:reduce){.egrets .e{animation:none}}
+
+/* ---------------- The date ---------------- */
+.date{background:linear-gradient(180deg,var(--paper) 0%,#F2EEE6 100%)}
+.date h2{font-size:clamp(54px,14vw,84px);line-height:1;color:var(--ink)}
+.date .label{margin-top:.6em}
+.cards{display:flex;gap:12px;justify-content:center;margin:2.2em 0 1.6em}
+.card{position:relative;width:min(27vw,120px);aspect-ratio:.86;background:#FFFDF9;border:1px solid rgba(46,49,54,.12);border-radius:6px;box-shadow:0 14px 30px -18px rgba(46,49,54,.35);display:grid;place-items:center;overflow:hidden}
+.card .val{font-family:var(--serif);font-size:clamp(22px,6vw,32px);font-weight:500;line-height:1;padding:0 6px}
+.card .val.num{font-size:clamp(34px,9vw,46px)}
+.card canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;transition:opacity .5s ease}
+.card.is-revealed canvas{opacity:0;pointer-events:none}
+.card .cap{position:absolute;left:0;right:0;bottom:8px;font-family:var(--sans);font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--ink-2)}
+.date .when{font-style:italic;font-size:clamp(19px,4.8vw,24px);color:var(--ink-2)}
+.reveal-all{margin-top:.4em;font-family:var(--sans);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink-2);text-decoration:underline;text-underline-offset:4px}
+
+/* ---------------- The letter ---------------- */
+.invite{background:linear-gradient(180deg,#F2EEE6 0%,var(--paper) 40%)}
+.invite h2{font-size:clamp(54px,14vw,84px);line-height:1}
+.hearts{width:44px;height:30px;margin:.6em auto 0;display:block}
+.hearts path{fill:none;stroke:var(--dusk);stroke-width:1.4;stroke-linecap:round}
+.lenv{position:relative;width:min(88vw,440px);aspect-ratio:1.2;margin:calc(min(88vw,440px) * .46) auto 2.6em;cursor:pointer}
+.lenv .back{position:absolute;inset:0;background:var(--powder-2);border-radius:6px}
+.lenv .flap{position:absolute;inset:0;background:linear-gradient(180deg,var(--powder),#CFDCE8);clip-path:polygon(0 0,100% 0,50% 52%);border-radius:6px 6px 0 0;transform-origin:50% 0;transform:rotateX(-165deg);z-index:0}
+.lenv .letter{position:absolute;left:7%;right:7%;top:-30%;bottom:6%;background:#FFFDF9;border-radius:4px;box-shadow:0 18px 40px -20px rgba(46,49,54,.45);padding:24px 22px;text-align:left;overflow:hidden;transition:transform .9s cubic-bezier(.6,0,.3,1),bottom .9s cubic-bezier(.6,0,.3,1);z-index:1}
+.lenv .pocket{position:absolute;inset:0;z-index:2;border-radius:6px;overflow:hidden;pointer-events:none}
+.lenv .pocket i{position:absolute;inset:0;display:block}
+.lenv .pocket .l{background:var(--powder);clip-path:polygon(0 0,50% 58%,0 100%)}
+.lenv .pocket .r{background:var(--powder);clip-path:polygon(100% 0,50% 58%,100% 100%)}
+.lenv .pocket .b{background:#C8D7E4;clip-path:polygon(0 100%,50% 58%,100% 100%)}
+.lenv .letter .sal{font-family:var(--script);font-size:clamp(26px,7vw,34px);line-height:1;margin-bottom:.5em}
+.lenv .letter p{font-size:clamp(15px,4.1vw,17px);line-height:1.5;margin-bottom:.7em}
+.lenv .letter .sig{font-family:var(--script);font-size:clamp(26px,7vw,34px);margin-top:.4em}
+.lenv .cue{position:absolute;left:0;right:0;bottom:-2.6em;color:var(--ink-2)}
+.lenv.is-out{aspect-ratio:auto;height:auto;min-height:60vh;cursor:default}
+.lenv.is-out .letter{position:relative;left:auto;right:auto;top:auto;bottom:auto;transform:none;margin:0 auto;width:100%;overflow:visible}
+.lenv.is-out .back,.lenv.is-out .flap,.lenv.is-out .pocket,.lenv.is-out .cue{display:none}
+.lenv:not(.is-out) .letter{max-height:none}
+.lenv:not(.is-out) .letter p:nth-child(n+3),.lenv:not(.is-out) .letter .sig{display:none}
+
+/* ---------------- Schedule ---------------- */
+.sched{color:var(--ink);min-height:100svh}
+.sched svg.bg{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+.sched h2{font-size:clamp(46px,12vw,72px);line-height:1}
+.tl{list-style:none;margin:2.4em auto 0;padding:0;max-width:420px;text-align:left;position:relative}
+.tl::before{content:"";position:absolute;left:96px;top:6px;bottom:6px;width:1px;background:rgba(46,49,54,.35)}
+.tl li{display:grid;grid-template-columns:82px 28px 1fr;align-items:start;padding:.55em 0}
+.tl time{font-family:var(--sans);font-weight:400;font-size:13px;letter-spacing:.12em;text-align:right;padding-top:.35em;color:var(--ink)}
+.tl .dot{width:7px;height:7px;border-radius:50%;background:var(--deep);margin:.65em auto 0;box-shadow:0 0 0 4px rgba(246,242,234,.9)}
+.tl b{font-weight:500;font-size:clamp(19px,5vw,22px);display:block;line-height:1.2}
+.tl span{display:block;font-style:italic;color:var(--ink-2);font-size:16px}
+.tl .day{grid-template-columns:1fr;padding:1.3em 0 .4em 110px;white-space:nowrap}
+.tl .day .label{letter-spacing:.22em}
+.tl .day .label{color:var(--deep)}
+
+/* ---------------- Details ---------------- */
+.details{background:var(--paper)}
+.details h2{font-size:clamp(46px,12vw,72px);line-height:1;margin-bottom:.4em}
+.dgrid{display:grid;gap:18px;width:min(92vw,520px);margin-top:1.2em}
+.dcard{background:#FFFDF9;border:1px solid rgba(46,49,54,.1);padding:26px 24px;box-shadow:0 18px 40px -26px rgba(46,49,54,.35);text-align:center}
+.dcard h3{font-family:var(--script);font-size:clamp(30px,8vw,40px);line-height:1;margin-bottom:.35em}
+.dcard p{font-size:17px;margin:0 0 .5em}
+.dcard p:last-child{margin:0}
+.dcard .label{display:block;margin-bottom:.9em}
+.swatches{display:flex;justify-content:center;gap:12px;margin:.6em 0 .9em}
+.swatches i{width:26px;height:26px;border-radius:50%;display:block;border:1px solid rgba(46,49,54,.15)}
+
+/* ---------------- RSVP ---------------- */
+.rsvp{background:linear-gradient(180deg,var(--paper) 0%,var(--powder) 100%)}
+.rsvp h2{font-size:clamp(54px,14vw,84px);line-height:1;margin-bottom:.25em}
+.rsvp form{width:min(92vw,440px);margin-top:1.6em;text-align:left}
+.f{margin-bottom:1.4em}
+.f label,.f legend{display:block;font-family:var(--sans);font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--ink-2);margin-bottom:.5em;padding:0}
+.f input,.f select,.f textarea{width:100%;font:inherit;font-size:18px;color:var(--ink);background:transparent;border:0;border-bottom:1px solid rgba(46,49,54,.35);padding:.5em 0;border-radius:0}
+.f input:focus,.f select:focus,.f textarea:focus{outline:none;border-bottom-color:var(--gold-3)}
+.f textarea{min-height:4.5em;resize:vertical}
+.f fieldset{border:0;padding:0;margin:0}
+.pills{display:flex;flex-wrap:wrap;gap:10px}
+.pills label{position:relative;font-family:var(--serif);font-size:17px;letter-spacing:0;text-transform:none;color:var(--ink);margin:0}
+.pills input{position:absolute;opacity:0;width:1px;height:1px}
+.pills span{display:inline-block;border:1px solid rgba(46,49,54,.35);border-radius:999px;padding:.5em 1.1em;cursor:pointer}
+.pills input:checked+span{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.pills input:focus-visible+span{outline:2px solid var(--gold);outline-offset:3px}
+.btn{display:inline-block;background:var(--ink);color:var(--paper);padding:.9em 2.2em;border-radius:999px;font-family:var(--sans);font-size:12px;letter-spacing:.28em;text-transform:uppercase;margin-top:.4em}
+.thanks{display:none;max-width:40ch}
+.thanks.is-visible{display:block}
+.thanks .script{font-size:clamp(40px,11vw,60px);line-height:1;margin-bottom:.3em;display:block}
+
+/* ---------------- Footer ---------------- */
+.foot{background:var(--powder);padding:64px 24px max(56px,env(safe-area-inset-bottom));text-align:center}
+.mono{width:92px;height:92px;border-radius:50%;margin:0 auto 18px;display:grid;place-items:center;background:radial-gradient(circle at 35% 30%,#F7ECBF 0,#D9BC6A 40%,#B8963F 80%);box-shadow:inset 0 2px 3px rgba(255,250,220,.7),inset 0 -3px 5px rgba(80,55,10,.4)}
+.mono span{font-family:var(--script);font-size:38px;color:rgba(80,55,10,.75);padding-top:6px}
+.foot .script{font-size:clamp(34px,9vw,46px);display:block;line-height:1}
+.foot p{margin:.6em 0 0;font-style:italic;color:var(--ink-2)}
+</style>
+</head>
+<body>
+
+
+<a class="skip" href="#date" id="skip">Skip</a>
+
+<!-- ============ Envelope overlay ============ -->
+<div class="env" id="env" aria-label="Sealed envelope">
+  <div class="body">
+    <div class="back"></div>
+    <div class="pocket"><i class="l"></i><i class="r"></i><i class="b"></i></div>
+    <div class="addr" id="envName">For our dearest friends</div>
+    <div class="flap"><i></i><b></b></div>
+    <div class="seal" aria-hidden="true"><span>A&amp;C</span></div>
+    <button class="env-btn" id="envBtn" type="button" aria-label="Open the invitation"></button>
+  </div>
+  <div class="hint"><span class="label">Tap the seal to open</span></div>
+</div>
+
+<!-- ============ Hero: the split gate ============ -->
+<section class="scene hero" id="hero">
+  <svg class="bg" viewBox="0 0 390 844" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <defs>
+      <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#7C8FB0"/><stop offset=".3" stop-color="#B9AFCB"/><stop offset=".52" stop-color="#EBC3AE"/><stop offset=".6" stop-color="#F6D6B4"/>
+      </linearGradient>
+      <radialGradient id="sun" cx=".5" cy=".6" r=".38">
+        <stop offset="0" stop-color="#FFF1CF" stop-opacity=".95"/><stop offset=".45" stop-color="#F8CFA3" stop-opacity=".5"/><stop offset="1" stop-color="#F8CFA3" stop-opacity="0"/>
+      </radialGradient>
+      <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#D9C3B4"/><stop offset=".18" stop-color="#9FAFC0"/><stop offset=".6" stop-color="#5F7E9B"/><stop offset="1" stop-color="#3E5B78"/>
+      </linearGradient>
+      <linearGradient id="stone" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#2C2E2A"/><stop offset=".55" stop-color="#3E403B"/><stop offset="1" stop-color="#262824"/>
+      </linearGradient>
+      <linearGradient id="stoneR" x1="1" y1="0" x2="0" y2="0">
+        <stop offset="0" stop-color="#2C2E2A"/><stop offset=".55" stop-color="#3E403B"/><stop offset="1" stop-color="#262824"/>
+      </linearGradient>
+      <linearGradient id="floor" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#4A4C46"/><stop offset="1" stop-color="#2A2C28"/>
+      </linearGradient>
+      <filter id="clouds" x="0" y="0" width="100%" height="100%">
+        <feTurbulence type="fractalNoise" baseFrequency=".006 .012" numOctaves="4" seed="3" result="n"/>
+        <feColorMatrix in="n" type="matrix" values="0 0 0 0 1  0 0 0 0 .98  0 0 0 0 .94  0 0 0 1.6 -.55" result="c"/>
+        <feGaussianBlur in="c" stdDeviation="1.2"/>
+      </filter>
+      <filter id="grain" x="0" y="0" width="100%" height="100%">
+        <feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="9" result="n"/>
+        <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .18 0" result="g"/>
+        <feComposite in="g" in2="SourceGraphic" operator="in" result="gi"/>
+        <feBlend in="SourceGraphic" in2="gi" mode="multiply"/>
+      </filter>
+      <filter id="haze" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="10"/></filter>
+    </defs>
+
+    <!-- sky, sun, clouds -->
+    <rect width="390" height="560" fill="url(#sky)"/>
+    <rect width="390" height="560" fill="url(#sun)"/>
+    <rect x="0" y="40" width="390" height="330" filter="url(#clouds)" opacity=".85"/>
+    <!-- sea and horizon haze -->
+    <rect x="0" y="500" width="390" height="350" fill="url(#sea)"/>
+    <rect x="0" y="482" width="390" height="40" fill="#F6D6B4" opacity=".6" filter="url(#haze)"/>
+    <ellipse cx="195" cy="504" rx="60" ry="3" fill="#FFF3D8" opacity=".9" filter="url(#haze)"/>
+    <!-- sun path on the water -->
+    <path d="M170 508 L220 508 L262 720 L128 720 Z" fill="#FFE8BF" opacity=".28" filter="url(#haze)"/>
+    <g stroke="#FFF6E4" stroke-width="1" opacity=".5" stroke-linecap="round">
+      <path d="M150 560h20M212 574h16M170 596h26M226 610h14M140 640h22M240 652h18M186 676h30"/>
+    </g>
+    <!-- distant headland -->
+    
+
+    <!-- candi bentar -->
+    <g filter="url(#grain)">
+<rect x="0" y="0" width="58" height="88" fill="url(#stone)"/>
+<rect x="0" y="0" width="66" height="9" fill="#5B5D55"/>
+<rect x="0" y="9" width="66" height="3" fill="#1E201C" opacity=".85"/>
+<rect x="0" y="88" width="66" height="88" fill="url(#stone)"/>
+<rect x="0" y="88" width="74" height="9" fill="#5B5D55"/>
+<rect x="0" y="97" width="74" height="3" fill="#1E201C" opacity=".85"/>
+<rect x="0" y="176" width="74" height="88" fill="url(#stone)"/>
+<rect x="0" y="176" width="82" height="9" fill="#5B5D55"/>
+<rect x="0" y="185" width="82" height="3" fill="#1E201C" opacity=".85"/>
+<rect x="0" y="264" width="82" height="88" fill="url(#stone)"/>
+<rect x="0" y="264" width="90" height="9" fill="#5B5D55"/>
+<rect x="0" y="273" width="90" height="3" fill="#1E201C" opacity=".85"/>
+<rect x="0" y="352" width="90" height="88" fill="url(#stone)"/>
+<rect x="0" y="352" width="98" height="9" fill="#5B5D55"/>
+<rect x="0" y="361" width="98" height="3" fill="#1E201C" opacity=".85"/>
+<rect x="0" y="440" width="98" height="88" fill="url(#stone)"/>
+<rect x="0" y="440" width="106" height="9" fill="#5B5D55"/>
+<rect x="0" y="449" width="106" height="3" fill="#1E201C" opacity=".85"/>
+<rect x="0" y="528" width="104" height="88" fill="url(#stone)"/>
+<rect x="0" y="528" width="112" height="9" fill="#5B5D55"/>
+<rect x="0" y="537" width="112" height="3" fill="#1E201C" opacity=".85"/>
+<rect x="0" y="616" width="110" height="88" fill="url(#stone)"/>
+<rect x="0" y="616" width="118" height="9" fill="#5B5D55"/>
+<rect x="0" y="625" width="118" height="3" fill="#1E201C" opacity=".85"/>
+<rect x="0" y="704" width="116" height="56" fill="url(#stone)"/>
+<rect x="0" y="704" width="124" height="9" fill="#5B5D55"/>
+<rect x="0" y="713" width="124" height="3" fill="#1E201C" opacity=".85"/>
+<rect x="332" y="0" width="58" height="88" fill="url(#stoneR)"/>
+<rect x="324" y="0" width="66" height="9" fill="#5B5D55"/>
+<rect x="324" y="9" width="66" height="3" fill="#1E201C" opacity=".85"/>
+<rect x="324" y="88" width="66" height="88" fill="url(#stoneR)"/>
+<rect x="316" y="88" width="74" height="9" fill="#5B5D55"/>
+<rect x="316" y="97" width="74" height="3" fill="#1E201C" opacity=".85"/>
+<rect x="316" y="176" width="74" height="88" fill="url(#stoneR)"/>
+<rect x="308" y="176" width="82" height="9" fill="#5B5D55"/>
+<rect x="308" y="185" width="82" height="3" fill="#1E201C" opacity=".85"/>
+<rect x="308" y="264" width="82" height="88" fill="url(#stoneR)"/>
+<rect x="300" y="264" width="90" height="9" fill="#5B5D55"/>
+<rect x="300" y="273" width="90" height="3" fill="#1E201C" opacity=".85"/>
+<rect x="300" y="352" width="90" height="88" fill="url(#stoneR)"/>
+<rect x="292" y="352" width="98" height="9" fill="#5B5D55"/>
+<rect x="292" y="361" width="98" height="3" fill="#1E201C" opacity=".85"/>
+<rect x="292" y="440" width="98" height="88" fill="url(#stoneR)"/>
+<rect x="284" y="440" width="106" height="9" fill="#5B5D55"/>
+<rect x="284" y="449" width="106" height="3" fill="#1E201C" opacity=".85"/>
+<rect x="286" y="528" width="104" height="88" fill="url(#stoneR)"/>
+<rect x="278" y="528" width="112" height="9" fill="#5B5D55"/>
+<rect x="278" y="537" width="112" height="3" fill="#1E201C" opacity=".85"/>
+<rect x="280" y="616" width="110" height="88" fill="url(#stoneR)"/>
+<rect x="272" y="616" width="118" height="9" fill="#5B5D55"/>
+<rect x="272" y="625" width="118" height="3" fill="#1E201C" opacity=".85"/>
+<rect x="274" y="704" width="116" height="56" fill="url(#stoneR)"/>
+<rect x="266" y="704" width="124" height="9" fill="#5B5D55"/>
+<rect x="266" y="713" width="124" height="3" fill="#1E201C" opacity=".85"/>
+      <rect x="0" y="760" width="390" height="84" fill="url(#floor)"/>
+      <rect x="0" y="760" width="390" height="5" fill="#5A5C54"/>
+      <rect x="0" y="802" width="390" height="4" fill="#5A5C54" opacity=".7"/>
+    </g>
+    <!-- sunset light catching the inner edges -->
+    <path d="M116 760V704H110V616H104V528H98V440H90V352H82V264H74V176H66V88H58V0" fill="none" stroke="#F2C6A0" stroke-width="1.2" opacity=".55"/>
+    <path d="M274 760V704H280V616H286V528H292V440H300V352H308V264H316V176H324V88H332V0" fill="none" stroke="#F2C6A0" stroke-width="1.2" opacity=".55"/>
+
+    <!-- frangipani -->
+    <g id="frangi">
+      <g transform="translate(46 150) rotate(-18)">
+        <path d="M-30 30C-10 10 10 6 40 18" fill="none" stroke="#3E5B45" stroke-width="3" stroke-linecap="round"/>
+        <ellipse cx="-4" cy="20" rx="12" ry="5" fill="#4C6E52" transform="rotate(-30 -4 20)"/>
+        <ellipse cx="22" cy="14" rx="12" ry="5" fill="#4C6E52" transform="rotate(-10 22 14)"/>
+        <g transform="translate(10 0)"><path d="M0-10c6-4 11 2 6 7 6-1 8 6 2 8 2 6-5 9-8 4-4 5-11 2-9-4-6-1-5-8 1-8-3-6 3-11 8-7z" fill="#FFF8E7"/><circle cx="0" cy="0" r="3.5" fill="#F3D27A"/></g>
+        <g transform="translate(34 6) scale(.8)"><path d="M0-10c6-4 11 2 6 7 6-1 8 6 2 8 2 6-5 9-8 4-4 5-11 2-9-4-6-1-5-8 1-8-3-6 3-11 8-7z" fill="#FFF8E7"/><circle cx="0" cy="0" r="3.5" fill="#F3D27A"/></g>
+        <g transform="translate(-14 4) scale(.7)"><path d="M0-10c6-4 11 2 6 7 6-1 8 6 2 8 2 6-5 9-8 4-4 5-11 2-9-4-6-1-5-8 1-8-3-6 3-11 8-7z" fill="#FFF8E7"/><circle cx="0" cy="0" r="3.5" fill="#F3D27A"/></g>
+      </g>
+      <g transform="translate(344 126) rotate(20) scale(-1 1)">
+        <path d="M-30 30C-10 10 10 6 40 18" fill="none" stroke="#3E5B45" stroke-width="3" stroke-linecap="round"/>
+        <ellipse cx="-4" cy="20" rx="12" ry="5" fill="#4C6E52" transform="rotate(-30 -4 20)"/>
+        <ellipse cx="22" cy="14" rx="12" ry="5" fill="#4C6E52" transform="rotate(-10 22 14)"/>
+        <g transform="translate(10 0)"><path d="M0-10c6-4 11 2 6 7 6-1 8 6 2 8 2 6-5 9-8 4-4 5-11 2-9-4-6-1-5-8 1-8-3-6 3-11 8-7z" fill="#FFF8E7"/><circle cx="0" cy="0" r="3.5" fill="#F3D27A"/></g>
+        <g transform="translate(34 6) scale(.8)"><path d="M0-10c6-4 11 2 6 7 6-1 8 6 2 8 2 6-5 9-8 4-4 5-11 2-9-4-6-1-5-8 1-8-3-6 3-11 8-7z" fill="#FFF8E7"/><circle cx="0" cy="0" r="3.5" fill="#F3D27A"/></g>
+      </g>
+    </g>
+    <!-- egrets -->
+    <g class="egrets">
+      <path class="e" style="animation-duration:38s" transform="translate(0 250) scale(.9)" d="M0 0c3-3 6-4 9-1 3-3 6-2 9 1-3-1-6 0-9 2-3-2-6-3-9-2z"/>
+      <path class="e" style="animation-duration:46s;animation-delay:-12s" transform="translate(0 300) scale(.7)" d="M0 0c3-3 6-4 9-1 3-3 6-2 9 1-3-1-6 0-9 2-3-2-6-3-9-2z"/>
+      <path class="e" style="animation-duration:52s;animation-delay:-30s" transform="translate(0 220) scale(.55)" d="M0 0c3-3 6-4 9-1 3-3 6-2 9 1-3-1-6 0-9 2-3-2-6-3-9-2z"/>
+    </g>
+  </svg>
+
+  <h1 class="script names">Ashley &amp; Charles</h1>
+  <p class="sub">are getting married</p>
+  <p class="where label" style="color:rgba(255,253,247,.85)">Jimbaran, Bali &nbsp;·&nbsp; 28 August 2027</p>
+  <div class="cue"><span class="label" style="color:rgba(255,253,247,.8)">Scroll</span>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9l7 7 7-7" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>
+  </div>
+</section>
+
+<!-- ============ The date ============ -->
+<section class="scene date" id="date">
+  <h2 class="script">The Date</h2>
+  <p class="label">✦ &nbsp;Scratch to reveal the date&nbsp; ✦</p>
+  <div class="cards" id="cards">
+    <div class="card"><span class="val num">28</span><span class="cap">Day</span><canvas aria-hidden="true"></canvas></div>
+    <div class="card"><span class="val">August</span><span class="cap">Month</span><canvas aria-hidden="true"></canvas></div>
+    <div class="card"><span class="val num">2027</span><span class="cap">Year</span><canvas aria-hidden="true"></canvas></div>
+  </div>
+  <p class="when">Saturday, at half past four in the afternoon</p>
+  <button class="reveal-all" id="revealAll" type="button">Reveal the date</button>
+</section>
+
+<!-- ============ You're invited ============ -->
+<section class="scene invite" id="invite">
+  <h2 class="script">You're invited</h2>
+  <svg class="hearts" viewBox="0 0 44 30" aria-hidden="true">
+    <path d="M14 26C6 20 2 15 3 10c1-4 6-5 9-1 3-4 8-3 9 1 1 5-3 10-7 16z"/>
+    <path d="M36 16c-5-4-8-7-7-10 1-3 4-3 6 0 2-3 5-3 6 0 1 3-2 6-5 10z"/>
+  </svg>
+  <div class="lenv" id="lenv" role="button" tabindex="0" aria-label="Open the letter">
+    <div class="back"></div>
+    <div class="flap"></div>
+    <div class="letter" id="letter">
+      <div class="sal">Dear friends and family,</div>
+      <p>Our first date was an Ed Sheeran concert. You might say everything about it, and everything since, has been "Perfect."</p>
+      <p>Ashley joined run club for the running. Charles joined for Ashley. He has yet to catch her. Along the way we fostered fourteen cats. Twelve found wonderful homes. Two found ours and stopped looking.</p>
+      <p>When we're not home, we're somewhere new, golfing our way around the world and leaving lost golf balls on several continents. So for the wedding we didn't want a typical venue. We wanted a cliff, an ocean, and everyone we love in one place.</p>
+      <p>Your only job is to show up in linen. It's going to be perfect. We checked.</p>
+      <div class="sig">Ashley &amp; Charles</div>
+    </div>
+    <div class="pocket"><i class="l"></i><i class="r"></i><i class="b"></i></div>
+    <div class="cue"><span class="label">Tap to read our letter</span></div>
+  </div>
+</section>
+
+<!-- ============ Schedule ============ -->
+<section class="scene sched" id="schedule">
+  <svg class="bg" viewBox="0 0 390 844" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <defs>
+      <linearGradient id="sky2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F6F2EA"/><stop offset=".45" stop-color="#E9DDE0"/><stop offset="1" stop-color="#C9D8E8"/></linearGradient>
+      <filter id="clouds2" x="0" y="0" width="100%" height="100%">
+        <feTurbulence type="fractalNoise" baseFrequency=".005 .011" numOctaves="4" seed="11" result="n"/>
+        <feColorMatrix in="n" type="matrix" values="0 0 0 0 1  0 0 0 0 .99  0 0 0 0 .97  0 0 0 1.7 -.5" result="c"/>
+        <feGaussianBlur in="c" stdDeviation="1.5"/>
+      </filter>
+      <filter id="clouds3" x="0" y="0" width="100%" height="100%">
+        <feTurbulence type="fractalNoise" baseFrequency=".004 .009" numOctaves="3" seed="5" result="n"/>
+        <feColorMatrix in="n" type="matrix" values="0 0 0 0 .95  0 0 0 0 .78  0 0 0 0 .66  0 0 0 1.2 -.45" result="c"/>
+        <feGaussianBlur in="c" stdDeviation="3"/>
+      </filter>
+    </defs>
+    <rect width="390" height="844" fill="url(#sky2)"/>
+    <rect x="0" y="380" width="390" height="464" filter="url(#clouds3)" opacity=".7"/>
+    <rect x="0" y="300" width="390" height="544" filter="url(#clouds2)" opacity=".95"/>
+  </svg>
+  <h2 class="script">Schedule of Events</h2>
+  <ol class="tl">
+    <li class="day"><span class="label">Friday · 27 August</span></li>
+    <li><time>6:00 PM</time><i class="dot"></i><div><b>Welcome party at Rock Bar</b><span>drinks on the rocks at the foot of the cliff</span></div></li>
+    <li class="day"><span class="label">Saturday · 28 August</span></li>
+    <li><time>4:00 PM</time><i class="dot"></i><div><b>Guests seated</b><span>the clifftop lawn above the ocean</span></div></li>
+    <li><time>4:30 PM</time><i class="dot"></i><div><b>Ceremony</b><span>short and sweet</span></div></li>
+    <li><time>5:15 PM</time><i class="dot"></i><div><b>Sunset drinks</b><span>at the cliff edge</span></div></li>
+    <li><time>7:00 PM</time><i class="dot"></i><div><b>Reception</b><span>dinner and dancing</span></div></li>
+    <li class="day"><span class="label">Sunday · 29 August</span></li>
+    <li><time>All day</time><i class="dot"></i><div><b>Yours</b><span>sleep in, find a pool, fly home when you're ready</span></div></li>
+  </ol>
+</section>
+
+<!-- ============ Details ============ -->
+<section class="scene details" id="details">
+  <h2 class="script">The Details</h2>
+  <div class="dgrid">
+    <div class="dcard"><span class="label">Where</span><h3>AYANA Bali</h3><p>Jimbaran, on the cliffs above the Indian Ocean. Rooms are held for our guests across AYANA Resort, AYANA Villas and RIMBA, all on one estate.</p><p>Everything happens on the estate. Nobody drives anywhere.</p></div>
+    <div class="dcard"><span class="label">Getting there</span><h3>Fly into Denpasar</h3><p>The airport is 25 minutes from the estate by Gojek, Grab or taxi. Land by Friday afternoon so you're at Rock Bar for sunset.</p></div>
+    <div class="dcard"><span class="label">What to wear</span><h3>Tropical formal</h3>
+      <div class="swatches" aria-label="Colors to dress within"><i style="background:#3F5B45"></i><i style="background:#7E8F6E"></i><i style="background:#2F4A6B"></i><i style="background:#A2623F"></i><i style="background:#D9C6A3"></i><i style="background:#242722"></i></div>
+      <p>Linen, silk, real color. Shoes that can handle clifftop stone. Please leave ivory to the bride.</p></div>
+    <div class="dcard"><span class="label">A note</span><h3>Adults only</h3><p>We love your children, and we're asking you to leave them at home this time. Your invitation says how many seats it admits.</p></div>
+  </div>
+</section>
+
+<!-- ============ RSVP ============ -->
+<section class="scene rsvp" id="rsvp">
+  <h2 class="script">Kindly reply</h2>
+  <p class="label">by 1 March 2027</p>
+  <form id="form" novalidate>
+    <div class="f"><label for="name">Your name</label><input id="name" type="text" autocomplete="name" required></div>
+    <div class="f"><label for="email">Email</label><input id="email" type="email" autocomplete="email" required></div>
+    <div class="f"><fieldset><legend>Attending</legend><div class="pills">
+      <label><input type="radio" name="att" value="both"><span>Friday and Saturday</span></label>
+      <label><input type="radio" name="att" value="saturday"><span>Saturday only</span></label>
+      <label><input type="radio" name="att" value="no"><span>Can't make it</span></label>
+    </div></fieldset></div>
+    <div class="f" id="fDiet"><label for="diet">Dietary needs</label><input id="diet" type="text" placeholder="Anything the kitchen should know"></div>
+    <div class="f"><label for="note">A note for us</label><textarea id="note"></textarea></div>
+    <button class="btn" type="submit">Send reply</button>
+  </form>
+  <div class="thanks" id="thanks"><span class="script">We can't wait</span><p>Thank you. Your reply is in, and we'll be in touch with booking details for the estate.</p></div>
+</section>
+
+<footer class="foot">
+  <div class="mono" aria-hidden="true"><span>A&amp;C</span></div>
+  <span class="script">Ashley &amp; Charles</span>
+  <p>AYANA Bali, Jimbaran &nbsp;·&nbsp; 28 August 2027</p>
+</footer>
+
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id)};
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var params=new URLSearchParams(location.search);
+  var to=(params.get('to')||'').replace(/\s+/g,' ').trim().slice(0,60);
+  if(to) $('envName').textContent='For '+to;
+
+  /* Envelope: tap the seal, the flap lifts, the envelope drops away. */
+  var env=$('env');
+  if(reduce){ env.parentNode.removeChild(env); }
+  else{
+    document.body.style.overflow='hidden';
+    var opened=false;
+    function open(){
+      if(opened) return; opened=true;
+      env.classList.add('is-open');
+      setTimeout(function(){ document.body.style.overflow=''; },1300);
+      setTimeout(function(){ if(env.parentNode) env.parentNode.removeChild(env); },2400);
+    }
+    $('envBtn').addEventListener('click',open);
+    $('skip').addEventListener('click',function(){ open(); });
+    document.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ if(document.activeElement===$('envBtn')) open(); } });
+  }
+
+  /* Scratch cards */
+  var cards=Array.prototype.slice.call(document.querySelectorAll('.card'));
+  function setupCard(card){
+    var cv=card.querySelector('canvas'), ctx=cv.getContext('2d');
+    var dpr=Math.min(2,window.devicePixelRatio||1);
+    function paint(){
+      var r=card.getBoundingClientRect();
+      cv.width=Math.round(r.width*dpr); cv.height=Math.round(r.height*dpr);
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+      var g=ctx.createLinearGradient(0,0,r.width,r.height);
+      g.addColorStop(0,'#CFC7B8'); g.addColorStop(.5,'#E9E2D4'); g.addColorStop(1,'#C9C1B1');
+      ctx.fillStyle=g; ctx.fillRect(0,0,r.width,r.height);
+      /* fine speckle */
+      ctx.fillStyle='rgba(120,110,95,.18)';
+      for(var i=0;i<260;i++){ ctx.fillRect(Math.random()*r.width,Math.random()*r.height,1,1); }
+      ctx.fillStyle='rgba(46,49,54,.55)';
+      ctx.font='500 10px Jost, Futura, sans-serif'; ctx.textAlign='center';
+      ctx.fillText('SCRATCH',r.width/2,r.height/2+4);
+    }
+    paint();
+    var scratching=false, strokes=0;
+    function pos(e){ var r=cv.getBoundingClientRect(); return {x:e.clientX-r.left,y:e.clientY-r.top}; }
+    function erase(p){
+      ctx.globalCompositeOperation='destination-out';
+      ctx.beginPath(); ctx.arc(p.x,p.y,16,0,Math.PI*2); ctx.fill();
+      ctx.globalCompositeOperation='source-over';
+      if(++strokes%8===0) check();
+    }
+    function check(){
+      var w=cv.width,h=cv.height, d=ctx.getImageData(0,0,w,h).data, clear=0, total=0;
+      for(var i=3;i<d.length;i+=4*16){ total++; if(d[i]===0) clear++; }
+      if(clear/total>.5) reveal(card);
+    }
+    cv.addEventListener('pointerdown',function(e){ scratching=true; cv.setPointerCapture(e.pointerId); erase(pos(e)); });
+    cv.addEventListener('pointermove',function(e){ if(scratching) erase(pos(e)); });
+    cv.addEventListener('pointerup',function(){ scratching=false; check(); });
+    cv.addEventListener('pointercancel',function(){ scratching=false; });
+    window.addEventListener('resize',function(){ if(!card.classList.contains('is-revealed')) paint(); });
+  }
+  function reveal(card){ card.classList.add('is-revealed'); }
+  if(reduce){ cards.forEach(reveal); $('revealAll').hidden=true; }
+  else{ cards.forEach(setupCard); $('revealAll').addEventListener('click',function(){ cards.forEach(reveal); this.hidden=true; }); }
+
+  /* Letter slides out of its envelope */
+  var lenv=$('lenv');
+  function pull(){ lenv.classList.add('is-out'); lenv.removeAttribute('role'); lenv.removeAttribute('tabindex'); }
+  lenv.addEventListener('click',pull);
+  lenv.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); pull(); } });
+  if(reduce) pull();
+
+  /* RSVP preview */
+  var form=$('form');
+  form.querySelectorAll('input[name="att"]').forEach(function(r){ r.addEventListener('change',function(){ $('fDiet').hidden=this.value==='no'; }); });
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    var ok=$('name').value.trim() && /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test($('email').value.trim()) && form.querySelector('input[name="att"]:checked');
+    if(!ok){ ( !$('name').value.trim() ? $('name') : $('email') ).focus(); return; }
+    form.hidden=true; $('thanks').classList.add('is-visible');
+    console.log('[preview] RSVP', { name:$('name').value, email:$('email').value, attending:form.querySelector('input[name="att"]:checked').value });
+  });
+})();
+</script>
+
+</body>
+</html>
