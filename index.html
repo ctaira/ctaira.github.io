@@ -128,11 +128,10 @@ button,input,select,textarea{font:inherit;color:inherit}
 .env-pocket{z-index:5;border-radius:6px;overflow:hidden}
 .env-pocket svg{position:absolute;inset:0;width:100%;height:100%}
 .env-pocket .addr{
-  position:absolute;left:0;right:0;bottom:16%;text-align:center;
+  position:absolute;left:0;right:0;bottom:11%;text-align:center;
   font-family:var(--serif);font-style:italic;font-size:clamp(20px,5.6vw,28px);color:var(--ink);
   padding:0 12%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
-.env-pocket .addr small{display:block;font-family:var(--mono);font-style:normal;font-size:10px;letter-spacing:.2em;color:var(--ink-soft);margin-bottom:4px}
 .env-pocket .par-avion{
   position:absolute;bottom:10px;right:12px;font-family:var(--mono);font-size:9px;letter-spacing:.22em;
   color:var(--husk);border:1px solid var(--husk);padding:3px 6px;border-radius:2px;
@@ -147,13 +146,23 @@ button,input,select,textarea{font:inherit;color:inherit}
   -webkit-clip-path:polygon(0 0,100% 0,50% 58%);
 }
 .seal{
-  position:absolute;left:50%;top:58%;width:82px;height:82px;margin:-41px 0 0 -41px;
-  will-change:transform,opacity;
+  position:absolute;left:50%;top:55%;width:82px;height:82px;margin:-41px 0 0 -41px;
+  will-change:transform;
 }
-.seal-art,.shard{position:absolute;inset:0}
-.shard{visibility:hidden;will-change:transform,opacity}
-.seal.is-cracking > .seal-art{visibility:hidden}
-.seal.is-cracking .shard{visibility:visible}
+.seal-art{position:absolute;inset:0}
+/* Breaking the seal: one jagged crack across the middle. The upper half stays on the
+   flap and lifts away with it; the lower half stays on the envelope as residue. */
+.seal.is-broken > .seal-art{
+  clip-path:polygon(-12% -12%,112% -12%,112% 45%,79% 51%,61% 46%,43% 54%,23% 48%,-12% 53%);
+  -webkit-clip-path:polygon(-12% -12%,112% -12%,112% 45%,79% 51%,61% 46%,43% 54%,23% 48%,-12% 53%);
+}
+.env-flap .seal{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.seal-residue{visibility:hidden}
+.seal-residue > .seal-art{
+  clip-path:polygon(-12% 53%,23% 48%,43% 54%,61% 46%,79% 51%,112% 45%,112% 112%,-12% 112%);
+  -webkit-clip-path:polygon(-12% 53%,23% 48%,43% 54%,61% 46%,79% 51%,112% 45%,112% 112%,-12% 112%);
+}
+.seal-residue.is-visible{visibility:visible}
 /* Sealing wax: uneven lobes, a glossy rim, deep lower shadow, grain from an SVG filter. */
 .seal .wax{
   position:absolute;inset:0;
@@ -513,7 +522,7 @@ hr.rule{border:0;border-top:1px solid rgba(36,39,34,.2);margin:2.5em 0}
           <path d="M0 72L50 42L100 72" fill="none" stroke="rgba(36,39,34,.12)" stroke-width=".5" vector-effect="non-scaling-stroke"/>
         </svg>
         <span class="par-avion">Par avion</span>
-        <div class="addr"><small>To</small><span id="envName">Our dearest guest</span></div>
+        <div class="addr"><span id="envName">Our dearest guest</span></div>
       </div>
 
       <div class="env env-flap" id="envFlap" aria-hidden="true">
@@ -948,24 +957,13 @@ var RSVP_ENDPOINT = "";
   } else {
     var vh = window.innerHeight, vw = window.innerWidth, eh = envBack.offsetHeight;
 
-    /* ---- Seal shards: four clones of the seal art, each clipped to a wedge between
-       jagged crack lines from the centre. They fly apart as the seal breaks. ---- */
-    var SHARDS = [
-      { clip: '50% 50%, 44% 28%, 30% -5%, 105% -5%, 105% 35%, 72% 46%', dx: 26, dy: -22, rot: 28 },
-      { clip: '50% 50%, 72% 46%, 105% 35%, 105% 105%, 60% 105%, 54% 70%', dx: 24, dy: 24, rot: -22 },
-      { clip: '50% 50%, 54% 70%, 60% 105%, -5% 105%, -5% 62%, 28% 56%', dx: -20, dy: 26, rot: 24 },
-      { clip: '50% 50%, 28% 56%, -5% 62%, -5% -5%, 30% -5%, 44% 28%', dx: -26, dy: -18, rot: -30 }
-    ];
-    var shardEls = SHARDS.map(function (sh) {
-      var d = document.createElement('div');
-      d.className = 'shard';
-      d.style.clipPath = 'polygon(' + sh.clip + ')';
-      d.style.webkitClipPath = 'polygon(' + sh.clip + ')';
-      d.appendChild(sealArt.cloneNode(true));
-      d.firstChild.removeAttribute('id');
-      seal.appendChild(d);
-      return d;
-    });
+    /* ---- Seal residue: a clone of the seal art on the pocket, clipped to the lower half.
+       It appears the moment the seal breaks and stays behind when the flap lifts. ---- */
+    var residue = document.createElement('div');
+    residue.className = 'seal seal-residue';
+    residue.appendChild(sealArt.cloneNode(true));
+    residue.firstChild.removeAttribute('id');
+    envPocket.appendChild(residue);
 
     /* ---- Egrets, as they come in over Jimbaran Bay at dusk: broad rounded wings on a slow
        beat, neck tucked in an S, legs trailing. Each bird is a group flying toward +x; the
@@ -1027,15 +1025,12 @@ var RSVP_ENDPOINT = "";
       renderFlock(p);
 
       /* -- 1. Wax seal cracks: scales up, rotates, fades ---------- 0.04–0.14 */
-      var s1 = seg(p, .04, .14);
-      seal.classList.toggle('is-cracking', s1 > 0);
-      seal.style.transform = 'scale(' + (1 + s1 * 0.5) + ')';
-      seal.style.visibility = s1 >= 1 ? 'hidden' : 'visible';
-      for (var k = 0; k < SHARDS.length; k++) {
-        var sh = SHARDS[k], e1 = ease(s1);
-        shardEls[k].style.transform = 'translate(' + (sh.dx * e1) + 'px,' + (sh.dy * e1) + 'px) rotate(' + (sh.rot * e1) + 'deg)';
-        shardEls[k].style.opacity = 1 - seg(s1, .3, 1);
-      }
+      var s1 = seg(p, .04, .14), snap = Math.min(1, s1 * 4);   /* the snap is quick */
+      seal.classList.toggle('is-broken', s1 > 0);
+      residue.classList.toggle('is-visible', s1 > 0);
+      /* the halves part by a hair at the crack; the flap carries the top half from here */
+      seal.style.transform = 'translateY(' + (-2.5 * snap) + 'px) rotate(' + (-2 * snap) + 'deg)';
+      residue.style.transform = 'translateY(' + (1.5 * snap) + 'px)';
 
       /* -- 2. Flap opens, rotateX 0 → -181deg -------------------- 0.10–0.26 */
       var s2 = ease(seg(p, .10, .26));
