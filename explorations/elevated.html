@@ -31,36 +31,47 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .skip{position:fixed;top:14px;right:14px;z-index:60;font-family:var(--sans);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink);text-decoration:none;background:rgba(246,242,234,.8);padding:8px 14px;border-radius:999px;border:1px solid rgba(46,49,54,.15)}
 
 /* ---------------- Envelope overlay ---------------- */
-.env{position:fixed;inset:0;z-index:50;display:grid;place-items:center;background:var(--paper);transition:transform 1.1s cubic-bezier(.6,0,.4,1) 1.15s,opacity .6s ease 1.6s}
-.env::before{content:"";position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");pointer-events:none}
-.env.is-open{transform:translateY(105%);opacity:0}
-.env .body{position:relative;width:min(88vw,420px);aspect-ratio:1.38;}
+.env{position:fixed;inset:0;z-index:50;display:grid;place-items:center;background:transparent;perspective:1400px}
+.env .veil{position:absolute;inset:0;background:var(--paper);transition:opacity 1.8s ease;z-index:0}
+.env .body{z-index:1}
+.env.s2 .veil{opacity:.5}
+.env .veil::before{content:"";position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.env.s3 .veil{opacity:0}
+.env .body{position:relative;width:min(88vw,420px);aspect-ratio:1.38;transition:transform 2s cubic-bezier(.55,0,.8,.45),opacity 1.2s ease .6s;transform-origin:50% 100%}
+.env.s3 .body{transform:translateY(90vh) scale(.94) rotateX(8deg);opacity:0}
+.env.s4{opacity:0;transition:opacity .5s ease;pointer-events:none}
 .env .back{position:absolute;inset:0;background:#E9E3D7;border-radius:6px}
 .env .pocket{position:absolute;inset:0;border-radius:6px;overflow:hidden}
 .env .pocket i{position:absolute;inset:0;display:block}
 .env .pocket .l{background:#F6F2EA;clip-path:polygon(0 0,50% 56%,0 100%)}
 .env .pocket .r{background:#F6F2EA;clip-path:polygon(100% 0,50% 56%,100% 100%)}
 .env .pocket .b{background:#F1ECE2;clip-path:polygon(0 100%,50% 56%,100% 100%)}
-.env .flap{position:absolute;inset:0;transform-origin:50% 0;transform-style:preserve-3d;transition:transform 1s cubic-bezier(.65,0,.35,1) .35s;z-index:3}
-.env.is-open .flap{transform:rotateX(-178deg);z-index:0}
+.env .flap{position:absolute;inset:0;transform-origin:50% 0;transform-style:preserve-3d;transition:transform 1.8s cubic-bezier(.7,0,.25,1);z-index:3}
+.env.s2 .flap{transform:rotateX(-178deg);z-index:0}
 .env .flap i{position:absolute;inset:0;display:block;background:linear-gradient(180deg,#F8F5EF,#ECE6DA);clip-path:polygon(0 0,100% 0,50% 58%);backface-visibility:hidden}
 .env .flap b{position:absolute;inset:0;display:block;background:#E3DCCF;clip-path:polygon(0 0,100% 0,50% 58%);transform:rotateX(180deg);backface-visibility:hidden}
 .env .addr{position:absolute;left:0;right:0;bottom:12%;text-align:center;font-family:var(--script);font-size:clamp(26px,7vw,36px);color:var(--ink);z-index:2}
 .seal{position:absolute;left:50%;top:58%;width:84px;height:84px;margin:-42px 0 0 -42px;z-index:4;border-radius:50%;
   background:radial-gradient(circle at 35% 30%,#F7ECBF 0,#D9BC6A 35%,#B8963F 70%,#8C6E2A 100%);
   box-shadow:inset 0 2px 3px rgba(255,250,220,.7),inset 0 -3px 5px rgba(80,55,10,.45),0 6px 14px -6px rgba(60,40,5,.5);
-  transition:transform .45s ease,opacity .4s ease;display:grid;place-items:center}
+  transition:transform 1s cubic-bezier(.3,.6,.2,1),opacity .7s ease .3s;display:grid;place-items:center}
+.env.is-pressed .seal{transform:scale(.94)}
 .seal::before{content:"";position:absolute;inset:7px;border-radius:50%;box-shadow:inset 0 1px 1px rgba(255,250,220,.6),inset 0 -1px 2px rgba(80,55,10,.5)}
 .seal span{font-family:var(--script);font-size:34px;color:rgba(80,55,10,.75);text-shadow:0 1px 0 rgba(255,250,220,.5);padding-top:4px}
-.env.is-open .seal{transform:scale(.2);opacity:0}
-.env .hint{position:absolute;left:0;right:0;bottom:max(36px,env(safe-area-inset-bottom));text-align:center}
+.env.s1 .seal{transform:translateY(-40px) scale(1.1);opacity:0}
+.env .hint{position:absolute;left:0;right:0;bottom:max(36px,env(safe-area-inset-bottom));text-align:center;transition:opacity .5s}
+.env.s1 .hint{opacity:0}
 .env .hint .label{color:var(--ink)}
 .env-btn{position:absolute;inset:0;z-index:5;border-radius:6px}
 @media (prefers-reduced-motion:reduce){.env{display:none}}
 
 /* ---------------- Hero ---------------- */
 .hero{color:#FFFDF7;min-height:100svh;padding-bottom:max(64px,10vh)}
-.hero svg.bg{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+.hero svg.bg{position:absolute;inset:0;width:100%;height:100%;z-index:0;transition:transform 4s cubic-bezier(.2,.6,.2,1),filter 3s ease}
+.hero.pre-scene svg.bg{transform:scale(1.06);filter:blur(3px)}
+.hero .names,.hero .sub,.hero .where,.hero .cue{transition:opacity 1.4s ease,transform 1.4s cubic-bezier(.2,.7,.2,1)}
+.hero.pre-text .names,.hero.pre-text .sub,.hero.pre-text .where,.hero.pre-text .cue{opacity:0;transform:translateY(12px)}
+.hero .sub{transition-delay:.15s}.hero .where{transition-delay:.3s}.hero .cue{transition-delay:.6s}
 .hero .names{font-size:clamp(54px,15vw,92px);line-height:1;text-shadow:0 2px 24px rgba(40,30,20,.35)}
 .hero .sub{font-style:italic;font-size:clamp(22px,5.4vw,28px);margin-top:.2em;text-shadow:0 1px 12px rgba(40,30,20,.35)}
 .hero .where{margin-top:2.2em;color:rgba(255,253,247,.85)}
@@ -171,6 +182,7 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 
 <!-- ============ Envelope overlay ============ -->
 <div class="env" id="env" aria-label="Sealed envelope">
+  <div class="veil"></div>
   <div class="body">
     <div class="back"></div>
     <div class="pocket"><i class="l"></i><i class="r"></i><i class="b"></i></div>
@@ -449,16 +461,21 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
   if(to) $('envName').textContent='For '+to;
 
   /* Envelope: tap the seal, the flap lifts, the envelope drops away. */
-  var env=$('env');
+  var env=$('env'), hero=$('hero');
   if(reduce){ env.parentNode.removeChild(env); }
   else{
     document.body.style.overflow='hidden';
+    hero.classList.add('pre-scene'); hero.classList.add('pre-text');
     var opened=false;
     function open(){
       if(opened) return; opened=true;
-      env.classList.add('is-open');
-      setTimeout(function(){ document.body.style.overflow=''; },1300);
-      setTimeout(function(){ if(env.parentNode) env.parentNode.removeChild(env); },2400);
+      env.classList.add('is-pressed');
+      setTimeout(function(){ env.classList.remove('is-pressed'); env.classList.add('s1'); },140);   /* seal lifts and dissolves   */
+      setTimeout(function(){ env.classList.add('s2'); },500);                                      /* flap opens, slowly          */
+      setTimeout(function(){ env.classList.add('s3'); hero.classList.remove('pre-scene'); },1900);  /* paper clears, envelope sinks, scene settles */
+      setTimeout(function(){ hero.classList.remove('pre-text'); document.body.style.overflow=''; },3300);  /* names rise in */
+      setTimeout(function(){ env.classList.add('s4'); },3900);
+      setTimeout(function(){ if(env.parentNode) env.parentNode.removeChild(env); },4500);
     }
     $('envBtn').addEventListener('click',open);
     $('skip').addEventListener('click',function(){ open(); });
