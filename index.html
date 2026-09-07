@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ashley &amp; Charles · 28 August 2027 · AYANA Bali</title>
+<meta name="description" content="Ashley and Charles are celebrating their marriage at AYANA Bali, Jimbaran, on Saturday 28 August 2027. Open your invitation and RSVP.">
+<meta name="theme-color" content="#242722">
+<meta property="og:title" content="Ashley &amp; Charles · 28 August 2027">
+<meta property="og:description" content="A celebration on the cliffs of Jimbaran, Bali. Open your invitation.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Instrument+Serif:ital@0;1&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ---------------------------------------------------------------------------
+   Tokens
+--------------------------------------------------------------------------- */
+:root{
+  --andesite:#242722;   /* dark volcanic temple stone */
+  --limestone:#E9E4D9;  /* cliff face */
+  --limestone-2:#DCD4C3;/* deeper limestone */
+  --paper:#F2EDE3;      /* passport page */
+  --palm:#3F5B45;       /* deep green */
+  --husk:#8C6E4F;       /* coconut husk, accent only */
+  --gold:#C0A264;       /* passport foil, sparingly */
+  --ink:#2A2C27;
+  --ink-soft:#5B5D55;
+  --serif:'Instrument Serif',Georgia,'Times New Roman',serif;
+  --sans:'Instrument Sans',system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;
+  --mono:'Roboto Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --ew:min(86vw,440px);            /* envelope width */
+  --eh:calc(var(--ew) * .72);       /* envelope height */
+  --pw:min(86vw,380px,60svh);      /* passport width  */
+  --ph:calc(var(--pw) * 1.42);      /* passport height */
+  --gutter:clamp(20px,6vw,48px);
+  --measure:640px;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{
+  margin:0;background:var(--limestone);color:var(--ink);
+  font-family:var(--sans);font-size:17px;line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{font-family:var(--serif);font-weight:400;line-height:1.05;margin:0;letter-spacing:-.005em}
+p{margin:0 0 1em}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+button,input,select,textarea{font:inherit;color:inherit}
+.mono{font-family:var(--mono)}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---------------------------------------------------------------------------
+   Skip link
+--------------------------------------------------------------------------- */
+.skip{
+  position:fixed;top:max(14px,env(safe-area-inset-top));right:16px;z-index:50;
+  font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;
+  text-decoration:none;color:var(--ink);background:rgba(242,237,227,.85);
+  border:1px solid rgba(36,39,34,.25);border-radius:999px;padding:8px 14px;
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  transition:opacity .3s,visibility .3s;
+}
+.skip.is-hidden{opacity:0;visibility:hidden}
+
+/* ---------------------------------------------------------------------------
+   Opening sequence
+--------------------------------------------------------------------------- */
+.stage{
+  position:relative;height:600vh;
+  background:linear-gradient(180deg,#D3E0DE 0%,#E3E3DA 42%,#E9E4D9 62%,#E3D8C2 100%);
+}
+.stage-viewport{
+  position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;
+  display:grid;place-items:center;
+}
+.scene{
+  position:relative;width:100%;height:100%;
+  perspective:1400px;perspective-origin:50% 45%;
+}
+.scene>*{position:absolute;left:50%;top:50%}
+
+.hint{
+  position:absolute;left:0;right:0;top:auto;bottom:max(28px,env(safe-area-inset-bottom));
+  text-align:center;font-family:var(--mono);font-size:12px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--ink-soft);
+}
+.hint svg{display:block;margin:10px auto 0;width:18px;height:18px}
+
+/* Envelope parts share size and centre; JS applies the same transform to each. */
+.env{width:var(--ew);height:var(--eh);margin-left:calc(var(--ew) / -2);margin-top:calc(var(--eh) / -2)}
+.env-back{z-index:2;background:#D5CDBC;border-radius:6px}
+.env-pocket{z-index:5;border-radius:6px;overflow:hidden}
+.env-pocket svg{position:absolute;inset:0;width:100%;height:100%}
+.env-pocket .addr{
+  position:absolute;left:0;right:0;bottom:16%;text-align:center;
+  font-family:var(--serif);font-style:italic;font-size:clamp(20px,5.6vw,28px);color:var(--ink);
+  padding:0 12%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.env-pocket .addr small{display:block;font-family:var(--mono);font-style:normal;font-size:10px;letter-spacing:.2em;color:var(--ink-soft);margin-bottom:4px}
+.env-pocket .par-avion{
+  position:absolute;bottom:10px;right:12px;font-family:var(--mono);font-size:9px;letter-spacing:.22em;
+  color:var(--husk);border:1px solid var(--husk);padding:3px 6px;border-radius:2px;
+}
+.env-flap{
+  z-index:6;transform-origin:50% 0;transform-style:preserve-3d;
+  will-change:transform;
+}
+.env-flap .flap-face{
+  position:absolute;inset:0;background:linear-gradient(180deg,#E6E0D3,#DBD3C2);
+  clip-path:polygon(0 0,100% 0,50% 58%);
+  -webkit-clip-path:polygon(0 0,100% 0,50% 58%);
+}
+.seal{
+  position:absolute;left:50%;top:58%;width:58px;height:58px;margin:-29px 0 0 -29px;
+  border-radius:50%;
+  background:radial-gradient(circle at 38% 32%,#A88762 0%,#8C6E4F 45%,#6E543A 100%);
+  display:grid;place-items:center;
+  font-family:var(--serif);font-size:20px;color:var(--gold);letter-spacing:.06em;
+  will-change:transform,opacity;
+}
+.seal::after{content:"";position:absolute;inset:6px;border-radius:50%;border:1px solid rgba(192,162,100,.55)}
+
+/* Boarding pass ------------------------------------------------------------ */
+.bpass{
+  z-index:3;width:calc(var(--ew) * .82);height:calc(var(--ew) * .82 * .40);
+  margin-left:calc(var(--ew) * -.41);margin-top:calc(var(--ew) * .82 * -.20);
+  background:var(--paper);border-radius:8px;display:flex;overflow:hidden;
+  color:var(--ink);will-change:transform,opacity;
+  font-family:var(--mono);font-size:clamp(7px,1.9vw,9px);letter-spacing:.06em;text-transform:uppercase;
+}
+.bpass .bp-main{flex:1 1 68%;padding:4% 4% 3.5%;display:flex;flex-direction:column;justify-content:space-between;min-width:0}
+.bpass .bp-stub{flex:0 0 32%;border-left:1.5px dashed rgba(36,39,34,.35);padding:4% 3.5%;display:flex;flex-direction:column;justify-content:space-between;background:#EAE3D5;min-width:0}
+.bpass .bp-head{display:flex;justify-content:space-between;color:var(--palm);font-weight:500;white-space:nowrap}
+.bpass .bp-route{display:flex;align-items:baseline;gap:.6em;font-family:var(--serif);font-size:3.2em;letter-spacing:0;text-transform:none;line-height:1}
+.bpass .bp-route svg{width:1em;height:.5em;color:var(--husk)}
+.bpass .bp-row{display:flex;gap:1.2em;min-width:0}
+.bpass .bp-row>div{min-width:0}
+.bpass .bp-pax{flex:1 1 auto}
+.bpass .bp-row span{display:block;color:var(--ink-soft)}
+.bpass .bp-row b{display:block;font-weight:500;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bpass .bp-pax b{font-family:var(--sans);font-size:1.25em;letter-spacing:.02em}
+.barcode{
+  height:1.6em;
+  background:repeating-linear-gradient(90deg,var(--ink) 0 1px,transparent 1px 3px,var(--ink) 3px 4px,transparent 4px 7px,var(--ink) 7px 9px,transparent 9px 10px);
+}
+
+/* Passport ------------------------------------------------------------------ */
+.passport{
+  z-index:4;width:var(--pw);height:var(--ph);
+  margin-left:calc(var(--pw) / -2);margin-top:calc(var(--ph) / -2);
+  perspective:1600px;perspective-origin:50% 50%;
+  will-change:transform;
+}
+.passport.is-out{z-index:7}
+.pp-page{
+  position:absolute;inset:0;background:var(--paper);border-radius:6px 10px 10px 6px;
+  box-shadow:0 18px 40px -18px rgba(36,39,34,.45);
+  overflow:hidden;color:var(--ink);
+  padding:calc(var(--pw) * .05) calc(var(--pw) * .06) calc(var(--pw) * .045) calc(var(--pw) * .075);
+  display:flex;flex-direction:column;
+}
+.pp-page::before{ /* gutter shadow at the spine */
+  content:"";position:absolute;left:0;top:0;bottom:0;width:6%;
+  background:linear-gradient(90deg,rgba(36,39,34,.16),rgba(36,39,34,0));pointer-events:none;
+}
+.pp-head{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid rgba(36,39,34,.25);padding-bottom:.35em;margin-bottom:.5em}
+.pp-head h2{font-size:clamp(17px,5vw,22px);letter-spacing:.14em;text-transform:uppercase}
+.pp-head span{font-family:var(--mono);font-size:clamp(8px,2.4vw,10px);letter-spacing:.14em;color:var(--ink-soft)}
+.pp-map{position:relative;flex:0 0 auto}
+.pp-map svg{display:block;width:100%;height:auto}
+.pp-map .land{fill:rgba(63,91,69,.16);stroke:rgba(63,91,69,.42);stroke-width:.7;stroke-linejoin:round}
+.pp-map .grid{fill:none;stroke:rgba(36,39,34,.12);stroke-width:.6}
+.pp-map .arc{fill:none;stroke:var(--husk);stroke-width:2.4;stroke-dasharray:.1 6;stroke-linecap:round}
+.pp-map .apt{fill:var(--andesite)}
+.pp-map .apt-ring{fill:none;stroke:var(--andesite);stroke-width:1.2}
+.pp-map .apt-label{font-family:var(--mono);font-size:18px;letter-spacing:.1em;fill:var(--ink)}
+.pp-map .plane{fill:var(--andesite)}
+.pp-data{
+  flex:1 1 auto;margin-top:.6em;
+  display:grid;grid-template-columns:auto 1fr;column-gap:1.2em;row-gap:.32em;align-content:start;
+  font-size:clamp(11px,3.3vw,14px);line-height:1.25;
+}
+.pp-data dt{font-family:var(--mono);font-size:.68em;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);padding-top:.35em}
+.pp-data dd{margin:0;font-family:var(--sans);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pp-data dd small{font-weight:400;color:var(--ink-soft)}
+.mrz{
+  container-type:inline-size;margin-top:auto;padding-top:.6em;
+  border-top:1px solid rgba(36,39,34,.25);
+  font-family:var(--mono);font-size:10px;line-height:1.35;letter-spacing:0;white-space:nowrap;overflow:hidden;
+  color:var(--ink);
+}
+.mrz div{overflow:hidden;font-size:calc(100cqw / 26.9)}
+.stamp{
+  position:absolute;right:4%;bottom:4%;width:calc(var(--pw) * .36);height:calc(var(--pw) * .36);
+  mix-blend-mode:multiply;transform-origin:50% 50%;will-change:transform,opacity;
+  pointer-events:none;
+}
+.stamp svg{display:block;width:100%;height:100%;overflow:visible}
+.stamp .ring{fill:none;stroke:var(--palm);stroke-width:2.2}
+.stamp .ring2{fill:none;stroke:var(--palm);stroke-width:.9}
+.stamp text{font-family:var(--mono);fill:var(--palm);letter-spacing:.2em;font-weight:500}
+.stamp .date{font-size:11px;letter-spacing:.14em}
+
+.pp-cover{
+  position:absolute;inset:0;z-index:3;transform-origin:0 50%;transform-style:preserve-3d;
+  will-change:transform;
+}
+.pp-cover .face{
+  position:absolute;inset:0;border-radius:6px 10px 10px 6px;
+  backface-visibility:hidden;-webkit-backface-visibility:hidden;
+}
+.pp-cover .face-front{
+  background:linear-gradient(160deg,#2B2F2A 0%,#242722 55%,#1D201C 100%);
+  color:var(--gold);display:flex;flex-direction:column;align-items:center;justify-content:space-between;
+  padding:calc(var(--pw) * .12) calc(var(--pw) * .08);text-align:center;
+}
+.pp-cover .face-front::before{content:"";position:absolute;inset:calc(var(--pw) * .035);border:1px solid rgba(192,162,100,.55);border-radius:4px 8px 8px 4px;pointer-events:none}
+.pp-cover .face-front::after{content:"";position:absolute;left:0;top:0;bottom:0;width:9%;background:linear-gradient(90deg,rgba(0,0,0,.35),rgba(0,0,0,0));border-radius:6px 0 0 6px}
+.pp-cover .face-front h2{font-size:clamp(20px,6vw,28px);letter-spacing:.28em;text-transform:uppercase;padding-left:.28em}
+.pp-cover .face-front .emblem{width:calc(var(--pw) * .32);height:calc(var(--pw) * .32)}
+.pp-cover .face-front .cover-foot{font-family:var(--mono);font-size:clamp(8px,2.4vw,10px);letter-spacing:.22em;text-transform:uppercase;line-height:1.9}
+.pp-cover .face-back{
+  transform:rotateY(180deg);background:#E6DFD1;
+  background-image:repeating-linear-gradient(45deg,rgba(63,91,69,.07) 0 2px,transparent 2px 14px);
+}
+.pp-cover .face-back::after{content:"";position:absolute;right:0;top:0;bottom:0;width:9%;background:linear-gradient(270deg,rgba(36,39,34,.18),rgba(36,39,34,0))}
+
+/* Reduced motion: no scrubbing, passport open and stamped. */
+@media (prefers-reduced-motion:reduce){
+  .stage{height:100vh;height:100svh}
+  .hint{display:none}
+}
+.stage.is-static .passport{transform:none;z-index:7}
+.stage.is-static .pp-cover{display:none}
+.stage.is-static .stamp{transform:rotate(-12deg);opacity:1}
+
+/* ---------------------------------------------------------------------------
+   Sections
+--------------------------------------------------------------------------- */
+.section{padding:clamp(64px,12vw,128px) var(--gutter)}
+.section>.inner{max-width:var(--measure);margin:0 auto}
+.section.is-limestone{background:var(--limestone)}
+.section.is-limestone-2{background:var(--limestone-2)}
+.section.is-palm{background:var(--palm);color:#EEF0E8}
+.section.is-andesite{background:var(--andesite);color:#E8E4DA}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--husk);margin-bottom:1.1em;display:block}
+.is-palm .eyebrow{color:var(--gold)}
+.is-andesite .eyebrow{color:var(--gold)}
+.section h2{font-size:clamp(38px,8vw,64px);margin-bottom:.45em;max-width:14ch}
+.lede{font-size:clamp(19px,2.6vw,22px);line-height:1.45;max-width:34ch}
+.muted{color:var(--ink-soft)}
+.is-palm .muted,.is-andesite .muted{color:rgba(232,228,218,.7)}
+hr.rule{border:0;border-top:1px solid rgba(36,39,34,.2);margin:2.5em 0}
+.is-palm hr.rule,.is-andesite hr.rule{border-color:rgba(255,255,255,.18)}
+
+/* Letter */
+.letter p{max-width:58ch}
+.letter .salutation{font-family:var(--serif);font-size:clamp(28px,5vw,36px);margin-bottom:.8em}
+.letter .signoff{font-family:var(--serif);font-style:italic;font-size:clamp(26px,5vw,34px);margin-top:1.4em;line-height:1.2}
+.letter .signoff small{display:block;font-family:var(--mono);font-style:normal;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);margin-top:.9em}
+
+/* Date + calendar */
+.date-grid{display:grid;gap:clamp(28px,6vw,56px);align-items:start}
+@media (min-width:720px){.date-grid{grid-template-columns:1fr 1fr}}
+.cal{max-width:360px}
+.cal-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.8em}
+.cal-head h3{font-size:clamp(26px,5vw,32px)}
+.cal-head span{font-family:var(--mono);font-size:12px;letter-spacing:.14em;color:var(--ink-soft)}
+.cal table{border-collapse:collapse;width:100%;table-layout:fixed}
+.cal th{font-family:var(--mono);font-weight:400;font-size:10px;letter-spacing:.12em;color:var(--ink-soft);padding:0 0 .6em;text-align:center}
+.cal td{text-align:center;padding:2px 0;font-family:var(--mono);font-size:14px}
+.cal td span{display:inline-grid;place-items:center;width:2.4em;height:2.4em;border-radius:50%}
+.cal td.is-near span{background:rgba(63,91,69,.14)}
+.cal td.is-day span{background:var(--andesite);color:var(--paper);font-weight:500}
+.cal-legend{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--ink-soft);margin-top:1em}
+.countdown{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;max-width:420px;margin-top:.4em}
+.countdown div{border-top:1px solid rgba(36,39,34,.3);padding-top:.6em}
+.countdown b{display:block;font-family:var(--serif);font-weight:400;font-size:clamp(34px,8vw,48px);line-height:1;font-variant-numeric:tabular-nums}
+.countdown span{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft)}
+.when{margin-top:2.2em;font-size:15px;max-width:46ch}
+
+/* Order of events */
+.timeline{list-style:none;margin:0;padding:0}
+.timeline>li{margin-top:2.6em}
+.timeline h3{font-size:clamp(28px,5vw,36px);margin-bottom:.15em}
+.timeline .day-sub{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:1.2em}
+.events{list-style:none;margin:0;padding:0;border-top:1px solid rgba(255,255,255,.18)}
+.events li{display:grid;grid-template-columns:1fr;gap:.15em 2em;padding:1em 0;border-bottom:1px solid rgba(255,255,255,.18)}
+.events time{font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:rgba(238,240,232,.75);padding-top:.35em}
+.events b{font-weight:500;font-size:19px;display:block}
+.events p{margin:.2em 0 0;color:rgba(238,240,232,.78);font-size:15px;max-width:44ch}
+@media (min-width:640px){.events li{grid-template-columns:120px 1fr}}
+.note{border-left:2px solid var(--gold);padding:.1em 0 .1em 1.2em;max-width:52ch;margin-top:3em;font-size:16px}
+.note p:last-child{margin:0}
+.travel{margin-top:3em;display:grid;gap:1.5em 3em}
+@media (min-width:640px){.travel{grid-template-columns:1fr 1fr}}
+.travel h4{font-family:var(--serif);font-weight:400;font-size:24px;margin:0 0 .3em}
+.travel p{font-size:15px;color:rgba(238,240,232,.82);margin:0}
+
+/* Dress code */
+.swatches{display:flex;flex-wrap:wrap;gap:18px 22px;margin:2em 0 2.6em;padding:0;list-style:none}
+.swatches li{display:flex;flex-direction:column;align-items:center;gap:.5em;width:64px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;text-align:center;color:var(--ink-soft)}
+.swatches i{display:block;width:56px;height:56px;border-radius:50%;border:1px solid rgba(36,39,34,.15);position:relative}
+.swatches .is-no i::after{content:"";position:absolute;left:-6px;right:-6px;top:50%;height:2px;background:var(--andesite);transform:rotate(-45deg)}
+.guidance{display:grid;gap:1.6em 3em}
+@media (min-width:640px){.guidance{grid-template-columns:1fr 1fr}}
+.guidance h4{font-family:var(--serif);font-weight:400;font-size:26px;margin:0 0 .3em}
+.guidance p{font-size:15.5px;margin:0}
+
+/* Adults only */
+.seats-box{
+  border:1.5px solid var(--andesite);padding:1.2em 1.4em;margin-top:2.4em;max-width:420px;
+  display:grid;grid-template-columns:1fr auto;gap:1em;align-items:center;
+}
+.seats-box .lbl{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft)}
+.seats-box .val{font-family:var(--serif);font-size:clamp(26px,5vw,32px);line-height:1.1;margin-top:.15em}
+.seats-box .num{font-family:var(--serif);font-size:clamp(52px,12vw,72px);line-height:.9;color:var(--palm)}
+
+/* RSVP */
+.rsvp form{max-width:520px}
+.field{margin-bottom:1.5em}
+.field label,.field legend{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:rgba(232,228,218,.75);margin-bottom:.55em;padding:0}
+.field input,.field select,.field textarea{
+  width:100%;background:transparent;border:0;border-bottom:1px solid rgba(232,228,218,.4);
+  padding:.55em 0;border-radius:0;color:#F2EDE3;
+}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-bottom-color:var(--gold)}
+.field input:focus-visible,.field select:focus-visible,.field textarea:focus-visible{outline:2px solid var(--gold);outline-offset:4px}
+.field select{appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg,transparent 50%,#E8E4DA 50%),linear-gradient(135deg,#E8E4DA 50%,transparent 50%);background-position:calc(100% - 14px) 55%,calc(100% - 8px) 55%;background-size:6px 6px;background-repeat:no-repeat;padding-right:28px}
+.field select option{color:var(--ink)}
+.field textarea{min-height:5em;resize:vertical}
+.field fieldset{border:0;padding:0;margin:0;min-width:0}
+.field .err{display:none;font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:#E1B27A;margin-top:.5em}
+.field.is-invalid .err{display:block}
+.field.is-invalid input,.field.is-invalid select{border-bottom-color:#E1B27A}
+.pills{display:flex;flex-wrap:wrap;gap:10px}
+.pills label{position:relative;margin:0;font-family:var(--sans);font-size:15px;letter-spacing:0;text-transform:none;color:#E8E4DA}
+.pills input{position:absolute;opacity:0;width:1px;height:1px;margin:0}
+.pills span{display:inline-block;border:1px solid rgba(232,228,218,.45);border-radius:999px;padding:.6em 1.1em;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.pills input:checked+span{background:var(--paper);color:var(--andesite);border-color:var(--paper)}
+.pills input:focus-visible+span{outline:2px solid var(--gold);outline-offset:3px}
+.hint-line{font-size:13.5px;color:rgba(232,228,218,.65);margin:.5em 0 0}
+.btn{
+  display:inline-block;background:var(--paper);color:var(--andesite);border:1px solid var(--paper);
+  padding:.9em 1.8em;border-radius:999px;font-weight:500;cursor:pointer;letter-spacing:.01em;
+  transition:background .2s,opacity .2s;
+}
+.btn:hover{background:#fff}
+.btn[disabled]{opacity:.55;cursor:default}
+.form-error{display:none;margin-top:1.2em;font-size:14.5px;color:#E1B27A;max-width:44ch}
+.form-error.is-visible{display:block}
+.confirm{display:none;max-width:48ch}
+.confirm.is-visible{display:block}
+.confirm h3{font-size:clamp(30px,6vw,42px);margin-bottom:.4em}
+.confirm .mono{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);display:block;margin-top:1.6em}
+.rsvp .deadline{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin:-1.6em 0 2.6em}
+
+/* Footer */
+.footer{background:#1B1D19;color:#D9D4C8;padding:clamp(64px,12vw,120px) var(--gutter) max(48px,env(safe-area-inset-bottom))}
+.footer .inner{max-width:var(--measure);margin:0 auto;display:grid;gap:2em;align-items:center;grid-template-columns:auto 1fr}
+.medallion{
+  width:clamp(96px,22vw,132px);height:clamp(96px,22vw,132px);border-radius:50%;
+  border:1.5px solid var(--gold);display:grid;place-items:center;position:relative;
+  font-family:var(--serif);color:var(--gold);font-size:clamp(34px,8vw,46px);letter-spacing:.04em;
+}
+.medallion::before{content:"";position:absolute;inset:6px;border:1px solid rgba(192,162,100,.45);border-radius:50%}
+.medallion span{padding-left:.1em}
+.footer h2{font-size:clamp(30px,6vw,44px);color:#F2EDE3;margin-bottom:.3em}
+.footer p{margin:0;font-size:15px;color:rgba(217,212,200,.75)}
+.footer .mono{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-top:1.2em;display:block}
+@media (max-width:420px){.footer .inner{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<a class="skip" id="skip" href="#letter">Skip ↓</a>
+
+<!-- =======================================================================
+     OPENING SEQUENCE
+     ======================================================================= -->
+<section class="stage" id="stage" aria-label="Your invitation">
+  <div class="stage-viewport">
+    <div class="scene" id="scene">
+
+      <div class="hint" id="hint" aria-hidden="true">Scroll to open
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9l8 8 8-8" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+      </div>
+
+      <!-- Envelope: back, boarding pass, pocket, flap (+ seal). Same transform on all. -->
+      <div class="env env-back" id="envBack" aria-hidden="true"></div>
+
+      <div class="bpass" id="bpass" aria-hidden="true">
+        <div class="bp-main">
+          <div class="bp-head"><span>Boarding pass</span><span>AC Air</span></div>
+          <div class="bp-route">LAX <svg viewBox="0 0 40 20" aria-hidden="true"><path d="M2 10h30M26 4l8 6-8 6" fill="none" stroke="currentColor" stroke-width="2"/></svg> DPS</div>
+          <div class="bp-row">
+            <div class="bp-pax"><span>Passenger</span><b id="bpName">Our guest</b></div>
+            <div><span>Date</span><b>28 AUG 2027</b></div>
+          </div>
+        </div>
+        <div class="bp-stub">
+          <div><span style="display:block;color:var(--ink-soft)">Flight</span><b>AC 2027</b></div>
+          <div><span style="display:block;color:var(--ink-soft)">Seats</span><b id="bpSeats">1</b></div>
+          <div class="barcode"></div>
+        </div>
+      </div>
+
+      <div class="env env-pocket" id="envPocket" aria-hidden="true">
+        <svg viewBox="0 0 100 72" preserveAspectRatio="none" aria-hidden="true">
+          <polygon points="0,0 50,42 0,72" fill="#E9E4D9"/>
+          <polygon points="100,0 50,42 100,72" fill="#E9E4D9"/>
+          <polygon points="0,72 50,42 100,72" fill="#E1DACB"/>
+          <path d="M0 0L50 42L100 0" fill="none" stroke="rgba(36,39,34,.12)" stroke-width=".5" vector-effect="non-scaling-stroke"/>
+          <path d="M0 72L50 42L100 72" fill="none" stroke="rgba(36,39,34,.12)" stroke-width=".5" vector-effect="non-scaling-stroke"/>
+        </svg>
+        <span class="par-avion">Par avion</span>
+        <div class="addr"><small>To</small><span id="envName">Our dearest guest</span></div>
+      </div>
+
+      <div class="env env-flap" id="envFlap" aria-hidden="true">
+        <div class="flap-face"></div>
+        <div class="seal" id="seal">A·C</div>
+      </div>
+
+      <!-- Passport -->
+      <div class="passport" id="passport">
+        <div class="pp-page">
+          <div class="pp-head">
+            <h2>Passport</h2>
+            <span>Type P · Code IDN</span>
+          </div>
+
+          <div class="pp-map" aria-hidden="true">
+            <svg viewBox="0 8 800 380" id="map">
+              <defs>
+                <mask id="arcReveal" maskUnits="userSpaceOnUse" x="0" y="0" width="800" height="400">
+                  <path id="arcMask" d="M136.9 141Q380 40 655.9 261.3" fill="none" stroke="#fff" stroke-width="8"/>
+                </mask>
+              </defs>
+              <rect class="grid" x="0" y="8" width="800" height="380"/>
+              <path class="grid" d="M0 200H800M400 8V388"/>
+              <path class="land" d="M249.4 388.3l6 2.4l-9.3 2.3l-6.7-2.8l-5.3-4.7l7.9 3.5l3.9-4.4zM269.9 380.6l1.1 2.3l-5.9 1.1l-1.1-1.3zM556.2 376.6l-3.4 0.2l0.4-3.2l3.5 1.2zM723.1 351.5l6.4 0.2l-0.8 6.6l-4.1 1l-3-6.7zM784.5 351.9l2.7 1.2l-3.4 5.7l0.8 1.4l-3.6 1.1l-1.9 4.7l-2.9 2.1l-5.9-1.2l0.8-3.1l7.7-5.9l3.5-5.8l1.6-1.3zM788 338.5l4.8 4.9l3.9-0.5l-1.2 4.1l-1.7-0.1l-4.4 7.2l-0.8-5l-2.4-1.1l1.9-6l-4.6-8l3.8 2.1zM771.4 299l-3.7-1.4l-3.2-4.4zM511.2 274.8l0.7 6.1l-1.6 0l-4.7 22.7l-1 3.3l-3.7 1.9l-3-1.7l-1.5-6.2l2.5-9.4l-1.1-5.7l1.1-3.4l4.1-1.2l3.1-3.3l3.3-7.2zM719 275.4l0.8 2.2l1.4-1.1l1.8 2.3l2.3 11.2l5.5 4l1.8 5.5l2.3 0.2l5.4 10.3l1 5.7l-1.5 9.9l-6.4 16.3l-8.2 4.5l-3.2-1.7l0.3-1.5l-3.2 2.6l-6.6-2.2l-2.4-5.3l-3.2-1.5l0.2-3.5l-3.1 2.5l2.2-6.6l-4 5.6l-3.8-6.4l-6.6-3.2l-11.5 2l-4.3 2.1l-1.2 2.6l-8.4 0.2l-4.2 3.1l-6.7-2.4l1.5-7.3l-5.2-15.5l1 1.2l-0.7-2.6l1.8 1.9l-1.9-5.4l1.7-7.4l0.2 2.1l5.5-5.1l9.2-2.9l4.8-9.2l1.9 1.9l-0.8-1.3l4.9-6.7l3.1-1.2l5.7 3.2l2.2-6.9l4.4-1.2l-1.7-2.4l1.2-0.4l6.5 3.2l2.7-1.1l1 1.4l-3.2 7.5l10.5 7.6l3.3-7.5l1-11.3l0.8-1.1l0.6 1.4zM676.5 265.2l-2.2 0.3l1.2-2.7l7.5-2.5zM662 259.4l2.7 1.7l-5.3 0.9zM673.1 259.4l-0.3 1.6l-6.3 0.5zM641.4 255.7l4.7-0.9l11 5.4l-2.5 1.1l-14-2.8l-6.5-2.6l1.5-2.7zM737.7 252.1l-3.9 2.4l-4.3-1.6l4-2.1l1.5 1.3l1.6-3.6l1.8 0.4zM689.9 245.3l0.8 2.2l-6.5-1.3l0.5-1.5zM698.1 239.9l0.6 4.6l2.3 1.7l1.9-3l4.5-1.7l13.9 6.1l3.1 4.5l3.7 1.7l-1 3.7l7.8 9l-6.2-1.3l-4.1-5.8l-2.9-1.2l-4.7 4.8l-7.8-3.5l-3.4 0.9l2.3-3.1l-1.6-5.4l-9.5-5.2l-1.5 1.6l-2.2-3.6l3.8-1.7l-3.3 0l-3.8-3.6l4.1-1.6zM678.3 232.6l-3.5 3.3l-7.8 0l1.7 4.6l5.3-2.2l-4.1 3.6l3.7 9.7l-2.1-0.2l1.1-2.3l-2.7 0.3l-1.1-5.5l-1.5 0.9l0.3 7.3l-1.4 0.4l-2.3-8.1l2.8-9.5l1.9-2.1l4.5 1.2zM686 233.4l-1.3 5.7l-1.1-7.6l0.7-1zM635.2 253.1l-2.5 0.1l-4.7-4.7l-16.2-27.3l4.9 0.7l7 8.9l2.3 0l4.8 5.6l-0.9 2.3l5.9 6.6zM661.9 231.5l2.5 2.6l-2.6 0.3l-3.7 13.5l-13.2-3l-2.6-12l8.7-5l8.3-10.8l5.5 4.3l-4.2 6.1zM680.8 212.9l0.4 3.5l-0.8 2.6l-0.8-2.9l-1 1.4l0.1 3.4l-2.6-1.6l-1.4-4.7l-3.8 1.8l3.5-4.2l0.8 1.3l3.6-2.1l-0.1-2.2zM580.5 219.2l-1.9 0.6l-1.1-2.2l0.6-8.6l3.6 6.5zM675.5 207.7l-2.2 3.5l-1.4-1.9l1.3-3.3l1.2-0.2l-0.4 1.9l1.6-2.7zM663.3 210.4l-3 2.7l5.2-8.5l0.4 2.3zM670.9 203.1l2.7 0.9l-2.5 3.2zM678.9 202.4l0.6 3.1l-1.7-0.7l-0.5 3.3l-1.2-6.8zM669.6 184.5l2.1 0.1l0.6 3.9l-1.7 7.8l4.9 1.5l0.3 3.5l-2.6-2.9l-5.1-0.9l0.8-1.9l-2-1.3l-0.4-3.9l0.9 0.9l1-7zM238.7 180.6l5.8 0.6l3.6 2.9l-5.2 0.5l-1.6 2.3l-2.2-1.7l-3.4 0.5l-1-1.8l4.5 0l-2.4-2.7zM645.2 184l-3.7 0.5l-0.1-2.4l4.8-2zM222.9 172.5l12 7.6l-7.7 0.5l1.5-1.6l-3.6-3.3l-6.9-1.7l0.1-1.3l-7.1 2.1l6-3.6zM669.3 172.4l-1 2.3l-1.4-4.5l3.1-4.9zM699.2 140.4l-1 2.7l-4.1 0.6l1.2-3zM476.8 136.1l-3.5 3.1l-1.6-1.5zM452.7 136l5.8 1.1l-3.5 1.1zM434.5 128.9l-0.9 4.5l-5.9-2.8l0.3-1.4zM420.5 120.5l1 5.7l-1.9 0.8l-1.4-5.8zM713.3 132l-1.6 5.6l-6.7 1.5l-3.2 3.2l-1.6-3.2l-9.1 2l2.3 2.1l-1.5 4.8l-2.5 0.1l0.5-2.5l-2.3-2.8l7.1-6l6.8-0.3l2.3-5l1.5 1.3l4.5-3.9l2-8.4l2.4-0.5l1.2 3.9zM421.2 117.9l-0.7 2.2l-1.5-2.5l1.9-2.1zM719.8 112.2l3.1-0.6l0.5 3.2l-3.3 0.8l-1.9 2.8l-3.5-1.9l-1.2 3.1l-2.5 0l-0.3-2.8l1.1-2.2l2.4-0.2l1.3-6.1zM125.5 100l-4.8-0.9l-5.3-3.3l-0.7-2.2l5.8 1.3zM275.3 93.8l-1.5 2.5l1.5-1l0.7 1.6l5.2 1l-0.7 2.1l1.6-0.5l1 3.2l-0.9 2.5l-2.5-0.4l-0.1-2.7l-2.6 2.4l-1.9-2.1l-6.7 0.1l4.2-8.8l3.3-2.6zM105.1 84.4l2.1-0.2l-0.7 3.2l1.9 2.3l-4.2-3.5zM719.2 93.7l2.2 5l-3.3-0.9l-1.4 4.1l2.1 4.9l-1.7-1.7l-1.5 2.2l-0.9-20.7l2.2-3zM384.9 89.4l-7.1 1.2l1.8-2.9l-1.2-2.9l4.7-3.5l4.2 1.6zM428.2 80l-1.3 2.3l-2.6-2.8l3.3-0.9zM60 75.7l-2.2 1.1l-1.5-2l4.7-1.2l0.9 0.9zM393.3 71.5l-2.4 3l4.7-0.4l-2.6 4.8l2.3 0.2l5.7 8.4l2.7 0.5l-0.5 4.1l-14.9 3.7l-1.2-0.6l5.2-3.6l-4.1-1.6l2.3-0.9l-0.8-3.4l3.3 0.3l0.3-1.6l-4.2-2.3l-0.5-2.8l-1.2 1.3l-1.3-4.2l2.5-5.2zM18.4 57l6.8 1.4l-1.9 0.9zM210.8 51.7l11.2 5.4l-2 0.9l-4.7-1.9l-5.4 3l-0.8-1.6l-3 0.3l3-6.2zM367.8 49.4l-0.5 1.8l2.5 1.9l-11.2 4.6l-9.1-1.3l2.2-1.2l-4.8-1.4l3.8-1.4l-4.7-0.7l4.9-2.3l3.5 1.9zM231.4 47.5l-2.5 0.1l0.4-3l3.8 0.4zM11.1 49.1l1.5 0.7l-0.5-2l6 0.4l4.4 2.6l-5.8 1.5l-0.9 3.3l-12-3.2l-0.7-2l-2.7 0.7l-0.3 2.5l0-11.2l11.3 5zM187.4 42l-9.2-0.8l3.5-2.1zM2.9 36.9l-2.9 0.2l0-1.9l5.4 0.7zM198.8 40.9l0 2.9l3-2.2l4.1 5.8l3.9-4.5l0.1-3.1l6.4 0.6l3 1.4l-1.5 2.9l1.6 1.5l-4.6 3.3l-5.4-0.4l-3.5 5l-5.8 2.1l-1.9 3l-5.3 2.6l-3.4 8.7l3.3 0.5l2 4.8l3.1-0.6l13.1 5.6l6.1 0.4l0.3 5.3l4.9 5.8l2.9-3.8l-2.7-5.9l7.3-5.3l-4.4-6.4l2.6-3l-1.7-6.9l9.5-0.3l5.5 3.7l4 0.2l0.7 5.9l3.6 2.1l6.8-6l7.1 9.5l-0.9 1.8l9.9 4.8l3.5 3.8l0.2 3.2l-9.7 5.4l-14.1 0l-10.5 9.6l5.5-4.2l8-2.6l2 1.4l-2.1 1.9l1.4 5.2l6.6 1l2.2-3.2l1.6 3.1l-12.4 6.7l-1.7-0.2l-0.1-2.4l3.9-2.3l-6 0.4l-7.9 5.9l1.6 3.9l-8.3 2l3.9 0l-4.5 0.5l-2.1 5.1l-1.4-1.6l1 3.1l-2 3.3l-0.9-5.4l0 3l-1.4-0.4l2.7 7.6l-12.5 11.6l2.8 12.8l-0.7 4.7l-3-1.9l-2.7-9.1l-2.6-2.8l-2.2 1.3l-2.9-2.2l-6.2 0.2l-0.1 2.9l-2.1 0.5l-8.2-1.7l-6.1 4l-1.7 2.6l-1.1 13.9l3.5 8.8l4.1 3.3l5.3-1.6l2.8-1.6l1.1-4.8l7.2-1.5l-4.2 15.9l8.8-0.3l3.5 2l-0.9 11.7l5.3 6.5l4.1-2.3l6.1 2.7l4.3-6.9l3.3-0.4l3.7-3.4l1.4 0.9l-1.8 1.9l0.6 6.6l1.5-2.2l-0.8-3.1l2.8-1.1l0.5-2.2l3.9 4.5l7.3 1.3l1.3-1.6l5.4-0.2l-1.9 0.8l0.8 1.3l3.5 1.6l0.4 2.3l3.5 1.6l4.3 5.7l7.1 0.6l5.9 4.4l3 6.9l-0.9 5.1l3.9 0.4l0.1 2.8l1.7-1.8l6.5 2.7l0.7 3.2l10.2 0.5l6.1 5.5l3.6 0.9l1.9 6.2l-0.9 4.7l-7.9 11.4l-1.3 13.5l-3.7 11.5l-2.3 2.9l-5.9 1.1l-6.7 4.3l-2.8 10.7l-10.9 16.1l-5.4 1.3l-4.9-2.7l3.6 8.4l-2.1 3.6l-3.3 1.5l-6.9 0.3l0.4 5.2l-1.3 1l-5.3 0.1l0.3 2.8l3.4 1.4l-3.8 2.6l-0.9 4.3l-3.8 1.5l-0.6 2.1l4.3 2.6l-0.8 2.5l-7 7.3l2.2 4.6l-6 1.5l-0.4 2.6l-8.8-4.4l-1.5-10.1l3.3-4.9l-3.4-0.8l2.9-7.2l2.5 1l1.2-5.8l-1.5-0.7l-0.7 3.5l-1.4-0.4l2.5-11.2l-0.8-5.9l4.8-13.3l2.8-35.7l-2.9-6.7l-10.1-7.6l-8.3-21l-3.3-3l-0.4-3.9l3.6-5.9l-2.7-1.2l0.1-3.4l8.5-13.8l-2.3-12.6l-3.1-1.7l-2.1 2.4l1.1 1.5l-2 0.9l-0.4-1.7l-5.4-1.8l-3.3-4.6l-0.3 1.5l-1.2-1.1l-0.1-3.3l-3.9-6.2l-8.3-1.8l-7.7-6.4l-4.1 1.5l-15.4-7.4l-4.4-4.7l-1.2-8l-7.2-7.9l-0.1-2.4l-6.5-7.1l-3.7-7.4l-2-0.7l0.2 4.6l11.7 19.1l-1.4 1.5l-4.8-5.4l-0.3-3.6l-6.1-4.8l2-2.4l-3-2.8l-3.9-9.8l-7.4-4.4l-8.4-16.1l1.1-14.7l-1.8-7.5l3.5 0.4l1.2 2.7l-0.6-5.4l-10.2-5.2l-0.9-4.2l-2.8-1.2l-11-15.1l-5.7-0.3l-7.2-3.7l-16.1-3.8l-2.5 0.6l0.5 2l-8.2 2.3l2.4-6l-7.6 5.4l1.6 1.4l-2.1 2l-9.3 6.1l-14.1 4.5l15.7-8.9l1.5-3.8l-10.9 0.7l0.2-2.7l-4.3-0.5l-5.1-4.8l3.5-4.6l8.4-1.7l-1.7-1.8l1.6-1.1l-9.3 1l-7-3.4l8.1-2.6l6.2 1.3l-11.3-6.3l10.8-5.6l11.8-2.9l44.6 6.9l14.9-3.6l1.5 1.2l2.2-2l5.3 2.8l3-1.9l0.3 2.1l6.3-1.1l13.8 2.5l3 1.4l-3.1 1.4l11.9-0.2l2.4 1.7l2.4-1.4l-2.3-1.2l1.4-1l4.5-0.4l10.4 3.2l6.7-0.4l-0.3-1.8l2-0.5l3.4 1l0 2.7l4.2-5l-5-2.9l0.2-3.1l2.6-2l5.2 1.7l3 3.2l-2 1.4zM146.3 30.6l-1.1 1.3l4.9-0.9l3.1 1.4l2.5-1.4l3.8 3.7l1.1-1.2l-1.6-2.9l4.2 0l2.5 1.1l2.1 4.7l7.7 2.7l-0.2 1.2l-3.6 0.2l0.7 2.1l-7.8-1.2l-16.3 1.8l-6.2-1.8l-2.7-2.2l10.9-1.1l-12.2-0.5l-1.2-1l5.2-1.1l-7.3-0.7l3.4-3.2zM167.8 29.8l-2 1.9l-3.5-2zM230.4 30.7l-7 1l-3-2.7zM207.6 30.5l1.8 1.8l2.1-2.3l5.6-1.2l3.8 2.9l-0.3 1.8l6.5-1.9l8.3 4l4.1-0.6l9.6 4l2.1 2.6l-4.1 1.3l15.5 5.2l-4.6 5.2l-6.2-3.9l-2.9 0.4l-0.3 1.6l6.3 3.7l1.4 2.8l-0.8 2l-8.4-3l5.8 5.1l-10.8-2.8l-8.5-5l-6.4 1.3l-1.9-1l1.5-2.1l8.7-0.4l2.3-6.4l-13.4-6.9l-5.2 1.2l-16.4-1.9l-1.8-1l2.3-1.3l-3.2 0l-0.7-2.9l4-3.7l5.7-0.7zM177 28.6l6.6 0.2l-1.5 2.2l3.4 1.2l-0.4 2.5l-5.8 0.9l-7.1-3.2l4.6-0.6l-2.4-1.8zM719.1 30.4l-8.3-0.4l4.9-1.4zM192.9 31.6l-4.9 2l-1.4-2.5l1.2-2.6l11.1 0zM132.3 35.5l-5.8 1.4l-6.3-2.7l4.4-5.1l-2.2-1.7l16.4 0.3l4.5 2l-8.2 2.7zM735 25.1l-2.6 1.1l-7.7-1.4zM192 25.4l-7.1 0.1l4.4-2zM722.4 23.8l-1.7 2.1l-11.9 0.6l-4.4-1.8l4.1-2.5zM181.1 20.5l1.7 1.3l-0.9 3.5l-9.6-1.6l-0.1-2.2zM159.5 22l5.2 0.7l-1 2.7l-16.5 1.7l4.3-2.2l-13.1-0.2l5.1-3.5l14.1 2.8l-3.2-2.7l2-1zM527.9 37.4l-8.6-0.1l-4.6-2l1.9-3.7l4.4-2.4l-2-0.3l5.3-2.5l-0.6-1.3l12.3-3.3l15.5-1.9l1.5 1.1l-23.1 6.3l-6.8 5.5l0.5 2.3zM189.6 19.4l6.8 0.9l5.4 3.3l17.9-0.3l2.9 2.2l-18.5 1.5l-9.5-1.3l-3.3-4.2l-7.2-1.2zM141.8 17.9l-2 3.1l-12.8 1.2l8.3-3.9zM637.7 19.8l0.6 1.4l8.5-0.6l6.8 2.4l-10.5 4.7l8 0.6l1.1 1.8l4.5-1.2l17 2.2l0.1-2.2l8.3 0.5l3.6 1.5l1 1.8l-1.3 1.2l6.3 3.4l2.1-3l16.9 1l-1.6-2.6l2.9-1.2l20.1 1.8l7.7 3.8l13.4-0.1l1.6 3.2l2.7 0.8l15.3-0.4l3.9 2.5l2.8-0.9l-1.8-1.8l1-1.3l18.1 2l3.1 1.2l0 11.2l-5.8 1l4.6 5.7l-12.9 2.6l-7.4 5l-3.2-1.9l-5.8 2.2l-6.1-0.2l-3.4 4.6l2.6 1.8l-0.3 4.1l-2.1 0.1l-1 2.4l0.9 1.2l-3.9 1.4l-0.8 3.2l-3.3 0.7l-3.9 5.5l-3-12.3l1.1-3.9l2-3l3.5-0.6l11.8-8.7l1.8-4l-2.7 0.2l-7 5.4l-1.8-3.5l-5.7 1l-5.6 4.7l1.8 1.7l-8.4 1l0.2-2l-3.5-0.4l-16.9 1.7l-15.7 12.1l6.8 2.7l3.9-1.2l3.2 3.1l0.1 2.4l-2.9 10.7l-4.1 6l-7.4 8.2l-3 1.7l-2.8-1.3l-10.5 9.9l4.3 8.4l-0.8 4.8l-5.8 2l-0.8-6.6l1.7-0.5l-4.8-3.4l1.4-4.1l-2.3-1.1l-7.1 2.9l2.5-4.3l-1.2-1.5l-8 4.9l-1.1 1.3l3.1 3.6l1.8 0.8l2.5-2l3.4 1.2l0.4 1.5l-3.1 0.8l-4.3 4.9l6.1 9.1l-1.4 2.9l1.8 2.4l-0.9 4.5l-6.7 10.4l-6.1 5l-11.3 3.9l-0.8 3l-1.2 0.2l-0.1-3.1l-3-0.9l-5.9 5.5l-0.5 2l7.1 10.7l1 5.2l-0.3 5l-9 8.6l-0.2-3.7l-3.5-2l-2-4.4l-3.9-1.2l0.3-2.2l-2 0l-1.9 11.7l8.3 10.5l2.8 11.9l-6.3-4.1l-2.9-10.4l-3.5-5.4l-0.4 1.7l0.9-10.3l-3.6-15.5l-4 3.4l-2.6-0.9l0.3-6.1l-6.5-12.8l-2-0.1l-0.5 2.7l-7.3 1l-1.1 3.8l-9.6 10.1l-4.1 1.9l-1 15.6l-5.2 6.7l-8.9-22.6l-2-15.1l-4.8 1.3l-2.9-3.4l0.4-2.1l-6.6-7.3l-10.8 1l-9.1-1.9l-2-4l-3.9 1.9l-7.1-3.9l-3.1-6.4l-4.8 0.5l6.3 14.7l0.5-3.5l1.3 0.6l0.5 5l4.9-0.3l5.2-6.4l1.1 6.1l4.2 1.9l2.4 3.5l-4.4 5.8l-0.3 3.7l-5.4 4.8l-6.4 2.4l-0.5 2.2l-7.8 4.5l-11.5 3.8l-1.9-11.7l-7.8-12.7l-1.4-6.8l-8.6-12.3l0.6-4.1l-2.2 5.2l-3.3-6.2l6.9 19l3 3.1l1.4 9.5l4 7.6l9 10l-1.3 1.8l4.2 3.6l14.4-4.5l-0.1 3.9l-7.3 18.1l-16.6 19.1l-2.4 5.9l-0.9 5.1l3.7 12.1l0.7 11.1l-2.9 5.7l-10.4 8.6l1.5 12.2l-6.4 4.5l-0.8 8.5l-8.9 11.3l-5.4 3.3l-7.1-0.2l-6.6 2.7l-3-2.7l-0.1-6.2l-6.7-12.9l-2.1-14l-5.5-11.4l0-6.4l4.2-14.3l-3.9-16l-6.9-11.1l1.3-13.7l-2-2.9l-5.8 1.4l-3.5-5.7l-5.5 0.4l-8.5 4l-6-1.3l-6.4 2.3l-3.3-1.4l-7.6-6.8l-5.4-10.2l-3.9-3.6l-2.2-7.2l3.3-9.5l-1.8-10.6l5.6-12.3l10.8-10.4l0.6-7.4l5.3-4.4l2.2-4.6l8.4 1.7l8.1-4l17.9-2.1l1.5 1.8l2-0.5l-1.7 8.8l19.4 9.9l2.1-2l0.2-3.5l3.1-1.7l16.4 5.6l4.6-1.9l6.2 1.7l4.9-10.4l0.4-5.7l-8.1 1.5l-1.8-1.5l-4.4 1.4l-4.6-1.4l-3.3-7.9l2.5-2.7l3.4-0.1l0.9-2.1l4.2 0.4l5.3-2.6l10.7 3l4.5-0.2l3-2.7l-11.2-9.2l5.4-5.7l-9.2 2.8l3 3.3l-5.4 2.1l-3.2-2.7l1.9-2.1l-5.7-1.4l-4.2 4.7l-2.6 6.6l2.5 4.3l-5.4 2.5l-0.7-1.9l-2.5-0.3l-2.7 0.7l1.5 1.6l-1.1 0.5l-2.8-0.8l3.1 7.3l-2.1-0.7l0.1 4.2l-1.5 0l-6.9-10.8l0.3-4.1l-14.2-11.3l-1.8 1l0.6 3.6l13.1 11l-3.6-0.8l0.4 4.3l-2.1 2.6l-1.5-5.8l-14.5-12.2l-5.2 3.5l-7.6 0.2l-0.1 3.3l-5 2.5l-2.4 4.8l0.9 1.6l-5 5.8l-4.9 0l-2.2 2.1l-2.5-2.8l-5.3 0.2l-1.1-17.3l3.1-2l13.5 0.9l1.1-1.7l0.4-5.6l-3.9-4.4l-3.4-1.1l-0.2-2.1l6.6 0.1l-0.7-3.2l2.1 1.2l5.2-2.2l0.7-2.3l4.9-1.9l1.9-4.1l7.6-1.2l1.5-1.4l-1.5-4.2l0.9-4.5l4.5-1.7l-0.7 2.4l1.5 1.2l-2.8 2.8l2.9 4.1l3.5-1.3l3.6 2l7.8-3.1l4.5 1.2l3.6-2.2l0.7-6.3l2.1-1l3.5 2.1l0.7-3.8l-2.4-2.3l12.8-2.4l-2.3-1.3l-11.6 1.9l-3.4-2.5l0.5-7l8.6-5.4l-3.3-2.5l-3.8 0.8l-1.8 3.7l-7.8 4.7l-1.6 4l3.7 3.5l-4.4 3.8l-2.1 7.4l-6.5 2.1l-5.7-11.6l-4.4 3.3l-6-0.8l-1.5-9.5l12.3-7.1l9.4-9.4l9.8-5.7l8.5-1.1l3.4-2.3l8-0.4l7 2.1l-2.9 0.8l2.4 1.8l2.3-1l18.1 5.6l1.9 3.2l-2.5 1.5l-15.2-1l3.6 2.1l0.3 4.2l4.6 1.6l-1.1-2.6l1.5-1l5.4 1.8l1.9-0.7l-1.5-2.1l5.2-2.8l4.1 1.1l1.3-1.9l-2.4-5.1l6.2 0.9l1.3 1.6l-2.8 0.3l0 1.6l1.7 1l16.4-6.2l1.7 0.1l-2.2 1.7l11.8-1.9l2.5 1.7l2.5-1.9l-2.3-1.6l1.2-0.9l17.7 5l1.5-1.5l-5-2.4l-0.5-4.4l5.6-5.1l7.5 0.2l-1.6 3.9l2.1 2.9l-0.5 3.9l2.5 1.7l-5.3 5.9l2.5 0.4l5.8-4.5l-1.3-1.6l1-1.9l-3-1.8l1.8-2.8l-2.9-2.3l4-1.9l-0.5-2l2.3 1.5l-0.9 2.7l2.4 0.5l-1-2l3.7-1.1l8.7 1.5l-2.2-5.3l14-0.8l-1.8-1.5l2.6-1.9l30.2-3.7l8-3.6l3.8 0.9l-3 0.7zM509.1 120.3l2.9 2.9l-1.8 0.2l-1.6 3.8l0.8 3.5l3.7 2l6.6-0.3l0.1-5.6l-2.6-3l0.5-2.4l4-0.2l-2.3-3.3l-2 2.8l-0.7-4.7l-2.6-1l-2.3-4.2l6.1-1.8l0-4.5l-8.8 1.3l-5.4 5zM155.1 17.8l-7.4-0.1l5-1.2zM454.9 17.3l-8.9 0.5l1.5-0.7l-1.3-0.9l4.6-0.6zM187 16.7l-5.1-0.1l-1.1-2.2l6.8 1.3zM177.6 16l0.9 1.2l-12.2-1.3l2.1-0.8l-2.8-1.8zM633.5 16l-12.5 1.1l5.9-4l7.3 1.8zM440.6 12.1l7.3 2.1l-5.6 1.1l-4.2 4.9l-2.7 0.1l-4.8-1.7l2-1l-9.4-5.4zM456.6 10.1l4.4 1l-9.7 1.8l-12.6-2.6zM513.6 9.7l-7.9 1.5l-2.4-0.7l1.3-0.9l-4.9-0.1zM622.1 14.4l-11-0.5l-8.4-3.7l10.6-2.6l9.4 4.1zM206.6 12.2l2.7 0.9l-11.1 3.2l-4.6-0.4l-2.4-1.1l1.8-1.8l-7.9-2.2l4.4-3l5.2-0.1zM247.8 2.5l14.7 2.1l-12.8 2.4l4.8 0l-12.7 4.8l-12.7 1.3l3.1 0.4l-1.5 0.5l1.8 1.4l-9.7 3.7l4.2 1.2l-5.9 1.7l-19.8-0.8l-0.3-1.4l4.1-0.6l-1.1-2l7.3 1l-6.6-2.3l6.4-2.7l-4.1-2.6l11.3-0.6l-12.8-0.1l-8.9-3.9l13.5-2.1l5.2 0.9l8.6-2.3zM339.8 1.4l13.9 2.2l-23.4 2l18.9-0.2l1.8 1l-2.4 1.6l16.4-2.1l7.9 1.7l-17.4 3.1l5.1 0.1l-4.4 3.9l0.1 3.1l2.7 1.8l-7.1 1l4.1 1.5l0.5 2.4l-2.4 0.3l2.9 2.4l-4.9 0.2l2.6 1.1l-0.7 1l-6.2 0.4l2.8 3.2l-5.5-0.4l5.9 2.4l0.8 2.3l-4 0.5l-4.5-2.7l0.8 1.9l-2.6 1.5l8.9 0.3l-12 4.7l-9 1l-5.4 4.1l-12.5 3.4l-3.1 5.6l-3.6 2.3l0.9 2.2l-2.1 5.1l-10.9-2.1l-7.5-7.8l-5.2-10l2.2-3.3l3.3-1l1.3-3.4l-5.7 1.8l-2.7-0.9l0.7-3.4l6.6 0.7l-9.9-3.1l2.5-2.6l-8.6-8.3l-6-1.6l-16.1 0.1l-6.4-2.7l10.3-1l-14.5-1.9l16.9-3.8l0.9-1l-6-1l12.9-3.4l-0.9-1.3l27.2-1.9l13 2.2l-5.3-1.5l0.3-1.2l7.5-1.7z"/>
+              <path class="arc" id="arc" d="M136.9 141Q380 40 655.9 261.3" mask="url(#arcReveal)"/>
+              <circle class="apt-ring" cx="136.9" cy="141" r="6"/><circle class="apt" cx="136.9" cy="141" r="2.4"/>
+              <circle class="apt-ring" cx="655.9" cy="261.3" r="6"/><circle class="apt" cx="655.9" cy="261.3" r="2.4"/>
+              <text class="apt-label" x="110" y="172">LAX</text>
+              <text class="apt-label" x="668" y="292">DPS</text>
+              <g id="plane" class="plane" style="opacity:0">
+                <path d="M0-11c1.2 0 2 1.4 2 3.2V-3l9 5.6V5l-9-2.6v4.4l2.4 1.8V10L0 9l-4.4 1v-1.4L-2 6.8V2.4L-11 5V2.6L-2-3v-4.8C-2-9.6-1.2-11 0-11z"/>
+              </g>
+            </svg>
+          </div>
+
+          <dl class="pp-data">
+            <dt>Issued to</dt><dd id="ppName">Our dearest guest</dd>
+            <dt>Admits</dt><dd id="ppSeats">1 guest</dd>
+            <dt>Valid</dt><dd>27 – 29 August 2027</dd>
+            <dt>Port of entry</dt><dd>DPS <small>· Denpasar, Bali</small></dd>
+            <dt>Destination</dt><dd>AYANA Bali <small>· Jimbaran</small></dd>
+            <dt>Issued by</dt><dd>Ashley &amp; Charles <small>· Los Angeles</small></dd>
+            <dt>Remarks</dt><dd>Adults only <small>· Tropical formal</small></dd>
+          </dl>
+
+          <div class="mrz" aria-label="Machine readable zone">
+            <div id="mrz1">P&lt;IDNBALI&lt;&lt;ASHLEY&lt;&lt;CHARLES&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
+            <div id="mrz2">AC28082027&lt;IDN2708279&lt;2708300&lt;JIMBARAN&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
+          </div>
+
+          <div class="stamp" id="stamp" aria-hidden="true">
+            <svg viewBox="0 0 120 120">
+              <defs>
+                <path id="stTop" d="M14 60A46 46 0 0 1 106 60"/>
+                <path id="stBot" d="M14 60A46 46 0 0 0 106 60"/>
+              </defs>
+              <circle class="ring" cx="60" cy="60" r="56"/>
+              <circle class="ring2" cx="60" cy="60" r="38"/>
+              <text font-size="12"><textPath href="#stTop" startOffset="50%" text-anchor="middle">ADMITTED</textPath></text>
+              <text font-size="12"><textPath href="#stBot" startOffset="50%" text-anchor="middle">DENPASAR</textPath></text>
+              <text class="date" x="60" y="57" text-anchor="middle">28 AUG</text>
+              <text class="date" x="60" y="71" text-anchor="middle">2027</text>
+              <path d="M22 60h6M92 60h6" stroke="#3F5B45" stroke-width="1.5"/>
+            </svg>
+          </div>
+        </div>
+
+        <div class="pp-cover" id="ppCover" aria-hidden="true">
+          <div class="face face-front">
+            <h2>Passport</h2>
+            <svg class="emblem" viewBox="0 0 100 100" aria-hidden="true">
+              <circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" stroke-width="1.2"/>
+              <circle cx="50" cy="50" r="38" fill="none" stroke="currentColor" stroke-width=".6"/>
+              <path d="M50 22c-4 12-10 18-20 22 10 4 16 10 20 22 4-12 10-18 20-22-10-4-16-10-20-22z" fill="none" stroke="currentColor" stroke-width="1.2"/>
+              <path d="M28 76c8-6 36-6 44 0" fill="none" stroke="currentColor" stroke-width="1"/>
+              <path d="M32 71c6-4 30-4 36 0" fill="none" stroke="currentColor" stroke-width=".7"/>
+            </svg>
+            <div class="cover-foot">Ashley &amp; Charles<br>Jimbaran · 28 Aug 2027</div>
+          </div>
+          <div class="face face-back"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- =======================================================================
+     1 · LETTER
+     ======================================================================= -->
+<section class="section is-limestone letter" id="letter">
+  <div class="inner">
+    <span class="eyebrow">01 — A letter</span>
+    <p class="salutation">Dear friends and family,</p>
+    <p>On 28 August 2026 we walked into a courthouse in downtown Los Angeles and walked out married. It took eleven minutes. It was quiet and small and exactly what the two of us needed that day.</p>
+    <p>It was also, if we're honest, only half of it. Five months earlier Charles had asked the question at sunset on Seragaki Beach in Okinawa, and somewhere between that beach and that courthouse we made ourselves a promise: the wedding would be for us, and the celebration would be for everyone.</p>
+    <p>So, one year later to the day, we're gathering the people we love most on a cliff above the Indian Ocean. Three days on one estate in Jimbaran, Bali. Seafood on the sand on Friday, vows at sunset on Saturday, and a long, unhurried lunch on Sunday before anyone has to think about airports again.</p>
+    <p>Come for the ceremony. Stay for the pool. Let us finally throw the party we skipped.</p>
+    <p class="signoff">With all our love,<br>Ashley &amp; Charles
+      <small>Los Angeles · September 2026</small>
+    </p>
+  </div>
+</section>
+
+<!-- =======================================================================
+     2 · THE DATE
+     ======================================================================= -->
+<section class="section is-limestone-2" id="date">
+  <div class="inner">
+    <span class="eyebrow">02 — The date</span>
+    <h2>Saturday, 28 August 2027</h2>
+    <p class="lede">One year to the day since the courthouse. Ceremony at half past four in the afternoon, Bali time.</p>
+
+    <div class="date-grid">
+      <div class="cal" aria-label="August 2027 calendar">
+        <div class="cal-head"><h3>August</h3><span>2027</span></div>
+        <table>
+          <thead><tr><th scope="col" abbr="Sunday">S</th><th scope="col" abbr="Monday">M</th><th scope="col" abbr="Tuesday">T</th><th scope="col" abbr="Wednesday">W</th><th scope="col" abbr="Thursday">T</th><th scope="col" abbr="Friday">F</th><th scope="col" abbr="Saturday">S</th></tr></thead>
+          <tbody>
+            <tr><td><span>1</span></td><td><span>2</span></td><td><span>3</span></td><td><span>4</span></td><td><span>5</span></td><td><span>6</span></td><td><span>7</span></td></tr>
+            <tr><td><span>8</span></td><td><span>9</span></td><td><span>10</span></td><td><span>11</span></td><td><span>12</span></td><td><span>13</span></td><td><span>14</span></td></tr>
+            <tr><td><span>15</span></td><td><span>16</span></td><td><span>17</span></td><td><span>18</span></td><td><span>19</span></td><td><span>20</span></td><td><span>21</span></td></tr>
+            <tr><td><span>22</span></td><td><span>23</span></td><td><span>24</span></td><td><span>25</span></td><td><span>26</span></td><td class="is-near"><span>27</span></td><td class="is-day"><span aria-label="28, the celebration">28</span></td></tr>
+            <tr><td class="is-near"><span>29</span></td><td><span>30</span></td><td><span>31</span></td><td></td><td></td><td></td><td></td></tr>
+          </tbody>
+        </table>
+        <p class="cal-legend">27 welcome dinner · 28 ceremony · 29 farewell lunch</p>
+      </div>
+
+      <div>
+        <span class="eyebrow" style="margin-bottom:.6em">Until the ceremony</span>
+        <div class="countdown" id="countdown" role="timer" aria-live="off">
+          <div><b id="cdD">—</b><span>days</span></div>
+          <div><b id="cdH">—</b><span>hours</span></div>
+          <div><b id="cdM">—</b><span>min</span></div>
+          <div><b id="cdS">—</b><span>sec</span></div>
+        </div>
+        <p class="when muted">Bali runs on Central Indonesia Time, fifteen hours ahead of Los Angeles. When we say our vows at 4:30 on Saturday afternoon, it will be 1:30 on Saturday morning back home. Set your watch on the plane, not after.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =======================================================================
+     3 · ORDER OF EVENTS
+     ======================================================================= -->
+<section class="section is-palm" id="events">
+  <div class="inner">
+    <span class="eyebrow">03 — Order of events</span>
+    <h2>Three days on the cliff</h2>
+    <p class="lede">Everything happens at AYANA Bali in Jimbaran, on the estate where you're staying.</p>
+
+    <ol class="timeline">
+      <li>
+        <h3>Friday</h3>
+        <span class="day-sub">27 August · Welcome</span>
+        <ul class="events">
+          <li><time datetime="2027-08-27T19:00+08:00">7:00 PM</time><div><b>Seafood dinner on Jimbaran Bay</b><p>Grilled fish and lobster on the sand at the estate's beach, feet in the water if you like. Come as you are off the plane.</p></div></li>
+        </ul>
+      </li>
+      <li>
+        <h3>Saturday</h3>
+        <span class="day-sub">28 August · The celebration</span>
+        <ul class="events">
+          <li><time datetime="2027-08-28T16:00+08:00">4:00 PM</time><div><b>Guests seated</b><p>The clifftop lawn above the ocean. There's shade, and there's water.</p></div></li>
+          <li><time datetime="2027-08-28T16:30+08:00">4:30 PM</time><div><b>Ceremony</b><p>Short. We've technically done this before.</p></div></li>
+          <li><time datetime="2027-08-28T17:15+08:00">5:15 PM</time><div><b>Sunset drinks</b><p>Cocktails at the cliff edge while the sun goes into the Indian Ocean.</p></div></li>
+          <li><time datetime="2027-08-28T19:00+08:00">7:00 PM</time><div><b>Reception</b><p>Dinner, speeches kept mercifully brief, and dancing until the estate asks us to stop.</p></div></li>
+        </ul>
+      </li>
+      <li>
+        <h3>Sunday</h3>
+        <span class="day-sub">29 August · Farewell</span>
+        <ul class="events">
+          <li><time datetime="2027-08-29T12:30+08:00">12:30 PM</time><div><b>Slow lunch</b><p>Long tables under the trees, nothing on the schedule afterwards. Leave whenever you're ready.</p></div></li>
+        </ul>
+      </li>
+    </ol>
+
+    <div class="note">
+      <p>Every event takes place on the AYANA estate, and you'll be staying on it too. Nobody drives anywhere all weekend. The resort runs a shuttle between AYANA Resort, AYANA Villas and RIMBA around the clock.</p>
+    </div>
+
+    <div class="travel">
+      <div>
+        <h4>Getting there</h4>
+        <p>Fly from Los Angeles (LAX) to Denpasar (DPS). There's no nonstop, so you'll connect once. AYANA is 25 minutes from the airport, and we'll have cars waiting when you land.</p>
+      </div>
+      <div>
+        <h4>Staying</h4>
+        <p>Rooms are held for our guests across AYANA Resort, AYANA Villas and RIMBA, all on the same estate. We'll send booking details once you've replied.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =======================================================================
+     4 · DRESS CODE
+     ======================================================================= -->
+<section class="section is-limestone" id="dress">
+  <div class="inner">
+    <span class="eyebrow">04 — Dress code</span>
+    <h2>Tropical formal</h2>
+    <p class="lede">Linen suits, long dresses, real colour. Dress for a beautiful evening outdoors in the tropics, not a ballroom.</p>
+
+    <ul class="swatches" aria-label="Colours to dress within">
+      <li><i style="background:#3F5B45"></i>Palm</li>
+      <li><i style="background:#7E8F6E"></i>Sage</li>
+      <li><i style="background:#2F4A6B"></i>Ocean</li>
+      <li><i style="background:#A2623F"></i>Clay</li>
+      <li><i style="background:#8C6E4F"></i>Husk</li>
+      <li><i style="background:#D9C6A3"></i>Sand</li>
+      <li><i style="background:#242722"></i>Andesite</li>
+      <li class="is-no"><i style="background:#F4EFE4"></i>Not ivory</li>
+    </ul>
+
+    <div class="guidance">
+      <div>
+        <h4>Fabric</h4>
+        <p>It will be around 29°C and humid at half past four. Linen, cotton voile, silk and seersucker will carry you through. Wool, polyester and anything lined will not.</p>
+      </div>
+      <div>
+        <h4>Shoes</h4>
+        <p>The ceremony is on clifftop stone and Friday dinner is on sand. Block heels, flat sandals and loafers survive both. Stilettos lose on the first night.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =======================================================================
+     5 · ADULTS ONLY
+     ======================================================================= -->
+<section class="section is-limestone-2" id="adults">
+  <div class="inner">
+    <span class="eyebrow">05 — A note on children</span>
+    <h2>Adults only</h2>
+    <p class="lede">We love your children. We're also asking you to leave them at home this time.</p>
+    <p style="max-width:52ch">The weekend runs late, the cliffs are real, and the bar never quite closes. We would rather you had three days that felt like a holiday of your own. We've kept the guest list to adults, and we hope you'll take that as an invitation to sleep in.</p>
+
+    <div class="seats-box" role="note">
+      <div>
+        <div class="lbl">Your invitation</div>
+        <div class="val" id="seatsLine">Admits one guest</div>
+      </div>
+      <div class="num" id="seatsNum" aria-hidden="true">1</div>
+    </div>
+  </div>
+</section>
+
+<!-- =======================================================================
+     6 · RSVP
+     ======================================================================= -->
+<section class="section is-andesite rsvp" id="rsvp">
+  <div class="inner">
+    <span class="eyebrow">06 — RSVP</span>
+    <h2>Will you come?</h2>
+    <p class="deadline" id="deadline">Kindly reply by 1 March 2027</p>
+
+    <form id="rsvpForm" novalidate>
+      <div class="field" id="fName">
+        <label for="name">Your name</label>
+        <input type="text" id="name" name="name" autocomplete="name" maxlength="80" required>
+        <p class="err">Please tell us who you are.</p>
+      </div>
+
+      <div class="field" id="fEmail">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" autocomplete="email" inputmode="email" maxlength="120" required>
+        <p class="err">That email doesn't look right.</p>
+      </div>
+
+      <div class="field" id="fAttending">
+        <fieldset>
+          <legend>Attending</legend>
+          <div class="pills">
+            <label><input type="radio" name="attending" value="all"><span>All three days</span></label>
+            <label><input type="radio" name="attending" value="partly"><span>Part of it</span></label>
+            <label><input type="radio" name="attending" value="no"><span>Can't make it</span></label>
+          </div>
+        </fieldset>
+        <p class="err">Let us know if you can make it.</p>
+      </div>
+
+      <div class="field" id="fParty" hidden>
+        <label for="party">Party size</label>
+        <select id="party" name="party"></select>
+        <p class="hint-line" id="partyHint"></p>
+      </div>
+
+      <div class="field" id="fDiet">
+        <label for="diet">Dietary needs</label>
+        <input type="text" id="diet" name="diet" maxlength="200" placeholder="Allergies, vegetarian, anything the kitchen should know">
+      </div>
+
+      <div class="field">
+        <label for="note">A note for us</label>
+        <textarea id="note" name="note" maxlength="1000" placeholder="Optional"></textarea>
+      </div>
+
+      <button class="btn" type="submit" id="submitBtn">Send reply</button>
+      <p class="form-error" id="formError">Something went wrong sending your reply. Please try again, or message us directly.</p>
+    </form>
+
+    <div class="confirm" id="confirmYes">
+      <h3>We can't wait.</h3>
+      <p>Thank you. Your reply is in, and we'll be in touch with booking details for the estate and a few notes on getting to Bali.</p>
+      <p>Start thinking about linen.</p>
+      <span class="mono">See you on the cliff · 28 Aug 2027</span>
+    </div>
+    <div class="confirm" id="confirmNo">
+      <h3>We'll miss you.</h3>
+      <p>Thank you for letting us know. We understand completely, and we'll raise a glass to you from the cliff.</p>
+      <p>If anything changes before March, just write to us.</p>
+      <span class="mono">With love · Ashley &amp; Charles</span>
+    </div>
+  </div>
+</section>
+
+<!-- =======================================================================
+     7 · FOOTER
+     ======================================================================= -->
+<footer class="footer">
+  <div class="inner">
+    <div class="medallion" aria-hidden="true"><span>A&amp;C</span></div>
+    <div>
+      <h2>Ashley &amp; Charles</h2>
+      <p>AYANA Bali, Jimbaran</p>
+      <p>Saturday, 28 August 2027</p>
+      <span class="mono">LAX → DPS · Admit adults only</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ---------------------------------------------------------------------------
+   RSVP backend. Leave empty for preview mode (logs the payload, no request).
+   Set to a Google Apps Script web-app URL to POST replies.
+--------------------------------------------------------------------------- */
+var RSVP_ENDPOINT = "";
+
+(function () {
+  'use strict';
+
+  var $ = function (id) { return document.getElementById(id); };
+  var clamp = function (v, a, b) { return v < a ? a : v > b ? b : v; };
+  /* Normalised progress of p through [a, b]. */
+  var seg = function (p, a, b) { return clamp((p - a) / (b - a), 0, 1); };
+  var ease = function (t) { return t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; };
+
+  /* -------------------------------------------------------------------------
+     Per-guest personalisation from ?to= and ?seats=
+  ------------------------------------------------------------------------- */
+  var params = new URLSearchParams(location.search);
+  var guestName = (params.get('to') || '').replace(/\s+/g, ' ').trim().slice(0, 60);
+  var seats = parseInt(params.get('seats'), 10);
+  seats = isFinite(seats) ? clamp(seats, 1, 6) : 1;
+  var hasName = guestName.length > 0;
+  var words = ['one', 'two', 'three', 'four', 'five', 'six'];
+
+  var displayName = hasName ? guestName : 'Our dearest guest';
+  $('ppName').textContent = displayName;
+  $('envName').textContent = displayName;
+  $('bpName').textContent = hasName ? guestName.toUpperCase() : 'GUEST';
+  $('ppSeats').textContent = seats + (seats === 1 ? ' guest' : ' guests');
+  $('bpSeats').textContent = String(seats);
+    $('seatsNum').textContent = String(seats);
+  $('seatsLine').textContent = 'Admits ' + words[seats - 1] + (seats === 1 ? ' guest' : ' guests');
+  if (hasName) $('name').value = guestName;
+
+  /* MRZ line 1 carries the guest's name, OCR-B style. */
+  var mrzName = (hasName ? guestName : 'GUEST').toUpperCase().replace(/&/g, ' AND ').replace(/[^A-Z ]/g, '').trim().replace(/ +/g, '<');
+  var padMrz = function (s) { s = s.slice(0, 44); while (s.length < 44) s += '<'; return s; };
+  $('mrz1').textContent = padMrz('P<IDNBALI<<' + mrzName + '<<');
+  $('mrz2').textContent = padMrz('AC28082027' + seats + 'IDN2708279<2708300<JIMBARAN<<');
+
+  /* -------------------------------------------------------------------------
+     Opening sequence
+  ------------------------------------------------------------------------- */
+  var stage = $('stage'), scene = $('scene'), hint = $('hint'), skip = $('skip');
+  var envBack = $('envBack'), envPocket = $('envPocket'), envFlap = $('envFlap'), seal = $('seal');
+  var pocketText = envPocket.querySelectorAll('.addr, .par-avion');
+  var bpass = $('bpass'), passport = $('passport'), cover = $('ppCover');
+  var arc = $('arc'), arcMask = $('arcMask'), plane = $('plane'), stamp = $('stamp');
+  var envParts = [envBack, envPocket, envFlap];
+
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var arcLen = arc.getTotalLength();
+  arcMask.style.strokeDasharray = arcLen;
+  arcMask.style.strokeDashoffset = arcLen;
+
+  /* Place the plane at a fraction of the arc, rotated to the path tangent. */
+  function placePlane(t) {
+    var d2 = Math.min(arcLen, Math.max(1, arcLen * t));
+    var d1 = d2 - 1;
+    var a = arc.getPointAtLength(d1), b = arc.getPointAtLength(d2);
+    var deg = Math.atan2(b.y - a.y, b.x - a.x) * 180 / Math.PI + 90;
+    plane.setAttribute('transform', 'translate(' + b.x.toFixed(2) + ' ' + b.y.toFixed(2) + ') rotate(' + deg.toFixed(2) + ') scale(1.15)');
+  }
+
+  if (reduce) {
+    /* No scrubbing: envelope and boarding pass leave the DOM; passport opens stamped. */
+    envParts.forEach(function (el) { el.parentNode.removeChild(el); });
+    bpass.parentNode.removeChild(bpass);
+    hint.parentNode.removeChild(hint);
+    stage.classList.add('is-static');
+    passport.classList.add('is-out');
+    arcMask.style.strokeDashoffset = 0;
+    plane.style.opacity = 1;
+    placePlane(1);
+    stamp.style.opacity = 1;
+    stamp.style.transform = 'rotate(-12deg)';
+  } else {
+    var vh = window.innerHeight, eh = envBack.offsetHeight;
+
+    function render(p) {
+      /* Envelope resting position, then it sinks in phase 6. */
+      var envY = vh * 0.06;
+
+      /* -- Hint fades out immediately ------------------------------ 0.00–0.05 */
+      hint.style.opacity = 1 - seg(p, 0, .05);
+
+      /* -- 1. Wax seal cracks: scales up, rotates, fades ---------- 0.04–0.14 */
+      var s1 = seg(p, .04, .14);
+      seal.style.transform = 'scale(' + (1 + s1 * 1.8) + ') rotate(' + (s1 * 35) + 'deg)';
+      seal.style.opacity = 1 - s1;
+      seal.style.visibility = s1 >= 1 ? 'hidden' : 'visible';
+
+      /* -- 2. Flap opens, rotateX 0 → -181deg -------------------- 0.10–0.26 */
+      var s2 = ease(seg(p, .10, .26));
+      envFlap.style.transform = 'translateY(' + envY + 'px) rotateX(' + (-181 * s2) + 'deg)';
+      /* z-index flips once the flap passes 90°, or it renders over what it just released */
+      envFlap.style.zIndex = s2 > .5 ? 1 : 6;
+
+      /* -- 3. Boarding pass rises out of the envelope ------------ 0.22–0.42 */
+      var s3 = ease(seg(p, .22, .42));
+      /* -- 4. Boarding pass drifts up and fades ------------------- 0.42–0.54 */
+      var s4 = seg(p, .42, .54);
+      var bpY = envY + eh * 0.10 - s3 * eh * 0.95 - s4 * vh * 0.28;
+      bpass.style.transform = 'translateY(' + bpY + 'px) rotate(' + (-2 + s4 * -4) + 'deg)';
+      bpass.style.opacity = 1 - s4;
+      bpass.style.visibility = (s4 >= 1 || p < .15) ? 'hidden' : 'visible';
+
+      /* -- 5. Passport rises out, scale .46 → 1 ------------------ 0.38–0.60 */
+      var s5 = ease(seg(p, .38, .60));
+      var ppY = (envY + eh * 0.03) * (1 - s5);
+      var ppS = .46 + .54 * s5;
+      /* the address on the pocket fades early so it never overprints the cover */
+      for (var t = 0; t < pocketText.length; t++) pocketText[t].style.opacity = 1 - seg(p, .40, .50);
+      passport.style.transform = 'translateY(' + ppY + 'px) scale(' + ppS + ')';
+      /* pocket stays above the passport until it is clear of the envelope */
+      passport.classList.toggle('is-out', p > .56);
+
+      /* -- 6. Envelope fades and sinks ---------------------------- 0.50–0.62 */
+      var s6 = seg(p, .50, .62);
+      var sinkY = envY + s6 * vh * 0.22;
+      envBack.style.transform = 'translateY(' + sinkY + 'px)';
+      envPocket.style.transform = 'translateY(' + sinkY + 'px)';
+      envFlap.style.transform = 'translateY(' + sinkY + 'px) rotateX(' + (-181 * s2) + 'deg)';
+      for (var i = 0; i < envParts.length; i++) {
+        envParts[i].style.opacity = 1 - s6;
+        envParts[i].style.visibility = s6 >= 1 ? 'hidden' : 'visible';
+      }
+      bpass.style.opacity = Math.min(1 - s4, 1 - s6);
+
+      /* -- 7. Cover swings open, rotateY 0 → -174deg -------------- 0.60–0.80 */
+      var s7 = ease(seg(p, .60, .80));
+      cover.style.transform = 'rotateY(' + (-174 * s7) + 'deg)';
+
+      /* -- 8. Flight path draws, plane rides it, stamp lands ------ 0.78–1.00 */
+      var s8 = seg(p, .78, .95);
+      arcMask.style.strokeDashoffset = arcLen * (1 - s8);
+      plane.style.opacity = p > .78 ? 1 : 0;
+      placePlane(s8);
+      var s8b = seg(p, .90, 1);
+      stamp.style.opacity = s8b;
+      stamp.style.transform = 'rotate(-12deg) scale(' + (1.9 - .9 * ease(s8b)) + ')';
+      stamp.style.visibility = s8b > 0 ? 'visible' : 'hidden';
+
+      skip.classList.toggle('is-hidden', p >= 1);
+    }
+
+    var ticking = false;
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(function () {
+        ticking = false;
+        var rect = stage.getBoundingClientRect();
+        var range = stage.offsetHeight - vh;
+        var p = range > 0 ? clamp(-rect.top / range, 0, 1) : 1;
+        render(p);
+      });
+    }
+    function onResize() {
+      vh = window.innerHeight;
+      eh = envBack.offsetHeight;
+      onScroll();
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onResize, { passive: true });
+    onResize();
+  }
+
+  /* -------------------------------------------------------------------------
+     Countdown to the ceremony
+  ------------------------------------------------------------------------- */
+  var target = new Date('2027-08-28T16:30:00+08:00').getTime();
+  var cdD = $('cdD'), cdH = $('cdH'), cdM = $('cdM'), cdS = $('cdS');
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+  function tick() {
+    var diff = Math.max(0, target - Date.now());
+    var s = Math.floor(diff / 1000);
+    cdD.textContent = Math.floor(s / 86400);
+    cdH.textContent = pad(Math.floor(s % 86400 / 3600));
+    cdM.textContent = pad(Math.floor(s % 3600 / 60));
+    cdS.textContent = pad(s % 60);
+  }
+  tick();
+  setInterval(tick, 1000);
+
+  /* -------------------------------------------------------------------------
+     RSVP
+  ------------------------------------------------------------------------- */
+  var form = $('rsvpForm'), submitBtn = $('submitBtn'), formError = $('formError');
+  var fName = $('fName'), fEmail = $('fEmail'), fAttending = $('fAttending'), fParty = $('fParty'), fDiet = $('fDiet');
+  var partySel = $('party'), partyHint = $('partyHint');
+
+  /* Party-size dropdown is capped at the invitation's seat count. Hidden when it's 1. */
+  for (var n = 1; n <= seats; n++) {
+    var opt = document.createElement('option');
+    opt.value = n;
+    opt.textContent = n === 1 ? 'Just me' : n + ' of us';
+    if (n === seats) opt.selected = true;
+    partySel.appendChild(opt);
+  }
+  partyHint.textContent = 'Your invitation admits up to ' + words[seats - 1] + '.';
+  var partyAllowed = seats > 1;
+
+  function attendingValue() {
+    var r = form.querySelector('input[name="attending"]:checked');
+    return r ? r.value : '';
+  }
+  function syncVisibility() {
+    var declined = attendingValue() === 'no';
+    fDiet.hidden = declined;
+    fParty.hidden = declined || !partyAllowed;
+  }
+  var radios = form.querySelectorAll('input[name="attending"]');
+  for (var r = 0; r < radios.length; r++) {
+    radios[r].addEventListener('change', function () {
+      syncVisibility();
+      fAttending.classList.remove('is-invalid');
+    });
+  }
+  syncVisibility();
+
+  var emailOk = function (v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v); };
+  $('name').addEventListener('input', function () { if (this.value.trim()) fName.classList.remove('is-invalid'); });
+  $('email').addEventListener('input', function () { if (emailOk(this.value.trim())) fEmail.classList.remove('is-invalid'); });
+
+  function validate() {
+    var ok = true, first = null;
+    var name = $('name').value.trim(), email = $('email').value.trim();
+    fName.classList.toggle('is-invalid', !name); if (!name) { ok = false; first = first || $('name'); }
+    fEmail.classList.toggle('is-invalid', !emailOk(email)); if (!emailOk(email)) { ok = false; first = first || $('email'); }
+    var att = attendingValue();
+    fAttending.classList.toggle('is-invalid', !att); if (!att) { ok = false; first = first || radios[0]; }
+    if (first) first.focus();
+    return ok;
+  }
+
+  function showConfirmation(declined) {
+    form.hidden = true;
+    $('deadline') && ($('deadline').hidden = true);
+    var el = $(declined ? 'confirmNo' : 'confirmYes');
+    el.classList.add('is-visible');
+    el.setAttribute('tabindex', '-1');
+    el.focus({ preventScroll: true });
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    formError.classList.remove('is-visible');
+    if (!validate()) return;
+
+    var declined = attendingValue() === 'no';
+    var party = declined ? 0 : (partyAllowed ? clamp(parseInt(partySel.value, 10) || 1, 1, seats) : 1);
+    var payload = {
+      name: $('name').value.trim(),
+      email: $('email').value.trim(),
+      attending: attendingValue(),
+      party: party,
+      dietary: declined ? '' : $('diet').value.trim(),
+      note: $('note').value.trim(),
+      invitedName: guestName,     /* from ?to=   — so mismatches are visible */
+      allowedSeats: seats,        /* from ?seats= */
+      submittedAt: new Date().toISOString(),
+      page: location.href
+    };
+
+    if (!RSVP_ENDPOINT) {
+      console.log('[RSVP preview mode — no endpoint set] payload:', payload);
+      showConfirmation(declined);
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending…';
+    /* Apps Script web apps answer via a redirect that carries no CORS headers,
+       so the response is opaque; a resolved fetch is the success signal. */
+    fetch(RSVP_ENDPOINT, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    }).then(function () {
+      showConfirmation(declined);
+    }).catch(function (err) {
+      console.error('RSVP send failed', err);
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Send reply';
+      formError.classList.add('is-visible');
+    });
+  });
+})();
+</script>
+</body>
+</html>
