@@ -8,8 +8,10 @@ nobody can reply for more seats than they were given.
 
 ## 1. The sheet
 
-Create a Google Sheet. Rename the first tab **Guests** and give it these
-headers in row 1:
+Create a Google Sheet. The quickest way is **File → Import → Upload** with
+`guests-template.csv` from this folder, then rename the tab to **Guests**
+and delete the two example rows. Or start blank, name the first tab
+**Guests**, and give it these headers in row 1:
 
 | A `code` | B `names` | C `seats` | D `email` | E `link` | F `sent` |
 |---|---|---|---|---|---|
