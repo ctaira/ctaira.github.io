@@ -247,7 +247,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 
 /* Cat paw: reaches in from the lower right and breaks the seal. */
 .paw{
-  z-index:7;width:calc(var(--ew) * .34);height:calc(var(--ew) * .34 * 4.4);
+  z-index:7;width:calc(var(--ew) * .5);height:calc(var(--ew) * .5 * 4.4);
   margin:0;transform-origin:50% 6.8%;will-change:transform;pointer-events:none;
   visibility:hidden;
 }
@@ -1260,7 +1260,7 @@ var RSVP_ENDPOINT = "";
         /* translate moves the element's corner; the pad centre sits at (50%, 12%) of the box */
         var padDX = paw.offsetWidth * 0.5, padDY = paw.offsetHeight * 0.068;
         var fromX = vw * 0.55, fromY = vh * 0.6;
-        var toX = sealX + 12 - padDX, toY = sealY + 8 - padDY;
+        var toX = sealX + 16 - padDX, toY = sealY + 10 - padDY;
         var px = fromX + (toX - fromX) * reach, py = fromY + (toY - fromY) * reach;
         paw.style.visibility = 'visible';
         paw.style.transform = 'translate(' + px.toFixed(1) + 'px,' + py.toFixed(1) + 'px) rotate(' + (-38 + press * 6) + 'deg) scale(' + (1 - press * .06) + ')';
