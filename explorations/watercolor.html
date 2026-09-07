@@ -1,8 +1,8 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Ashley &amp; Charles, watercolour</title>
 <meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -26,48 +26,49 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .skip{position:fixed;top:14px;right:14px;z-index:60;font-family:var(--caps);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--navy);text-decoration:none;background:rgba(243,238,228,.85);padding:8px 14px;border-radius:999px;border:1px solid rgba(199,168,90,.6)}
 .scene{display:block;width:100%;height:auto}
 
-/* ---- opening: scene + envelope ---- */
-.opener{position:fixed;inset:0;z-index:50;display:flex;justify-content:center;background:#EDE6D8}
-.opener.is-done{opacity:0;pointer-events:none;transition:opacity .7s ease}
-.opener .inner{width:min(100vw,430px);height:100%;position:relative;overflow:hidden;background:var(--paper)}
-.opener .scene{position:absolute;left:0;top:0;width:100%;height:58%;transition:opacity 1s ease,transform 1.2s ease}
-.opener .mono{position:absolute;left:50%;top:5%;transform:translateX(-50%);width:120px;transition:opacity .8s ease}
-.opener.s4 .scene,.opener.s4 .mono,.opener.s4 .tag{opacity:0}
-.opener.s4 .scene{transform:scale(1.04)}
+/* ---- opening: one scroll-scrubbed stage ---- */
+.stage{position:relative;height:500vh;background:#EDE6D8}
+.view{position:sticky;top:0;height:100svh;overflow:hidden;display:flex;justify-content:center;background:#EDE6D8}
+@media (prefers-reduced-motion:reduce){.stage{height:100svh}}
+.inner{width:min(100vw,430px);height:100%;position:relative;overflow:hidden;background:var(--paper)}
+.inner .scene{position:absolute;left:0;top:0;width:100%;height:58%;transform-origin:50% 60%;will-change:transform}
+.inner .mono{position:absolute;left:50%;top:5%;transform:translateX(-50%);width:120px}
 .env{position:absolute;left:5%;right:5%;top:44%;height:46%;perspective:1400px;perspective-origin:50% 10%}
-.env .back,.env .pocket,.env .flap{transition:transform 1s cubic-bezier(.5,0,.75,.4),opacity .7s ease .2s}
-.opener.s4 .env .back,.opener.s4 .env .pocket{transform:translateY(70%);opacity:0}
-.opener.s4 .env .flap{transform:rotateX(-176deg) translateY(-70%);opacity:0}
 .env .back{position:absolute;inset:0;background:var(--kraft);border-radius:6px}
-.env .card{position:absolute;left:5%;right:5%;top:8%;bottom:6%;background:var(--paper);border-radius:4px;box-shadow:0 10px 30px -14px rgba(31,58,95,.5);z-index:1;display:grid;place-items:center;
-  transition:transform 1.1s cubic-bezier(.45,0,.2,1),box-shadow 1s ease,border-radius 1s ease;will-change:transform}
-.opener.s3 .env .card{transform:translateY(-52%) scale(1.04);box-shadow:0 30px 60px -24px rgba(31,58,95,.55)}
-.opener.s4 .env .card{transition:transform 1.1s cubic-bezier(.6,0,.2,1),box-shadow .8s ease,border-radius .8s ease;border-radius:0;box-shadow:none;z-index:6}
-.opener.s4 .env{z-index:6}
-.env .card .cm{width:38%;transition:opacity .45s ease,transform .8s ease}
-.opener.s4 .env .card .cm{opacity:0;transform:scale(.9)}
-.opener.s5{transition:opacity .6s ease;opacity:0;pointer-events:none}
-.opener .tag{transition:opacity .5s ease}
+.env .card{position:absolute;left:5%;right:5%;top:8%;bottom:6%;background:var(--paper);border-radius:4px;box-shadow:0 10px 30px -14px rgba(31,58,95,.5);z-index:1;display:grid;place-items:center;transform-origin:50% 50%;will-change:transform}
+.env .card.is-out{z-index:6}
+.env .card .cm{width:38%}
 .env .pocket{position:absolute;inset:0;z-index:2;overflow:hidden;border-radius:6px;pointer-events:none}
 .env .pocket i{position:absolute;inset:0;display:block}
 .env .pocket .l{background:linear-gradient(90deg,#E2D5BE,#D9CBB2);clip-path:polygon(0 0,50% 52%,0 100%)}
 .env .pocket .r{background:linear-gradient(270deg,#E2D5BE,#D9CBB2);clip-path:polygon(100% 0,50% 52%,100% 100%)}
 .env .pocket .b{background:#D2C3A8;clip-path:polygon(0 100%,50% 52%,100% 100%)}
-.env .flap{position:absolute;inset:0;z-index:3;transform-origin:50% 0;transform-style:preserve-3d;transition:transform 1s cubic-bezier(.7,0,.25,1)}
+.env .flap{position:absolute;inset:0;z-index:3;transform-origin:50% 0;transform-style:preserve-3d;will-change:transform}
+.env .flap.is-past{z-index:0}
 .env .flap i{position:absolute;inset:0;display:block;background:linear-gradient(180deg,#E6DAC4,#D6C7AC);clip-path:polygon(0 0,100% 0,50% 56%);backface-visibility:hidden}
-.env .flap b{position:absolute;inset:0;display:block;background:#CDBEA2;clip-path:polygon(0 0,100% 0,50% 56%);transform:rotateX(180deg);backface-visibility:hidden}
-.opener.s2 .env .flap{transform:rotateX(-176deg);z-index:0}
-.seal{position:absolute;left:50%;top:56%;width:84px;height:80px;margin:-40px 0 0 -42px;z-index:4;transition:transform .55s cubic-bezier(.3,.7,.3,1),opacity .4s ease .15s}
-.opener.s1 .seal{transform:translateY(-90px) rotate(-8deg) scale(1.08);opacity:0}
-.env-btn:active ~ .seal{transform:scale(.94)}
+.env .flap b{position:absolute;inset:0;display:block;background:#CDBEA2;clip-path:polygon(0 56%,100% 56%,50% 0);transform:rotateX(180deg);transform-origin:50% 28%;backface-visibility:hidden}
+.seal{position:absolute;left:50%;top:56%;width:84px;height:80px;margin:-40px 0 0 -42px;backface-visibility:hidden;transform-origin:50% 50%}
 .seal svg{display:block;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 4px 6px rgba(80,55,10,.35))}
-
-.opener .tag{position:absolute;left:0;right:0;bottom:4%;text-align:center}
-.opener .tag .label{color:var(--navy)}
-.opener .tag .script{display:block;font-size:30px;color:var(--navy);line-height:1.1;margin-top:.15em}
-.opener .tag .orn{color:var(--gold);font-size:12px;letter-spacing:.3em}
-.env-btn{position:absolute;inset:0;z-index:5}
-@media (prefers-reduced-motion:reduce){.opener{display:none}}
+.seal.top{clip-path:polygon(-14% -14%,114% -14%,114% 50%,-14% 50%);z-index:4}
+.seal.bottom{clip-path:polygon(-14% 50%,114% 50%,114% 114%,-14% 114%);z-index:3}
+.open-btn{position:absolute;inset:0;z-index:5}
+.tag{position:absolute;left:0;right:0;bottom:4%;text-align:center}
+.tag .label{color:var(--navy)}
+.tag .script{display:block;font-size:30px;color:var(--navy);line-height:1.1;margin-top:.15em}
+.tag .orn{color:var(--gold);font-size:12px;letter-spacing:.3em}
+.hint{position:absolute;left:0;right:0;top:calc(44% - 34px);text-align:center;z-index:7;pointer-events:none}
+.hint .label{color:var(--navy);background:rgba(243,238,228,.88);padding:7px 14px;border-radius:999px}
+.burst{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:7}
+.more{position:absolute;left:0;right:0;bottom:max(24px,env(safe-area-inset-bottom));text-align:center;z-index:8;opacity:0;pointer-events:none;text-decoration:none;color:var(--navy)}
+.more .label{color:inherit}
+.more svg{display:block;margin:8px auto 0;width:18px;height:18px}
+.bob{animation:bob 7s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:50% 100%}
+@keyframes bob{from{transform:translateY(0) rotate(-1.2deg)}to{transform:translateY(-3px) rotate(1.2deg)}}
+.washes{animation:washes 12s ease-in-out infinite alternate}
+@keyframes washes{from{transform:translateX(-6px)}to{transform:translateX(6px)}}
+.birds{animation:birds 90s linear infinite}
+@keyframes birds{from{transform:translateX(-30px)}to{transform:translateX(120px)}}
+@media (prefers-reduced-motion:reduce){.bob,.washes,.birds{animation:none}}
 
 /* ---- card sections ---- */
 .card-sec{position:relative;padding:44px 26px;text-align:center}
@@ -128,14 +129,12 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .foot{padding:40px 26px 64px;text-align:center}
 .foot .label{color:var(--navy)}
 </style>
-</head>
-<body>
-
 
 <a class="skip" href="#card" id="skip">Skip</a>
 
-<div class="opener" id="opener" aria-label="Sealed invitation">
-  <div class="inner">
+<section class="stage" id="stage" aria-label="Sealed invitation">
+<div class="view">
+  <div class="inner" id="inner">
     <svg class="scene" viewBox="0 0 390 520" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
   <defs>
     <filter id="wc" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency=".018" numOctaves="3" seed="2" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="14" xChannelSelector="R" yChannelSelector="G"/><feGaussianBlur stdDeviation=".5"/></filter>
@@ -155,13 +154,13 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
   </g>
   <!-- sea washes -->
   <rect x="0" y="252" width="390" height="180" fill="url(#seaw)" filter="url(#gran)"/>
-  <g filter="url(#wc2)" opacity=".5">
+  <g class="washes" filter="url(#wc2)" opacity=".5">
     <path d="M0 290C80 280 140 300 200 292C260 284 330 300 390 290V302C330 312 260 296 200 304C140 312 80 292 0 302Z" fill="#FFFFFF"/>
     <path d="M0 340C90 330 150 350 220 342C290 334 340 350 390 340V350C340 360 290 344 220 352C150 360 90 340 0 350Z" fill="#FFFFFF"/>
     <path d="M0 384C90 376 160 392 240 386C300 380 350 392 390 386V394C350 400 300 388 240 394C160 400 90 384 0 392Z" fill="#DDE9F0"/>
   </g>
   <!-- jukung outrigger under sail -->
-  <g filter="url(#wc2)">
+  <g class="bob" filter="url(#wc2)">
     <path d="M150 330l6 -46l26 46z" fill="#F4EBD8" stroke="#8A7A5E" stroke-width=".8"/>
     <path d="M158 330l-4 -34l-22 34z" fill="#E8DCC2" stroke="#8A7A5E" stroke-width=".8"/>
     <path d="M124 332C140 340 176 340 194 332L188 344H132Z" fill="#6B4E32"/>
@@ -171,7 +170,7 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
   <!-- small distant sail -->
   <g filter="url(#wc2)"><path d="M270 300l3 -18l10 18z" fill="#F4EBD8" stroke="#8A7A5E" stroke-width=".6"/><path d="M266 302h20" stroke="#6B4E32" stroke-width="1.4"/></g>
   <!-- birds -->
-  <g fill="none" stroke="#40525F" stroke-width="1" opacity=".7"><path d="M60 140c3-3 6-3 9 0 3-3 6-3 9 0M90 128c2-2 4-2 6 0 2-2 4-2 6 0M320 100c3-3 6-3 9 0 3-3 6-3 9 0"/></g>
+  <g class="birds" fill="none" stroke="#40525F" stroke-width="1" opacity=".7"><path d="M60 140c3-3 6-3 9 0 3-3 6-3 9 0M90 128c2-2 4-2 6 0 2-2 4-2 6 0M320 100c3-3 6-3 9 0 3-3 6-3 9 0"/></g>
   <!-- foreground palms -->
   <g filter="url(#wc)">
     <path d="M28 420C34 360 30 300 18 250" stroke="#5B6E4F" stroke-width="5" fill="none" stroke-linecap="round"/>
@@ -191,23 +190,30 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 <path d="M60 92c-5-4-8-7-8-10a4 4 0 0 1 8-2a4 4 0 0 1 8 2c0 3-3 6-8 10z" fill="#C7A85A"/></svg>
     <div class="env" id="env">
       <div class="back"></div>
-      <div class="card"><svg class="cm" viewBox="0 0 120 110" aria-hidden="true"><circle cx="60" cy="50" r="40" fill="none" stroke="#C7A85A" stroke-width="1.2"/>
+      <div class="card" id="ins"><svg class="cm" viewBox="0 0 120 110" aria-hidden="true"><circle cx="60" cy="50" r="40" fill="none" stroke="#C7A85A" stroke-width="1.2"/>
 <g fill="none" stroke="#C7A85A" stroke-width="1.6" stroke-linecap="round"><path d="M28 78C22 66 20 52 26 40"/><path d="M92 78C98 66 100 52 94 40"/></g>
 <g fill="#C7A85A"><ellipse cx="24" cy="64" rx="5" ry="2" transform="rotate(-40 24 64)"/><ellipse cx="23" cy="54" rx="5" ry="2" transform="rotate(-70 23 54)"/><ellipse cx="26" cy="45" rx="5" ry="2" transform="rotate(-90 26 45)"/><ellipse cx="96" cy="64" rx="5" ry="2" transform="rotate(40 96 64)"/><ellipse cx="97" cy="54" rx="5" ry="2" transform="rotate(70 97 54)"/><ellipse cx="94" cy="45" rx="5" ry="2" transform="rotate(90 94 45)"/></g>
 <text x="60" y="60" text-anchor="middle" font-family="Cinzel,Cormorant Garamond,Georgia,serif" font-size="26" letter-spacing="2" fill="#1F3A5F">A<tspan fill="#C7A85A">|</tspan>C</text>
 <path d="M60 92c-5-4-8-7-8-10a4 4 0 0 1 8-2a4 4 0 0 1 8 2c0 3-3 6-8 10z" fill="#C7A85A"/></svg></div>
-      <div class="pocket"><i class="l"></i><i class="r"></i><i class="b"></i></div>
-      <div class="flap"><i></i><b></b></div>
-      <div class="seal" aria-hidden="true"><svg viewBox="0 0 84 80"><defs><radialGradient id="gw" cx=".38" cy=".3" r=".8"><stop offset="0" stop-color="#F3E3AE"/><stop offset=".45" stop-color="#D2B36A"/><stop offset=".8" stop-color="#A88A3F"/><stop offset="1" stop-color="#7D6428"/></radialGradient></defs>
-<path d="M42 74C22 58 6 46 6 30A18 18 0 0 1 42 20A18 18 0 0 1 78 30C78 46 62 58 42 74Z" fill="url(#gw)" stroke="#8C7130" stroke-width=".8"/>
+      <div class="pocket"><i class="l"></i><i class="r"></i><i class="b"></i><div class="seal bottom" id="sealBot" aria-hidden="true"><svg viewBox="0 0 84 80"><defs><radialGradient id="gw1" cx=".38" cy=".3" r=".8"><stop offset="0" stop-color="#F3E3AE"/><stop offset=".45" stop-color="#D2B36A"/><stop offset=".8" stop-color="#A88A3F"/><stop offset="1" stop-color="#7D6428"/></radialGradient></defs>
+<path d="M42 74C22 58 6 46 6 30A18 18 0 0 1 42 20A18 18 0 0 1 78 30C78 46 62 58 42 74Z" fill="url(#gw1)" stroke="#8C7130" stroke-width=".8"/>
 <path d="M42 66C26 54 13 44 13 31A13 13 0 0 1 42 25A13 13 0 0 1 71 31C71 44 58 54 42 66Z" fill="none" stroke="rgba(120,90,30,.45)" stroke-width="1.2"/>
 <g fill="none" stroke="rgba(120,90,30,.55)" stroke-width="1" stroke-linecap="round"><path d="M22 46C20 40 21 34 25 30"/><path d="M62 46C64 40 63 34 59 30"/></g>
-<text x="42" y="44" text-anchor="middle" font-family="Cinzel,Georgia,serif" font-size="13" letter-spacing="1" fill="rgba(80,55,10,.8)">A|C</text></svg></div>
-      <button class="env-btn" id="envBtn" type="button" aria-label="Open the invitation"></button>
+<text x="42" y="44" text-anchor="middle" font-family="Cinzel,Georgia,serif" font-size="13" letter-spacing="1" fill="rgba(80,55,10,.8)">A|C</text></svg></div></div>
+      <div class="flap" id="flap"><i></i><b></b><div class="seal top" id="sealTop" aria-hidden="true"><svg viewBox="0 0 84 80"><defs><radialGradient id="gw2" cx=".38" cy=".3" r=".8"><stop offset="0" stop-color="#F3E3AE"/><stop offset=".45" stop-color="#D2B36A"/><stop offset=".8" stop-color="#A88A3F"/><stop offset="1" stop-color="#7D6428"/></radialGradient></defs>
+<path d="M42 74C22 58 6 46 6 30A18 18 0 0 1 42 20A18 18 0 0 1 78 30C78 46 62 58 42 74Z" fill="url(#gw2)" stroke="#8C7130" stroke-width=".8"/>
+<path d="M42 66C26 54 13 44 13 31A13 13 0 0 1 42 25A13 13 0 0 1 71 31C71 44 58 54 42 66Z" fill="none" stroke="rgba(120,90,30,.45)" stroke-width="1.2"/>
+<g fill="none" stroke="rgba(120,90,30,.55)" stroke-width="1" stroke-linecap="round"><path d="M22 46C20 40 21 34 25 30"/><path d="M62 46C64 40 63 34 59 30"/></g>
+<text x="42" y="44" text-anchor="middle" font-family="Cinzel,Georgia,serif" font-size="13" letter-spacing="1" fill="rgba(80,55,10,.8)">A|C</text></svg></div></div>
+      <button class="open-btn" id="envBtn" type="button" aria-label="Open the invitation"></button>
     </div>
     <div class="tag"><span class="orn">✦ ─── ♥ ─── ✦</span><br><span class="label">Our forever begins</span><span class="script">together</span></div>
+    <div class="hint" id="hint"><span class="label">Tap the seal, or swipe up, to open</span></div>
+    <canvas class="burst" id="burstCv" aria-hidden="true"></canvas>
+    <a class="more" id="more" href="#card"><span class="label">Swipe up for the details</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9l7 7 7-7" fill="none" stroke="currentColor" stroke-width="1.2"/></svg></a>
   </div>
 </div>
+</section>
 
 <div class="phone">
   <section class="card-sec wash" id="card">
@@ -247,13 +253,13 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
   </g>
   <!-- sea washes -->
   <rect x="0" y="252" width="390" height="180" fill="url(#seaw)" filter="url(#gran)"/>
-  <g filter="url(#wc2)" opacity=".5">
+  <g class="washes" filter="url(#wc2)" opacity=".5">
     <path d="M0 290C80 280 140 300 200 292C260 284 330 300 390 290V302C330 312 260 296 200 304C140 312 80 292 0 302Z" fill="#FFFFFF"/>
     <path d="M0 340C90 330 150 350 220 342C290 334 340 350 390 340V350C340 360 290 344 220 352C150 360 90 340 0 350Z" fill="#FFFFFF"/>
     <path d="M0 384C90 376 160 392 240 386C300 380 350 392 390 386V394C350 400 300 388 240 394C160 400 90 384 0 392Z" fill="#DDE9F0"/>
   </g>
   <!-- jukung outrigger under sail -->
-  <g filter="url(#wc2)">
+  <g class="bob" filter="url(#wc2)">
     <path d="M150 330l6 -46l26 46z" fill="#F4EBD8" stroke="#8A7A5E" stroke-width=".8"/>
     <path d="M158 330l-4 -34l-22 34z" fill="#E8DCC2" stroke="#8A7A5E" stroke-width=".8"/>
     <path d="M124 332C140 340 176 340 194 332L188 344H132Z" fill="#6B4E32"/>
@@ -263,7 +269,7 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
   <!-- small distant sail -->
   <g filter="url(#wc2)"><path d="M270 300l3 -18l10 18z" fill="#F4EBD8" stroke="#8A7A5E" stroke-width=".6"/><path d="M266 302h20" stroke="#6B4E32" stroke-width="1.4"/></g>
   <!-- birds -->
-  <g fill="none" stroke="#40525F" stroke-width="1" opacity=".7"><path d="M60 140c3-3 6-3 9 0 3-3 6-3 9 0M90 128c2-2 4-2 6 0 2-2 4-2 6 0M320 100c3-3 6-3 9 0 3-3 6-3 9 0"/></g>
+  <g class="birds" fill="none" stroke="#40525F" stroke-width="1" opacity=".7"><path d="M60 140c3-3 6-3 9 0 3-3 6-3 9 0M90 128c2-2 4-2 6 0 2-2 4-2 6 0M320 100c3-3 6-3 9 0 3-3 6-3 9 0"/></g>
   <!-- foreground palms -->
   <g filter="url(#wc)">
     <path d="M28 420C34 360 30 300 18 250" stroke="#5B6E4F" stroke-width="5" fill="none" stroke-linecap="round"/>
@@ -336,31 +342,87 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 (function(){
   var $=function(id){return document.getElementById(id)};
   var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var opener=$('opener'), env=$('env'), cardSec=$('card');
-  if(reduce){ opener.parentNode.removeChild(opener); }
-  else{
-    document.body.style.overflow='hidden';
-    cardSec.classList.add('staged');
-    var opened=false;
-    function open(){ if(opened) return; opened=true;
-      var card=env.querySelector('.card');
-      opener.classList.add('s1');                                   /* seal lifts away            */
-      setTimeout(function(){ opener.classList.add('s2'); },250);    /* flap swings back           */
-      setTimeout(function(){ opener.classList.add('s3'); },950);    /* card rises clear           */
-      setTimeout(function(){                                        /* card grows into the page   */
-        var r=card.getBoundingClientRect(), vw=innerWidth, vh=innerHeight;
-        var sc=Math.max(vw/r.width, vh/r.height)*1.02;
-        var cx=r.left+r.width/2, cy=r.top+r.height/2;
-        var dx=(vw/2-cx), dy=(vh/2-cy);
-        opener.classList.add('s4');
-        card.style.transform='translate('+dx.toFixed(1)+'px,'+dy.toFixed(1)+'px) scale('+sc.toFixed(3)+')';
-        window.scrollTo(0,0);
-      },2050);
-      setTimeout(function(){ opener.classList.add('s5'); cardSec.classList.add('in'); document.body.style.overflow=''; },3050);  /* paper becomes the page */
-      setTimeout(function(){ if(opener.parentNode) opener.parentNode.removeChild(opener); },3800); }
-    $('envBtn').addEventListener('click',open);
-    $('skip').addEventListener('click',open);
+  /* Opening: press the seal, it parts in two, the flap lifts, the card slides out in a puff of confetti, then grows into the page */
+  var OPEN_MS=9200;
+  var stage=$('stage'), inner=$('inner'), scene=inner.querySelector('.scene'), mono=inner.querySelector('.mono'), tag=inner.querySelector('.tag');
+  var env=$('env'), ins=$('ins'), cm=ins.querySelector('.cm'), flap=$('flap'), sealTop=$('sealTop'), sealBot=$('sealBot');
+  var back=env.querySelector('.back'), pocket=env.querySelector('.pocket'), btn=$('envBtn'), hint=$('hint'), more=$('more'), cardSec=$('card');
+  var bcv=$('burstCv'), bx=bcv.getContext('2d'), bdpr=Math.min(2,devicePixelRatio||1), burstOn=false, G={};
+  if(!reduce) cardSec.classList.add('staged');
+  function measure(){
+    var iw=inner.offsetWidth, ih=inner.offsetHeight, ew=env.offsetWidth, eh=env.offsetHeight, et=env.offsetTop;
+    var cw=ew*.9, ch=eh*.86, cy=et+eh*.08+ch/2;
+    G.eh=eh; G.iw=iw; G.ih=ih;
+    G.dy1=ih*.42-cy; G.sc1=1.08;                          /* presented: held up in front of the scene */
+    G.dy2=ih/2-cy; G.sc2=Math.max(iw/cw,ih/ch)*1.02;      /* filled: the paper becomes the page       */
+    G.ox=iw/2; G.oy=et+eh*.1;                              /* confetti leaves from the envelope mouth  */
+    bcv.width=Math.round(iw*bdpr); bcv.height=Math.round(ih*bdpr); bx.setTransform(bdpr,0,0,bdpr,0,0); burstOn=true;
   }
+  var P=[]; (function(){ var s=11; function rnd(){ s=(s*16807)%2147483647; return s/2147483647; }
+    var cols=['#1F3A5F','#C7A85A','#F3EEE4','#8FB0C8','#E9D79F'];
+    for(var i=0;i<120;i++){ var a=-Math.PI/2+(rnd()-.5)*1.7, v=150+rnd()*300; P.push({vx:Math.cos(a)*v,vy:Math.sin(a)*v,r:rnd()*6.3,vr:(rnd()-.5)*8,w:4+rnd()*5,h:2+rnd()*3,c:cols[i%5]}); } })();
+  function drawBurst(t){
+    if(t<=0||t>=2.8){ if(burstOn){ bx.clearRect(0,0,G.iw,G.ih); burstOn=false; } return; }
+    burstOn=true; bx.clearRect(0,0,G.iw,G.ih); var a=1-seg(t,1.9,2.8), d=1/(1+1.1*t);
+    for(var i=0;i<P.length;i++){ var q=P[i], x=G.ox+q.vx*t*d, y=G.oy+q.vy*t*d+240*t*t;
+      bx.save(); bx.globalAlpha=a; bx.translate(x,y); bx.rotate(q.r+q.vr*t); bx.fillStyle=q.c; bx.fillRect(-q.w/2,-q.h/2,q.w,q.h); bx.restore(); }
+  }
+  function render(p){
+    var press=Math.sin(Math.PI*seg(p,0,.06));      /* finger presses the seal          */
+    var snap=seg(p,.05,.12);                         /* foil parts along the flap edge   */
+    var f=ease(seg(p,.09,.34));                      /* flap swings back                 */
+    var rise=ease(seg(p,.30,.60));                   /* card slides out of the pocket    */
+    var sink=Math.pow(seg(p,.44,.68),2);             /* envelope drops away              */
+    var fade=seg(p,.50,.64);
+    var away=ease(seg(p,.48,.68));                   /* scene, monogram and tag step back */
+    var grow=ease(seg(p,.66,.88));                   /* the card becomes the page        */
+    var ink=seg(p,.84,.94);                          /* monogram fades from the paper    */
+    var envDy=sink*G.ih*.55, sealS=1-.06*press, op=1-fade;
+    sealTop.style.transform='translateY('+(-2.5*snap).toFixed(2)+'px) rotate('+(-2*snap).toFixed(2)+'deg) scale('+sealS.toFixed(3)+')';
+    sealBot.style.transform='translateY('+(1.5*snap).toFixed(2)+'px) scale('+sealS.toFixed(3)+')';
+    var envT='translateY('+envDy.toFixed(1)+'px)';
+    back.style.transform=pocket.style.transform=envT;
+    flap.style.transform=envT+' rotateX('+(-176*f).toFixed(2)+'deg)';
+    flap.classList.toggle('is-past',f>.5);
+    back.style.opacity=pocket.style.opacity=flap.style.opacity=op;
+    var dy,sc;
+    if(grow<=0){ dy=G.dy1*rise; sc=1+(G.sc1-1)*rise; } else { dy=G.dy1+(G.dy2-G.dy1)*grow; sc=G.sc1+(G.sc2-G.sc1)*grow; }
+    ins.style.transform='translateY('+dy.toFixed(1)+'px) scale('+sc.toFixed(4)+')';
+    ins.style.borderRadius=grow>0?(4*(1-grow)).toFixed(1)+'px':'';
+    ins.style.boxShadow=grow>=1?'none':'';
+    ins.classList.toggle('is-out',(envDy-dy)>=G.eh*.92||op<.05);   /* only once it has cleared the mouth */
+    cm.style.opacity=1-ink;
+    scene.style.opacity=mono.style.opacity=tag.style.opacity=1-away;
+    scene.style.transform='scale('+(1+.04*away).toFixed(3)+')';
+    drawBurst(seg(p,.40,.82)*2.8);
+    cardSec.classList.toggle('in',p>=.9);
+    hint.style.opacity=1-seg(p,0,.05);
+    btn.hidden=p>.15;
+    var m=seg(p,.94,1); more.style.opacity=m; more.style.pointerEvents=m>.5?'auto':'none';
+  }
+  /* ---- shared opening engine: one progress value drives everything ---- */
+  var vh=innerHeight, vw=innerWidth, ticking=false, anim=null;
+  function clamp(x){return x<0?0:x>1?1:x}
+  function seg(p,a,b){return clamp((p-a)/(b-a))}
+  function ease(t){return .5-.5*Math.cos(Math.PI*t)}
+  function progress(){ if(reduce) return 1; var span=stage.offsetHeight-vh; if(span<=0) return 1; return clamp(-stage.getBoundingClientRect().top/span); }
+  function onScroll(){ if(ticking) return; ticking=true; requestAnimationFrame(function(){ ticking=false; render(progress()); }); }
+  function playOpen(){
+    if(anim||reduce) return;
+    var from=scrollY, end=stage.offsetTop+stage.offsetHeight-vh+vh*0.16, dur=OPEN_MS, t0=performance.now();
+    var evs=['pointerdown','wheel','touchmove','keydown'];
+    function off(){ evs.forEach(function(e){ removeEventListener(e,cancel,true); }); }
+    function cancel(){ if(anim){ cancelAnimationFrame(anim); anim=null; } off(); }
+    evs.forEach(function(e){ addEventListener(e,cancel,true); });
+    (function step(now){ var t=clamp((now-t0)/dur); scrollTo(0,from+(end-from)*ease(t)); render(progress()); if(t<1) anim=requestAnimationFrame(step); else { anim=null; off(); } })(t0);
+  }
+  addEventListener('scroll',onScroll,{passive:true});
+  addEventListener('resize',function(){ vh=innerHeight; vw=innerWidth; measure(); render(progress()); });
+
+  btn.addEventListener('click',playOpen);
+  measure(); render(progress());
+  if(reduce){ hint.hidden=true; btn.hidden=true; cm.style.opacity=1; }
+  document.fonts&&document.fonts.ready.then(function(){ measure(); render(progress()); if(reduce) cm.style.opacity=1; });
   /* countdown */
   var target=new Date('2027-08-28T16:30:00+08:00').getTime();
   function pad(n){return (n<10?'0':'')+n}

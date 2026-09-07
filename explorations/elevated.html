@@ -1,8 +1,8 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Ashley &amp; Charles, Bali</title>
 <meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,56 +30,57 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .skip{position:fixed;top:14px;right:14px;z-index:60;font-family:var(--sans);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink);text-decoration:none;background:rgba(246,242,234,.8);padding:8px 14px;border-radius:999px;border:1px solid rgba(46,49,54,.15)}
 
-/* ---------------- Envelope overlay ---------------- */
-.env{position:fixed;inset:0;z-index:50;display:grid;place-items:center;background:transparent;perspective:1400px}
-.env .veil{position:absolute;inset:0;background:var(--paper);transition:opacity 1.8s ease;z-index:0}
-.env .body{z-index:1}
-.env.s2 .veil{opacity:.5}
-.env .veil::before{content:"";position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
-.env.s3 .veil{opacity:0}
-.env .body{position:relative;width:min(88vw,420px);aspect-ratio:1.38;transition:transform 2s cubic-bezier(.55,0,.8,.45),opacity 1.2s ease .6s;transform-origin:50% 100%}
-.env.s3 .body{transform:translateY(90vh) scale(.94) rotateX(8deg);opacity:0}
-.env.s4{opacity:0;transition:opacity .5s ease;pointer-events:none}
+/* ---------------- Opening: one scroll-scrubbed stage ---------------- */
+.stage{position:relative;height:500vh;background:var(--paper)}
+.view{position:sticky;top:0;height:100svh;overflow:hidden;color:#FFFDF7}
+@media (prefers-reduced-motion:reduce){.stage{height:100svh}}
+.view svg.bg{position:absolute;inset:0;width:100%;height:100%;z-index:0;transform:scale(1.06);filter:blur(3px);will-change:transform}
+.veil{position:absolute;inset:0;background:var(--paper);z-index:1;pointer-events:none}
+.veil::before{content:"";position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.env{--ew:min(88vw,420px);--eh:calc(var(--ew)/1.38);position:absolute;left:calc(50% - var(--ew)/2);top:calc(66% - var(--eh)/2);width:var(--ew);height:var(--eh);z-index:2;perspective:1400px}
 .env .back{position:absolute;inset:0;background:#E9E3D7;border-radius:6px}
-.env .pocket{position:absolute;inset:0;border-radius:6px;overflow:hidden}
+.env .pocket{position:absolute;inset:0;border-radius:6px;overflow:hidden;z-index:2}
 .env .pocket i{position:absolute;inset:0;display:block}
 .env .pocket .l{background:#F6F2EA;clip-path:polygon(0 0,50% 56%,0 100%)}
 .env .pocket .r{background:#F6F2EA;clip-path:polygon(100% 0,50% 56%,100% 100%)}
 .env .pocket .b{background:#F1ECE2;clip-path:polygon(0 100%,50% 56%,100% 100%)}
-.env .flap{position:absolute;inset:0;transform-origin:50% 0;transform-style:preserve-3d;transition:transform 1.8s cubic-bezier(.7,0,.25,1);z-index:3}
-.env.s2 .flap{transform:rotateX(-178deg);z-index:0}
+.env .addr{position:absolute;left:0;right:0;bottom:12%;text-align:center;font-family:var(--script);font-size:clamp(26px,7vw,36px);color:var(--ink);z-index:2;pointer-events:none}
+.env .flap{position:absolute;inset:0;transform-origin:50% 0;transform-style:preserve-3d;z-index:3;will-change:transform}
+.env .flap.is-past{z-index:0}
 .env .flap i{position:absolute;inset:0;display:block;background:linear-gradient(180deg,#F8F5EF,#ECE6DA);clip-path:polygon(0 0,100% 0,50% 58%);backface-visibility:hidden}
-.env .flap b{position:absolute;inset:0;display:block;background:#E3DCCF;clip-path:polygon(0 0,100% 0,50% 58%);transform:rotateX(180deg);backface-visibility:hidden}
-.env .addr{position:absolute;left:0;right:0;bottom:12%;text-align:center;font-family:var(--script);font-size:clamp(26px,7vw,36px);color:var(--ink);z-index:2}
-.seal{position:absolute;left:50%;top:58%;width:84px;height:84px;margin:-42px 0 0 -42px;z-index:4;border-radius:50%;
+.env .flap b{position:absolute;inset:0;display:block;background:#E3DCCF;clip-path:polygon(0 58%,100% 58%,50% 0);transform:rotateX(180deg);transform-origin:50% 29%;backface-visibility:hidden}
+.seal{position:absolute;left:50%;top:58%;width:84px;height:84px;margin:-42px 0 0 -42px;border-radius:50%;
   background:radial-gradient(circle at 35% 30%,#F7ECBF 0,#D9BC6A 35%,#B8963F 70%,#8C6E2A 100%);
   box-shadow:inset 0 2px 3px rgba(255,250,220,.7),inset 0 -3px 5px rgba(80,55,10,.45),0 6px 14px -6px rgba(60,40,5,.5);
-  transition:transform 1s cubic-bezier(.3,.6,.2,1),opacity .7s ease .3s;display:grid;place-items:center}
-.env.is-pressed .seal{transform:scale(.94)}
+  display:grid;place-items:center;backface-visibility:hidden;transform-origin:50% 50%}
 .seal::before{content:"";position:absolute;inset:7px;border-radius:50%;box-shadow:inset 0 1px 1px rgba(255,250,220,.6),inset 0 -1px 2px rgba(80,55,10,.5)}
 .seal span{font-family:var(--script);font-size:34px;color:rgba(80,55,10,.75);text-shadow:0 1px 0 rgba(255,250,220,.5);padding-top:4px}
-.env.s1 .seal{transform:translateY(-40px) scale(1.1);opacity:0}
-.env .hint{position:absolute;left:0;right:0;bottom:max(36px,env(safe-area-inset-bottom));text-align:center;transition:opacity .5s}
-.env.s1 .hint{opacity:0}
-.env .hint .label{color:var(--ink)}
-.env-btn{position:absolute;inset:0;z-index:5;border-radius:6px}
-@media (prefers-reduced-motion:reduce){.env{display:none}}
-
-/* ---------------- Hero ---------------- */
-.hero{color:#FFFDF7;min-height:100svh;padding-bottom:max(64px,10vh)}
-.hero svg.bg{position:absolute;inset:0;width:100%;height:100%;z-index:0;transition:transform 4s cubic-bezier(.2,.6,.2,1),filter 3s ease}
-.hero.pre-scene svg.bg{transform:scale(1.06);filter:blur(3px)}
-.hero .names,.hero .sub,.hero .where,.hero .cue{transition:opacity 1.4s ease,transform 1.4s cubic-bezier(.2,.7,.2,1)}
-.hero.pre-text .names,.hero.pre-text .sub,.hero.pre-text .where,.hero.pre-text .cue{opacity:0;transform:translateY(12px)}
-.hero .sub{transition-delay:.15s}.hero .where{transition-delay:.3s}.hero .cue{transition-delay:.6s}
-.hero .names{font-size:clamp(54px,15vw,92px);line-height:1;text-shadow:0 2px 24px rgba(40,30,20,.35)}
-.hero .sub{font-style:italic;font-size:clamp(22px,5.4vw,28px);margin-top:.2em;text-shadow:0 1px 12px rgba(40,30,20,.35)}
-.hero .where{margin-top:2.2em;color:rgba(255,253,247,.85)}
-.hero .cue{position:absolute;left:0;right:0;bottom:max(28px,env(safe-area-inset-bottom));color:rgba(255,253,247,.8)}
-.hero .cue svg{display:block;margin:8px auto 0;width:18px;height:18px}
+.seal.top{clip-path:polygon(-12% -12%,112% -12%,112% 50%,-12% 50%);z-index:4}
+.seal.bottom{clip-path:polygon(-12% 50%,112% 50%,112% 112%,-12% 112%);z-index:3}
+.env .inv{position:absolute;left:5%;right:5%;top:7%;bottom:7%;z-index:1;background:rgba(255,253,249,.97);border-radius:4px;box-shadow:0 18px 40px -22px rgba(46,49,54,.5);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:5% 8%;color:var(--ink);transform-origin:50% 50%;will-change:transform}
+.env .inv::before{content:"";position:absolute;inset:6px;border:1px solid rgba(201,168,92,.55);border-radius:2px;pointer-events:none}
+.env .inv.is-out{z-index:6}
+.inv .heart{width:30px;height:22px;margin-bottom:.6em;display:block}
+.inv .heart path{fill:none;stroke:var(--gold);stroke-width:1.4;stroke-linecap:round}
+.inv .names{font-size:clamp(34px,9vw,48px);line-height:1;color:var(--ink);font-weight:400}
+.inv .sub{font-style:italic;font-size:clamp(16px,4.4vw,21px);margin:.35em 0 0}
+.inv .where{margin-top:1.3em;color:var(--ink-2)}
+.open-btn{position:absolute;inset:0;z-index:5;border-radius:6px}
+.hint{position:absolute;left:0;right:0;bottom:max(28px,env(safe-area-inset-bottom));text-align:center;z-index:7;pointer-events:none}
+.hint .label{color:var(--ink)}
+.more{position:absolute;left:0;right:0;bottom:max(24px,env(safe-area-inset-bottom));text-align:center;z-index:8;opacity:0;pointer-events:none;text-decoration:none;color:rgba(255,253,247,.85)}
+.more .label{color:inherit}
+.more svg{display:block;margin:8px auto 0;width:18px;height:18px}
 .egrets .e{fill:#FFFDF7;opacity:.9;animation:fly linear infinite}
 @keyframes fly{from{transform:translateX(-80px)}to{transform:translateX(480px)}}
-@media (prefers-reduced-motion:reduce){.egrets .e{animation:none}}
+.drift{animation:drift 80s ease-in-out infinite alternate}
+@keyframes drift{from{transform:translateX(0)}to{transform:translateX(-70px)}}
+.glints{animation:glint 5s ease-in-out infinite alternate}
+@keyframes glint{from{opacity:.3}to{opacity:.7}}
+.sunpath{animation:shimmer 9s ease-in-out infinite alternate}
+@keyframes shimmer{from{opacity:.22}to{opacity:.36}}
+@media (prefers-reduced-motion:reduce){.egrets .e,.drift,.glints,.sunpath{animation:none}}
 
 /* ---------------- The date ---------------- */
 .date{background:linear-gradient(180deg,var(--paper) 0%,#F2EEE6 100%)}
@@ -174,28 +175,12 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .foot .script{font-size:clamp(34px,9vw,46px);display:block;line-height:1}
 .foot p{margin:.6em 0 0;font-style:italic;color:var(--ink-2)}
 </style>
-</head>
-<body>
-
 
 <a class="skip" href="#date" id="skip">Skip</a>
 
-<!-- ============ Envelope overlay ============ -->
-<div class="env" id="env" aria-label="Sealed envelope">
-  <div class="veil"></div>
-  <div class="body">
-    <div class="back"></div>
-    <div class="pocket"><i class="l"></i><i class="r"></i><i class="b"></i></div>
-    <div class="addr" id="envName">For our dearest friends</div>
-    <div class="flap"><i></i><b></b></div>
-    <div class="seal" aria-hidden="true"><span>A&amp;C</span></div>
-    <button class="env-btn" id="envBtn" type="button" aria-label="Open the invitation"></button>
-  </div>
-  <div class="hint"><span class="label">Tap the seal to open</span></div>
-</div>
-
-<!-- ============ Hero: the split gate ============ -->
-<section class="scene hero" id="hero">
+<!-- ============ Opening: envelope over the split gate, scrubbed by scroll ============ -->
+<section class="stage" id="hero">
+<div class="view" id="view">
   <svg class="bg" viewBox="0 0 390 844" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
     <defs>
       <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
@@ -233,14 +218,14 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
     <!-- sky, sun, clouds -->
     <rect width="390" height="560" fill="url(#sky)"/>
     <rect width="390" height="560" fill="url(#sun)"/>
-    <rect x="0" y="40" width="390" height="330" filter="url(#clouds)" opacity=".85"/>
+    <g class="drift"><rect x="-90" y="40" width="570" height="330" filter="url(#clouds)" opacity=".85"/></g>
     <!-- sea and horizon haze -->
     <rect x="0" y="500" width="390" height="350" fill="url(#sea)"/>
     <rect x="0" y="482" width="390" height="40" fill="#F6D6B4" opacity=".6" filter="url(#haze)"/>
     <ellipse cx="195" cy="504" rx="60" ry="3" fill="#FFF3D8" opacity=".9" filter="url(#haze)"/>
     <!-- sun path on the water -->
-    <path d="M170 508 L220 508 L262 720 L128 720 Z" fill="#FFE8BF" opacity=".28" filter="url(#haze)"/>
-    <g stroke="#FFF6E4" stroke-width="1" opacity=".5" stroke-linecap="round">
+    <path class="sunpath" d="M170 508 L220 508 L262 720 L128 720 Z" fill="#FFE8BF" opacity=".28" filter="url(#haze)"/>
+    <g class="glints" stroke="#FFF6E4" stroke-width="1" opacity=".5" stroke-linecap="round">
       <path d="M150 560h20M212 574h16M170 596h26M226 610h14M140 640h22M240 652h18M186 676h30"/>
     </g>
     <!-- distant headland -->
@@ -336,12 +321,23 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
     </g>
   </svg>
 
-  <h1 class="script names">Ashley &amp; Charles</h1>
-  <p class="sub">are getting married</p>
-  <p class="where label" style="color:rgba(255,253,247,.85)">Jimbaran, Bali &nbsp;·&nbsp; 28 August 2027</p>
-  <div class="cue"><span class="label" style="color:rgba(255,253,247,.8)">Scroll</span>
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9l7 7 7-7" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>
+  <div class="veil" aria-hidden="true"></div>
+  <div class="env" id="env" aria-label="Sealed envelope">
+    <div class="back"></div>
+    <div class="inv" id="card">
+      <svg class="heart" viewBox="0 0 44 30" aria-hidden="true"><path d="M22 28C12 20 4 14 4 8a6 6 0 0 1 12-2a6 6 0 0 1 12 2c0 6-8 12-18 20z"/></svg>
+      <h1 class="script names">Ashley &amp; Charles</h1>
+      <p class="sub">are getting married</p>
+      <p class="where label">Jimbaran, Bali &nbsp;·&nbsp; 28 August 2027</p>
+    </div>
+    <div class="pocket"><i class="l"></i><i class="r"></i><i class="b"></i><div class="seal bottom" id="sealBot" aria-hidden="true"><span>A&amp;C</span></div></div>
+    <div class="addr" id="envName">For our dearest friends</div>
+    <div class="flap" id="flap"><i></i><b></b><div class="seal top" id="sealTop" aria-hidden="true"><span>A&amp;C</span></div></div>
+    <button class="open-btn" id="envBtn" type="button" aria-label="Open the invitation"></button>
   </div>
+  <div class="hint" id="hint"><span class="label">Tap the seal, or swipe up, to open</span></div>
+  <a class="more" id="more" href="#date"><span class="label">Swipe up for the details</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9l7 7 7-7" fill="none" stroke="currentColor" stroke-width="1.2"/></svg></a>
+</div>
 </section>
 
 <!-- ============ The date ============ -->
@@ -460,27 +456,69 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
   var to=(params.get('to')||'').replace(/\s+/g,' ').trim().slice(0,60);
   if(to) $('envName').textContent='For '+to;
 
-  /* Envelope: tap the seal, the flap lifts, the envelope drops away. */
-  var env=$('env'), hero=$('hero');
-  if(reduce){ env.parentNode.removeChild(env); }
-  else{
-    document.body.style.overflow='hidden';
-    hero.classList.add('pre-scene'); hero.classList.add('pre-text');
-    var opened=false;
-    function open(){
-      if(opened) return; opened=true;
-      env.classList.add('is-pressed');
-      setTimeout(function(){ env.classList.remove('is-pressed'); env.classList.add('s1'); },140);   /* seal lifts and dissolves   */
-      setTimeout(function(){ env.classList.add('s2'); },500);                                      /* flap opens, slowly          */
-      setTimeout(function(){ env.classList.add('s3'); hero.classList.remove('pre-scene'); },1900);  /* paper clears, envelope sinks, scene settles */
-      setTimeout(function(){ hero.classList.remove('pre-text'); document.body.style.overflow=''; },3300);  /* names rise in */
-      setTimeout(function(){ env.classList.add('s4'); },3900);
-      setTimeout(function(){ if(env.parentNode) env.parentNode.removeChild(env); },4500);
-    }
-    $('envBtn').addEventListener('click',open);
-    $('skip').addEventListener('click',function(){ open(); });
-    document.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ if(document.activeElement===$('envBtn')) open(); } });
+  /* Opening: seal press, seal snaps in two, flap lifts, card rises, envelope drops away, gate comes into focus */
+  var OPEN_MS=9000;
+  var stage=$('hero'), view=$('view'), bg=view.querySelector('svg.bg'), veil=view.querySelector('.veil');
+  var env=$('env'), card=$('card'), flap=$('flap'), sealTop=$('sealTop'), sealBot=$('sealBot');
+  var back=env.querySelector('.back'), pocket=env.querySelector('.pocket'), addr=$('envName'), btn=$('envBtn'), hint=$('hint'), more=$('more');
+  var G={};
+  function measure(){
+    var ew=env.offsetWidth, eh=env.offsetHeight, et=env.offsetTop;
+    G.eh=eh; var cw=ew*.9, ch=eh*.86;
+    G.dy=vh/2-(et+eh/2);
+    G.sc=Math.min(1.16,(vw*.9)/cw,(vh*.66)/ch);
   }
+  function render(p){
+    var press=Math.sin(Math.PI*seg(p,0,.06));      /* finger presses the seal        */
+    var snap=seg(p,.05,.12);                         /* wax parts along the flap edge  */
+    var f=ease(seg(p,.09,.34));                      /* flap swings back               */
+    var rise=ease(seg(p,.30,.62));                   /* card slides out of the pocket  */
+    var grow=ease(seg(p,.44,.74));                   /* card comes toward you          */
+    var sink=Math.pow(seg(p,.46,.70),2);             /* envelope drops away            */
+    var fade=seg(p,.52,.66);
+    var clear=ease(seg(p,.36,.66));                  /* paper veil lifts               */
+    var focus=ease(seg(p,.38,.76));                  /* gate sharpens                  */
+    var envDy=sink*vh*.6, sealS=1-.06*press;
+    sealTop.style.transform='translateY('+(-2.5*snap).toFixed(2)+'px) rotate('+(-2*snap).toFixed(2)+'deg) scale('+sealS.toFixed(3)+')';
+    sealBot.style.transform='translateY('+(1.5*snap).toFixed(2)+'px) scale('+sealS.toFixed(3)+')';
+    var envT='translateY('+envDy.toFixed(1)+'px)', op=1-fade;
+    back.style.transform=pocket.style.transform=addr.style.transform=envT;
+    flap.style.transform=envT+' rotateX('+(-176*f).toFixed(2)+'deg)';
+    flap.classList.toggle('is-past',f>.5);
+    back.style.opacity=pocket.style.opacity=addr.style.opacity=flap.style.opacity=op;
+    var cardDy=G.dy*rise, sc=1+(G.sc-1)*grow;
+    card.style.transform='translateY('+cardDy.toFixed(1)+'px) scale('+sc.toFixed(3)+')';
+    card.classList.toggle('is-out',(envDy-cardDy)>=G.eh*.92||op<.05);   /* only once it has cleared the mouth */
+    veil.style.opacity=1-clear;
+    bg.style.transform='scale('+(1.06-.06*focus).toFixed(3)+')';
+    bg.style.filter=focus>=1?'none':'blur('+(3*(1-focus)).toFixed(1)+'px)';
+    hint.style.opacity=1-seg(p,0,.05);
+    btn.hidden=p>.15;
+    var m=seg(p,.94,1); more.style.opacity=m; more.style.pointerEvents=m>.5?'auto':'none';
+  }
+  /* ---- shared opening engine: one progress value drives everything ---- */
+  var vh=innerHeight, vw=innerWidth, ticking=false, anim=null;
+  function clamp(x){return x<0?0:x>1?1:x}
+  function seg(p,a,b){return clamp((p-a)/(b-a))}
+  function ease(t){return .5-.5*Math.cos(Math.PI*t)}
+  function progress(){ if(reduce) return 1; var span=stage.offsetHeight-vh; if(span<=0) return 1; return clamp(-stage.getBoundingClientRect().top/span); }
+  function onScroll(){ if(ticking) return; ticking=true; requestAnimationFrame(function(){ ticking=false; render(progress()); }); }
+  function playOpen(){
+    if(anim||reduce) return;
+    var from=scrollY, end=stage.offsetTop+stage.offsetHeight-vh+vh*0.16, dur=OPEN_MS, t0=performance.now();
+    var evs=['pointerdown','wheel','touchmove','keydown'];
+    function off(){ evs.forEach(function(e){ removeEventListener(e,cancel,true); }); }
+    function cancel(){ if(anim){ cancelAnimationFrame(anim); anim=null; } off(); }
+    evs.forEach(function(e){ addEventListener(e,cancel,true); });
+    (function step(now){ var t=clamp((now-t0)/dur); scrollTo(0,from+(end-from)*ease(t)); render(progress()); if(t<1) anim=requestAnimationFrame(step); else { anim=null; off(); } })(t0);
+  }
+  addEventListener('scroll',onScroll,{passive:true});
+  addEventListener('resize',function(){ vh=innerHeight; vw=innerWidth; measure(); render(progress()); });
+
+  btn.addEventListener('click',playOpen);
+  measure(); render(progress());
+  if(reduce){ hint.hidden=true; btn.hidden=true; }
+  document.fonts&&document.fonts.ready.then(function(){ measure(); render(progress()); });
 
   /* Scratch cards */
   var cards=Array.prototype.slice.call(document.querySelectorAll('.card'));
