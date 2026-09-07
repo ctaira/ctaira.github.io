@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ashley &amp; Charles, stitched</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --linen:#EFE7D6;--linen-2:#E7DDC8;--cream:#F7F0E0;--green:#2F4A34;--green-2:#4E6B44;--gold:#C2A15B;--gold-2:#E6D3A2;--pink:#E0A4AC;--ink:#2B3A2E;--ink-2:#5E6A5F;
+  --serif:'Cormorant Garamond','Cormorant',Georgia,'Times New Roman',serif;
+  --sans:'Jost','Futura','Avenir Next','Helvetica Neue',Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--linen);color:var(--ink);font-family:var(--serif);font-size:18px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .3 0 0 0 0 .25 0 0 0 0 .15 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+  repeating-linear-gradient(0deg,rgba(90,70,40,.035) 0 1px,transparent 1px 3px),repeating-linear-gradient(90deg,rgba(90,70,40,.035) 0 1px,transparent 1px 3px)}
+h1,h2,h3{margin:0;font-weight:500}
+p{margin:0 0 .9em}
+:focus-visible{outline:2px solid var(--gold);outline-offset:4px}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+.label{font-family:var(--sans);font-weight:400;font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:var(--ink-2)}
+.col{width:min(100vw,430px);margin:0 auto;position:relative}
+.sec{position:relative;padding:48px 28px;text-align:center}
+.sec svg.orn{display:block;width:100%;height:auto}
+.rule{width:64px;height:1px;background:var(--gold);margin:1.4em auto}
+.skip{position:fixed;top:14px;right:14px;z-index:60;font-family:var(--sans);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink);text-decoration:none;background:rgba(239,231,214,.85);padding:8px 14px;border-radius:999px;border:1px solid rgba(194,161,91,.6)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* doors */
+.doors{position:fixed;inset:0;z-index:50;display:flex;pointer-events:none}
+.doors .d{flex:1 1 50%;position:relative;background:var(--linen);overflow:hidden;transition:transform 1.9s cubic-bezier(.7,0,.3,1) .5s}
+.doors .d svg{position:absolute;top:50%;left:0;width:100%;height:auto;transform:translateY(-50%)}
+.doors .d.l{box-shadow:inset -2px 0 0 rgba(194,161,91,.6)}
+.doors .d.r{box-shadow:inset 2px 0 0 rgba(194,161,91,.6)}
+.doors.is-open .d.l{transform:translateX(-102%)}
+.doors.is-open .d.r{transform:translateX(102%)}
+@media (prefers-reduced-motion:reduce){.doors{display:none}}
+
+/* cover */
+.cover{padding:36px 8px 24px}
+.cover .art{position:relative}
+.cover .art svg{display:block;width:100%;height:auto}
+.cover .txt{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding-top:2%}
+.cover .txt>div{width:58%}
+.cover h1{font-size:clamp(40px,11vw,54px);line-height:1.05;color:var(--green);font-weight:500}
+.cover h1 span{display:block;font-size:.8em;line-height:1.3}
+.cover .meta{margin-top:1.1em;line-height:2}
+.cover .meta .label{display:block;color:var(--green)}
+.fade{opacity:0;transform:translateY(8px);transition:opacity 1s ease,transform 1s ease}
+.fade.in{opacity:1;transform:none}
+
+/* countdown */
+.count h2{font-size:clamp(26px,7vw,32px);color:var(--green);font-weight:500}
+.cd{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-width:340px;margin:1.4em auto 0}
+.cd b{display:block;font-weight:500;font-size:clamp(28px,8vw,36px);line-height:1;color:var(--green);font-variant-numeric:tabular-nums}
+.cd span{display:block;margin-top:.5em;font-family:var(--sans);font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--ink-2)}
+
+/* venue etc */
+.band{display:block;width:100%;height:56px;background:
+  repeating-linear-gradient(90deg,var(--green-2) 0 14px,transparent 14px 28px),
+  repeating-linear-gradient(0deg,rgba(255,255,255,.12) 0 2px,transparent 2px 8px),var(--linen-2);
+  border-top:2px solid var(--gold);border-bottom:2px solid var(--gold);opacity:.85}
+.h2{font-size:clamp(30px,8vw,38px);color:var(--green);font-weight:500;line-height:1.1}
+.h3{font-size:clamp(24px,6.4vw,30px);color:var(--green);font-weight:500;line-height:1.15}
+.sub{font-style:italic;font-size:clamp(18px,5vw,22px);color:var(--ink-2)}
+.copy{max-width:34ch;margin:.8em auto 0;font-size:17px;color:var(--ink)}
+.btn{display:inline-block;margin-top:1.2em;font-family:var(--sans);font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--green);border:1px solid var(--gold);border-radius:999px;padding:12px 26px;text-decoration:none;background:rgba(247,240,224,.6)}
+.time{font-family:var(--sans);font-size:12px;letter-spacing:.2em;color:var(--ink);margin-top:1em}
+.time i{font-style:italic;font-family:var(--serif);font-size:17px;letter-spacing:0;display:block;margin-bottom:.3em}
+
+/* schedule */
+.sched ol{list-style:none;margin:1.4em 0 0;padding:0;text-align:left;max-width:320px;margin-left:auto;margin-right:auto}
+.sched li{display:grid;grid-template-columns:78px 1fr;gap:1em;padding:.5em 0;border-bottom:1px dashed rgba(194,161,91,.5)}
+.sched time{font-family:var(--sans);font-size:12px;letter-spacing:.14em;color:var(--green);padding-top:.35em}
+.sched b{display:block;font-weight:500;font-size:19px;line-height:1.2}
+.sched span{font-style:italic;color:var(--ink-2);font-size:16px}
+.sched .day{grid-template-columns:1fr;border:0;padding:1.1em 0 .2em}
+
+/* rsvp */
+.rsvp .art{position:relative}
+.rsvp .art svg{display:block;width:100%;height:auto}
+.rsvp .inner{position:absolute;inset:0;padding:60px 52px 64px;text-align:center}
+.rsvp .h2{margin-bottom:.2em}
+.rsvp .f{text-align:left;margin-top:.7em}
+.rsvp label{display:block;font-style:italic;font-size:16px;color:var(--ink-2)}
+.rsvp input{width:100%;font:inherit;font-size:17px;color:var(--ink);background:transparent;border:0;border-bottom:1px solid rgba(78,107,68,.55);padding:.3em 0;border-radius:0}
+.rsvp input:focus{outline:none;border-bottom-color:var(--green)}
+.rsvp .yn{display:flex;gap:1.4em;align-items:center;margin-top:.4em}
+.rsvp .yn label{display:flex;align-items:center;gap:.4em;font-style:normal;font-size:17px;color:var(--ink);cursor:pointer}
+.rsvp .yn input{width:14px;height:14px;margin:0;appearance:none;-webkit-appearance:none;border:1px solid var(--green);background:transparent;padding:0}
+.rsvp .yn input:checked{background:var(--green);box-shadow:inset 0 0 0 2.5px var(--cream)}
+.rsvp .send{display:inline-block;margin-top:1.1em;font-family:var(--serif);font-size:17px;color:var(--green);border:1px solid var(--gold);border-radius:999px;padding:8px 30px;background:rgba(247,240,224,.6)}
+.rsvp .thanks{display:none;font-style:italic;font-size:19px;margin-top:1em}
+.rsvp .thanks.is-visible{display:block}
+@media (max-width:360px){.rsvp .inner{padding:56px 44px 64px}}
+
+/* footer */
+.foot{padding:40px 28px 64px;text-align:center}
+.foot .sub{font-size:clamp(20px,5.6vw,24px)}
+.foot .label{display:block;margin-top:.6em;color:var(--green)}
+.foot .label + .label{margin-top:.3em;color:var(--ink-2);letter-spacing:.24em;font-size:10px}
+</style>
+</head>
+<body>
+
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <filter id="stitch" x="-6%" y="-6%" width="112%" height="112%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency=".85 .28" numOctaves="2" seed="4" result="n"/>
+      <feDiffuseLighting in="n" lighting-color="#fff" surfaceScale="1.8" diffuseConstant="1.05" result="lit"><feDistantLight azimuth="60" elevation="58"/></feDiffuseLighting>
+      <feComposite in="lit" in2="SourceGraphic" operator="in" result="litIn"/>
+      <feBlend in="SourceGraphic" in2="litIn" mode="multiply" result="tex"/>
+      <feDropShadow in="tex" dx="0" dy=".7" stdDeviation=".6" flood-color="#4A3A20" flood-opacity=".35"/>
+    </filter>
+    <symbol id="frangi" overflow="visible"><g fill="#F7F0E0" stroke="#D9CCAF" stroke-width=".5"><path d="M0 0C-5.0 -2.8 -5.0 -9.1 0 -12.0C5.0 -9.1 5.0 -2.8 0 0Z" transform="rotate(0)"/><path d="M0 0C-5.0 -2.8 -5.0 -9.1 0 -12.0C5.0 -9.1 5.0 -2.8 0 0Z" transform="rotate(72)"/><path d="M0 0C-5.0 -2.8 -5.0 -9.1 0 -12.0C5.0 -9.1 5.0 -2.8 0 0Z" transform="rotate(144)"/><path d="M0 0C-5.0 -2.8 -5.0 -9.1 0 -12.0C5.0 -9.1 5.0 -2.8 0 0Z" transform="rotate(216)"/><path d="M0 0C-5.0 -2.8 -5.0 -9.1 0 -12.0C5.0 -9.1 5.0 -2.8 0 0Z" transform="rotate(288)"/></g><circle r="3.2" fill="#EFCF6A"/><circle r="1.4" fill="#E3B33F"/></symbol><symbol id="hibi" overflow="visible"><g fill="#D98C83" stroke="#B8695F" stroke-width=".5"><path d="M0 0C-7.0 -3.2 -7.0 -10.4 0 -14.0C7.0 -10.4 7.0 -3.2 0 0Z" transform="rotate(0)"/><path d="M0 0C-7.0 -3.2 -7.0 -10.4 0 -14.0C7.0 -10.4 7.0 -3.2 0 0Z" transform="rotate(72)"/><path d="M0 0C-7.0 -3.2 -7.0 -10.4 0 -14.0C7.0 -10.4 7.0 -3.2 0 0Z" transform="rotate(144)"/><path d="M0 0C-7.0 -3.2 -7.0 -10.4 0 -14.0C7.0 -10.4 7.0 -3.2 0 0Z" transform="rotate(216)"/><path d="M0 0C-7.0 -3.2 -7.0 -10.4 0 -14.0C7.0 -10.4 7.0 -3.2 0 0Z" transform="rotate(288)"/></g><path d="M0 0L2 -10" stroke="#8C3F3A" stroke-width="1.2" stroke-linecap="round"/><circle cx="2" cy="-10" r="1.6" fill="#EFCF6A"/></symbol><symbol id="boug" overflow="visible"><g fill="#E0A4AC" stroke="#C4858E" stroke-width=".5"><path d="M0 -2L-7 -12L1 -14Z"/><path d="M0 -2L9 -10L11 -2Z"/><path d="M0 -2L-8 4L-2 11Z"/></g><circle r="1.6" fill="#F7F0E0"/><circle cx="3" cy="-3" r=".9" fill="#EFCF6A"/></symbol><symbol id="mons" overflow="visible"><path d="M0 16C-9 10 -13 2 -12 -6C-11 -12 -6 -16 0 -14C6 -16 11 -12 12 -6C13 2 9 10 0 16Z" fill="#4E6B44" stroke="#35512F" stroke-width=".6"/><path d="M0 -12V14" stroke="#35512F" stroke-width=".7"/><path d="M-9 -4C-6 -3 -4 -1 -3 2M9 -4C6 -3 4 -1 3 2M-8 4C-6 5 -4 7 -3 9M8 4C6 5 4 7 3 9" fill="none" stroke="#35512F" stroke-width=".7"/><path d="M-10 -6C-8 -7 -6 -6 -5 -4L-8 -1Z M10 -6C8 -7 6 -6 5 -4L8 -1Z" fill="#EFE7D6"/></symbol><symbol id="leaf" overflow="visible"><path d="M0 -11C5 -6 5 6 0 11C-5 6 -5 -6 0 -11Z" fill="#7A9468" stroke="#4E6B44" stroke-width=".5"/><path d="M0 -9V9" stroke="#4E6B44" stroke-width=".5"/></symbol><symbol id="palm" overflow="visible"><path d="M0 0C0 8 0 16 0 24" stroke="#4E6B44" stroke-width="1.2" fill="none"/><path d="M0 2 L9 9" stroke="#6F8A5C" stroke-width="1.1" stroke-linecap="round"/><path d="M0 5 L-11 12" stroke="#6F8A5C" stroke-width="1.1" stroke-linecap="round"/><path d="M0 8 L12 15" stroke="#6F8A5C" stroke-width="1.1" stroke-linecap="round"/><path d="M0 11 L-14 18" stroke="#6F8A5C" stroke-width="1.1" stroke-linecap="round"/><path d="M0 14 L13 21" stroke="#6F8A5C" stroke-width="1.1" stroke-linecap="round"/><path d="M0 17 L-12 24" stroke="#6F8A5C" stroke-width="1.1" stroke-linecap="round"/><path d="M0 20 L10 27" stroke="#6F8A5C" stroke-width="1.1" stroke-linecap="round"/></symbol>
+  </defs>
+</svg>
+
+<a class="skip" href="#count" id="skip">Skip</a>
+
+<div class="doors" id="doors" aria-hidden="true">
+  <div class="d l"><svg viewBox="0 0 195 844"><g filter="url(#stitch)"><rect x="10" y="10" width="175" height="824" rx="6" fill="none" stroke="#C2A15B" stroke-width="2"/><rect x="14" y="14" width="167" height="816" rx="4" fill="none" stroke="#E6D3A2" stroke-width=".8" stroke-dasharray="1 3"/><path d="M40 60C120 40 120 140 60 150C10 160 30 240 100 230C170 220 150 320 90 320C30 320 40 410 110 400C180 390 160 480 90 490C30 500 40 580 110 570C180 560 150 650 90 660C30 670 40 760 110 750" fill="none" stroke="#C2A15B" stroke-width="2.2" stroke-linecap="round"/><path d="M40 60C120 40 120 140 60 150C10 160 30 240 100 230C170 220 150 320 90 320C30 320 40 410 110 400C180 390 160 480 90 490C30 500 40 580 110 570C180 560 150 650 90 660C30 670 40 760 110 750" fill="none" stroke="#E6D3A2" stroke-width=".8" stroke-dasharray="2 4" stroke-linecap="round"/><path d="M100 40C60 120 150 200 100 280C50 360 150 440 100 520C50 600 150 680 100 780" fill="none" stroke="#4E6B44" stroke-width="2.4" stroke-linecap="round"/><use href="#frangi" transform="translate(100.0 40.0) rotate(10) scale(1.30)"/><use href="#leaf" transform="translate(72.0 90.0) rotate(-40) scale(1.10)"/><use href="#leaf" transform="translate(124.0 120.0) rotate(30) scale(1.10)"/><use href="#hibi" transform="translate(132.0 190.0) rotate(15) scale(1.20)"/><use href="#mons" transform="translate(66.0 230.0) rotate(-20) scale(1.10)"/><use href="#boug" transform="translate(100.0 280.0) rotate(0) scale(1.30)"/><use href="#leaf" transform="translate(130.0 330.0) rotate(25) scale(1.10)"/><use href="#palm" transform="translate(60.0 360.0) rotate(-30) scale(1.00)"/><use href="#frangi" transform="translate(128.0 430.0) rotate(-15) scale(1.20)"/><use href="#leaf" transform="translate(70.0 470.0) rotate(-30) scale(1.10)"/><use href="#hibi" transform="translate(100.0 520.0) rotate(5) scale(1.20)"/><use href="#mons" transform="translate(134.0 590.0) rotate(25) scale(1.00)"/><use href="#leaf" transform="translate(68.0 620.0) rotate(-40) scale(1.10)"/><use href="#boug" transform="translate(96.0 680.0) rotate(10) scale(1.20)"/><use href="#frangi" transform="translate(130.0 740.0) rotate(20) scale(1.10)"/><use href="#leaf" transform="translate(80.0 780.0) rotate(-20) scale(1.10)"/></g></svg></div>
+  <div class="d r"><svg viewBox="0 0 195 844"><g filter="url(#stitch)"><rect x="10" y="10" width="175" height="824" rx="6" fill="none" stroke="#C2A15B" stroke-width="2"/><rect x="14" y="14" width="167" height="816" rx="4" fill="none" stroke="#E6D3A2" stroke-width=".8" stroke-dasharray="1 3"/><path d="M155 60C75 40 75 140 135 150C185 160 165 240 95 230C25 220 45 320 105 320C165 320 155 410 85 400C15 390 35 480 105 490C165 500 155 580 85 570C15 560 45 650 105 660C165 670 155 760 85 750" fill="none" stroke="#C2A15B" stroke-width="2.2" stroke-linecap="round"/><path d="M155 60C75 40 75 140 135 150C185 160 165 240 95 230C25 220 45 320 105 320C165 320 155 410 85 400C15 390 35 480 105 490C165 500 155 580 85 570C15 560 45 650 105 660C165 670 155 760 85 750" fill="none" stroke="#E6D3A2" stroke-width=".8" stroke-dasharray="2 4" stroke-linecap="round"/><path d="M95 40C135 120 45 200 95 280C145 360 45 440 95 520C145 600 45 680 95 780" fill="none" stroke="#4E6B44" stroke-width="2.4" stroke-linecap="round"/><use href="#frangi" transform="translate(95 40.0) rotate(-10) scale(1.30)"/><use href="#leaf" transform="translate(123 90.0) rotate(40) scale(1.10)"/><use href="#leaf" transform="translate(71 120.0) rotate(-30) scale(1.10)"/><use href="#hibi" transform="translate(63 190.0) rotate(-15) scale(1.20)"/><use href="#mons" transform="translate(129 230.0) rotate(20) scale(1.10)"/><use href="#boug" transform="translate(95 280.0) rotate(-0) scale(1.30)"/><use href="#leaf" transform="translate(65 330.0) rotate(-25) scale(1.10)"/><use href="#palm" transform="translate(135 360.0) rotate(30) scale(1.00)"/><use href="#frangi" transform="translate(67 430.0) rotate(15) scale(1.20)"/><use href="#leaf" transform="translate(125 470.0) rotate(30) scale(1.10)"/><use href="#hibi" transform="translate(95 520.0) rotate(-5) scale(1.20)"/><use href="#mons" transform="translate(61 590.0) rotate(-25) scale(1.00)"/><use href="#leaf" transform="translate(127 620.0) rotate(40) scale(1.10)"/><use href="#boug" transform="translate(99 680.0) rotate(-10) scale(1.20)"/><use href="#frangi" transform="translate(65 740.0) rotate(-20) scale(1.10)"/><use href="#leaf" transform="translate(115 780.0) rotate(20) scale(1.10)"/></g></svg></div>
+</div>
+
+<div class="col">
+
+  <section class="sec cover" id="cover">
+    <div class="art">
+      <svg viewBox="0 0 390 700" aria-hidden="true"><g filter="url(#stitch)"><ellipse cx="195" cy="330" rx="128" ry="182" fill="none" stroke="#C2A15B" stroke-width="2.4"/><ellipse cx="195" cy="330" rx="122" ry="176" fill="none" stroke="#E6D3A2" stroke-width=".9" stroke-dasharray="1.5 3.5"/><ellipse cx="195" cy="330" rx="136" ry="190" fill="none" stroke="#E6D3A2" stroke-width=".9" stroke-dasharray="1.5 3.5"/><path d="M60 60C20 120 70 150 120 120C170 90 130 40 90 70C60 95 90 130 120 110" fill="none" stroke="#C2A15B" stroke-width="2.2" stroke-linecap="round"/><g transform="translate(390 0) scale(-1 1)"><path d="M60 60C20 120 70 150 120 120C170 90 130 40 90 70C60 95 90 130 120 110" fill="none" stroke="#C2A15B" stroke-width="2.2" stroke-linecap="round"/></g><g transform="translate(0 700) scale(1 -1)"><path d="M60 60C20 120 70 150 120 120C170 90 130 40 90 70C60 95 90 130 120 110" fill="none" stroke="#C2A15B" stroke-width="2.2" stroke-linecap="round"/></g><g transform="translate(390 700) scale(-1 -1)"><path d="M60 60C20 120 70 150 120 120C170 90 130 40 90 70C60 95 90 130 120 110" fill="none" stroke="#C2A15B" stroke-width="2.2" stroke-linecap="round"/></g><path d="M70 150C40 260 40 400 80 520" fill="none" stroke="#4E6B44" stroke-width="2.4"/><path d="M320 150C350 260 350 400 310 520" fill="none" stroke="#4E6B44" stroke-width="2.4"/><use href="#mons" transform="translate(60.0 120.0) rotate(-30) scale(1.89)"/><use href="#mons" transform="translate(330.0 120.0) rotate(30) scale(1.89)"/><use href="#frangi" transform="translate(110.0 80.0) rotate(0) scale(2.03)"/><use href="#frangi" transform="translate(280.0 80.0) rotate(10) scale(2.03)"/><use href="#boug" transform="translate(175.0 60.0) rotate(-10) scale(1.89)"/><use href="#boug" transform="translate(215.0 60.0) rotate(15) scale(1.89)"/><use href="#hibi" transform="translate(56.0 240.0) rotate(-10) scale(1.89)"/><use href="#hibi" transform="translate(334.0 240.0) rotate(10) scale(1.89)"/><use href="#leaf" transform="translate(72.0 300.0) rotate(-20) scale(1.76)"/><use href="#leaf" transform="translate(318.0 300.0) rotate(20) scale(1.76)"/><use href="#leaf" transform="translate(60.0 380.0) rotate(20) scale(1.76)"/><use href="#leaf" transform="translate(330.0 380.0) rotate(-20) scale(1.76)"/><use href="#palm" transform="translate(40.0 430.0) rotate(-25) scale(1.62)"/><use href="#palm" transform="translate(350.0 430.0) rotate(25) scale(1.62)"/><use href="#boug" transform="translate(80.0 520.0) rotate(0) scale(1.89)"/><use href="#boug" transform="translate(310.0 520.0) rotate(0) scale(1.89)"/><use href="#frangi" transform="translate(130.0 610.0) rotate(0) scale(2.03)"/><use href="#frangi" transform="translate(260.0 610.0) rotate(0) scale(2.03)"/><use href="#hibi" transform="translate(195.0 640.0) rotate(0) scale(2.03)"/><use href="#leaf" transform="translate(160.0 650.0) rotate(-40) scale(1.76)"/><use href="#leaf" transform="translate(230.0 650.0) rotate(40) scale(1.76)"/><use href="#mons" transform="translate(95.0 650.0) rotate(-15) scale(1.76)"/><use href="#mons" transform="translate(295.0 650.0) rotate(15) scale(1.76)"/></g></svg>
+      <div class="txt fade" id="coverTxt"><div>
+        <h1>Ashley<span>&amp;</span>Charles</h1>
+        <div class="meta"><span class="label">August 28, 2027</span><span class="label">Jimbaran · Bali</span></div>
+      </div></div>
+    </div>
+  </section>
+
+  <section class="sec count" id="count">
+    <span class="label">Counting the days</span>
+    <div class="cd" role="timer" aria-live="off">
+      <div><b id="dD">—</b><span>Days</span></div><div><b id="dH">—</b><span>Hours</span></div><div><b id="dM">—</b><span>Minutes</span></div><div><b id="dS">—</b><span>Seconds</span></div>
+    </div>
+    <div class="rule"></div>
+    <svg class="orn" viewBox="0 0 390 230" aria-hidden="true"><g filter="url(#stitch)"><path d="M120 200V90H140V70H150V50H160V200Z M270 200V90H250V70H240V50H230V200Z" fill="#8A7B60" stroke="#5E5240" stroke-width="1"/><rect x="100" y="200" width="190" height="10" fill="#8A7B60" stroke="#5E5240"/><path d="M60 210C120 150 100 60 60 20" fill="none" stroke="#4E6B44" stroke-width="2.2"/><path d="M330 210C270 150 290 60 330 20" fill="none" stroke="#4E6B44" stroke-width="2.2"/><use href="#palm" transform="translate(80.0 40.0) rotate(-20) scale(1.40)"/><use href="#palm" transform="translate(310.0 40.0) rotate(20) scale(1.40)"/><use href="#mons" transform="translate(70.0 120.0) rotate(-20) scale(1.30)"/><use href="#mons" transform="translate(320.0 120.0) rotate(20) scale(1.30)"/><use href="#frangi" transform="translate(95.0 190.0) rotate(0) scale(1.30)"/><use href="#frangi" transform="translate(295.0 190.0) rotate(0) scale(1.30)"/><use href="#boug" transform="translate(60.0 80.0) rotate(0) scale(1.20)"/><use href="#boug" transform="translate(330.0 80.0) rotate(0) scale(1.20)"/><circle cx="195" cy="120" r="26" fill="#EFCF6A" opacity=".85"/><path d="M150 180C170 170 220 170 240 180" fill="none" stroke="#7A9468" stroke-width="2"/></g></svg>
+  </section>
+
+  <span class="band" aria-hidden="true"></span>
+
+  <section class="sec venue" id="venue">
+    <h2 class="h2">Our Venue</h2>
+    <p class="sub">AYANA Bali</p>
+    <span class="label">Jimbaran, Bali, Indonesia</span>
+    <p class="copy">A clifftop estate above the Indian Ocean, with stone temples, frangipani, and a bar built on the rocks at the water's edge. Rooms are held for our guests across the estate, so nobody drives anywhere.</p>
+    <a class="btn" href="https://maps.google.com/?q=AYANA+Resort+Bali+Jimbaran" target="_blank" rel="noopener">View map</a>
+  </section>
+
+  <svg class="orn" viewBox="0 0 390 40" aria-hidden="true"><g filter="url(#stitch)"><path d="M40 20C120 0 150 40 195 20C240 0 270 40 350 20" fill="none" stroke="#C2A15B" stroke-width="1.8" stroke-linecap="round"/><use href="#frangi" transform="translate(195.0 20.0) rotate(0) scale(1.20)"/><use href="#leaf" transform="translate(160.0 20.0) rotate(-70) scale(1.00)"/><use href="#leaf" transform="translate(230.0 20.0) rotate(70) scale(1.00)"/></g></svg>
+
+  <section class="sec ceremony" id="ceremony">
+    <h2 class="h3">Rock Bar</h2>
+    <p class="sub">Welcome party on the rocks</p>
+    <div class="time"><i>Friday, 27 August 2027</i>6:00 PM</div>
+    <div class="rule"></div>
+    <h2 class="h3">The Clifftop</h2>
+    <p class="sub">Ceremony at sunset<br>followed by dinner and dancing</p>
+    <div class="time"><i>Saturday, 28 August 2027</i>4:30 PM</div>
+    <a class="btn" href="https://maps.google.com/?q=AYANA+Resort+Bali+Jimbaran" target="_blank" rel="noopener">View on map</a>
+    <div class="rule"></div>
+    <span class="label">Dress code</span>
+    <h2 class="h3" style="margin-top:.3em">Tropical Formal</h2>
+    <p class="sub">Linen and silk · Real color · Shoes for stone</p>
+  </section>
+
+  <svg class="orn" viewBox="0 0 390 40" aria-hidden="true"><g filter="url(#stitch)"><path d="M40 20C120 0 150 40 195 20C240 0 270 40 350 20" fill="none" stroke="#C2A15B" stroke-width="1.8" stroke-linecap="round"/><use href="#frangi" transform="translate(195.0 20.0) rotate(0) scale(1.20)"/><use href="#leaf" transform="translate(160.0 20.0) rotate(-70) scale(1.00)"/><use href="#leaf" transform="translate(230.0 20.0) rotate(70) scale(1.00)"/></g></svg>
+
+  <section class="sec sched" id="schedule">
+    <h2 class="h2">The Weekend</h2>
+    <ol>
+      <li class="day"><span class="label">Friday</span></li>
+      <li><time>6:00 PM</time><div><b>Welcome party</b><span>Rock Bar, drinks at the water's edge</span></div></li>
+      <li class="day"><span class="label">Saturday</span></li>
+      <li><time>4:00 PM</time><div><b>Guests seated</b><span>the clifftop lawn</span></div></li>
+      <li><time>4:30 PM</time><div><b>Ceremony</b><span>short and sweet</span></div></li>
+      <li><time>5:15 PM</time><div><b>Sunset drinks</b><span>at the cliff edge</span></div></li>
+      <li><time>7:00 PM</time><div><b>Dinner</b><span>under the stars</span></div></li>
+      <li><time>9:30 PM</time><div><b>Dancing</b><span>until the estate asks us to stop</span></div></li>
+      <li class="day"><span class="label">Sunday</span></li>
+      <li><time>All day</time><div><b>Yours</b><span>sleep in, find a pool, fly home when you're ready</span></div></li>
+    </ol>
+  </section>
+
+  <svg class="orn" viewBox="0 0 390 40" aria-hidden="true"><g filter="url(#stitch)"><path d="M40 20C120 0 150 40 195 20C240 0 270 40 350 20" fill="none" stroke="#C2A15B" stroke-width="1.8" stroke-linecap="round"/><use href="#frangi" transform="translate(195.0 20.0) rotate(0) scale(1.20)"/><use href="#leaf" transform="translate(160.0 20.0) rotate(-70) scale(1.00)"/><use href="#leaf" transform="translate(230.0 20.0) rotate(70) scale(1.00)"/></g></svg>
+
+  <section class="sec gifts" id="gifts">
+    <h2 class="h2">Gifts</h2>
+    <span class="label">A thoughtful gesture</span>
+    <p class="copy">Your presence in Bali is the greatest gift, and we mean that. If you wish to contribute to our new life together, we'll leave our details here closer to the date.</p>
+  </section>
+
+  <section class="sec rsvp" id="rsvp">
+    <div class="art">
+      <svg viewBox="0 0 390 640" aria-hidden="true"><g filter="url(#stitch)"><rect x="18" y="18" width="354" height="604" rx="10" fill="none" stroke="#C2A15B" stroke-width="2"/><rect x="24" y="24" width="342" height="592" rx="8" fill="none" stroke="#E6D3A2" stroke-width=".8" stroke-dasharray="1.5 3.5"/><path d="M18 80C40 60 60 90 90 70C110 58 120 90 140 78" fill="none" stroke="#4E6B44" stroke-width="2"/><path d="M372 80C350 60 330 90 300 70C280 58 270 90 250 78" fill="none" stroke="#4E6B44" stroke-width="2"/><use href="#frangi" transform="translate(30.0 30.0) rotate(0) scale(1.20)"/><use href="#frangi" transform="translate(360.0 30.0) rotate(0) scale(1.20)"/><use href="#boug" transform="translate(30.0 610.0) rotate(0) scale(1.20)"/><use href="#boug" transform="translate(360.0 610.0) rotate(0) scale(1.20)"/><use href="#leaf" transform="translate(60.0 40.0) rotate(-60) scale(1.00)"/><use href="#leaf" transform="translate(330.0 40.0) rotate(60) scale(1.00)"/><use href="#leaf" transform="translate(60.0 600.0) rotate(-120) scale(1.00)"/><use href="#leaf" transform="translate(330.0 600.0) rotate(120) scale(1.00)"/><use href="#hibi" transform="translate(195.0 618.0) rotate(0) scale(1.20)"/></g></svg>
+      <div class="inner">
+        <h2 class="h2">RSVP</h2>
+        <p class="sub" style="font-size:16px">Kindly reply before the 1st of March, 2027.</p>
+        <form id="form" novalidate>
+          <div class="f"><label for="name">Full name</label><input id="name" type="text" autocomplete="name" required></div>
+          <div class="f"><label for="email">Email</label><input id="email" type="email" autocomplete="email" required></div>
+          <div class="f"><label>Will you attend?</label>
+            <div class="yn"><label><input type="radio" name="att" value="yes"> Yes</label><label><input type="radio" name="att" value="no"> No</label></div></div>
+          <div class="f" id="fDiet"><label for="diet">Dietary needs</label><input id="diet" type="text"></div>
+          <button class="send" type="submit">Send</button>
+        </form>
+        <p class="thanks" id="thanks">Thank you. We have your reply.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <p class="sub">We cannot wait to celebrate with you</p>
+    <span class="label">Ashley &amp; Charles</span>
+    <span class="label">AYANA Bali · Jimbaran · 28 August 2027</span>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id)};
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var doors=$('doors'), txt=$('coverTxt');
+  if(reduce){ if(doors) doors.parentNode.removeChild(doors); txt.classList.add('in'); }
+  else{
+    document.body.style.overflow='hidden';
+    var opened=false;
+    function open(){
+      if(opened) return; opened=true;
+      doors.classList.add('is-open');
+      setTimeout(function(){ txt.classList.add('in'); },1500);
+      setTimeout(function(){ document.body.style.overflow=''; if(doors.parentNode) doors.parentNode.removeChild(doors); },2700);
+    }
+    setTimeout(open,700);
+    $('skip').addEventListener('click',open);
+  }
+  /* countdown */
+  var target=new Date('2027-08-28T16:30:00+08:00').getTime();
+  function pad(n){return (n<10?'0':'')+n}
+  function tick(){ var s=Math.max(0,Math.floor((target-Date.now())/1000));
+    $('dD').textContent=Math.floor(s/86400); $('dH').textContent=pad(Math.floor(s%86400/3600)); $('dM').textContent=pad(Math.floor(s%3600/60)); $('dS').textContent=pad(s%60); }
+  tick(); setInterval(tick,1000);
+  /* rsvp preview */
+  var form=$('form');
+  form.querySelectorAll('input[name="att"]').forEach(function(r){ r.addEventListener('change',function(){ $('fDiet').hidden=this.value==='no'; }); });
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    var ok=$('name').value.trim() && /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test($('email').value.trim()) && form.querySelector('input[name="att"]:checked');
+    if(!ok){ ( !$('name').value.trim() ? $('name') : $('email') ).focus(); return; }
+    form.hidden=true; $('thanks').classList.add('is-visible');
+    console.log('[preview] RSVP',{name:$('name').value,email:$('email').value,attending:form.querySelector('input[name="att"]:checked').value});
+  });
+})();
+</script>
+
+</body>
+</html>
