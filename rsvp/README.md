@@ -39,7 +39,8 @@ Edit → Version: New version**, or the live URL keeps running the old code.
 
 Reload the sheet. An **Invitations** menu appears. Run **Fill missing codes
 and links**. Every household row now has a six-character code and a link
-like `https://yourdomain.com/?i=k7m3qx`. Send each household its own link.
+like `https://yourdomain.com/?i=k7m3qx`. The next step emails them out, or
+you can copy a link from column E to send by text.
 
 Rows you add later get codes the next time you run the menu item. Existing
 codes are never changed. To disable a link, delete its code.
