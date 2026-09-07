@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ashley &amp; Charles, the archway</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F8F6F2;--paper-2:#F1EEE8;--blue:#BFD6E6;--blue-2:#A9C6DA;--blue-3:#8FB3CC;--navy:#233A55;--gold:#D4B15F;--gold-2:#F0DFA0;--gold-3:#A88A3F;--ink:#2A3340;--ink-2:#66707C;--stone:#CFC4B2;--stone-2:#B9AD98;
+  --script:'Pinyon Script','Snell Roundhand','Brush Script MT',cursive;
+  --serif:'Cormorant Garamond','Cormorant',Georgia,'Times New Roman',serif;
+  --sans:'Jost','Futura','Avenir Next','Helvetica Neue',Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:18px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.95' numOctaves='1' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .2 0 0 0 0 .2 0 0 0 0 .2 0 0 0 .5 -.42'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+h1,h2,h3{margin:0;font-weight:400}
+p{margin:0 0 1em}
+:focus-visible{outline:2px solid var(--gold);outline-offset:4px}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+.script{font-family:var(--script);font-weight:400}
+.label{font-family:var(--sans);font-weight:400;font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--ink-2)}
+.scene{position:relative;min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:clamp(56px,10vh,96px) 24px;text-align:center;overflow:hidden}
+.scene>*{position:relative;z-index:1}
+.skip{position:fixed;top:14px;right:14px;z-index:60;font-family:var(--sans);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink);text-decoration:none;background:rgba(248,246,242,.85);padding:8px 14px;border-radius:999px;border:1px solid rgba(42,51,64,.15)}
+
+/* ---------------- Envelope: four flaps peel open ---------------- */
+.env{position:fixed;inset:0;z-index:50;background:transparent;perspective:1400px;transition:opacity .6s ease}
+.env .flap{position:absolute;inset:0;background:var(--paper);backface-visibility:hidden;-webkit-backface-visibility:hidden;transition:transform 1.1s cubic-bezier(.7,0,.3,1)}
+.env .flap::after{content:"";position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.95' numOctaves='1' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .2 0 0 0 0 .2 0 0 0 0 .2 0 0 0 .6 -.45'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.env .flap.t{clip-path:polygon(0 0,100% 0,50% 50%);transform-origin:50% 0;box-shadow:inset 0 -1px 0 rgba(42,51,64,.08)}
+.env .flap.b{clip-path:polygon(0 100%,100% 100%,50% 50%);transform-origin:50% 100%}
+.env .flap.l{clip-path:polygon(0 0,50% 50%,0 100%);transform-origin:0 50%}
+.env .flap.r{clip-path:polygon(100% 0,50% 50%,100% 100%);transform-origin:100% 50%}
+.env .crease{position:absolute;inset:0;pointer-events:none;background:linear-gradient(45deg,transparent 49.7%,rgba(42,51,64,.10) 50%,transparent 50.3%),linear-gradient(-45deg,transparent 49.7%,rgba(42,51,64,.10) 50%,transparent 50.3%)}
+.env.is-open .flap.t{transform:rotateX(180deg)}
+.env.is-open .flap.l{transform:rotateY(-180deg);transition-delay:.18s}
+.env.is-open .flap.r{transform:rotateY(180deg);transition-delay:.18s}
+.env.is-open .flap.b{transform:rotateX(-180deg);transition-delay:.36s}
+.env.is-open .crease{opacity:0;transition:opacity .3s}
+.env.is-gone{opacity:0;pointer-events:none}
+.seal{position:absolute;left:50%;top:50%;width:92px;height:92px;margin:-46px 0 0 -46px;z-index:4;border-radius:50%;
+  background:radial-gradient(circle at 36% 30%,#F8ECC2 0,#DEC271 38%,#BD9A42 72%,#8E6F2A 100%);
+  box-shadow:inset 0 2px 3px rgba(255,250,220,.7),inset 0 -3px 5px rgba(80,55,10,.45),0 8px 16px -8px rgba(60,40,5,.5);
+  display:grid;place-items:center;transition:transform .5s ease,opacity .45s ease}
+.seal::before{content:"";position:absolute;inset:7px;border-radius:50%;box-shadow:inset 0 1px 1px rgba(255,250,220,.6),inset 0 -1px 2px rgba(80,55,10,.5)}
+.seal svg{width:44px;height:44px;display:block}
+.env.is-open .seal{transform:scale(.3);opacity:0}
+.env .hint{position:absolute;left:0;right:0;top:calc(50% + 60px);text-align:center;font-family:var(--serif);font-size:19px;color:var(--navy);transition:opacity .3s}
+.env.is-open .hint{opacity:0}
+.env-btn{position:absolute;inset:0;z-index:5}
+@media (prefers-reduced-motion:reduce){.env{display:none}}
+
+/* ---------------- Hero: the archway ---------------- */
+.hero{color:#FFFDF7;min-height:100svh;padding-bottom:max(64px,10vh);justify-content:center}
+.hero svg.bg{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+.hero .names{font-size:clamp(50px,13vw,80px);line-height:1;color:#2A3340;text-shadow:0 1px 0 rgba(255,255,255,.6)}
+.hero .sub{font-size:clamp(20px,5vw,26px);margin-top:.2em;color:#2A3340}
+.hero .txt{background:radial-gradient(ellipse at center,rgba(248,246,242,.72) 0%,rgba(248,246,242,.45) 45%,rgba(248,246,242,0) 72%);padding:28px 30px 34px;margin-top:-6vh}
+.hero .cue{position:absolute;left:0;right:0;bottom:max(24px,env(safe-area-inset-bottom));color:var(--navy)}
+.hero .cue .script{font-size:26px}
+
+/* ---------------- The date ---------------- */
+.date{background:linear-gradient(180deg,var(--paper) 0%,#F3F1EC 100%)}
+.date h2{font-size:clamp(54px,14vw,84px);line-height:1;color:var(--ink)}
+.date .label{margin-top:.6em;color:var(--navy)}
+.cards{display:flex;gap:12px;justify-content:center;margin:2.2em 0 1.6em}
+.card{position:relative;width:min(27vw,120px);aspect-ratio:.86;background:#FFFFFF;border:1px solid rgba(42,51,64,.08);border-radius:10px;box-shadow:0 14px 30px -18px rgba(42,51,64,.35);display:grid;place-items:center;overflow:hidden}
+.card .val{font-family:var(--serif);font-size:clamp(22px,6vw,32px);font-weight:500;line-height:1;padding:0 6px}
+.card .val.num{font-size:clamp(34px,9vw,46px)}
+.card canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;transition:opacity .5s ease}
+.card.is-revealed canvas{opacity:0;pointer-events:none}
+.card .cap{position:absolute;left:0;right:0;bottom:8px;font-family:var(--sans);font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--ink-2)}
+.date .when{font-style:italic;font-size:clamp(19px,4.8vw,24px);color:var(--ink-2)}
+.reveal-all{margin-top:.4em;font-family:var(--sans);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink-2);text-decoration:underline;text-underline-offset:4px}
+
+/* ---------------- The letter ---------------- */
+.invite{background:linear-gradient(180deg,#F3F1EC 0%,var(--paper) 40%)}
+.invite h2{font-size:clamp(54px,14vw,84px);line-height:1}
+.hearts{width:44px;height:30px;margin:.6em auto 0;display:block}
+.hearts path{fill:none;stroke:var(--blue-3);stroke-width:1.4;stroke-linecap:round}
+.lenv{position:relative;width:min(88vw,440px);aspect-ratio:1.2;margin:calc(min(88vw,440px) * .46) auto 2.6em;cursor:pointer}
+.lenv .back{position:absolute;inset:0;background:var(--blue-2);border-radius:6px}
+.lenv .flap{position:absolute;inset:0;background:linear-gradient(180deg,var(--blue),#B3CDDF);clip-path:polygon(0 0,100% 0,50% 52%);border-radius:6px 6px 0 0;transform-origin:50% 0;transform:rotateX(-165deg);z-index:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='rgba(255,255,255,.35)' stroke-width='1.2'%3E%3Cpath d='M20 100c10-30 30-50 60-60M30 90c8-4 14-10 18-18M50 70c8-4 14-10 18-18M40 82c-8 2-14 0-18-4M60 60c-8 2-14 0-18-4'/%3E%3C/g%3E%3C/svg%3E"),linear-gradient(180deg,var(--blue),#B3CDDF)}
+.lenv .letter{position:absolute;left:7%;right:7%;top:-30%;bottom:6%;background:#FFFFFF;border-radius:4px;box-shadow:0 18px 40px -20px rgba(42,51,64,.45);padding:24px 22px;text-align:center;overflow:hidden;z-index:1}
+.lenv .pocket{position:absolute;inset:0;z-index:2;border-radius:6px;overflow:hidden;pointer-events:none}
+.lenv .pocket i{position:absolute;inset:0;display:block}
+.lenv .pocket .l{background:var(--blue);clip-path:polygon(0 0,50% 58%,0 100%)}
+.lenv .pocket .r{background:var(--blue);clip-path:polygon(100% 0,50% 58%,100% 100%)}
+.lenv .pocket .b{background:#B3CDDF;clip-path:polygon(0 100%,50% 58%,100% 100%)}
+.lenv .letter .sal{font-family:var(--script);font-size:clamp(26px,7vw,34px);line-height:1;margin-bottom:.5em}
+.lenv .letter p{font-size:clamp(15px,4.1vw,17px);line-height:1.5;margin-bottom:.7em}
+.lenv .letter .sig{font-family:var(--script);font-size:clamp(26px,7vw,34px);margin-top:.4em}
+.lenv .cue{position:absolute;left:0;right:0;bottom:-2.6em;color:var(--ink-2)}
+.lenv.is-out{aspect-ratio:auto;height:auto;min-height:60vh;cursor:default}
+.lenv.is-out .letter{position:relative;left:auto;right:auto;top:auto;bottom:auto;transform:none;margin:0 auto;width:100%;overflow:visible}
+.lenv.is-out .back,.lenv.is-out .flap,.lenv.is-out .pocket,.lenv.is-out .cue{display:none}
+.lenv:not(.is-out) .letter p:nth-child(n+3),.lenv:not(.is-out) .letter .sig{display:none}
+
+/* ---------------- Schedule ---------------- */
+.sched{color:var(--ink);min-height:100svh}
+.sched svg.bg{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+.sched h2{font-size:clamp(46px,12vw,72px);line-height:1}
+.tl2{list-style:none;margin:2.4em auto 0;padding:0;max-width:360px;position:relative}
+.tl2::before{content:"";position:absolute;left:50%;top:8px;bottom:8px;width:1px;background:var(--blue-3)}
+.tl2 li{position:relative;width:50%;padding:.2em 22px .9em;text-align:right}
+.tl2 li:nth-child(even){margin-left:50%;text-align:left}
+.tl2 li::before{content:"";position:absolute;top:.85em;width:9px;height:9px;background:var(--blue-3);transform:rotate(45deg);right:-5px}
+.tl2 li:nth-child(even)::before{right:auto;left:-4px}
+.tl2 time{display:block;font-family:var(--serif);font-size:clamp(24px,6.4vw,30px);line-height:1.1;color:var(--ink)}
+.tl2 b{display:block;font-weight:400;font-size:16px;color:var(--ink-2);line-height:1.3}
+.tl2 .day{width:100%;margin:0;text-align:center;padding:1.2em 0 .6em}
+.tl2 .day::before{display:none}
+.tl2 .day .label{color:var(--navy);background:var(--paper);padding:0 10px}
+
+/* ---------------- Venue ---------------- */
+.venue{padding-bottom:0}
+.venue h2{font-size:clamp(46px,12vw,72px);line-height:1}
+.pin{display:grid;grid-template-columns:44px 1fr;gap:14px;align-items:start;text-align:left;max-width:340px;margin:1.4em auto 0}
+.pin svg{width:40px;height:40px}
+.pin b{display:block;font-weight:500;font-size:22px;line-height:1.2}
+.pin span{display:block;color:var(--ink-2);font-size:16px}
+.venue .copy{max-width:36ch;margin:1.2em auto 0;font-size:17px}
+.venue .btn{display:inline-block;margin:1.2em 0 2em;font-family:var(--sans);font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--navy);border:1px solid var(--blue-3);border-radius:999px;padding:12px 26px;text-decoration:none;background:#fff}
+.venue svg.vista{display:block;width:100%;height:auto;margin-top:auto}
+
+/* ---------------- RSVP + footer ---------------- */
+.rsvp{background:linear-gradient(180deg,var(--paper) 0%,var(--blue) 100%)}
+.rsvp h2{font-size:clamp(54px,14vw,84px);line-height:1}
+.rsvp form{width:min(92vw,440px);margin-top:1.6em;text-align:left}
+.f{margin-bottom:1.4em}
+.f label,.f legend{display:block;font-family:var(--sans);font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--ink-2);margin-bottom:.5em;padding:0}
+.f input,.f textarea{width:100%;font:inherit;font-size:18px;color:var(--ink);background:transparent;border:0;border-bottom:1px solid rgba(42,51,64,.35);padding:.5em 0;border-radius:0}
+.f input:focus,.f textarea:focus{outline:none;border-bottom-color:var(--navy)}
+.f textarea{min-height:4.5em;resize:vertical}
+.f fieldset{border:0;padding:0;margin:0}
+.pills{display:flex;flex-wrap:wrap;gap:10px}
+.pills label{position:relative;font-family:var(--serif);font-size:17px;letter-spacing:0;text-transform:none;color:var(--ink);margin:0}
+.pills input{position:absolute;opacity:0;width:1px;height:1px}
+.pills span{display:inline-block;border:1px solid rgba(42,51,64,.35);border-radius:999px;padding:.5em 1.1em;cursor:pointer;background:rgba(255,255,255,.5)}
+.pills input:checked+span{background:var(--navy);color:var(--paper);border-color:var(--navy)}
+.pills input:focus-visible+span{outline:2px solid var(--gold);outline-offset:3px}
+.btn{display:inline-block;background:var(--navy);color:var(--paper);padding:.9em 2.2em;border-radius:999px;font-family:var(--sans);font-size:12px;letter-spacing:.28em;text-transform:uppercase;margin-top:.4em}
+.thanks{display:none;max-width:40ch}
+.thanks.is-visible{display:block}
+.thanks .script{font-size:clamp(40px,11vw,60px);line-height:1;margin-bottom:.3em;display:block}
+.foot{background:var(--blue);padding:56px 24px max(56px,env(safe-area-inset-bottom));text-align:center}
+.foot .script{font-size:clamp(34px,9vw,46px);display:block;line-height:1;color:var(--navy)}
+.foot p{margin:.6em 0 0;font-style:italic;color:var(--ink-2)}
+</style>
+</head>
+<body>
+
+
+<a class="skip" href="#date" id="skip">Skip</a>
+
+<!-- ============ Envelope ============ -->
+<div class="env" id="env" aria-label="Sealed envelope">
+  <div class="flap t"></div><div class="flap l"></div><div class="flap r"></div><div class="flap b"></div>
+  <div class="crease"></div>
+  <div class="seal" aria-hidden="true"><svg viewBox="0 0 44 44"><path d="M22 38C12 30 4 23 4 14a9 9 0 0 1 18-2a9 9 0 0 1 18 2c0 9-8 16-18 24z" fill="none" stroke="rgba(80,55,10,.75)" stroke-width="1.8"/><path d="M22 34C14 27 8 21 8 14.5a6 6 0 0 1 12-1.5" fill="none" stroke="rgba(80,55,10,.45)" stroke-width="1.2"/></svg></div>
+  <div class="hint">Click to open</div>
+  <button class="env-btn" id="envBtn" type="button" aria-label="Open the invitation"></button>
+</div>
+
+<!-- ============ Hero: the archway ============ -->
+<section class="scene hero" id="hero">
+  <svg class="bg" viewBox="0 0 390 844" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <defs>
+      <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#BFD6E6"/><stop offset=".55" stop-color="#E6EEF3"/><stop offset=".7" stop-color="#F3E9DA"/></linearGradient>
+      <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#CFD9DC"/><stop offset=".3" stop-color="#9DBACB"/><stop offset="1" stop-color="#6A93AE"/></linearGradient>
+      <linearGradient id="col" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#B9AD98"/><stop offset=".3" stop-color="#E4DCCB"/><stop offset=".7" stop-color="#D3C8B3"/><stop offset="1" stop-color="#A89C87"/></linearGradient>
+      <linearGradient id="arch" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#D9D0BD"/><stop offset="1" stop-color="#BDB19B"/></linearGradient>
+      <filter id="clouds" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".006 .012" numOctaves="4" seed="3" result="n"/><feColorMatrix in="n" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1.6 -.55" result="c"/><feGaussianBlur in="c" stdDeviation="1.2"/></filter>
+      <filter id="grain" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="2" seed="9" result="n"/><feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .14 0" result="g"/><feComposite in="g" in2="SourceGraphic" operator="in" result="gi"/><feBlend in="SourceGraphic" in2="gi" mode="multiply"/></filter>
+      <filter id="haze" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="8"/></filter>
+      <symbol id="fr" overflow="visible"><g fill="#FFF8E7" stroke="#E4D6B6" stroke-width=".5"><path d="M0 0C-4.5 -2.8 -4.5 -9.1 0 -12C4.5 -9.1 4.5 -2.8 0 0Z"/><path d="M0 0C-4.5 -2.8 -4.5 -9.1 0 -12C4.5 -9.1 4.5 -2.8 0 0Z" transform="rotate(72)"/><path d="M0 0C-4.5 -2.8 -4.5 -9.1 0 -12C4.5 -9.1 4.5 -2.8 0 0Z" transform="rotate(144)"/><path d="M0 0C-4.5 -2.8 -4.5 -9.1 0 -12C4.5 -9.1 4.5 -2.8 0 0Z" transform="rotate(216)"/><path d="M0 0C-4.5 -2.8 -4.5 -9.1 0 -12C4.5 -9.1 4.5 -2.8 0 0Z" transform="rotate(288)"/></g><circle r="2.8" fill="#F3D27A"/></symbol>
+      <symbol id="lf" overflow="visible"><path d="M0 -9C4 -5 4 5 0 9C-4 5 -4 -5 0 -9Z" fill="#6B8A63" stroke="#4E6B45" stroke-width=".5"/></symbol>
+      <symbol id="bg" overflow="visible"><g fill="#E7A9B2" stroke="#CF8C98" stroke-width=".5"><path d="M0 -2L-6 -10L1 -12Z"/><path d="M0 -2L8 -9L9 -2Z"/><path d="M0 -2L-7 3L-2 9Z"/></g></symbol>
+    </defs>
+    <!-- sky, sea, distant cliffs -->
+    <rect width="390" height="560" fill="url(#sky)"/>
+    <rect x="0" y="30" width="390" height="320" filter="url(#clouds)" opacity=".8"/>
+    <rect x="0" y="470" width="390" height="380" fill="url(#sea)"/>
+    <rect x="0" y="456" width="390" height="30" fill="#F3E9DA" opacity=".6" filter="url(#haze)"/>
+    <path d="M60 470C120 452 190 458 260 448C310 441 350 452 390 460V480H60Z" fill="#8AA0B2" opacity=".55" filter="url(#haze)"/>
+    <g stroke="#FFFFFF" stroke-width="1" opacity=".45" stroke-linecap="round"><path d="M110 520h22M200 540h18M150 570h30M250 590h16M120 630h26M240 650h20"/></g>
+    <!-- balustrade -->
+    <g filter="url(#grain)">
+      <rect x="0" y="720" width="390" height="10" rx="2" fill="#E6DECC" stroke="#B9AD98" stroke-width=".8"/>
+      <path d="M18 730c-6 6-6 18 0 26c-6 4-6 12 0 16h12c6-4 6-12 0-16c6-8 6-20 0-26z" fill="#E6DECC" stroke="#B9AD98" stroke-width=".8"/><path d="M53 730c-6 6-6 18 0 26c-6 4-6 12 0 16h12c6-4 6-12 0-16c6-8 6-20 0-26z" fill="#E6DECC" stroke="#B9AD98" stroke-width=".8"/><path d="M88 730c-6 6-6 18 0 26c-6 4-6 12 0 16h12c6-4 6-12 0-16c6-8 6-20 0-26z" fill="#E6DECC" stroke="#B9AD98" stroke-width=".8"/><path d="M123 730c-6 6-6 18 0 26c-6 4-6 12 0 16h12c6-4 6-12 0-16c6-8 6-20 0-26z" fill="#E6DECC" stroke="#B9AD98" stroke-width=".8"/><path d="M158 730c-6 6-6 18 0 26c-6 4-6 12 0 16h12c6-4 6-12 0-16c6-8 6-20 0-26z" fill="#E6DECC" stroke="#B9AD98" stroke-width=".8"/><path d="M193 730c-6 6-6 18 0 26c-6 4-6 12 0 16h12c6-4 6-12 0-16c6-8 6-20 0-26z" fill="#E6DECC" stroke="#B9AD98" stroke-width=".8"/><path d="M228 730c-6 6-6 18 0 26c-6 4-6 12 0 16h12c6-4 6-12 0-16c6-8 6-20 0-26z" fill="#E6DECC" stroke="#B9AD98" stroke-width=".8"/><path d="M263 730c-6 6-6 18 0 26c-6 4-6 12 0 16h12c6-4 6-12 0-16c6-8 6-20 0-26z" fill="#E6DECC" stroke="#B9AD98" stroke-width=".8"/><path d="M298 730c-6 6-6 18 0 26c-6 4-6 12 0 16h12c6-4 6-12 0-16c6-8 6-20 0-26z" fill="#E6DECC" stroke="#B9AD98" stroke-width=".8"/><path d="M333 730c-6 6-6 18 0 26c-6 4-6 12 0 16h12c6-4 6-12 0-16c6-8 6-20 0-26z" fill="#E6DECC" stroke="#B9AD98" stroke-width=".8"/><path d="M368 730c-6 6-6 18 0 26c-6 4-6 12 0 16h12c6-4 6-12 0-16c6-8 6-20 0-26z" fill="#E6DECC" stroke="#B9AD98" stroke-width=".8"/>
+      <rect x="0" y="772" width="390" height="14" rx="2" fill="#E1D8C4" stroke="#B9AD98" stroke-width=".8"/>
+      <rect x="0" y="786" width="390" height="58" fill="#D9CFBA"/>
+    </g>
+    <!-- archway: columns and arch -->
+    <g filter="url(#grain)">
+      <rect x="0" y="0" width="70" height="844" fill="#CFC4B2"/><rect x="320" y="0" width="70" height="844" fill="#CFC4B2"/>
+      <rect x="44" y="150" width="34" height="600" fill="url(#col)"/><rect x="312" y="150" width="34" height="600" fill="url(#col)"/>
+      <rect x="36" y="140" width="50" height="14" rx="2" fill="#E1D8C4"/><rect x="304" y="140" width="50" height="14" rx="2" fill="#E1D8C4"/>
+      <rect x="38" y="154" width="46" height="8" fill="#B9AD98"/><rect x="306" y="154" width="46" height="8" fill="#B9AD98"/>
+      <rect x="34" y="740" width="54" height="16" rx="2" fill="#E1D8C4"/><rect x="302" y="740" width="54" height="16" rx="2" fill="#E1D8C4"/>
+      <path d="M0 0H390V150H346A151 151 0 0 0 44 150H0Z" fill="url(#arch)"/>
+      <path d="M44 150A151 151 0 0 1 346 150" fill="none" stroke="#B9AD98" stroke-width="3"/>
+      <path d="M58 150A137 137 0 0 1 332 150" fill="none" stroke="#EDE6D6" stroke-width="2" opacity=".8"/>
+    </g>
+    <!-- climbing frangipani and bougainvillea over the arch -->
+    <g id="vines">
+      <path d="M20 300C30 220 60 140 120 70C160 30 220 20 300 60" fill="none" stroke="#4E6B45" stroke-width="2.6" stroke-linecap="round"/>
+      <path d="M370 320C360 240 330 150 270 80C240 50 200 40 150 60" fill="none" stroke="#4E6B45" stroke-width="2.6" stroke-linecap="round"/>
+      <use href="#lf" transform="translate(40 240) rotate(-30) scale(1.40)"/><use href="#fr" transform="translate(26 200) rotate(0) scale(1.60)"/><use href="#bg" transform="translate(60 150) rotate(10) scale(1.50)"/><use href="#lf" transform="translate(90 110) rotate(-50) scale(1.30)"/><use href="#fr" transform="translate(130 66) rotate(0) scale(1.70)"/><use href="#bg" transform="translate(180 36) rotate(-10) scale(1.50)"/><use href="#lf" transform="translate(230 28) rotate(60) scale(1.30)"/><use href="#fr" transform="translate(270 44) rotate(0) scale(1.60)"/><use href="#lf" transform="translate(300 66) rotate(40) scale(1.30)"/><use href="#lf" transform="translate(350 260) rotate(30) scale(1.40)"/><use href="#fr" transform="translate(364 220) rotate(0) scale(1.60)"/><use href="#bg" transform="translate(330 170) rotate(-10) scale(1.50)"/><use href="#lf" transform="translate(300 124) rotate(50) scale(1.30)"/><use href="#fr" transform="translate(250 80) rotate(0) scale(1.70)"/><use href="#bg" transform="translate(205 52) rotate(10) scale(1.50)"/><use href="#lf" transform="translate(170 52) rotate(-60) scale(1.30)"/><use href="#fr" transform="translate(120 70) rotate(0) scale(1.50)"/><use href="#bg" transform="translate(36 300) rotate(0) scale(1.40)"/><use href="#bg" transform="translate(356 320) rotate(0) scale(1.40)"/>
+    </g>
+  </svg>
+  <div class="txt">
+    <h1 class="script names">Ashley &amp; Charles</h1>
+    <p class="sub">are getting married!</p>
+  </div>
+  <div class="cue"><span class="script">The Date</span></div>
+</section>
+
+<!-- ============ The date ============ -->
+<section class="scene date" id="date">
+  <h2 class="script">The Date</h2>
+  <p class="label">✦ &nbsp;Scratch to reveal the date&nbsp; ✦</p>
+  <div class="cards" id="cards">
+    <div class="card"><span class="val num">28</span><span class="cap">Day</span><canvas aria-hidden="true"></canvas></div>
+    <div class="card"><span class="val">August</span><span class="cap">Month</span><canvas aria-hidden="true"></canvas></div>
+    <div class="card"><span class="val num">2027</span><span class="cap">Year</span><canvas aria-hidden="true"></canvas></div>
+  </div>
+  <p class="when">Saturday, at half past four in the afternoon</p>
+  <button class="reveal-all" id="revealAll" type="button">Reveal the date</button>
+</section>
+
+
+<!-- ============ You're invited ============ -->
+<section class="scene invite" id="invite">
+  <h2 class="script">You're invited</h2>
+  <svg class="hearts" viewBox="0 0 44 30" aria-hidden="true">
+    <path d="M14 26C6 20 2 15 3 10c1-4 6-5 9-1 3-4 8-3 9 1 1 5-3 10-7 16z"/>
+    <path d="M36 16c-5-4-8-7-7-10 1-3 4-3 6 0 2-3 5-3 6 0 1 3-2 6-5 10z"/>
+  </svg>
+  <div class="lenv" id="lenv" role="button" tabindex="0" aria-label="Open the letter">
+    <div class="back"></div>
+    <div class="flap"></div>
+    <div class="letter" id="letter">
+      <div class="sal">Dear friends and family,</div>
+      <p>Our first date was an Ed Sheeran concert. You might say everything about it, and everything since, has been "Perfect."</p>
+      <p>Ashley joined run club for the running. Charles joined for Ashley. He has yet to catch her. Along the way we fostered fourteen cats. Twelve found wonderful homes. Two found ours and stopped looking.</p>
+      <p>When we're not home, we're somewhere new, golfing our way around the world and leaving lost golf balls on several continents. So for the wedding we didn't want a typical venue. We wanted a cliff, an ocean, and everyone we love in one place.</p>
+      <p>Your only job is to show up in linen. It's going to be perfect. We checked.</p>
+      <div class="sig">Ashley &amp; Charles</div>
+    </div>
+    <div class="pocket"><i class="l"></i><i class="r"></i><i class="b"></i></div>
+    <div class="cue"><span class="label">Tap to read our letter</span></div>
+  </div>
+</section>
+
+
+<!-- ============ Schedule ============ -->
+<section class="scene sched" id="schedule">
+  <svg class="bg" viewBox="0 0 390 844" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <defs>
+      <linearGradient id="sky2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F8F6F2"/><stop offset=".5" stop-color="#F3EFE8"/><stop offset="1" stop-color="#BFD6E6"/></linearGradient>
+      <filter id="clouds2" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".005 .011" numOctaves="4" seed="11" result="n"/><feColorMatrix in="n" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1.7 -.5" result="c"/><feGaussianBlur in="c" stdDeviation="1.5"/></filter>
+      <filter id="clouds3" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".004 .009" numOctaves="3" seed="5" result="n"/><feColorMatrix in="n" type="matrix" values="0 0 0 0 .55  0 0 0 0 .72  0 0 0 0 .86  0 0 0 1.2 -.45" result="c"/><feGaussianBlur in="c" stdDeviation="3"/></filter>
+    </defs>
+    <rect width="390" height="844" fill="url(#sky2)"/>
+    <rect x="0" y="380" width="390" height="464" filter="url(#clouds3)" opacity=".8"/>
+    <rect x="0" y="300" width="390" height="544" filter="url(#clouds2)" opacity=".95"/>
+  </svg>
+  <h2 class="script">Schedule of Events</h2>
+  <ol class="tl2">
+    <li class="day"><span class="label">Friday · 27 August</span></li>
+    <li><time>18:00</time><b>Welcome party at Rock Bar</b></li>
+    <li class="day"><span class="label">Saturday · 28 August</span></li>
+    <li><time>16:00</time><b>Guests seated on the clifftop</b></li>
+    <li><time>16:30</time><b>Ceremony</b></li>
+    <li><time>17:15</time><b>Sunset drinks at the cliff edge</b></li>
+    <li><time>19:00</time><b>Dinner</b></li>
+    <li><time>21:30</time><b>Dancing</b></li>
+    <li><time>Late</time><b>End of the celebration</b></li>
+  </ol>
+</section>
+
+<!-- ============ Venue ============ -->
+<section class="scene venue" id="venue">
+  <h2 class="script">Wedding Venue</h2>
+  <div class="pin">
+    <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 38C12 28 6 22 6 14a14 14 0 0 1 28 0c0 8-6 14-14 24z" fill="#BFD6E6" stroke="#8FB3CC" stroke-width="1.2"/><path d="M20 20c-4-3-6-6-6-8a3.5 3.5 0 0 1 6-1a3.5 3.5 0 0 1 6 1c0 2-2 5-6 8z" fill="#233A55"/></svg>
+    <div><b>AYANA Bali</b><span>Jimbaran, Bali, Indonesia</span><span>25 minutes from Denpasar airport</span></div>
+  </div>
+  <p class="copy">A clifftop estate above the Indian Ocean. Rooms are held for our guests across AYANA Resort, AYANA Villas and RIMBA, all on the same grounds, so nobody drives anywhere all weekend.</p>
+  <a class="btn" href="https://maps.google.com/?q=AYANA+Resort+Bali+Jimbaran" target="_blank" rel="noopener">Get directions</a>
+  <svg class="vista" viewBox="0 0 390 260" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+    <defs><linearGradient id="sea3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#CFD9DC"/><stop offset="1" stop-color="#6A93AE"/></linearGradient></defs>
+    <rect width="390" height="260" fill="#E6EEF3"/>
+    <path d="M0 120C50 96 110 100 160 84C210 68 260 80 310 70C340 64 370 70 390 76V150H0Z" fill="#7E93A6" opacity=".7"/>
+    <rect x="0" y="130" width="390" height="130" fill="url(#sea3)"/>
+    <path d="M30 258C34 200 30 160 22 130" stroke="#4E6B45" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <g stroke="#4E6B45" stroke-width="3" fill="none" stroke-linecap="round"><path d="M22 130C44 116 74 118 100 132"/><path d="M22 130C4 112 -6 94 -2 70"/><path d="M22 130C48 106 72 96 104 96"/><path d="M22 130C14 104 24 80 48 66"/></g>
+    <path d="M360 258C356 200 360 160 368 130" stroke="#4E6B45" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <g stroke="#4E6B45" stroke-width="3" fill="none" stroke-linecap="round"><path d="M368 130C346 116 316 118 290 132"/><path d="M368 130C386 112 396 94 392 70"/><path d="M368 130C342 106 318 96 286 96"/><path d="M368 130C376 104 366 80 342 66"/></g>
+  </svg>
+</section>
+
+<!-- ============ RSVP ============ -->
+<section class="scene rsvp" id="rsvp">
+  <h2 class="script">Kindly reply</h2>
+  <p class="label">by 1 March 2027</p>
+  <form id="form" novalidate>
+    <div class="f"><label for="name">Your name</label><input id="name" type="text" autocomplete="name" required></div>
+    <div class="f"><label for="email">Email</label><input id="email" type="email" autocomplete="email" required></div>
+    <div class="f"><fieldset><legend>Attending</legend><div class="pills">
+      <label><input type="radio" name="att" value="both"><span>Friday and Saturday</span></label>
+      <label><input type="radio" name="att" value="saturday"><span>Saturday only</span></label>
+      <label><input type="radio" name="att" value="no"><span>Can't make it</span></label>
+    </div></fieldset></div>
+    <div class="f" id="fDiet"><label for="diet">Dietary needs</label><input id="diet" type="text" placeholder="Anything the kitchen should know"></div>
+    <div class="f"><label for="note">A note for us</label><textarea id="note"></textarea></div>
+    <button class="btn" type="submit">Send reply</button>
+  </form>
+  <div class="thanks" id="thanks"><span class="script">We can't wait</span><p>Thank you. Your reply is in, and we'll be in touch with booking details for the estate.</p></div>
+</section>
+
+<footer class="foot">
+  <span class="script">Ashley &amp; Charles</span>
+  <p>AYANA Bali, Jimbaran &nbsp;·&nbsp; 28 August 2027</p>
+</footer>
+
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id)};
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var params=new URLSearchParams(location.search);
+  var to=(params.get('to')||'').replace(/\s+/g,' ').trim().slice(0,60);
+  if(to) $('envName').textContent='For '+to;
+
+  /* Envelope: tap the seal, the flap lifts, the envelope drops away. */
+  var env=$('env');
+  if(reduce){ env.parentNode.removeChild(env); }
+  else{
+    document.body.style.overflow='hidden';
+    var opened=false;
+    function open(){
+      if(opened) return; opened=true;
+      env.classList.add('is-open');
+      setTimeout(function(){ env.classList.add('is-gone'); document.body.style.overflow=''; },1500);
+      setTimeout(function(){ if(env.parentNode) env.parentNode.removeChild(env); },2200);
+    }
+    $('envBtn').addEventListener('click',open);
+    $('skip').addEventListener('click',function(){ open(); });
+    document.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ if(document.activeElement===$('envBtn')) open(); } });
+  }
+
+  /* Scratch cards */
+  var cards=Array.prototype.slice.call(document.querySelectorAll('.card'));
+  function setupCard(card){
+    var cv=card.querySelector('canvas'), ctx=cv.getContext('2d');
+    var dpr=Math.min(2,window.devicePixelRatio||1);
+    function paint(){
+      var r=card.getBoundingClientRect();
+      cv.width=Math.round(r.width*dpr); cv.height=Math.round(r.height*dpr);
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+      var g=ctx.createLinearGradient(0,0,r.width,r.height);
+      g.addColorStop(0,'#B3CDDF'); g.addColorStop(.5,'#D3E3EE'); g.addColorStop(1,'#A9C6DA');
+      ctx.fillStyle=g; ctx.fillRect(0,0,r.width,r.height);
+      /* fine speckle */
+      ctx.fillStyle='rgba(255,255,255,.35)';
+      for(var i=0;i<260;i++){ ctx.fillRect(Math.random()*r.width,Math.random()*r.height,1,1); }
+      ctx.fillStyle='rgba(35,58,85,.55)';
+      ctx.font='500 10px Jost, Futura, sans-serif'; ctx.textAlign='center';
+      ctx.fillText('SCRATCH',r.width/2,r.height/2+4);
+    }
+    paint();
+    var scratching=false, strokes=0;
+    function pos(e){ var r=cv.getBoundingClientRect(); return {x:e.clientX-r.left,y:e.clientY-r.top}; }
+    function erase(p){
+      ctx.globalCompositeOperation='destination-out'; ctx.fillStyle='#000';
+      ctx.beginPath(); ctx.arc(p.x,p.y,16,0,Math.PI*2); ctx.fill();
+      ctx.globalCompositeOperation='source-over';
+      if(++strokes%8===0) check();
+    }
+    function check(){
+      var w=cv.width,h=cv.height, d=ctx.getImageData(0,0,w,h).data, clear=0, total=0;
+      for(var i=3;i<d.length;i+=4*16){ total++; if(d[i]<40) clear++; }
+      if(clear/total>.4) reveal(card);
+    }
+    cv.addEventListener('pointerdown',function(e){ scratching=true; cv.setPointerCapture(e.pointerId); erase(pos(e)); });
+    cv.addEventListener('pointermove',function(e){ if(scratching) erase(pos(e)); });
+    cv.addEventListener('pointerup',function(){ scratching=false; check(); });
+    cv.addEventListener('pointercancel',function(){ scratching=false; });
+    window.addEventListener('resize',function(){ if(!card.classList.contains('is-revealed')) paint(); });
+  }
+  function reveal(card){ card.classList.add('is-revealed'); }
+  if(reduce){ cards.forEach(reveal); $('revealAll').hidden=true; }
+  else{ cards.forEach(setupCard); $('revealAll').addEventListener('click',function(){ cards.forEach(reveal); this.hidden=true; }); }
+
+  /* Letter slides out of its envelope */
+  var lenv=$('lenv');
+  function pull(){ lenv.classList.add('is-out'); lenv.removeAttribute('role'); lenv.removeAttribute('tabindex'); }
+  lenv.addEventListener('click',pull);
+  lenv.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); pull(); } });
+  if(reduce) pull();
+
+  /* RSVP preview */
+  var form=$('form');
+  form.querySelectorAll('input[name="att"]').forEach(function(r){ r.addEventListener('change',function(){ $('fDiet').hidden=this.value==='no'; }); });
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    var ok=$('name').value.trim() && /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test($('email').value.trim()) && form.querySelector('input[name="att"]:checked');
+    if(!ok){ ( !$('name').value.trim() ? $('name') : $('email') ).focus(); return; }
+    form.hidden=true; $('thanks').classList.add('is-visible');
+    console.log('[preview] RSVP', { name:$('name').value, email:$('email').value, attending:form.querySelector('input[name="att"]:checked').value });
+  });
+})();
+</script>
+
+</body>
+</html>
