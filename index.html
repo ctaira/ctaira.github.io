@@ -989,12 +989,14 @@ hr.rule{border:0;border-top:1px solid rgba(36,39,34,.2);margin:2.5em 0}
       <h3>We can't wait.</h3>
       <p>Thank you. Your reply is in, and we'll be in touch with booking details for the estate and a few notes on getting to Bali.</p>
       <p>Start thinking about linen.</p>
+      <p class="muted confirm-mail" hidden>A copy of your reply is on its way to your inbox.</p>
       <span class="mono">See you on the cliff · 28 Aug 2027</span>
     </div>
     <div class="confirm" id="confirmNo">
       <h3>We'll miss you.</h3>
       <p>Thank you for letting us know. We understand completely, and we'll raise a glass to you from the cliff.</p>
-      <p>If anything changes before March, just write to us.</p>
+      <p>If anything changes before March, just open your invitation again and send a new reply.</p>
+      <p class="muted confirm-mail" hidden>A copy of your reply is on its way to your inbox.</p>
       <span class="mono">With love · Ashley &amp; Charles</span>
     </div>
   </div>
@@ -1433,10 +1435,11 @@ var RSVP_ENDPOINT = "";
     return ok;
   }
 
-  function showConfirmation(declined) {
+  function showConfirmation(declined, emailed) {
     form.hidden = true;
     $('deadline').hidden = true;
     var el = $(declined ? 'confirmNo' : 'confirmYes');
+    el.querySelector('.confirm-mail').hidden = !emailed;
     el.classList.add('is-visible');
     el.setAttribute('tabindex', '-1');
     el.focus({ preventScroll: true });
@@ -1484,7 +1487,7 @@ var RSVP_ENDPOINT = "";
     fetch(RSVP_ENDPOINT, { method: 'POST', body: body })
       .then(function (r) { return r.json(); })
       .then(function (d) {
-        if (d && d.ok) showConfirmation(declined);
+        if (d && d.ok) showConfirmation(declined, !!d.emailed);
         else if (d && d.error === 'not_found') failed(d, "We couldn't match your invitation. Please reply from the link we sent you, or message us directly.");
         else failed(d);
       })

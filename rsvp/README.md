@@ -11,12 +11,13 @@ nobody can reply for more seats than they were given.
 Create a Google Sheet. Rename the first tab **Guests** and give it these
 headers in row 1:
 
-| A `code` | B `names` | C `seats` | D `email` | E `link` |
-|---|---|---|---|---|
+| A `code` | B `names` | C `seats` | D `email` | E `link` | F `sent` |
+|---|---|---|---|---|---|
 
 Add one row per household. Fill in **names** (what the passport will say, e.g.
-`Sam & Priya Nair`) and **seats** (1 to 6). Leave **code** and **link** empty;
-the script fills them in. **email** is optional and prefills the form.
+`Sam & Priya Nair`) and **seats** (1 to 6). Put every adult's address in
+**email**, separated by commas, so each person in the household gets the
+same link. Leave **code**, **link** and **sent** empty; the script fills them.
 
 A **Responses** tab is created automatically the first time the script runs.
 
@@ -24,7 +25,9 @@ A **Responses** tab is created automatically the first time the script runs.
 
 1. In the sheet, open **Extensions → Apps Script**.
 2. Delete the placeholder and paste the contents of `Code.gs`.
-3. Set `SITE_URL` at the top to your domain, with a trailing slash.
+3. Set `SITE_URL` at the top to your domain, with a trailing slash. The
+   other settings there (sender name, reply-to, subjects, deadline) are
+   worth a glance too.
 4. Save, then **Deploy → New deployment**. Type: **Web app**. Execute as
    **Me**. Who has access: **Anyone**. Click Deploy and authorise it.
 5. Copy the **Web app URL** (it ends in `/exec`).
@@ -41,7 +44,31 @@ like `https://yourdomain.com/?i=k7m3qx`. Send each household its own link.
 Rows you add later get codes the next time you run the menu item. Existing
 codes are never changed. To disable a link, delete its code.
 
-## 4. The site
+## 4. Sending the invitations
+
+Emails go out from the Google account that owns the script, under the sender
+name set in `FROM_NAME`.
+
+1. **Invitations → Send a test invitation to me** emails you the invitation
+   for the first row, so you can see it before anyone else does.
+2. **Invitations → Send invitations to unsent rows** emails every household
+   that has a code and an email but nothing in **sent**, then writes the
+   send time into **sent**. It asks before sending and tells you how many
+   emails your account can still send today.
+
+A personal Gmail account can send about 100 emails a day. If the list is
+longer, run the same menu item again the next day; rows already sent are
+skipped. Google Workspace accounts have a much higher limit. To resend to
+one household, clear its **sent** cell and run it again.
+
+## 5. Confirmation emails
+
+Every reply triggers a confirmation to the address the guest entered, with
+what they said and their link, and a note that sending a new reply before
+the deadline replaces the old one. If the email can't be sent, the reply is
+still recorded; the guest just doesn't get the receipt.
+
+## 6. The site
 
 In `index.html`, near the top of the script, set:
 
