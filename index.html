@@ -245,6 +245,19 @@ button,input,select,textarea{font:inherit;color:inherit}
 .seal .laurel.lo .l-leaf{fill:rgba(40,4,10,.58)}
 .seal .laurel.hi .l-leaf{fill:rgba(255,205,205,.3)}
 
+/* Cat paw: reaches in from the lower right and breaks the seal. */
+.paw{
+  z-index:7;width:calc(var(--ew) * .34);height:calc(var(--ew) * .34 * 4.4);
+  margin:0;transform-origin:50% 6.8%;will-change:transform;pointer-events:none;
+  visibility:hidden;
+}
+.paw svg{display:block;width:100%;height:100%;overflow:visible}
+.paw .fur{fill:#5A5B55}
+.paw .fur-dark{fill:#474842}
+.paw .toe{fill:#63645E;stroke:#3F403B;stroke-width:1.2}
+.paw .claw{fill:#F2EDE3;stroke:#3F403B;stroke-width:.8}
+.paw .stripe{fill:#3F403B;opacity:.55}
+
 /* Boarding pass ------------------------------------------------------------ */
 .bpass{
   z-index:3;width:calc(var(--ew) * .82);height:calc(var(--ew) * .82 * .40);
@@ -595,6 +608,33 @@ hr.rule{border:0;border-top:1px solid rgba(36,39,34,.2);margin:2.5em 0}
             </svg>
           </div>
         </div>
+      </div>
+
+      <div class="paw" id="paw" aria-hidden="true">
+        <svg viewBox="-40 -40 80 352">
+          <!-- forearm, long enough to leave the screen -->
+          <rect class="fur" x="-21" y="6" width="42" height="330" rx="21"/>
+          <path class="stripe" d="M-20 122q20 -7 40 0v9q-20 -7 -40 0z"/>
+          <path class="stripe" d="M-20 148q20 -7 40 0v9q-20 -7 -40 0z"/>
+          <path class="stripe" d="M-20 44q20 -7 40 0v9q-20 -7 -40 0z"/>
+          <path class="stripe" d="M-20 70q20 -7 40 0v9q-20 -7 -40 0z"/>
+          <path class="stripe" d="M-20 96q20 -7 40 0v9q-20 -7 -40 0z"/>
+          <!-- paw -->
+          <ellipse class="fur-dark" cx="0" cy="8" rx="26" ry="22"/>
+          <ellipse class="fur" cx="0" cy="4" rx="25" ry="21"/>
+          <!-- toes -->
+          <circle class="toe" cx="-18" cy="-8" r="8.5"/>
+          <circle class="toe" cx="-6.5" cy="-15" r="8.5"/>
+          <circle class="toe" cx="6.5" cy="-15" r="8.5"/>
+          <circle class="toe" cx="18" cy="-8" r="8.5"/>
+          <!-- claws: scaled out from the toe tips at the snap -->
+          <g class="claws" id="pawClaws">
+            <path class="claw" transform="translate(-20 -16)" d="M-2.5 0C-2 -5 -1 -9 1.5 -12C1.5 -8 2.2 -4 2.5 0Z"/>
+            <path class="claw" transform="translate(-6.5 -23)" d="M-2.5 0C-2 -5 -1 -9 0.5 -12C1.5 -8 2.2 -4 2.5 0Z"/>
+            <path class="claw" transform="translate(6.5 -23)" d="M-2.5 0C-2 -5 -1 -9 -0.5 -12C1.5 -8 2.2 -4 2.5 0Z"/>
+            <path class="claw" transform="translate(20 -16)" d="M-2.5 0C-2 -5 -1 -9 -1.5 -12C1.5 -8 2.2 -4 2.5 0Z"/>
+          </g>
+        </svg>
       </div>
 
       <button class="open-btn" id="openBtn" type="button" aria-label="Open the invitation"></button>
@@ -1079,6 +1119,7 @@ var RSVP_ENDPOINT = "";
   var bpass = $('bpass'), passport = $('passport'), cover = $('ppCover');
   var arc = $('arc'), arcMask = $('arcMask'), plane = $('plane'), stamp = $('stamp');
   var openBtn = $('openBtn'), flock = $('flock'), more = $('more'), sealArt = $('sealArt');
+  var paw = $('paw'), pawClaws = $('pawClaws');
   var envParts = [envBack, envPocket, envFlap];
 
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1101,6 +1142,7 @@ var RSVP_ENDPOINT = "";
     bpass.parentNode.removeChild(bpass);
     hint.parentNode.removeChild(hint);
     openBtn.parentNode.removeChild(openBtn);
+    paw.parentNode.removeChild(paw);
     flock.parentNode.removeChild(flock);   /* the ocean stays, but its CSS animation is off */
     stage.classList.add('is-static');
     passport.classList.add('is-out');
@@ -1209,8 +1251,26 @@ var RSVP_ENDPOINT = "";
       openBtn.classList.toggle('is-hidden', p > .04);
 
 
-      /* -- 1. Wax seal cracks: scales up, rotates, fades ---------- 0.04–0.14 */
-      var s1 = seg(p, .04, .14), snap = Math.min(1, s1 * 4);   /* the snap is quick */
+      /* -- 0. A cat paw reaches in, presses the seal, withdraws --- 0.00–0.16 */
+      var reach = ease(seg(p, .00, .05)) * (1 - ease(seg(p, .08, .16)));
+      var press = seg(p, .05, .062) * (1 - seg(p, .07, .085));            /* a short push */
+      if (reach > 0.001) {
+        /* the seal sits at 55% down the envelope; the paw's pad lands just below and right of it */
+        var sealX = 0, sealY = envY + eh * 0.05;
+        /* translate moves the element's corner; the pad centre sits at (50%, 12%) of the box */
+        var padDX = paw.offsetWidth * 0.5, padDY = paw.offsetHeight * 0.068;
+        var fromX = vw * 0.55, fromY = vh * 0.6;
+        var toX = sealX + 12 - padDX, toY = sealY + 8 - padDY;
+        var px = fromX + (toX - fromX) * reach, py = fromY + (toY - fromY) * reach;
+        paw.style.visibility = 'visible';
+        paw.style.transform = 'translate(' + px.toFixed(1) + 'px,' + py.toFixed(1) + 'px) rotate(' + (-38 + press * 6) + 'deg) scale(' + (1 - press * .06) + ')';
+        pawClaws.setAttribute('transform', 'scale(1 ' + (0.05 + 0.95 * press).toFixed(3) + ')');
+      } else {
+        paw.style.visibility = 'hidden';
+      }
+
+      /* -- 1. Wax seal cracks: scales up, rotates, fades ---------- 0.05–0.14 */
+      var s1 = seg(p, .05, .14), snap = Math.min(1, s1 * 4);   /* the snap is quick */
       seal.classList.toggle('is-broken', s1 > 0);
       residue.classList.toggle('is-visible', s1 > 0);
       /* the halves part by a hair at the crack; the flap carries the top half from here */
