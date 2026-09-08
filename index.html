@@ -180,19 +180,6 @@ button,input,select,textarea{font:inherit;color:inherit}
   -webkit-clip-path:polygon(-12% 53%,23% 48%,43% 54%,61% 46%,79% 51%,112% 45%,112% 112%,-12% 112%);
 }
 .seal-residue.is-visible{visibility:visible}
-/* Cat paw: reaches in from the lower right and breaks the seal. */
-.paw{
-  z-index:7;width:calc(var(--ew) * .5);height:calc(var(--ew) * .5 * 4.4);
-  margin:0;transform-origin:50% 6.8%;will-change:transform;pointer-events:none;
-  visibility:hidden;
-}
-.paw svg{display:block;width:100%;height:100%;overflow:visible}
-.paw .fur{fill:#5A5B55}
-.paw .fur-dark{fill:#474842}
-.paw .toe{fill:#63645E;stroke:#3F403B;stroke-width:1.2}
-.paw .claw{fill:#F2EDE3;stroke:#3F403B;stroke-width:.8}
-.paw .stripe{fill:#3F403B;opacity:.55}
-
 /* Boarding pass ------------------------------------------------------------ */
 .bpass{
   z-index:3;width:calc(var(--ew) * .92);height:calc(var(--ew) * .92 * .446);
@@ -611,33 +598,6 @@ hr.rule{border:0;border-top:1px solid rgba(36,39,34,.2);margin:2.5em 0}
           <div class="seal-art" id="sealArt">
           </div>
         </div>
-      </div>
-
-      <div class="paw" id="paw" aria-hidden="true">
-        <svg viewBox="-40 -40 80 352">
-          <!-- forearm, long enough to leave the screen -->
-          <rect class="fur" x="-21" y="6" width="42" height="330" rx="21"/>
-          <path class="stripe" d="M-20 122q20 -7 40 0v9q-20 -7 -40 0z"/>
-          <path class="stripe" d="M-20 148q20 -7 40 0v9q-20 -7 -40 0z"/>
-          <path class="stripe" d="M-20 44q20 -7 40 0v9q-20 -7 -40 0z"/>
-          <path class="stripe" d="M-20 70q20 -7 40 0v9q-20 -7 -40 0z"/>
-          <path class="stripe" d="M-20 96q20 -7 40 0v9q-20 -7 -40 0z"/>
-          <!-- paw -->
-          <ellipse class="fur-dark" cx="0" cy="8" rx="26" ry="22"/>
-          <ellipse class="fur" cx="0" cy="4" rx="25" ry="21"/>
-          <!-- toes -->
-          <circle class="toe" cx="-18" cy="-8" r="8.5"/>
-          <circle class="toe" cx="-6.5" cy="-15" r="8.5"/>
-          <circle class="toe" cx="6.5" cy="-15" r="8.5"/>
-          <circle class="toe" cx="18" cy="-8" r="8.5"/>
-          <!-- claws: scaled out from the toe tips at the snap -->
-          <g class="claws" id="pawClaws">
-            <path class="claw" transform="translate(-20 -16)" d="M-2.5 0C-2 -5 -1 -9 1.5 -12C1.5 -8 2.2 -4 2.5 0Z"/>
-            <path class="claw" transform="translate(-6.5 -23)" d="M-2.5 0C-2 -5 -1 -9 0.5 -12C1.5 -8 2.2 -4 2.5 0Z"/>
-            <path class="claw" transform="translate(6.5 -23)" d="M-2.5 0C-2 -5 -1 -9 -0.5 -12C1.5 -8 2.2 -4 2.5 0Z"/>
-            <path class="claw" transform="translate(20 -16)" d="M-2.5 0C-2 -5 -1 -9 -1.5 -12C1.5 -8 2.2 -4 2.5 0Z"/>
-          </g>
-        </svg>
       </div>
 
       <button class="open-btn" id="openBtn" type="button" aria-label="Open the invitation"></button>
@@ -1112,7 +1072,6 @@ var RSVP_ENDPOINT = "";
   var bpass = $('bpass'), passport = $('passport'), cover = $('ppCover');
   var arc = $('arc'), arcMask = $('arcMask'), plane = $('plane'), stamp = $('stamp');
   var openBtn = $('openBtn'), flock = $('flock'), more = $('more'), sealArt = $('sealArt'), capTop = $('capTop');
-  var paw = $('paw'), pawClaws = $('pawClaws');
   /* ---- The painted plate is stacked in depth: the base painting, then the cliff, the gate,
      the ledge and the foreground flowers cut from it. Each layer drifts by its own factor with
      the scroll and with the device's tilt or the pointer, so the scene pops out around the
@@ -1191,7 +1150,6 @@ var RSVP_ENDPOINT = "";
     hint.parentNode.removeChild(hint);
     capTop.parentNode.removeChild(capTop);
     openBtn.parentNode.removeChild(openBtn);
-    paw.parentNode.removeChild(paw);
     flock.parentNode.removeChild(flock);   /* the ocean stays, but its CSS animation is off */
     stage.classList.add('is-static');
     passport.classList.add('is-out');
@@ -1297,63 +1255,47 @@ var RSVP_ENDPOINT = "";
 
       /* -- Hint fades out immediately ------------------------------ 0.00–0.05 */
       hint.style.opacity = 1 - seg(p, 0, .05);
-      capTop.style.opacity = 1 - seg(p, .38, .50);   /* the caption clears before the passport rises */
+      capTop.style.opacity = 1 - seg(p, .50, .62);   /* the caption clears before the passport rises */
       openBtn.classList.toggle('is-hidden', p > .04);
 
 
-      /* -- 0. A cat paw reaches in, presses the seal, withdraws --- 0.00–0.16 */
-      var reach = ease(seg(p, .00, .05)) * (1 - ease(seg(p, .08, .16)));
-      var press = seg(p, .05, .062) * (1 - seg(p, .07, .085));            /* a short push */
-      if (reach > 0.001) {
-        /* the seal sits at 55% down the envelope; the paw's pad lands just below and right of it */
-        var sealX = -envBack.offsetWidth * 0.02, sealY = envY + eh * 0.05;
-        /* translate moves the element's corner; the pad centre sits at (50%, 12%) of the box */
-        var padDX = paw.offsetWidth * 0.5, padDY = paw.offsetHeight * 0.068;
-        var fromX = vw * 0.55, fromY = vh * 0.6;
-        var toX = sealX + 16 - padDX, toY = sealY + 10 - padDY;
-        var px = fromX + (toX - fromX) * reach, py = fromY + (toY - fromY) * reach;
-        paw.style.visibility = 'visible';
-        paw.style.transform = 'translate(' + px.toFixed(1) + 'px,' + py.toFixed(1) + 'px) rotate(' + (-38 + press * 6) + 'deg) scale(' + (1 - press * .06) + ')';
-        pawClaws.setAttribute('transform', 'scale(1 ' + (0.05 + 0.95 * press).toFixed(3) + ')');
-      } else {
-        paw.style.visibility = 'hidden';
-      }
-
-      /* -- 1. Wax seal cracks: scales up, rotates, fades ---------- 0.05–0.14 */
-      var s1 = seg(p, .05, .14), snap = Math.min(1, s1 * 4);   /* the snap is quick */
+      /* -- 1. Wax seal cracks: scales up, rotates, fades ---------- 0.03–0.12 */
+      var s1 = seg(p, .03, .12), snap = Math.min(1, s1 * 4);   /* the snap is quick */
       seal.classList.toggle('is-broken', s1 > 0);
       residue.classList.toggle('is-visible', s1 > 0);
       /* the halves part by a hair at the crack; the flap carries the top half from here */
       seal.style.transform = 'translateY(' + (-2.5 * snap) + 'px) rotate(' + (-2 * snap) + 'deg)';
       residue.style.transform = 'translateY(' + (1.5 * snap) + 'px)';
 
-      /* -- 2. Flap opens, rotateX 0 → -181deg -------------------- 0.10–0.26 */
-      var s2 = ease(seg(p, .10, .26));
+      /* -- 2. Flap opens, rotateX 0 → -181deg -------------------- 0.08–0.24 */
+      var s2 = ease(seg(p, .08, .24));
       envFlap.style.transform = 'translateY(' + envY + 'px) rotateX(' + (-181 * s2) + 'deg)';
       /* z-index flips once the flap passes 90°, or it renders over what it just released */
       envFlap.style.zIndex = s2 > .5 ? 1 : 6;
 
-      /* -- 3. Boarding pass rises out of the envelope ------------ 0.22–0.42 */
-      var s3 = ease(seg(p, .22, .42));
-      /* -- 4. Boarding pass drifts up and fades ------------------- 0.42–0.54 */
-      var s4 = seg(p, .42, .54);
-      var bpY = envY + eh * 0.10 - s3 * eh * 0.95 - s4 * vh * 0.28;
+      /* -- 3. Boarding pass rises out of the envelope ------------ 0.20–0.40 */
+      var s3 = ease(seg(p, .20, .40));
+      /* then it holds in view, 0.40–0.50, so it can be read */
+      /* -- 4. Boarding pass drifts up and fades ------------------- 0.50–0.72 */
+      var s4 = ease(seg(p, .50, .72));
+      var bpFade = 1 - seg(p, .56, .72);          /* the fade starts after the drift, and lasts */
+      var bpY = envY + eh * 0.10 - s3 * eh * 0.95 - s4 * vh * 0.34;
       bpass.style.transform = 'translateY(' + bpY + 'px) rotate(' + (-2 + s4 * -4) + 'deg)';
-      bpass.style.opacity = 1 - s4;
-      bpass.style.visibility = (s4 >= 1 || p < .15) ? 'hidden' : 'visible';
+      bpass.style.opacity = bpFade;
+      bpass.style.visibility = (bpFade <= 0 || p < .14) ? 'hidden' : 'visible';
 
-      /* -- 5. Passport rises out, scale .46 → 1 ------------------ 0.38–0.60 */
-      var s5 = ease(seg(p, .38, .60));
+      /* -- 5. Passport rises out, scale .46 → 1 ------------------ 0.50–0.72 */
+      var s5 = ease(seg(p, .50, .72));
       var ppY = (envY + eh * 0.03) * (1 - s5);
       var ppS = .46 + .54 * s5;
       /* the address on the pocket fades early so it never overprints the cover */
-      for (var t = 0; t < pocketText.length; t++) pocketText[t].style.opacity = 1 - seg(p, .40, .50);
+      for (var t = 0; t < pocketText.length; t++) pocketText[t].style.opacity = 1 - seg(p, .52, .62);
       passport.style.transform = 'translateY(' + ppY + 'px) scale(' + ppS + ')';
       /* pocket stays above the passport until it is clear of the envelope */
-      passport.classList.toggle('is-out', p > .56);
+      passport.classList.toggle('is-out', p > .68);
 
-      /* -- 6. Envelope fades and sinks ---------------------------- 0.50–0.62 */
-      var s6 = seg(p, .50, .62);
+      /* -- 6. Envelope fades and sinks ---------------------------- 0.62–0.74 */
+      var s6 = seg(p, .62, .74);
       var sinkY = envY + s6 * vh * 0.22;
       envBack.style.transform = 'translateY(' + sinkY + 'px)';
       envPocket.style.transform = 'translateY(' + sinkY + 'px)';
@@ -1362,24 +1304,24 @@ var RSVP_ENDPOINT = "";
         envParts[i].style.opacity = 1 - s6;
         envParts[i].style.visibility = s6 >= 1 ? 'hidden' : 'visible';
       }
-      bpass.style.opacity = Math.min(1 - s4, 1 - s6);
+      bpass.style.opacity = Math.min(bpFade, 1 - s6);
 
-      /* -- 7. Cover swings open, rotateY 0 → -174deg -------------- 0.60–0.80 */
-      var s7 = ease(seg(p, .60, .80));
+      /* -- 7. Cover swings open, rotateY 0 → -174deg -------------- 0.72–0.88 */
+      var s7 = ease(seg(p, .72, .88));
       cover.style.transform = 'rotateY(' + (-174 * s7) + 'deg)';
 
-      /* -- 8. Flight path draws, plane rides it, stamp lands ------ 0.78–1.00 */
-      var s8 = seg(p, .78, .95);
+      /* -- 8. Flight path draws, plane rides it, stamp lands ------ 0.86–1.00 */
+      var s8 = seg(p, .86, .97);
       arcMask.style.strokeDashoffset = arcLen * (1 - s8);
-      plane.style.opacity = p > .78 ? 1 : 0;
+      plane.style.opacity = p > .86 ? 1 : 0;
       placePlane(s8);
-      var s8b = seg(p, .90, 1);
+      var s8b = seg(p, .94, 1);
       stamp.style.opacity = s8b;
       stamp.style.transform = 'rotate(-12deg) scale(' + (1.9 - .9 * ease(s8b)) + ')';
       stamp.style.visibility = s8b > 0 ? 'visible' : 'hidden';
 
       /* -- "More below" link fades in as the stamp lands ---------- 0.96–1.00 */
-      var s9 = seg(p, .96, 1);
+      var s9 = seg(p, .97, 1);
       more.style.opacity = s9;
       more.style.visibility = s9 > 0 ? 'visible' : 'hidden';
 
@@ -1421,7 +1363,7 @@ var RSVP_ENDPOINT = "";
       var start = window.pageYOffset;
       /* Run past the end of the stage so the letter's top edge shows below the passport. */
       var end = stage.offsetTop + stage.offsetHeight - vh + vh * 0.16;
-      var dur = 9500, t0 = performance.now();
+      var dur = 11000, t0 = performance.now();
       document.documentElement.style.scrollBehavior = 'auto';
       function step(now) {
         var t = clamp((now - t0) / dur, 0, 1);
