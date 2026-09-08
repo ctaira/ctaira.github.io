@@ -123,7 +123,9 @@ button,input,select,textarea{font:inherit;color:inherit}
    if it is missing or fails, the drawn scene stays. */
 .plate{left:0;top:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:0;transition:opacity .6s ease;overflow:hidden}
 .plate.is-ready{opacity:1}
-.plate img{position:absolute;left:-3%;top:-3%;width:106%;height:106%;object-fit:cover;object-position:50% 46%;backface-visibility:hidden}
+.plate img{position:absolute;left:-3%;top:-3%;width:106%;height:106%;max-width:none;max-height:none;object-fit:cover;object-position:50% 46%}
+/* the cut layers are cropped to their content and placed over the painting by script, so the bitmaps that move stay small */
+.plate img.lyr{left:0;top:0;width:auto;height:auto;object-fit:fill}
 .vista .v-wash{animation:vwash 11s ease-in-out infinite alternate}
 @keyframes vwash{from{transform:translateX(-7px)}to{transform:translateX(7px)}}
 @media (prefers-reduced-motion:reduce){.vista .v-wash{animation:none}}
@@ -578,11 +580,11 @@ hr.rule{border:0;border-top:1px solid rgba(36,39,34,.2);margin:2.5em 0}
 
       <div class="plate" id="plate" aria-hidden="true">
         <img id="plateBase" src="assets/bali-cliff.jpg" alt="" decoding="async">
-        <img class="lyr" data-k="0.35" src="assets/l2-cliff.webp" alt="" decoding="async">
-        <img class="lyr" data-k="0.55" src="assets/l6-gate.webp" alt="" decoding="async">
-        <img class="lyr" data-k="0.7" src="assets/l7-ledge.webp" alt="" decoding="async">
-        <img class="lyr" data-k="1" src="assets/l5-flowers-bottom.webp" alt="" decoding="async">
-        <img class="lyr" data-k="1.15" src="assets/l4-flowers-top.webp" alt="" decoding="async">
+        <img class="lyr" data-k="0.35" data-box="512,676,429,731" src="assets/l2-cliff.webp" alt="" decoding="async">
+        <img class="lyr" data-k="0.55" data-box="0,432,368,756" src="assets/l6-gate.webp" alt="" decoding="async">
+        <img class="lyr" data-k="0.7" data-box="0,1291,941,381" src="assets/l7-ledge.webp" alt="" decoding="async">
+        <img class="lyr" data-k="1" data-box="0,1111,709,561" src="assets/l5-flowers-bottom.webp" alt="" decoding="async">
+        <img class="lyr" data-k="1.15" data-box="0,0,629,668" src="assets/l4-flowers-top.webp" alt="" decoding="async">
       </div>
 
       <svg class="flock" id="flock" aria-hidden="true"></svg>
@@ -1117,28 +1119,49 @@ var RSVP_ENDPOINT = "";
      envelope. If the base fails to load the drawn scene stays. ---- */
   var plate = $('plate'), vista = $('vista'), plateBase = $('plateBase');
   var layers = Array.prototype.slice.call(plate.querySelectorAll('.lyr'));
-  function plateReady() { plate.classList.add('is-ready'); vista.style.display = 'none'; }
+  function plateReady() {
+    plate.classList.add('is-ready');
+    var hideVista = function () { vista.style.display = 'none'; };
+    plate.addEventListener('transitionend', hideVista, { once: true });
+    setTimeout(hideVista, 900);
+  }
   /* fade in only once every layer is decoded, so no layer ever shows before the painting under it */
   var decodes = [plateBase].concat(layers).map(function (img) { return (img.decode ? img.decode() : Promise.resolve()).catch(function () {}); });
-  Promise.all(decodes).then(function () { if (plateBase.naturalWidth > 0) plateReady(); });
+  Promise.all(decodes).then(function () { if (plateBase.naturalWidth > 0) { fitPlate(); layoutPlate(); plateReady(); } });
+  window.addEventListener('resize', function () { fitPlate(); layoutPlate(); }, { passive: true });
   plateBase.addEventListener('error', function () { plate.parentNode.removeChild(plate); });
   layers.forEach(function (l) { l.addEventListener('error', function () { l.parentNode.removeChild(l); }); });
   var tiltX = 0, tiltY = 0, scrollDepth = 0, reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var SRC_W = 941, SRC_H = 1672;   /* the painting's pixel size; every layer box is in these units */
+  /* movement lands on whole device pixels, whatever the display scaling, so bitmaps are never resampled */
+  function snap(v) { var d = window.devicePixelRatio || 1; return Math.round(v * d) / d; }
+  /* Place each cropped layer exactly where its pixels sit in the cover-fitted base painting. */
+  function fitPlate() {
+    var W = plate.clientWidth, H = plate.clientHeight;
+    if (!W || !H) return;
+    var bw = W * 1.06, bh = H * 1.06, bx = -W * 0.03, by = -H * 0.03;   /* the base image box (106%, offset -3%) */
+    var s = Math.max(bw / SRC_W, bh / SRC_H);
+    var ox = bx + (bw - SRC_W * s) * 0.5, oy = by + (bh - SRC_H * s) * 0.46;   /* object-position 50% 46% */
+    for (var i = 0; i < layers.length; i++) {
+      var b = layers[i].getAttribute('data-box').split(',').map(Number);
+      layers[i].style.left = (ox + b[0] * s).toFixed(2) + 'px';
+      layers[i].style.top = (oy + b[1] * s).toFixed(2) + 'px';
+      layers[i].style.width = (b[2] * s).toFixed(2) + 'px';
+      layers[i].style.height = (b[3] * s).toFixed(2) + 'px';
+    }
+  }
   function layoutPlate() {
     if (reduceMotion) return;
     for (var i = 0; i < layers.length; i++) {
       var k = parseFloat(layers[i].getAttribute('data-k')) || 0;
       /* whole pixels and no scaling: a bitmap that is resampled every frame goes soft */
-      var dx = Math.round(tiltX * 12 * k), dy = Math.round(tiltY * 9 * k + scrollDepth * 22 * k);
+      var dx = snap(tiltX * 10 * k), dy = snap(tiltY * 8 * k + scrollDepth * 22 * k);
       layers[i].style.transform = 'translate(' + dx + 'px,' + dy + 'px)';
     }
-    plateBase.style.transform = 'translate(' + Math.round(-tiltX * 4) + 'px,' + Math.round(-tiltY * 3 - scrollDepth * 8) + 'px)';
+    plateBase.style.transform = 'translate(' + snap(-tiltX * 3) + 'px,' + snap(-tiltY * 2 - scrollDepth * 8) + 'px)';
   }
   var plateTick = false;
   function queuePlate() { if (plateTick) return; plateTick = true; requestAnimationFrame(function () { plateTick = false; layoutPlate(); }); }
-  if (window.matchMedia('(pointer:fine)').matches) {
-    window.addEventListener('pointermove', function (e) { tiltX = (e.clientX / window.innerWidth - .5) * 2; tiltY = (e.clientY / window.innerHeight - .5) * 2; queuePlate(); }, { passive: true });
-  }
   if ('DeviceOrientationEvent' in window) {
     window.addEventListener('deviceorientation', function (e) {
       if (e.gamma == null || e.beta == null) return;
