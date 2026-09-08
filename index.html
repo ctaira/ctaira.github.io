@@ -304,6 +304,11 @@ button,input,select,textarea{font:inherit;color:inherit}
 .pg .salut{font-family:var(--serif);font-size:1.55em;margin-bottom:.6em}
 .pg .sig{font-family:var(--serif);font-style:italic;font-size:1.5em;line-height:1.2;margin-top:.9em}
 .pg .sig small{display:block;font-family:var(--mono);font-style:normal;font-size:.48em;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);margin-top:.9em}
+.pg .script-line{font-family:var(--script);font-size:2em;line-height:1.1;color:var(--palm);margin:-.15em 0 .35em}
+.pg .sub{font-family:var(--mono);font-size:.72em;letter-spacing:.2em;text-transform:uppercase;color:var(--husk);margin:0 0 .6em}
+/* a full-bleed illustration across the foot of a page */
+.pg .band{display:block;width:calc(100% + var(--pw) * .155);max-width:none;height:auto;margin:.5em calc(var(--pw) * -.07) calc(var(--pw) * -.055) calc(var(--pw) * -.085)}
+.pg .foot + .band{margin-top:.6em}
 .pg .note{border-left:2px solid var(--gold);padding-left:.8em;color:var(--ink-soft);font-size:.92em}
 .pg .foot{margin-top:auto;padding-top:.6em;border-top:1px solid rgba(36,39,34,.18);font-family:var(--mono);font-size:.62em;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft)}
 .muted{color:var(--ink-soft)}
@@ -313,10 +318,6 @@ button,input,select,textarea{font:inherit;color:inherit}
 .pg .ev time{font-family:var(--mono);font-size:.76em;letter-spacing:.06em;color:var(--ink-soft);padding-top:.25em}
 .pg .ev b{font-weight:500;display:block}
 .pg .ev p{margin:.05em 0 0;font-size:.9em;color:var(--ink-soft)}
-/* swatches */
-.pg .sw{display:grid;grid-template-columns:repeat(4,1fr);gap:.5em .3em;margin:.4em 0 .6em;padding:0;list-style:none;font-family:var(--mono);font-size:.6em;letter-spacing:.06em;text-transform:uppercase;text-align:center;color:var(--ink-soft)}
-.pg .sw i{display:block;width:calc(var(--pw) * .1);height:calc(var(--pw) * .1);border-radius:50%;margin:0 auto .4em;border:1px solid rgba(36,39,34,.15);position:relative}
-.pg .sw .is-no i::after{content:"";position:absolute;left:-4px;right:-4px;top:50%;height:1.5px;background:var(--andesite);transform:rotate(-45deg)}
 /* questions */
 .pg .qa{margin:0}
 .pg .qa dt{font-family:var(--serif);font-size:1.12em;margin:.7em 0 .12em}
@@ -728,24 +729,13 @@ button,input,select,textarea{font:inherit;color:inherit}
           </div>
           <div class="pp-page pg leaf-back" id="pg-dress">
             <span class="eb">04 — Dress code</span>
-            <h2>Tropical formal</h2>
-            <p class="lede">Linen suits, long dresses, real color. Dress for a beautiful evening outdoors in the tropics, not a ballroom.</p>
-            <ul class="sw" aria-label="Colors to dress within">
-              <li><i style="background:#3F5B45"></i>Palm</li>
-              <li><i style="background:#7E8F6E"></i>Sage</li>
-              <li><i style="background:#2F4A6B"></i>Ocean</li>
-              <li><i style="background:#A2623F"></i>Clay</li>
-              <li><i style="background:#8C6E4F"></i>Husk</li>
-              <li><i style="background:#D9C6A3"></i>Sand</li>
-              <li><i style="background:#242722"></i>Andesite</li>
-              <li class="is-no"><i style="background:#F4EFE4"></i>Not ivory</li>
-            </ul>
-            <h3>Fabric</h3>
-            <p>Around 29°C and humid at half past four. Linen, cotton voile, silk and seersucker will carry you through. Wool, polyester and anything lined will not.</p>
-            <h3>Shoes</h3>
-            <p>Clifftop stone, and rocks at the water's edge. Block heels, flat sandals and loafers survive both. Stilettos lose on the first night.</p>
+            <h2>What is the dress code?</h2>
+            <p class="script-line">Dress to Impress in Full Color</p>
+            <p class="sub">Colorful black tie</p>
+            <p>We invite you to celebrate in your most fabulous formalwear. Think vibrant hues, rich jewel tones, tropical colors, and elegant silhouettes. The brighter, the better.</p>
             <div class="foot">Page 8</div>
-          </div>
+            <img class="band" src="assets/dress.jpg" alt="Nine guests in colorful black tie: a green tuxedo, gowns in pink, yellow, coral, floral and violet, suits in cream, navy and terracotta." decoding="async">
+        </div>
         </div>
 
         <div class="pp-leaf" data-leaf="3">
