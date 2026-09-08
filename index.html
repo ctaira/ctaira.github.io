@@ -70,7 +70,7 @@ button,input,select,textarea{font:inherit;color:inherit}
    Opening sequence
 --------------------------------------------------------------------------- */
 .stage{
-  position:relative;height:600vh;
+  position:relative;height:860vh;
   background:#E4D9C4;   /* the vista SVG paints the viewport; this is only a fallback */
 }
 .stage-viewport{
@@ -92,20 +92,6 @@ button,input,select,textarea{font:inherit;color:inherit}
 .hint{top:auto;bottom:max(22px,env(safe-area-inset-bottom))}
 .hint .tap{display:block;margin-top:1em;font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft)}
 .hint svg{display:block;margin:6px auto 0;width:18px;height:18px}
-
-/* Appears once the passport is stamped: the sequence is over, the details are below. */
-.more{
-  position:absolute;left:0;right:0;top:auto;bottom:calc(max(30px,env(safe-area-inset-bottom)) + 10px);
-  text-align:center;text-decoration:none;
-  font-family:var(--mono);font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);
-  opacity:0;visibility:hidden;z-index:1;
-}
-.more span{display:inline-block;background:rgba(242,237,227,.72);border-radius:999px;padding:6px 14px;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
-.more svg{display:block;margin:10px auto 0;width:18px;height:18px;animation:bob 1.8s ease-in-out infinite}
-.more:focus-visible{outline:2px solid var(--gold);outline-offset:6px;border-radius:4px}
-@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
-@media (prefers-reduced-motion:reduce){.more svg{animation:none}}
-.stage.is-static .more{opacity:1;visibility:visible}
 
 /* Tap target over the envelope: opening on demand is not autoplay. */
 .open-btn{
@@ -156,18 +142,6 @@ button,input,select,textarea{font:inherit;color:inherit}
 .vista .v-wash{animation:vwash 11s ease-in-out infinite alternate}
 @keyframes vwash{from{transform:translateX(-7px)}to{transform:translateX(7px)}}
 @media (prefers-reduced-motion:reduce){.vista .v-wash{animation:none}}
-
-/* Birds cross the sky on their own time: near egrets, and distant seabirds for depth. */
-.flock{position:absolute;inset:0;left:0;top:0;width:100%;height:100%;z-index:0;pointer-events:none;overflow:visible}
-.flock .bird{visibility:hidden}
-.flock .gull{fill:none;stroke:#3C4340;stroke-width:1.1;stroke-linecap:round;opacity:.7}
-.flock .b-body{fill:#F7F3EA;stroke:#2A2C27;stroke-width:.6;stroke-linejoin:round}
-.flock .b-wing{fill:#F7F3EA;stroke:#2A2C27;stroke-width:.6;stroke-linejoin:round}
-.flock .b-wing.far{fill:#E4DFD3}
-.flock .b-neck{fill:none;stroke:#2A2C27;stroke-width:.6;stroke-linecap:round}
-.flock .b-head{fill:#F7F3EA;stroke:#2A2C27;stroke-width:.6}
-.flock .b-bill{fill:none;stroke:#C0A264;stroke-width:1;stroke-linecap:round}
-.flock .b-legs{fill:none;stroke:#2A2C27;stroke-width:.7;stroke-linecap:round}
 
 /* Envelope parts share size and centre; JS applies the same transform to each. */
 .env{width:var(--ew);height:var(--eh);margin-left:calc(var(--ew) / -2);margin-top:calc(var(--eh) / -2)}
@@ -273,8 +247,19 @@ button,input,select,textarea{font:inherit;color:inherit}
 .stamp text{font-family:var(--mono);fill:var(--palm);letter-spacing:.2em;font-weight:500}
 .stamp .date{font-size:11px;letter-spacing:.14em}
 
+/* Leaves. Each is a right-hand page on its front and the next left-hand page on its back; it turns on the
+   spine like the cover. Faces are ordinary pages, so the same page styles serve both sides. */
+.pp-leaf{position:absolute;inset:0;transform-origin:0 50%;transform-style:preserve-3d;will-change:transform}
+.pp-leaf .pp-page{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.pp-leaf .leaf-back{transform:rotateY(180deg);border-radius:10px 6px 6px 10px}
+.pp-leaf .leaf-back::before{left:auto;right:0;background:linear-gradient(270deg,rgba(36,39,34,.16),rgba(36,39,34,0))}
+.pp-base{z-index:1}
+/* painted pages */
+.pp-art{padding:0;background-position:center;background-size:cover;background-repeat:no-repeat}
+.pp-art.art-cal{background-image:url("assets/pp-calendar.jpg")}
+.pp-art.art-itin{background-image:url("assets/pp-itinerary.jpg")}
 .pp-cover{
-  position:absolute;inset:0;z-index:3;transform-origin:0 50%;transform-style:preserve-3d;
+  position:absolute;inset:0;z-index:40;transform-origin:0 50%;transform-style:preserve-3d;
   will-change:transform;
 }
 .pp-cover .face{
@@ -289,117 +274,87 @@ button,input,select,textarea{font:inherit;color:inherit}
 }
 .pp-cover .face-back::after{content:"";position:absolute;right:0;top:0;bottom:0;width:9%;background:linear-gradient(270deg,rgba(36,39,34,.18),rgba(36,39,34,0))}
 
-/* Reduced motion: no scrubbing, passport open and stamped. */
-@media (prefers-reduced-motion:reduce){
-  .stage{height:100vh;height:100svh}
-  .hint{display:none}
-}
-.stage.is-static .passport{transform:none;z-index:7}
+/* Reduced motion: no scrubbing. The passport lies open as a column of pages, first to last. */
+.stage.is-static{height:auto;padding:24px 0 40px}
+.stage.is-static .stage-viewport{position:static;height:auto;display:block}
+.stage.is-static .scene{height:auto;perspective:none}
+.stage.is-static .vista,.stage.is-static .plate{display:none}
+.stage.is-static .passport{position:relative;left:auto;top:auto;margin:0 auto;height:auto;transform:none!important;perspective:none;display:flex;flex-direction:column-reverse;z-index:7}
+.stage.is-static .pp-leaf{position:static;transform:none!important}
+.stage.is-static .pp-leaf .pp-page,.stage.is-static .pp-base{position:relative;inset:auto;height:var(--ph);margin:0 0 14px;transform:none;backface-visibility:visible;-webkit-backface-visibility:visible;border-radius:6px 10px 10px 6px}
+.stage.is-static .pp-leaf .leaf-back::before{left:0;right:auto;background:linear-gradient(90deg,rgba(36,39,34,.16),rgba(36,39,34,0))}
 .stage.is-static .pp-cover{display:none}
 .stage.is-static .stamp{transform:rotate(-12deg);opacity:1}
 
 /* ---------------------------------------------------------------------------
-   Sections
+   Pages of the passport. Everything is sized from the page width, so a page reads
+   the same on a phone and on a desktop.
 --------------------------------------------------------------------------- */
-.section{padding:clamp(64px,12vw,128px) var(--gutter)}
-.section>.inner{max-width:var(--measure);margin:0 auto}
-.section.is-limestone{background:var(--limestone)}
-.section.is-limestone-2{background:var(--limestone-2)}
-.section.is-palm{background:var(--palm);color:#EEF0E8}
-.section.is-andesite{background:var(--andesite);color:#E8E4DA}
-.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--husk);margin-bottom:1.1em;display:block}
-.is-palm .eyebrow{color:var(--gold)}
-.is-andesite .eyebrow{color:var(--gold)}
-.section h2{font-size:clamp(38px,8vw,64px);margin-bottom:.45em;max-width:14ch}
-.lede{font-size:clamp(19px,2.6vw,22px);line-height:1.45;max-width:34ch}
+.pp-page.pg{
+  padding:calc(var(--pw) * .07) calc(var(--pw) * .07) calc(var(--pw) * .055) calc(var(--pw) * .085);
+  font-size:calc(var(--pw) * .036);line-height:1.42;color:var(--ink);
+}
+.pg .eb{font-family:var(--mono);font-size:.7em;letter-spacing:.18em;text-transform:uppercase;color:var(--husk);display:block;margin-bottom:.9em}
+.pg h2{font-size:1.85em;line-height:1.05;margin:0 0 .45em}
+.pg h3{font-size:1.22em;margin:.85em 0 .22em}
+.pg h3.first{margin-top:0}
+.pg h3 small{font-family:var(--mono);font-size:.5em;letter-spacing:.14em;text-transform:uppercase;color:var(--husk);margin-left:.6em;vertical-align:middle}
+.pg p{margin:0 0 .65em}
+.pg .lede{font-family:var(--serif);font-style:italic;font-size:1.12em;line-height:1.35}
+.pg .salut{font-family:var(--serif);font-size:1.55em;margin-bottom:.6em}
+.pg .sig{font-family:var(--serif);font-style:italic;font-size:1.5em;line-height:1.2;margin-top:.9em}
+.pg .sig small{display:block;font-family:var(--mono);font-style:normal;font-size:.48em;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);margin-top:.9em}
+.pg .note{border-left:2px solid var(--gold);padding-left:.8em;color:var(--ink-soft);font-size:.92em}
+.pg .foot{margin-top:auto;padding-top:.6em;border-top:1px solid rgba(36,39,34,.18);font-family:var(--mono);font-size:.62em;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft)}
 .muted{color:var(--ink-soft)}
-.is-palm .muted,.is-andesite .muted{color:rgba(232,228,218,.7)}
-hr.rule{border:0;border-top:1px solid rgba(36,39,34,.2);margin:2.5em 0}
-.is-palm hr.rule,.is-andesite hr.rule{border-color:rgba(255,255,255,.18)}
-
-/* Letter */
-.letter p{max-width:58ch}
-.letter .salutation{font-family:var(--serif);font-size:clamp(28px,5vw,36px);margin-bottom:.8em}
-.letter .signoff{font-family:var(--serif);font-style:italic;font-size:clamp(26px,5vw,34px);margin-top:1.4em;line-height:1.2}
-.letter .signoff small{display:block;font-family:var(--mono);font-style:normal;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);margin-top:.9em}
-
-/* Date + calendar */
-.date-grid{display:grid;gap:clamp(28px,6vw,56px);align-items:start}
-@media (min-width:720px){.date-grid{grid-template-columns:1fr 1fr}}
-.cal{max-width:360px}
-.cal-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.8em}
-.cal-head h3{font-size:clamp(26px,5vw,32px)}
-.cal-head span{font-family:var(--mono);font-size:12px;letter-spacing:.14em;color:var(--ink-soft)}
-.cal table{border-collapse:collapse;width:100%;table-layout:fixed}
-.cal th{font-family:var(--mono);font-weight:400;font-size:10px;letter-spacing:.12em;color:var(--ink-soft);padding:0 0 .6em;text-align:center}
-.cal td{text-align:center;padding:2px 0;font-family:var(--mono);font-size:14px}
-.cal td span{display:inline-grid;place-items:center;width:2.4em;height:2.4em;border-radius:50%}
-.cal td.is-near span{background:rgba(63,91,69,.14)}
-.cal td.is-day span{background:var(--andesite);color:var(--paper);font-weight:500}
-.cal-legend{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--ink-soft);margin-top:1em}
-.countdown{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;max-width:420px;margin-top:.4em}
-.countdown div{border-top:1px solid rgba(36,39,34,.3);padding-top:.6em}
-.countdown b{display:block;font-family:var(--serif);font-weight:400;font-size:clamp(34px,8vw,48px);line-height:1;font-variant-numeric:tabular-nums}
-.countdown span{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft)}
-
-/* Order of events */
-.timeline{list-style:none;margin:0;padding:0}
-.timeline>li{margin-top:2.6em}
-.timeline h3{font-size:clamp(28px,5vw,36px);margin-bottom:.15em}
-.timeline .day-sub{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:1.2em}
-.events{list-style:none;margin:0;padding:0;border-top:1px solid rgba(255,255,255,.18)}
-.events li{display:grid;grid-template-columns:1fr;gap:.15em 2em;padding:1em 0;border-bottom:1px solid rgba(255,255,255,.18)}
-.events time{font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:rgba(238,240,232,.75);padding-top:.35em}
-.events b{font-weight:500;font-size:19px;display:block}
-.events p{margin:.2em 0 0;color:rgba(238,240,232,.78);font-size:15px;max-width:44ch}
-@media (min-width:640px){.events li{grid-template-columns:120px 1fr}}
-.note{border-left:2px solid var(--gold);padding:.1em 0 .1em 1.2em;max-width:52ch;margin-top:3em;font-size:16px}
-.note p:last-child{margin:0}
-.travel{margin-top:3em;display:grid;gap:1.5em 3em}
-@media (min-width:640px){.travel{grid-template-columns:1fr 1fr}}
-.travel h4{font-family:var(--serif);font-weight:400;font-size:24px;margin:0 0 .3em}
-.travel p{font-size:15px;color:rgba(238,240,232,.82);margin:0}
-
-/* Dress code */
-.swatches{display:flex;flex-wrap:wrap;gap:18px 22px;margin:2em 0 2.6em;padding:0;list-style:none}
-.swatches li{display:flex;flex-direction:column;align-items:center;gap:.5em;width:64px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;text-align:center;color:var(--ink-soft)}
-.swatches i{display:block;width:56px;height:56px;border-radius:50%;border:1px solid rgba(36,39,34,.15);position:relative}
-.swatches .is-no i::after{content:"";position:absolute;left:-6px;right:-6px;top:50%;height:2px;background:var(--andesite);transform:rotate(-45deg)}
-.guidance{display:grid;gap:1.6em 3em}
-@media (min-width:640px){.guidance{grid-template-columns:1fr 1fr}}
-.guidance h4{font-family:var(--serif);font-weight:400;font-size:26px;margin:0 0 .3em}
-.guidance p{font-size:15.5px;margin:0}
-
-/* Adults only */
-.seats-box{
-  border:1.5px solid var(--andesite);padding:1.2em 1.4em;margin-top:2.4em;max-width:420px;
-  display:grid;grid-template-columns:1fr auto;gap:1em;align-items:center;
-}
-.seats-box .lbl{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft)}
-.seats-box .val{font-family:var(--serif);font-size:clamp(26px,5vw,32px);line-height:1.1;margin-top:.15em}
-.seats-box .num{font-family:var(--serif);font-size:clamp(52px,12vw,72px);line-height:.9;color:var(--palm)}
-
-/* FAQ */
-.faq{list-style:none;margin:2.5em 0 0;padding:0;border-top:1px solid rgba(255,255,255,.18);max-width:640px}
-.faq details{border-bottom:1px solid rgba(255,255,255,.18)}
-.faq summary{
-  list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:baseline;gap:1.5em;
-  padding:1.05em 0;font-family:var(--serif);font-size:clamp(21px,4.6vw,26px);line-height:1.2;
-}
-.faq summary::-webkit-details-marker{display:none}
-.faq summary::after{
-  content:"+";flex:0 0 auto;font-family:var(--mono);font-size:18px;color:var(--gold);
-  transition:transform .25s;transform-origin:50% 50%;
-}
-.faq details[open] summary::after{transform:rotate(45deg)}
-.faq summary:focus-visible{outline:2px solid var(--gold);outline-offset:4px;border-radius:4px}
-.faq .answer{padding:0 0 1.4em;max-width:56ch;font-size:16px;color:rgba(238,240,232,.85)}
-.faq .answer p{margin:0 0 .8em}
-.faq .answer p:last-child{margin:0}
-.faq .answer a{color:#EEF0E8;text-decoration-color:var(--gold);text-underline-offset:3px}
+/* events */
+.pg .ev{list-style:none;margin:0;padding:0}
+.pg .ev li{display:grid;grid-template-columns:4.3em 1fr;gap:.1em .5em;padding:.4em 0;border-top:1px solid rgba(36,39,34,.14)}
+.pg .ev time{font-family:var(--mono);font-size:.76em;letter-spacing:.06em;color:var(--ink-soft);padding-top:.25em}
+.pg .ev b{font-weight:500;display:block}
+.pg .ev p{margin:.05em 0 0;font-size:.9em;color:var(--ink-soft)}
+/* swatches */
+.pg .sw{display:grid;grid-template-columns:repeat(4,1fr);gap:.5em .3em;margin:.4em 0 .6em;padding:0;list-style:none;font-family:var(--mono);font-size:.6em;letter-spacing:.06em;text-transform:uppercase;text-align:center;color:var(--ink-soft)}
+.pg .sw i{display:block;width:calc(var(--pw) * .1);height:calc(var(--pw) * .1);border-radius:50%;margin:0 auto .4em;border:1px solid rgba(36,39,34,.15);position:relative}
+.pg .sw .is-no i::after{content:"";position:absolute;left:-4px;right:-4px;top:50%;height:1.5px;background:var(--andesite);transform:rotate(-45deg)}
+/* questions */
+.pg .qa{margin:0}
+.pg .qa dt{font-family:var(--serif);font-size:1.12em;margin:.7em 0 .12em}
+.pg .qa dt:first-child{margin-top:0}
+.pg .qa dd{margin:0;font-size:.92em;color:var(--ink-soft)}
+/* seats */
+.pg .seats{border:1.5px solid var(--andesite);padding:.6em .9em;margin:.4em 0 .8em;display:grid;grid-template-columns:1fr auto;gap:.6em;align-items:center}
+.pg .seats .lbl{font-family:var(--mono);font-size:.66em;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft)}
+.pg .seats .val{font-family:var(--serif);font-size:1.3em;line-height:1.1;margin-top:.1em}
+.pg .seats .num{font-family:var(--serif);font-size:2.6em;line-height:.9;color:var(--palm)}
+/* countdown */
+.pg .cd{display:grid;grid-template-columns:repeat(4,1fr);gap:.5em;margin:.3em 0 1em}
+.pg .cd div{border-top:1px solid rgba(36,39,34,.3);padding-top:.4em}
+.pg .cd b{display:block;font-family:var(--serif);font-weight:400;font-size:1.9em;line-height:1;font-variant-numeric:tabular-nums}
+.pg .cd span{font-family:var(--mono);font-size:.6em;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft)}
+/* the reply form, on paper */
+.pg .deadline{font-family:var(--mono);font-size:.68em;letter-spacing:.14em;text-transform:uppercase;color:var(--husk);margin:-.6em 0 1em}
+.pg .field{margin-bottom:.75em}
+.pg .field label,.pg .field legend{font-size:.64em;color:var(--ink-soft);margin-bottom:.25em}
+.pg .field input,.pg .field select,.pg .field textarea{color:var(--ink);border-bottom-color:rgba(36,39,34,.35);padding:.3em 0;font-size:.95em}
+.pg .field input:focus,.pg .field select:focus,.pg .field textarea:focus{border-bottom-color:var(--palm)}
+.pg .field select{background-image:linear-gradient(45deg,transparent 50%,var(--ink) 50%),linear-gradient(135deg,var(--ink) 50%,transparent 50%)}
+.pg .field textarea{min-height:2.2em}
+.pg .field .err{color:#A2623F}
+.pg .field.is-invalid input,.pg .field.is-invalid select{border-bottom-color:#A2623F}
+.pg .pills{gap:.35em}
+.pg .pills label{font-size:.82em;color:var(--ink)}
+.pg .pills span{border-color:rgba(36,39,34,.4);padding:.38em .7em}
+.pg .pills input:checked+span{background:var(--andesite);color:var(--paper);border-color:var(--andesite)}
+.pg .hint-line{font-size:.78em;color:var(--ink-soft);margin-top:.3em}
+.pg .btn{background:var(--andesite);color:var(--paper);border-color:var(--andesite);padding:.6em 1.3em;font-size:.9em}
+.pg .btn:hover{background:#3a3d36}
+.pg .form-error{font-size:.85em;color:#A2623F;margin-top:.8em}
+.pg .confirm h3{font-size:1.7em;margin:.2em 0 .4em}
+.pg .confirm .mono{color:var(--husk);font-size:.66em;margin-top:1.2em}
+.pg .gate{font-size:.95em}
 
 /* RSVP */
-.rsvp form{max-width:520px}
 .field{margin-bottom:1.5em}
 .field label,.field legend{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:rgba(232,228,218,.75);margin-bottom:.55em;padding:0}
 .field input,.field select,.field textarea{
@@ -437,7 +392,6 @@ hr.rule{border:0;border-top:1px solid rgba(36,39,34,.2);margin:2.5em 0}
 .confirm .mono{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);display:block;margin-top:1.6em}
 .gate{max-width:46ch;font-size:16.5px}
 .gate p{margin-bottom:.8em}
-.rsvp .deadline{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin:-1.6em 0 2.6em}
 
 /* Footer */
 .footer{background:#1B1D19;color:#D9D4C8;padding:clamp(64px,12vw,120px) var(--gutter) max(48px,env(safe-area-inset-bottom))}
@@ -457,7 +411,7 @@ hr.rule{border:0;border-top:1px solid rgba(36,39,34,.2);margin:2.5em 0}
 </head>
 <body>
 
-<a class="skip" id="skip" href="#letter">Skip ↓</a>
+<a class="skip" id="skip" href="#rsvp">Skip ↓</a>
 
 <!-- =======================================================================
      OPENING SEQUENCE
@@ -600,7 +554,6 @@ hr.rule{border:0;border-top:1px solid rgba(36,39,34,.2);margin:2.5em 0}
         <img class="lyr lyr-corner" data-k="1.15" data-box="0,0,588,554" src="assets/l-corner.webp" alt="" decoding="async">
       </div>
 
-      <svg class="flock" id="flock" aria-hidden="true"></svg>
 
       <div class="cap cap-top" id="capTop" aria-hidden="true"><span class="caps">A journey<br>to forever</span><i class="rule"></i><span class="script">Bali, Indonesia</span></div>
 
@@ -628,13 +581,205 @@ hr.rule{border:0;border-top:1px solid rgba(36,39,34,.2);margin:2.5em 0}
 
       <button class="open-btn" id="openBtn" type="button" aria-label="Open the invitation"></button>
 
-      <a class="more" id="more" href="#letter"><span>Swipe up for the details</span>
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9l8 8 8-8" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
-      </a>
-
       <!-- Passport -->
       <div class="passport" id="passport">
-        <div class="pp-page">
+        <!-- The last right-hand page never turns: the reply form lives on it, untransformed. -->
+        <div class="pp-page pg pp-base" id="rsvp">
+          <span class="eb">Reply</span>
+          <p class="deadline" id="deadline">Kindly reply by 1 March 2027</p>
+          <div class="gate" id="rsvpGate" hidden>
+            <p>We couldn't find your invitation. Please open the link from the message we sent you, which carries your name and seats, and reply from there.</p>
+            <p class="muted">If the link isn't working, just write to us and we'll sort it out.</p>
+          </div>
+          <form id="rsvpForm" novalidate>
+            <div class="field" id="fName">
+              <label for="name">Your name</label>
+              <input type="text" id="name" name="name" autocomplete="name" maxlength="80" required>
+              <p class="err">Please tell us who you are.</p>
+            </div>
+            <div class="field" id="fEmail">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" autocomplete="email" inputmode="email" maxlength="120" required>
+              <p class="err">That email doesn't look right.</p>
+            </div>
+            <div class="field" id="fAttending">
+              <fieldset>
+                <legend>Attending</legend>
+                <div class="pills">
+                  <label><input type="radio" name="attending" value="both"><span>Friday &amp; Saturday</span></label>
+                  <label><input type="radio" name="attending" value="saturday"><span>Saturday only</span></label>
+                  <label><input type="radio" name="attending" value="no"><span>Can't make it</span></label>
+                </div>
+              </fieldset>
+              <p class="err">Let us know if you can make it.</p>
+            </div>
+            <div class="field" id="fParty" hidden>
+              <label for="party">Party size</label>
+              <select id="party" name="party"></select>
+              <p class="hint-line" id="partyHint"></p>
+            </div>
+            <div class="field" id="fDiet">
+              <label for="diet">Dietary needs</label>
+              <input type="text" id="diet" name="diet" maxlength="200" placeholder="Anything the kitchen should know">
+            </div>
+            <div class="field">
+              <label for="note">A note for us</label>
+              <textarea id="note" name="note" maxlength="1000" placeholder="Optional"></textarea>
+            </div>
+            <button class="btn" type="submit" id="submitBtn">Send reply</button>
+            <p class="form-error" id="formError">Something went wrong sending your reply. Please try again, or message us directly.</p>
+          </form>
+          <div class="confirm" id="confirmYes">
+            <h3>We can't wait.</h3>
+            <p>Thank you. Your reply is in, and we'll be in touch with booking details for the estate and a few notes on getting to Bali.</p>
+            <p>Start thinking about linen.</p>
+            <p class="muted confirm-mail" hidden>A copy of your reply is on its way to your inbox.</p>
+            <span class="mono">See you on the cliff · 28 Aug 2027</span>
+          </div>
+          <div class="confirm" id="confirmNo">
+            <h3>We'll miss you.</h3>
+            <p>Thank you for letting us know. We understand completely, and we'll raise a glass to you from the cliff.</p>
+            <p>If anything changes before March, just open your invitation again and send a new reply.</p>
+            <p class="muted confirm-mail" hidden>A copy of your reply is on its way to your inbox.</p>
+            <span class="mono">With love · Ashley &amp; Charles</span>
+          </div>
+        </div>
+
+        <!-- Leaves, last to first, so the first turns from the top of the pile. Front = right page, back = the next left page. -->
+        <div class="pp-leaf" data-leaf="6">
+          <div class="pp-page pg leaf-front">
+            <span class="eb">Questions, continued</span>
+            <dl class="qa">
+              <dt>What's the weather like?</dt><dd>Dry season, and the best of it. Around 29°C in the afternoon, 24°C at night, humid, and very little rain. The sun sets a little after six.</dd>
+              <dt>Is there a registry?</dt><dd>Getting yourself to Bali is the gift, and we mean that. If you'd still like to give something, we'll add details closer to the date.</dd>
+              <dt>What about money?</dt><dd>Indonesia uses the rupiah. The resort takes cards for everything. A little cash is handy for taxis, markets and tips, and the airport ATMs are the easiest place to get it.</dd>
+              <dt>Can I make a longer trip of it?</dt><dd>Please do. Uluwatu's cliffs and temple are twenty minutes south, and Ubud's rice terraces are a couple of hours north.</dd>
+              <dt>When do I need to reply by?</dt><dd>1 March 2027, on the next page. Earlier helps us hold the rooms.</dd>
+            </dl>
+            <div class="foot">Page 11</div>
+          </div>
+          <div class="pp-page pg leaf-back">
+            <span class="eb">07 — RSVP</span>
+            <h2>Will you come?</h2>
+            <p class="lede">Turn to the facing page and tell us. The form knows how many seats your invitation admits.</p>
+            <span class="eb" style="margin-top:1.2em">Until the ceremony</span>
+            <div class="cd" id="countdown" role="timer" aria-live="off">
+              <div><b id="cdD">—</b><span>days</span></div>
+              <div><b id="cdH">—</b><span>hours</span></div>
+              <div><b id="cdM">—</b><span>min</span></div>
+              <div><b id="cdS">—</b><span>sec</span></div>
+            </div>
+            <p>If anything changes before March, open your invitation again and send a new reply. And if a question isn't answered here, write to us.</p>
+            <div class="foot">Page 12</div>
+          </div>
+        </div>
+
+        <div class="pp-leaf" data-leaf="5">
+          <div class="pp-page pg leaf-front">
+            <span class="eb">05 — A note on children</span>
+            <h2>Adults only</h2>
+            <p class="lede">We love your children. We're also asking you to leave them at home this time.</p>
+            <p>The weekend runs late, the cliffs are real, and the bar never quite closes. We would rather you had a few days that felt like a holiday of your own. We've kept the guest list to adults, and we hope you'll take that as an invitation to sleep in.</p>
+            <div class="seats" role="note">
+              <div>
+                <div class="lbl">Your invitation</div>
+                <div class="val" id="seatsLine">Admits one guest</div>
+              </div>
+              <div class="num" id="seatsNum" aria-hidden="true">1</div>
+            </div>
+            <div class="foot">Page 9</div>
+          </div>
+          <div class="pp-page pg leaf-back">
+            <span class="eb">06 — Questions</span>
+            <h2>Things you might be wondering</h2>
+            <dl class="qa">
+              <dt>When should I fly in?</dt><dd>Into Denpasar (DPS), landing by Friday afternoon so you're at Rock Bar for sunset. From most places it's a long trip with a connection, so build in the time.</dd>
+              <dt>Do I need a visa?</dt><dd>US passports get a 30-day visa on arrival, plus a small Bali tourist levy. You need six months' validity and a blank page. We'll send the current rules in the spring.</dd>
+              <dt>Where do I stay?</dt><dd>On the estate. Rooms are held across AYANA Resort, AYANA Villas and RIMBA, which share grounds, pools and a shuttle. Booking details follow your reply.</dd>
+              <dt>Do I need a car?</dt><dd>No. Everything is on the estate and the shuttle runs around the clock. Gojek, Grab or a taxi covers the airport run.</dd>
+            </dl>
+            <div class="foot">Page 10</div>
+          </div>
+        </div>
+
+        <div class="pp-leaf" data-leaf="4">
+          <div class="pp-page pg leaf-front">
+            <span class="eb">03 — Order of events</span>
+            <h3 class="first">Sunday <small>29 August · Yours</small></h3>
+            <ul class="ev">
+              <li><time>All day</time><div><b>Nothing planned</b><p>Sleep in, find a pool, and fly home whenever you're ready.</p></div></li>
+            </ul>
+            <h3>Getting there</h3>
+            <p>Fly into Denpasar (DPS). AYANA is 25 minutes from the airport by Gojek, Grab or taxi, all of which pick up in arrivals.</p>
+            <h3>Staying</h3>
+            <p>Rooms are held for our guests across AYANA Resort, AYANA Villas and RIMBA, all on the same estate. We'll send booking details once you've replied.</p>
+            <p class="note">Nobody drives anywhere all weekend. The resort shuttle runs between the three hotels around the clock.</p>
+            <div class="foot">Page 7</div>
+          </div>
+          <div class="pp-page pg leaf-back">
+            <span class="eb">04 — Dress code</span>
+            <h2>Tropical formal</h2>
+            <p class="lede">Linen suits, long dresses, real color. Dress for a beautiful evening outdoors in the tropics, not a ballroom.</p>
+            <ul class="sw" aria-label="Colors to dress within">
+              <li><i style="background:#3F5B45"></i>Palm</li>
+              <li><i style="background:#7E8F6E"></i>Sage</li>
+              <li><i style="background:#2F4A6B"></i>Ocean</li>
+              <li><i style="background:#A2623F"></i>Clay</li>
+              <li><i style="background:#8C6E4F"></i>Husk</li>
+              <li><i style="background:#D9C6A3"></i>Sand</li>
+              <li><i style="background:#242722"></i>Andesite</li>
+              <li class="is-no"><i style="background:#F4EFE4"></i>Not ivory</li>
+            </ul>
+            <h3>Fabric</h3>
+            <p>Around 29°C and humid at half past four. Linen, cotton voile, silk and seersucker will carry you through. Wool, polyester and anything lined will not.</p>
+            <h3>Shoes</h3>
+            <p>Clifftop stone, and rocks at the water's edge. Block heels, flat sandals and loafers survive both. Stilettos lose on the first night.</p>
+            <div class="foot">Page 8</div>
+          </div>
+        </div>
+
+        <div class="pp-leaf" data-leaf="3">
+          <div class="pp-page pg leaf-front">
+            <span class="eb">01 — A letter, continued</span>
+            <p>When we're not home, we're somewhere new, golfing our way around the world and leaving lost golf balls on several continents. So for the wedding we didn't want a typical venue. We wanted a cliff, an ocean, and everyone we love in one place.</p>
+            <p>Your only job is to show up in linen. It's going to be perfect. We checked.</p>
+            <p class="sig">With all our love,<br>Ashley &amp; Charles
+              <small>Los Angeles · September 2026</small>
+            </p>
+            <div class="foot">Page 5</div>
+          </div>
+          <div class="pp-page pg leaf-back">
+            <span class="eb">03 — Order of events</span>
+            <h2>A weekend on the cliff</h2>
+            <p class="lede">Everything happens at AYANA Bali in Jimbaran, on the estate where you're staying.</p>
+            <h3 class="first">Friday <small>27 August · Welcome</small></h3>
+            <ul class="ev">
+              <li><time datetime="2027-08-27T18:00+08:00">6:00 PM</time><div><b>Welcome party at Rock Bar</b><p>Drinks and bites on the rocks at the foot of the cliff. Take the inclinator down. Come as you are off the plane.</p></div></li>
+            </ul>
+            <h3>Saturday <small>28 August · The celebration</small></h3>
+            <ul class="ev">
+              <li><time datetime="2027-08-28T16:00+08:00">4:00 PM</time><div><b>Guests seated</b><p>The clifftop lawn above the ocean. There's shade, and there's water.</p></div></li>
+              <li><time datetime="2027-08-28T16:30+08:00">4:30 PM</time><div><b>Ceremony</b><p>Short and sweet, then straight to the drinks.</p></div></li>
+              <li><time datetime="2027-08-28T17:15+08:00">5:15 PM</time><div><b>Sunset drinks</b><p>Cocktails at the cliff edge while the sun goes into the Indian Ocean.</p></div></li>
+              <li><time datetime="2027-08-28T19:00+08:00">7:00 PM</time><div><b>Reception</b><p>Dinner, speeches kept mercifully brief, and dancing until the estate asks us to stop.</p></div></li>
+            </ul>
+            <div class="foot">Page 6</div>
+          </div>
+        </div>
+
+        <div class="pp-leaf" data-leaf="2">
+          <div class="pp-page pp-art art-itin leaf-front" role="img" aria-label="August 27: welcome party at the Rock Bar, AYANA Resort, drinks and dinner with cliffside views. August 28: tea ceremony (optional), wedding ceremony, reception."></div>
+          <div class="pp-page pg leaf-back">
+            <span class="eb">01 — A letter</span>
+            <p class="salut">Dear friends and family,</p>
+            <p>Our first date was an Ed Sheeran concert. You might say everything about it, and everything since, has been "Perfect."</p>
+            <p>Ashley joined run club for the running. Charles joined for Ashley. He has yet to catch her. Along the way we fostered fourteen cats. Twelve found wonderful homes. Two found ours and stopped looking.</p>
+            <div class="foot">Page 4</div>
+          </div>
+        </div>
+
+        <div class="pp-leaf" data-leaf="1">
+          <div class="pp-page leaf-front">
           <div class="pp-head">
             <h2>Passport</h2>
             <span>Type P · Code IDN</span>
@@ -693,331 +838,15 @@ hr.rule{border:0;border-top:1px solid rgba(36,39,34,.2);margin:2.5em 0}
           </div>
         </div>
 
+          <div class="pp-page pp-art art-cal leaf-back" role="img" aria-label="August 2027 calendar with the 27th and 28th circled, over a painting of the Bali cliffs."></div>
+        </div>
+
         <div class="pp-cover" id="ppCover" aria-hidden="true">
           <div class="face face-front"></div>
           <div class="face face-back"></div>
         </div>
       </div>
 
-    </div>
-  </div>
-</section>
-
-<!-- =======================================================================
-     1 · LETTER
-     ======================================================================= -->
-<section class="section is-limestone letter" id="letter">
-  <div class="inner">
-    <span class="eyebrow">01 — A letter</span>
-    <p class="salutation">Dear friends and family,</p>
-    <p>Our first date was an Ed Sheeran concert. You might say everything about it, and everything since, has been "Perfect."</p>
-    <p>Ashley joined run club for the running. Charles joined for Ashley. He has yet to catch her. Along the way we fostered fourteen cats. Twelve found wonderful homes. Two found ours and stopped looking.</p>
-    <p>When we're not home, we're somewhere new, golfing our way around the world and leaving lost golf balls on several continents. So for the wedding we didn't want a typical venue. We wanted a cliff, an ocean, and everyone we love in one place.</p>
-    <p>Your only job is to show up in linen. It's going to be perfect. We checked.</p>
-    <p class="signoff">With all our love,<br>Ashley &amp; Charles
-      <small>Los Angeles · September 2026</small>
-    </p>
-  </div>
-</section>
-
-<!-- =======================================================================
-     2 · THE DATE
-     ======================================================================= -->
-<section class="section is-limestone-2" id="date">
-  <div class="inner">
-    <span class="eyebrow">02 — The date</span>
-    <h2>Saturday, 28 August 2027</h2>
-    <p class="lede">Ceremony at half past four in the afternoon, Bali time, on the cliff above the ocean.</p>
-
-    <div class="date-grid">
-      <div class="cal" aria-label="August 2027 calendar">
-        <div class="cal-head"><h3>August</h3><span>2027</span></div>
-        <table>
-          <thead><tr><th scope="col" abbr="Sunday">S</th><th scope="col" abbr="Monday">M</th><th scope="col" abbr="Tuesday">T</th><th scope="col" abbr="Wednesday">W</th><th scope="col" abbr="Thursday">T</th><th scope="col" abbr="Friday">F</th><th scope="col" abbr="Saturday">S</th></tr></thead>
-          <tbody>
-            <tr><td><span>1</span></td><td><span>2</span></td><td><span>3</span></td><td><span>4</span></td><td><span>5</span></td><td><span>6</span></td><td><span>7</span></td></tr>
-            <tr><td><span>8</span></td><td><span>9</span></td><td><span>10</span></td><td><span>11</span></td><td><span>12</span></td><td><span>13</span></td><td><span>14</span></td></tr>
-            <tr><td><span>15</span></td><td><span>16</span></td><td><span>17</span></td><td><span>18</span></td><td><span>19</span></td><td><span>20</span></td><td><span>21</span></td></tr>
-            <tr><td><span>22</span></td><td><span>23</span></td><td><span>24</span></td><td><span>25</span></td><td><span>26</span></td><td class="is-near"><span>27</span></td><td class="is-day"><span aria-label="28, the celebration">28</span></td></tr>
-            <tr><td><span>29</span></td><td><span>30</span></td><td><span>31</span></td><td></td><td></td><td></td><td></td></tr>
-          </tbody>
-        </table>
-        <p class="cal-legend">27 welcome party · 28 ceremony</p>
-      </div>
-
-      <div>
-        <span class="eyebrow" style="margin-bottom:.6em">Until the ceremony</span>
-        <div class="countdown" id="countdown" role="timer" aria-live="off">
-          <div><b id="cdD">—</b><span>days</span></div>
-          <div><b id="cdH">—</b><span>hours</span></div>
-          <div><b id="cdM">—</b><span>min</span></div>
-          <div><b id="cdS">—</b><span>sec</span></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- =======================================================================
-     3 · ORDER OF EVENTS
-     ======================================================================= -->
-<section class="section is-palm" id="events">
-  <div class="inner">
-    <span class="eyebrow">03 — Order of events</span>
-    <h2>A weekend on the cliff</h2>
-    <p class="lede">Everything happens at AYANA Bali in Jimbaran, on the estate where you're staying.</p>
-
-    <ol class="timeline">
-      <li>
-        <h3>Friday</h3>
-        <span class="day-sub">27 August · Welcome</span>
-        <ul class="events">
-          <li><time datetime="2027-08-27T18:00+08:00">6:00 PM</time><div><b>Welcome party at Rock Bar</b><p>Drinks and bites on the rocks at the foot of the cliff, with the Indian Ocean breaking underneath. Take the inclinator down. Come as you are off the plane.</p></div></li>
-        </ul>
-      </li>
-      <li>
-        <h3>Saturday</h3>
-        <span class="day-sub">28 August · The celebration</span>
-        <ul class="events">
-          <li><time datetime="2027-08-28T16:00+08:00">4:00 PM</time><div><b>Guests seated</b><p>The clifftop lawn above the ocean. There's shade, and there's water.</p></div></li>
-          <li><time datetime="2027-08-28T16:30+08:00">4:30 PM</time><div><b>Ceremony</b><p>Short and sweet, then straight to the drinks.</p></div></li>
-          <li><time datetime="2027-08-28T17:15+08:00">5:15 PM</time><div><b>Sunset drinks</b><p>Cocktails at the cliff edge while the sun goes into the Indian Ocean.</p></div></li>
-          <li><time datetime="2027-08-28T19:00+08:00">7:00 PM</time><div><b>Reception</b><p>Dinner, speeches kept mercifully brief, and dancing until the estate asks us to stop.</p></div></li>
-        </ul>
-      </li>
-      <li>
-        <h3>Sunday</h3>
-        <span class="day-sub">29 August · Yours</span>
-        <ul class="events">
-          <li><time>All day</time><div><b>Nothing planned</b><p>We're not hosting anything on Sunday. Sleep in, find a pool, and fly home whenever you're ready.</p></div></li>
-        </ul>
-      </li>
-    </ol>
-
-    <div class="note">
-      <p>Every event takes place on the AYANA estate, and you'll be staying on it too. Nobody drives anywhere all weekend. The resort runs a shuttle between AYANA Resort, AYANA Villas and RIMBA around the clock.</p>
-    </div>
-
-    <div class="travel">
-      <div>
-        <h4>Getting there</h4>
-        <p>Fly into Denpasar (DPS). AYANA is 25 minutes from the airport by Gojek, Grab or taxi, all of which pick up in arrivals.</p>
-      </div>
-      <div>
-        <h4>Staying</h4>
-        <p>Rooms are held for our guests across AYANA Resort, AYANA Villas and RIMBA, all on the same estate. We'll send booking details once you've replied.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- =======================================================================
-     4 · DRESS CODE
-     ======================================================================= -->
-<section class="section is-limestone" id="dress">
-  <div class="inner">
-    <span class="eyebrow">04 — Dress code</span>
-    <h2>Tropical formal</h2>
-    <p class="lede">Linen suits, long dresses, real color. Dress for a beautiful evening outdoors in the tropics, not a ballroom.</p>
-
-    <ul class="swatches" aria-label="Colors to dress within">
-      <li><i style="background:#3F5B45"></i>Palm</li>
-      <li><i style="background:#7E8F6E"></i>Sage</li>
-      <li><i style="background:#2F4A6B"></i>Ocean</li>
-      <li><i style="background:#A2623F"></i>Clay</li>
-      <li><i style="background:#8C6E4F"></i>Husk</li>
-      <li><i style="background:#D9C6A3"></i>Sand</li>
-      <li><i style="background:#242722"></i>Andesite</li>
-      <li class="is-no"><i style="background:#F4EFE4"></i>Not ivory</li>
-    </ul>
-
-    <div class="guidance">
-      <div>
-        <h4>Fabric</h4>
-        <p>It will be around 29°C and humid at half past four. Linen, cotton voile, silk and seersucker will carry you through. Wool, polyester and anything lined will not.</p>
-      </div>
-      <div>
-        <h4>Shoes</h4>
-        <p>The ceremony is on clifftop stone and Rock Bar is built on the rocks at the water's edge. Block heels, flat sandals and loafers survive both. Stilettos lose on the first night.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- =======================================================================
-     5 · ADULTS ONLY
-     ======================================================================= -->
-<section class="section is-limestone-2" id="adults">
-  <div class="inner">
-    <span class="eyebrow">05 — A note on children</span>
-    <h2>Adults only</h2>
-    <p class="lede">We love your children. We're also asking you to leave them at home this time.</p>
-    <p style="max-width:52ch">The weekend runs late, the cliffs are real, and the bar never quite closes. We would rather you had a few days that felt like a holiday of your own. We've kept the guest list to adults, and we hope you'll take that as an invitation to sleep in.</p>
-
-    <div class="seats-box" role="note">
-      <div>
-        <div class="lbl">Your invitation</div>
-        <div class="val" id="seatsLine">Admits one guest</div>
-      </div>
-      <div class="num" id="seatsNum" aria-hidden="true">1</div>
-    </div>
-  </div>
-</section>
-
-<!-- =======================================================================
-     6 · FAQ
-     ======================================================================= -->
-<section class="section is-palm" id="faq">
-  <div class="inner">
-    <span class="eyebrow">06 — Questions</span>
-    <h2>Things you might be wondering</h2>
-    <p class="lede">The short answers. If yours isn't here, write to us.</p>
-
-    <div class="faq">
-      <details>
-        <summary>When should I fly in?</summary>
-        <div class="answer">
-          <p>Fly into Denpasar (DPS), Bali's international airport. Aim to land by Friday afternoon so you're at Rock Bar for sunset, and remember that from most places it's a long trip with a connection, so build in the time. If you can spare it, arriving Thursday gives you a day to find your feet.</p>
-          <p>AYANA is 25 minutes from the airport. Transport is on you, and it's easy: Gojek and Grab both work in Bali and pick up at the airport from the marked ride-hailing points, with a small airport surcharge. There's also a fixed-fare taxi counter in arrivals, and AYANA can book a private transfer if you'd rather have someone holding a sign.</p>
-        </div>
-      </details>
-      <details>
-        <summary>Do I need a visa?</summary>
-        <div class="answer">
-          <p>US passport holders can get a 30-day visa on arrival, either at the airport or online beforehand, and there's a small Bali tourist levy paid on entry. Your passport needs at least six months' validity past your arrival date and a blank page.</p>
-          <p>Rules change, so we'll send a reminder with the current requirements in the spring.</p>
-        </div>
-      </details>
-      <details>
-        <summary>Where do I stay?</summary>
-        <div class="answer">
-          <p>On the estate. Rooms are held for our guests across AYANA Resort, AYANA Villas and RIMBA, which share the same grounds, pools and shuttle. Once you've replied we'll send booking details and the group rate.</p>
-        </div>
-      </details>
-      <details>
-        <summary>Do I need a car?</summary>
-        <div class="answer">
-          <p>No. Everything happens on the estate, and the resort shuttle runs between the three hotels around the clock. The only ride you'll need is from the airport, and Gojek, Grab or a taxi will do it.</p>
-        </div>
-      </details>
-      <details>
-        <summary>Can I bring a plus-one, or the kids?</summary>
-        <div class="answer">
-          <p>Your invitation says exactly how many seats it admits, and the RSVP form only lets you reply for that many. The weekend is adults only, which we say more about <a href="#adults">just above</a>.</p>
-        </div>
-      </details>
-      <details>
-        <summary>What's the weather like in late August?</summary>
-        <div class="answer">
-          <p>Dry season, and the best of it. Around 29°C in the afternoon, 24°C at night, humid, and very little chance of rain. The sun sets a little after six, which is why the ceremony is at half past four.</p>
-        </div>
-      </details>
-      <details>
-        <summary>What should I wear?</summary>
-        <div class="answer">
-          <p>Tropical formal. Linen, color, shoes that can handle stone and rock. The <a href="#dress">dress code section</a> has swatches and the practical bits.</p>
-        </div>
-      </details>
-      <details>
-        <summary>Is there a registry?</summary>
-        <div class="answer">
-          <p>Getting yourself to Bali is the gift, and we mean that. If you'd still like to give something, we'll add details here closer to the date.</p>
-        </div>
-      </details>
-      <details>
-        <summary>What about money?</summary>
-        <div class="answer">
-          <p>Indonesia uses the rupiah. The resort takes cards for everything. A little cash is handy for taxis, markets and tips if you head off the estate, and the airport ATMs are the easiest place to get it.</p>
-        </div>
-      </details>
-      <details>
-        <summary>Can I make a longer trip of it?</summary>
-        <div class="answer">
-          <p>Please do. Sunday is wide open, and Bali rewards a few extra days. Uluwatu's cliffs and temple are twenty minutes south, and Ubud's rice terraces are a couple of hours north. We're happy to share what we've loved.</p>
-        </div>
-      </details>
-      <details>
-        <summary>When do I need to reply by?</summary>
-        <div class="answer">
-          <p>1 March 2027, using the form <a href="#rsvp">below</a>. Earlier helps us hold the rooms.</p>
-        </div>
-      </details>
-    </div>
-  </div>
-</section>
-
-<!-- =======================================================================
-     7 · RSVP
-     ======================================================================= -->
-<section class="section is-andesite rsvp" id="rsvp">
-  <div class="inner">
-    <span class="eyebrow">07 — RSVP</span>
-    <h2>Will you come?</h2>
-    <p class="deadline" id="deadline">Kindly reply by 1 March 2027</p>
-
-    <div class="gate" id="rsvpGate" hidden>
-      <p>We couldn't find your invitation. Please open the link from the message we sent you, which carries your name and seats, and reply from there.</p>
-      <p class="muted">If the link isn't working, just write to us and we'll sort it out.</p>
-    </div>
-
-    <form id="rsvpForm" novalidate>
-      <div class="field" id="fName">
-        <label for="name">Your name</label>
-        <input type="text" id="name" name="name" autocomplete="name" maxlength="80" required>
-        <p class="err">Please tell us who you are.</p>
-      </div>
-
-      <div class="field" id="fEmail">
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" autocomplete="email" inputmode="email" maxlength="120" required>
-        <p class="err">That email doesn't look right.</p>
-      </div>
-
-      <div class="field" id="fAttending">
-        <fieldset>
-          <legend>Attending</legend>
-          <div class="pills">
-            <label><input type="radio" name="attending" value="both"><span>Friday and Saturday</span></label>
-            <label><input type="radio" name="attending" value="saturday"><span>Saturday only</span></label>
-            <label><input type="radio" name="attending" value="no"><span>Can't make it</span></label>
-          </div>
-        </fieldset>
-        <p class="err">Let us know if you can make it.</p>
-      </div>
-
-      <div class="field" id="fParty" hidden>
-        <label for="party">Party size</label>
-        <select id="party" name="party"></select>
-        <p class="hint-line" id="partyHint"></p>
-      </div>
-
-      <div class="field" id="fDiet">
-        <label for="diet">Dietary needs</label>
-        <input type="text" id="diet" name="diet" maxlength="200" placeholder="Anything the kitchen should know">
-      </div>
-
-      <div class="field">
-        <label for="note">A note for us</label>
-        <textarea id="note" name="note" maxlength="1000" placeholder="Optional"></textarea>
-      </div>
-
-      <button class="btn" type="submit" id="submitBtn">Send reply</button>
-      <p class="form-error" id="formError">Something went wrong sending your reply. Please try again, or message us directly.</p>
-    </form>
-
-    <div class="confirm" id="confirmYes">
-      <h3>We can't wait.</h3>
-      <p>Thank you. Your reply is in, and we'll be in touch with booking details for the estate and a few notes on getting to Bali.</p>
-      <p>Start thinking about linen.</p>
-      <p class="muted confirm-mail" hidden>A copy of your reply is on its way to your inbox.</p>
-      <span class="mono">See you on the cliff · 28 Aug 2027</span>
-    </div>
-    <div class="confirm" id="confirmNo">
-      <h3>We'll miss you.</h3>
-      <p>Thank you for letting us know. We understand completely, and we'll raise a glass to you from the cliff.</p>
-      <p>If anything changes before March, just open your invitation again and send a new reply.</p>
-      <p class="muted confirm-mail" hidden>A copy of your reply is on its way to your inbox.</p>
-      <span class="mono">With love · Ashley &amp; Charles</span>
     </div>
   </div>
 </section>
@@ -1072,14 +901,16 @@ var RSVP_ENDPOINT = "";
     seats = isFinite(n) ? clamp(parseInt(n, 10) || 1, 1, 6) : 1;
     var hasName = guestName.length > 0;
     var displayName = hasName ? guestName : 'Our dearest guest';
-    $('ppName').textContent = displayName;
-    $('envName').textContent = displayName;
-    $('bpName').textContent = hasName ? guestName.toUpperCase() : 'GUEST';
-    $('ppSeats').textContent = seats + (seats === 1 ? ' guest' : ' guests');
-    $('bpSeats').textContent = String(seats);
-    $('seatsNum').textContent = String(seats);
+    /* some of these leave the DOM under reduced motion, so write only to what is there */
+    function put(id, text) { var el = $(id); if (el) el.textContent = text; }
+    put('ppName', displayName);
+    put('envName', displayName);
+    put('bpName', hasName ? guestName.toUpperCase() : 'GUEST');
+    put('ppSeats', seats + (seats === 1 ? ' guest' : ' guests'));
+    put('bpSeats', String(seats));
+    put('seatsNum', String(seats));
     $('seatsNum').hidden = false;
-    $('seatsLine').textContent = 'Admits ' + words[seats - 1] + (seats === 1 ? ' guest' : ' guests');
+    put('seatsLine', 'Admits ' + words[seats - 1] + (seats === 1 ? ' guest' : ' guests'));
     if (hasName && !$('name').value) $('name').value = guestName;
 
     /* MRZ line 1 carries the guest's name, OCR-B style. */
@@ -1096,8 +927,10 @@ var RSVP_ENDPOINT = "";
   var envBack = $('envBack'), envPocket = $('envPocket'), envFlap = $('envFlap'), seal = $('seal');
   var pocketText = envPocket.querySelectorAll('.addr, .par-avion');
   var bpass = $('bpass'), passport = $('passport'), cover = $('ppCover');
+  /* the leaves, first to last (the DOM holds them last to first so the first sits on top) */
+  var leaves = Array.prototype.slice.call(passport.querySelectorAll('.pp-leaf')).sort(function (a, b) { return a.getAttribute('data-leaf') - b.getAttribute('data-leaf'); });
   var arc = $('arc'), arcMask = $('arcMask'), plane = $('plane'), stamp = $('stamp');
-  var openBtn = $('openBtn'), flock = $('flock'), more = $('more'), sealArt = $('sealArt'), capTop = $('capTop');
+  var openBtn = $('openBtn'), sealArt = $('sealArt'), capTop = $('capTop');
   /* ---- The painted plate is stacked in depth: the base painting, then the temple cliff, the
      stone ledge, the flowering bushes and the plumeria corner. On load each arrives in turn (CSS),
      then the layers answer the device's tilt by their own factor. If the base fails to load the
@@ -1179,7 +1012,6 @@ var RSVP_ENDPOINT = "";
     hint.parentNode.removeChild(hint);
     capTop.parentNode.removeChild(capTop);
     openBtn.parentNode.removeChild(openBtn);
-    flock.parentNode.removeChild(flock);   /* the ocean stays, but its CSS animation is off */
     stage.classList.add('is-static');
     stage.classList.remove('is-loading');
     passport.classList.add('is-out');
@@ -1199,87 +1031,25 @@ var RSVP_ENDPOINT = "";
     residue.firstChild.removeAttribute('id');
     envPocket.appendChild(residue);
 
-    /* ---- Birds on their own clock. Near egrets (broad wings, tucked neck, trailing legs)
-       beat a few times then glide; distant seabirds are small gliding strokes. Runs only
-       while the stage is on screen and the tab is visible. ---- */
-    var SVG_NS = 'http://www.w3.org/2000/svg';
-    var EGRET =
-      '<path class="b-legs" d="M-5 1.4L-15.5 3.6M-4.4 1.9L-14.6 4.6"/>' +
-      '<g class="wings">' +
-        '<path class="b-wing far" transform="translate(-2 0) scale(.82)" d="M-3.5 -0.5C-8 -5 -7 -12 -1 -15.5C4.5 -13 5.5 -6 3.5 -0.5Z"/>' +
-        '<path class="b-wing" d="M-3.5 -0.5C-8 -5 -7 -12 -1 -15.5C4.5 -13 5.5 -6 3.5 -0.5Z"/>' +
-      '</g>' +
-      '<path class="b-body" d="M-8 0.4C-5 -1.8 3 -2.3 7 -1C8.6 -0.4 8.9 1 7.6 1.7C3 3.2 -3.5 3.2 -8 0.4Z"/>' +
-      '<path class="b-neck" d="M6.6 -1C7.6 -2.8 8.8 -3.4 10 -2.6"/>' +
-      '<circle class="b-head" cx="10.8" cy="-2.2" r="1.4"/>' +
-      '<path class="b-bill" d="M12 -2.1L16.4 -1.5"/>';
-    var GULL = '<path class="gull" d="M-6 0C-4 -2.6 -2 -3 0 -0.6C2 -3 4 -2.6 6 0"/>';
-    var birds = [];
-    function makeBird(kind, i) {
-      var g = document.createElementNS(SVG_NS, 'g');
-      g.setAttribute('class', 'bird');
-      g.innerHTML = kind === 'egret' ? EGRET : GULL;
-      flock.appendChild(g);
-      var b = { kind: kind, el: g, wings: g.querySelector('.wings'), dir: 1 };
-      resetBird(b, true);
-      return b;
+    /* ---- The stage is measured in beats: the opening takes OPEN of them, then every spread
+       takes PER, then a short hold. On a phone the spread cannot fit at reading size, so each
+       spread also gets a close-up of its left page and a pan across to its right page, and PER
+       is longer to make room. The stage height follows, so scroll speed feels the same either way. */
+    var BEAT_VH = 50, OPEN = 12, HOLD = .8, SPREADS = leaves.length;
+    var spreadS = 1, mobileSpread = false, PER = 2.4, BEATS = OPEN + SPREADS * PER + HOLD;
+    function measureBook() {
+      var pw = passport.offsetWidth;
+      spreadS = Math.min(1, (vw - 28) / (2 * pw));   /* scale at which both pages fit across */
+      mobileSpread = spreadS < .9;
+      PER = mobileSpread ? 4.4 : 2.4;
+      BEATS = OPEN + SPREADS * PER + HOLD;
+      stage.style.height = Math.round(BEATS * BEAT_VH) + 'vh';
     }
-    function resetBird(b, initial) {
-      var egret = b.kind === 'egret';
-      b.dir = egret ? 1 : (Math.random() < .5 ? -1 : 1);
-      b.scale = egret ? 1.0 + Math.random() * .5 : .55 + Math.random() * .5;
-      b.speed = (egret ? 42 + Math.random() * 16 : 18 + Math.random() * 12) * b.dir;   /* px per second */
-      b.x = initial ? Math.random() * vw : (b.dir > 0 ? -80 : vw + 80);
-      b.y = vh * (egret ? .10 + Math.random() * .30 : .06 + Math.random() * .28);
-      b.bob = 4 + Math.random() * 6;
-      b.phase = Math.random() * Math.PI * 2;
-      b.flapRate = egret ? 1.4 : 2.2;                     /* beats per second while flapping */
-      b.flapFor = 1.6 + Math.random() * 1.6;              /* seconds of flapping */
-      b.glideFor = 2.5 + Math.random() * 4;               /* seconds of gliding */
-      b.cycleT = Math.random() * (b.flapFor + b.glideFor);
-    }
-    for (var bi = 0; bi < 3; bi++) birds.push(makeBird('egret', bi));
-    for (var gi = 0; gi < 6; gi++) birds.push(makeBird('gull', gi));
 
-    var lastT = 0, birdsOn = false;
-    function tickBirds(now) {
-      if (!birdsOn) return;
-      var dt = lastT ? Math.min(.05, (now - lastT) / 1000) : 0;
-      lastT = now;
-      for (var i = 0; i < birds.length; i++) {
-        var b = birds[i];
-        b.x += b.speed * dt;
-        b.cycleT += dt;
-        var cycle = b.flapFor + b.glideFor;
-        if (b.cycleT > cycle) b.cycleT -= cycle;
-        if ((b.dir > 0 && b.x > vw + 90) || (b.dir < 0 && b.x < -90)) resetBird(b, false);
-        var y = b.y + Math.sin(now / 1000 * .9 + b.phase) * b.bob;
-        var flapping = b.cycleT < b.flapFor;
-        var beat = flapping ? Math.cos(b.cycleT * b.flapRate * Math.PI * 2 + b.phase) : 0.55;   /* glide: wings held out */
-        var tilt = flapping ? 0 : Math.sin(now / 1000 * .6 + b.phase) * 3;
-        b.el.style.visibility = 'visible';
-        b.el.setAttribute('transform', 'translate(' + b.x.toFixed(1) + ' ' + y.toFixed(1) + ') rotate(' + tilt.toFixed(1) + ') scale(' + (b.scale * b.dir).toFixed(2) + ' ' + b.scale.toFixed(2) + ')');
-        if (b.wings) b.wings.setAttribute('transform', 'scale(1 ' + (0.15 + 0.85 * beat).toFixed(3) + ')');
-        else b.el.firstChild.setAttribute('transform', 'scale(1 ' + (0.6 + 0.4 * beat).toFixed(3) + ')');
-      }
-      requestAnimationFrame(tickBirds);
-    }
-    function setBirds(on) {
-      if (on === birdsOn) return;
-      birdsOn = on; lastT = 0;
-      if (on) requestAnimationFrame(tickBirds);
-    }
-    var stageVisible = true;
-    if ('IntersectionObserver' in window) {
-      new IntersectionObserver(function (entries) {
-        stageVisible = entries[0].isIntersecting;
-        setBirds(stageVisible && !document.hidden);
-      }, { threshold: 0 }).observe(stage);
-    }
-    document.addEventListener('visibilitychange', function () { setBirds(stageVisible && !document.hidden); });
-    setBirds(true);
-
-    function render(p) {
+    function render(pAll) {
+      var pb = pAll * BEATS;
+      /* the envelope-to-stamp sequence, on its own 0–1 */
+      var p = clamp(pb / OPEN, 0, 1);
       /* Envelope resting position, then it sinks in phase 6. */
       var envY = vh * 0.06;
 
@@ -1320,7 +1090,8 @@ var RSVP_ENDPOINT = "";
       var ppS = .46 + .54 * s5;
       /* the address on the pocket fades early so it never overprints the cover */
       for (var t = 0; t < pocketText.length; t++) pocketText[t].style.opacity = 1 - seg(p, .52, .62);
-      passport.style.transform = 'translateY(' + ppY + 'px) scale(' + ppS + ')';
+      /* the page-turn phases (below) may pan and scale the passport on top of this */
+      var ppTX = 0, ppSZ = 1;
       /* pocket stays above the passport until it is clear of the envelope */
       passport.classList.toggle('is-out', p > .68);
 
@@ -1350,12 +1121,33 @@ var RSVP_ENDPOINT = "";
       stamp.style.transform = 'rotate(-12deg) scale(' + (1.9 - .9 * ease(s8b)) + ')';
       stamp.style.visibility = s8b > 0 ? 'visible' : 'hidden';
 
-      /* -- "More below" link fades in as the stamp lands ---------- 0.96–1.00 */
-      var s9 = seg(p, .97, 1);
-      more.style.opacity = s9;
-      more.style.visibility = s9 > 0 ? 'visible' : 'hidden';
+      /* -- 9. The pages turn, one leaf per spread. A leaf folds over onto the pile at the left;
+            its back is the next left-hand page and the page beneath is the next right-hand page.
+            On a phone the view pulls back to watch the turn, closes in on the left page, then
+            pans across to the right page. On a wider screen the whole spread stays in view. ---- */
+      var pw = passport.offsetWidth;
+      var firstTurn = 0;
+      for (var li = 0; li < SPREADS; li++) {
+        var t = clamp((pb - OPEN - li * PER) / PER, 0, 1);
+        var turn = ease(seg(t, 0, mobileSpread ? .32 : .5));
+        if (li === 0) firstTurn = turn;
+        leaves[li].style.transform = 'rotateY(' + (-180 * turn) + 'deg)';
+        /* on the right it sits atop the unturned pile; past the spine it lands atop the turned pile */
+        leaves[li].style.zIndex = turn > .5 ? 20 + li : 10 + (SPREADS - li);
+        if (t > 0 && t < 1 && mobileSpread) {
+          var zoom = ease(seg(t, .40, .55)), pan = ease(seg(t, .72, .86));
+          ppSZ = 1 - (1 - spreadS) * turn; ppSZ += (1 - ppSZ) * zoom;
+          ppTX = pw * .5 * spreadS * turn; ppTX += (pw - ppTX) * zoom; ppTX -= pw * pan;
+        }
+      }
+      if (!mobileSpread) ppTX = pw * .5 * ease(seg(pb - OPEN, 0, PER * .5));   /* centre the spread from the first turn on */
+      /* the cover lies flat once the first leaf lands on it; closed, it is above everything */
+      cover.style.transform = 'rotateY(' + (-174 * s7 - 6 * firstTurn) + 'deg)';
+      cover.style.zIndex = s7 > .5 ? 4 : 40;
+      /* translate runs before scale, so the offsets above are in unscaled page units */
+      passport.style.transform = 'translate(' + ppTX.toFixed(1) + 'px,' + ppY + 'px) scale(' + (ppS * ppSZ).toFixed(4) + ')';
 
-      skip.classList.toggle('is-hidden', p >= 1);
+      skip.classList.toggle('is-hidden', pAll >= 1);
     }
 
     var ticking = false;
@@ -1374,8 +1166,14 @@ var RSVP_ENDPOINT = "";
       vh = window.innerHeight;
       vw = window.innerWidth;
       eh = envBack.offsetHeight;
+      measureBook();
       onScroll();
     }
+    /* Skip: straight to the last spread, where the reply form is. */
+    skip.addEventListener('click', function (e) {
+      e.preventDefault(); cancelOpen();
+      window.scrollTo({ top: stage.offsetTop + stage.offsetHeight - vh, behavior: 'smooth' });
+    });
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onResize, { passive: true });
     onResize();
@@ -1391,9 +1189,10 @@ var RSVP_ENDPOINT = "";
     function playOpen() {
       cancelOpen();
       var start = window.pageYOffset;
-      /* Run past the end of the stage so the letter's top edge shows below the passport. */
-      var end = stage.offsetTop + stage.offsetHeight - vh + vh * 0.16;
-      var dur = 11000, t0 = performance.now();
+      /* Run through the opening and the first turn, to the painted spread; the guest reads on from there. */
+      var endBeat = OPEN + PER * (mobileSpread ? .9 : .6);
+      var end = stage.offsetTop + (stage.offsetHeight - vh) * (endBeat / BEATS);
+      var dur = 15000, t0 = performance.now();
       document.documentElement.style.scrollBehavior = 'auto';
       function step(now) {
         var t = clamp((now - t0) / dur, 0, 1);
