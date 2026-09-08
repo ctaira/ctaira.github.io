@@ -66,6 +66,31 @@ button,input,select,textarea{font:inherit;color:inherit}
 }
 .skip.is-hidden{opacity:0;visibility:hidden}
 
+/* Contents: a pill at the top left opens a short list of the passport's pages. */
+.nav-btn{
+  position:fixed;top:max(14px,env(safe-area-inset-top));left:16px;z-index:50;
+  font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--ink);background:rgba(242,237,227,.85);
+  border:1px solid rgba(36,39,34,.25);border-radius:999px;padding:8px 14px;cursor:pointer;
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+}
+.nav{
+  position:fixed;top:calc(max(14px,env(safe-area-inset-top)) + 44px);left:16px;z-index:50;
+  background:rgba(242,237,227,.96);border:1px solid rgba(36,39,34,.25);border-radius:14px;
+  padding:8px 0;min-width:190px;box-shadow:0 18px 40px -18px rgba(36,39,34,.5);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  transform-origin:14px 0;transition:opacity .2s,transform .2s,visibility .2s;
+}
+.nav[hidden]{display:block;opacity:0;visibility:hidden;transform:scale(.96) translateY(-4px)}
+.nav ol{list-style:none;margin:0;padding:0}
+.nav a{
+  display:grid;grid-template-columns:1.6em 1fr;align-items:baseline;gap:.4em;
+  padding:8px 16px;text-decoration:none;color:var(--ink);font-family:var(--serif);font-size:17px;line-height:1.2;
+}
+.nav a small{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--husk)}
+.nav a:hover,.nav a:focus-visible{background:rgba(36,39,34,.06);outline:none}
+.nav .rule{height:1px;background:rgba(36,39,34,.15);margin:6px 16px}
+
 /* ---------------------------------------------------------------------------
    Opening sequence
 --------------------------------------------------------------------------- */
@@ -109,24 +134,10 @@ button,input,select,textarea{font:inherit;color:inherit}
    if it is missing or fails, the drawn scene stays. */
 .plate{left:0;top:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:0;transition:opacity .6s ease;overflow:hidden}
 .plate.is-ready{opacity:1}
-.plate img{position:absolute;left:-3%;top:-3%;width:106%;height:106%;max-width:none;max-height:none;object-fit:cover;object-position:50% 46%}
-/* the cut layers are cropped to their content and placed over the painting by script, so the bitmaps that move stay small */
-.plate img.lyr{left:0;top:0;width:auto;height:auto;object-fit:fill;will-change:transform}
-/* Load-in. The painting settles, then each cut layer arrives from its own side, nearest last; the two
-   foreground layers keep a slow sway afterwards. Tilt uses the separate translate property, so the
-   animations and the tilt never fight over transform. */
-.plate.is-ready #plateBase{animation:plate-settle 2.4s cubic-bezier(.2,.6,.2,1) both}
+.plate img{position:absolute;left:0;top:0;width:100%;height:100%;max-width:none;max-height:none;object-fit:cover;object-position:50% 46%}
+/* Load-in: the painting settles from a slight zoom as it fades up. */
+.plate.is-ready img{animation:plate-settle 2.4s cubic-bezier(.2,.6,.2,1) both}
 @keyframes plate-settle{from{transform:scale(1.06)}to{transform:scale(1)}}
-.plate.is-ready .lyr-cliff{animation:in-cliff 1.6s cubic-bezier(.2,.7,.2,1) .4s backwards}
-@keyframes in-cliff{from{opacity:0;transform:translate(7%,2%)}}
-.plate.is-ready .lyr-ledge{animation:in-ledge 1.4s cubic-bezier(.2,.7,.2,1) .7s backwards}
-@keyframes in-ledge{from{opacity:0;transform:translateY(12%)}}
-.plate.is-ready .lyr-bushes{transform-origin:50% 100%;animation:in-bushes 1.5s cubic-bezier(.2,.7,.2,1) .9s backwards,sway-bushes 9s ease-in-out 2.4s infinite}
-@keyframes in-bushes{from{opacity:0;transform:translateY(16%)}}
-@keyframes sway-bushes{0%,100%{transform:rotate(0)}50%{transform:rotate(.5deg)}}
-.plate.is-ready .lyr-corner{transform-origin:6% 4%;animation:in-corner 1.6s cubic-bezier(.2,.7,.2,1) 1.05s backwards,sway-corner 7.5s ease-in-out 2.65s infinite}
-@keyframes in-corner{from{opacity:0;transform:translate(-9%,-11%) rotate(-4deg)}}
-@keyframes sway-corner{0%,100%{transform:rotate(0)}50%{transform:rotate(.8deg)}}
 /* the envelope and captions wait for the scene, then rise into place */
 .stage.is-loading .env,.stage.is-loading .passport,.stage.is-loading .cap-top,.stage.is-loading .hint{opacity:0!important}
 .stage.is-in .env{animation:rise-in 1.1s cubic-bezier(.2,.7,.2,1) 1.35s backwards}
@@ -412,6 +423,20 @@ button,input,select,textarea{font:inherit;color:inherit}
 <body>
 
 <a class="skip" id="skip" href="#rsvp">Skip ↓</a>
+<button class="nav-btn" id="navBtn" type="button" aria-expanded="false" aria-controls="nav">Contents</button>
+<nav class="nav" id="nav" hidden aria-label="Pages of the invitation">
+  <ol>
+    <li><a href="#stage" data-beat="0"><small>—</small>The invitation</a></li>
+    <li><a href="#pg-date" data-spread="0" data-side="l"><small>01</small>The date</a></li>
+    <li><a href="#pg-letter" data-spread="1" data-side="l"><small>02</small>A letter</a></li>
+    <li><a href="#pg-weekend" data-spread="2" data-side="l"><small>03</small>The weekend</a></li>
+    <li><a href="#pg-travel" data-spread="2" data-side="r"><small>04</small>Getting there</a></li>
+    <li><a href="#pg-dress" data-spread="3" data-side="l"><small>05</small>Dress code</a></li>
+    <li><a href="#pg-adults" data-spread="3" data-side="r"><small>06</small>Adults only</a></li>
+    <li><a href="#pg-faq" data-spread="4" data-side="l"><small>07</small>Questions</a></li>
+    <li><a href="#rsvp" data-spread="5" data-side="r"><small>08</small>RSVP</a></li>
+  </ol>
+</nav>
 
 <!-- =======================================================================
      OPENING SEQUENCE
@@ -548,10 +573,6 @@ button,input,select,textarea{font:inherit;color:inherit}
 
       <div class="plate" id="plate" aria-hidden="true">
         <img id="plateBase" src="assets/bali-cliff.jpg" alt="" decoding="async">
-        <img class="lyr lyr-cliff" data-k="0.35" data-box="367,412,574,796" src="assets/l-cliff.webp" alt="" decoding="async">
-        <img class="lyr lyr-ledge" data-k="0.7" data-box="0,1267,941,405" src="assets/l-ledge.webp" alt="" decoding="async">
-        <img class="lyr lyr-bushes" data-k="1" data-box="0,1063,941,609" src="assets/l-bushes.webp" alt="" decoding="async">
-        <img class="lyr lyr-corner" data-k="1.15" data-box="0,0,588,554" src="assets/l-corner.webp" alt="" decoding="async">
       </div>
 
 
@@ -675,7 +696,7 @@ button,input,select,textarea{font:inherit;color:inherit}
         </div>
 
         <div class="pp-leaf" data-leaf="5">
-          <div class="pp-page pg leaf-front">
+          <div class="pp-page pg leaf-front" id="pg-adults">
             <span class="eb">05 — A note on children</span>
             <h2>Adults only</h2>
             <p class="lede">We love your children. We're also asking you to leave them at home this time.</p>
@@ -689,7 +710,7 @@ button,input,select,textarea{font:inherit;color:inherit}
             </div>
             <div class="foot">Page 9</div>
           </div>
-          <div class="pp-page pg leaf-back">
+          <div class="pp-page pg leaf-back" id="pg-faq">
             <span class="eb">06 — Questions</span>
             <h2>Things you might be wondering</h2>
             <dl class="qa">
@@ -703,7 +724,7 @@ button,input,select,textarea{font:inherit;color:inherit}
         </div>
 
         <div class="pp-leaf" data-leaf="4">
-          <div class="pp-page pg leaf-front">
+          <div class="pp-page pg leaf-front" id="pg-travel">
             <span class="eb">03 — Order of events</span>
             <h3 class="first">Sunday <small>29 August · Yours</small></h3>
             <ul class="ev">
@@ -716,7 +737,7 @@ button,input,select,textarea{font:inherit;color:inherit}
             <p class="note">Nobody drives anywhere all weekend. The resort shuttle runs between the three hotels around the clock.</p>
             <div class="foot">Page 7</div>
           </div>
-          <div class="pp-page pg leaf-back">
+          <div class="pp-page pg leaf-back" id="pg-dress">
             <span class="eb">04 — Dress code</span>
             <h2>Tropical formal</h2>
             <p class="lede">Linen suits, long dresses, real color. Dress for a beautiful evening outdoors in the tropics, not a ballroom.</p>
@@ -748,7 +769,7 @@ button,input,select,textarea{font:inherit;color:inherit}
             </p>
             <div class="foot">Page 5</div>
           </div>
-          <div class="pp-page pg leaf-back">
+          <div class="pp-page pg leaf-back" id="pg-weekend">
             <span class="eb">03 — Order of events</span>
             <h2>A weekend on the cliff</h2>
             <p class="lede">Everything happens at AYANA Bali in Jimbaran, on the estate where you're staying.</p>
@@ -769,7 +790,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 
         <div class="pp-leaf" data-leaf="2">
           <div class="pp-page pp-art art-itin leaf-front" role="img" aria-label="August 27: welcome party at the Rock Bar, AYANA Resort, drinks and dinner with cliffside views. August 28: tea ceremony (optional), wedding ceremony, reception."></div>
-          <div class="pp-page pg leaf-back">
+          <div class="pp-page pg leaf-back" id="pg-letter">
             <span class="eb">01 — A letter</span>
             <p class="salut">Dear friends and family,</p>
             <p>Our first date was an Ed Sheeran concert. You might say everything about it, and everything since, has been "Perfect."</p>
@@ -838,7 +859,7 @@ button,input,select,textarea{font:inherit;color:inherit}
           </div>
         </div>
 
-          <div class="pp-page pp-art art-cal leaf-back" role="img" aria-label="August 2027 calendar with the 27th and 28th circled, over a painting of the Bali cliffs."></div>
+          <div class="pp-page pp-art art-cal leaf-back" id="pg-date" role="img" aria-label="August 2027 calendar with the 27th and 28th circled, over a painting of the Bali cliffs."></div>
         </div>
 
         <div class="pp-cover" id="ppCover" aria-hidden="true">
@@ -931,12 +952,9 @@ var RSVP_ENDPOINT = "";
   var leaves = Array.prototype.slice.call(passport.querySelectorAll('.pp-leaf')).sort(function (a, b) { return a.getAttribute('data-leaf') - b.getAttribute('data-leaf'); });
   var arc = $('arc'), arcMask = $('arcMask'), plane = $('plane'), stamp = $('stamp');
   var openBtn = $('openBtn'), sealArt = $('sealArt'), capTop = $('capTop');
-  /* ---- The painted plate is stacked in depth: the base painting, then the temple cliff, the
-     stone ledge, the flowering bushes and the plumeria corner. On load each arrives in turn (CSS),
-     then the layers answer the device's tilt by their own factor. If the base fails to load the
+  /* ---- The painted plate: one image. It fades in once decoded; if it fails to load the
      drawn scene stays and the envelope still appears. ---- */
   var plate = $('plate'), vista = $('vista'), plateBase = $('plateBase');
-  var layers = Array.prototype.slice.call(plate.querySelectorAll('.lyr'));
   function sceneIn() { stage.classList.remove('is-loading'); stage.classList.add('is-in'); }
   function plateReady() {
     plate.classList.add('is-ready');
@@ -945,50 +963,9 @@ var RSVP_ENDPOINT = "";
     plate.addEventListener('transitionend', hideVista, { once: true });
     setTimeout(hideVista, 900);
   }
-  /* fade in only once every layer is decoded, so no layer ever shows before the painting under it */
-  var decodes = [plateBase].concat(layers).map(function (img) { return (img.decode ? img.decode() : Promise.resolve()).catch(function () {}); });
-  Promise.all(decodes).then(function () { if (plateBase.naturalWidth > 0) { fitPlate(); layoutPlate(); plateReady(); } });
-  window.addEventListener('resize', function () { fitPlate(); layoutPlate(); }, { passive: true });
+  (plateBase.decode ? plateBase.decode() : Promise.resolve()).catch(function () {}).then(function () { if (plateBase.naturalWidth > 0) plateReady(); });
   plateBase.addEventListener('error', function () { plate.parentNode.removeChild(plate); sceneIn(); });
   setTimeout(function () { if (stage.classList.contains('is-loading')) sceneIn(); }, 6000);   /* never wait on a stalled image */
-  layers.forEach(function (l) { l.addEventListener('error', function () { l.parentNode.removeChild(l); }); });
-  var tiltX = 0, tiltY = 0, reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var SRC_W = 941, SRC_H = 1672;   /* the painting's pixel size; every layer box is in these units */
-  /* movement lands on whole device pixels, whatever the display scaling, so bitmaps are never resampled */
-  function snap(v) { var d = window.devicePixelRatio || 1; return Math.round(v * d) / d; }
-  /* Place each cropped layer exactly where its pixels sit in the cover-fitted base painting. */
-  function fitPlate() {
-    var W = plate.clientWidth, H = plate.clientHeight;
-    if (!W || !H) return;
-    var bw = W * 1.06, bh = H * 1.06, bx = -W * 0.03, by = -H * 0.03;   /* the base image box (106%, offset -3%) */
-    var s = Math.max(bw / SRC_W, bh / SRC_H);
-    var ox = bx + (bw - SRC_W * s) * 0.5, oy = by + (bh - SRC_H * s) * 0.46;   /* object-position 50% 46% */
-    for (var i = 0; i < layers.length; i++) {
-      var b = layers[i].getAttribute('data-box').split(',').map(Number);
-      layers[i].style.left = (ox + b[0] * s).toFixed(2) + 'px';
-      layers[i].style.top = (oy + b[1] * s).toFixed(2) + 'px';
-      layers[i].style.width = (b[2] * s).toFixed(2) + 'px';
-      layers[i].style.height = (b[3] * s).toFixed(2) + 'px';
-    }
-  }
-  function layoutPlate() {
-    if (reduceMotion) return;
-    for (var i = 0; i < layers.length; i++) {
-      var k = parseFloat(layers[i].getAttribute('data-k')) || 0;
-      /* whole pixels and no scaling: a bitmap that is resampled every frame goes soft */
-      var dx = snap(tiltX * 10 * k), dy = snap(tiltY * 8 * k);
-      layers[i].style.translate = dx + 'px ' + dy + 'px';
-    }
-    plateBase.style.translate = snap(-tiltX * 3) + 'px ' + snap(-tiltY * 2) + 'px';
-  }
-  var plateTick = false;
-  function queuePlate() { if (plateTick) return; plateTick = true; requestAnimationFrame(function () { plateTick = false; layoutPlate(); }); }
-  if ('DeviceOrientationEvent' in window) {
-    window.addEventListener('deviceorientation', function (e) {
-      if (e.gamma == null || e.beta == null) return;
-      tiltX = Math.max(-1, Math.min(1, e.gamma / 25)); tiltY = Math.max(-1, Math.min(1, (e.beta - 45) / 25)); queuePlate();
-    }, { passive: true });
-  }
   var envParts = [envBack, envPocket, envFlap];
 
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1171,9 +1148,28 @@ var RSVP_ENDPOINT = "";
     }
     /* Skip: straight to the last spread, where the reply form is. */
     skip.addEventListener('click', function (e) {
-      e.preventDefault(); cancelOpen();
-      window.scrollTo({ top: stage.offsetTop + stage.offsetHeight - vh, behavior: 'smooth' });
+      e.preventDefault();
+      scrollTween(stage.offsetTop + stage.offsetHeight - vh, 1400);
     });
+    /* ---- Contents: each entry names a spread and a side; the jump lands where that page is
+       fully readable on this device, flipping the leaves on the way. ---- */
+    function beatFor(a) {
+      if (a.hasAttribute('data-beat')) return parseFloat(a.getAttribute('data-beat'));
+      var i = parseInt(a.getAttribute('data-spread'), 10), right = a.getAttribute('data-side') === 'r';
+      var t = mobileSpread ? (right ? .93 : .62) : .7;
+      return OPEN + PER * (i + t);
+    }
+    var navBtn = $('navBtn'), nav = $('nav');
+    function setNav(open) { nav.hidden = !open; navBtn.setAttribute('aria-expanded', open ? 'true' : 'false'); }
+    navBtn.addEventListener('click', function () { setNav(nav.hidden); });
+    nav.addEventListener('click', function (e) {
+      var a = e.target.closest('a'); if (!a) return;
+      e.preventDefault(); setNav(false);
+      var y = stage.offsetTop + (stage.offsetHeight - vh) * (beatFor(a) / BEATS);
+      scrollTween(y, Math.min(1800, 500 + Math.abs(y - window.pageYOffset) * .12));
+    });
+    document.addEventListener('click', function (e) { if (!nav.hidden && !nav.contains(e.target) && e.target !== navBtn) setNav(false); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setNav(false); });
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onResize, { passive: true });
     onResize();
@@ -1186,13 +1182,9 @@ var RSVP_ENDPOINT = "";
       opening = null;
       document.documentElement.style.scrollBehavior = '';
     }
-    function playOpen() {
+    function scrollTween(end, dur) {
       cancelOpen();
-      var start = window.pageYOffset;
-      /* Run through the opening and the first turn, to the painted spread; the guest reads on from there. */
-      var endBeat = OPEN + PER * (mobileSpread ? .9 : .6);
-      var end = stage.offsetTop + (stage.offsetHeight - vh) * (endBeat / BEATS);
-      var dur = 15000, t0 = performance.now();
+      var start = window.pageYOffset, t0 = performance.now();
       document.documentElement.style.scrollBehavior = 'auto';
       function step(now) {
         var t = clamp((now - t0) / dur, 0, 1);
@@ -1202,6 +1194,11 @@ var RSVP_ENDPOINT = "";
         else cancelOpen();
       }
       opening = requestAnimationFrame(step);
+    }
+    function playOpen() {
+      /* Run through the opening and the first turn, to the painted spread; the guest reads on from there. */
+      var endBeat = OPEN + PER * (mobileSpread ? .9 : .6);
+      scrollTween(stage.offsetTop + (stage.offsetHeight - vh) * (endBeat / BEATS), 15000);
     }
     openBtn.addEventListener('click', playOpen);
     ['pointerdown', 'wheel', 'touchmove', 'keydown'].forEach(function (ev) {
