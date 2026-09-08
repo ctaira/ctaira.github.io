@@ -125,7 +125,34 @@ button,input,select,textarea{font:inherit;color:inherit}
 .plate.is-ready{opacity:1}
 .plate img{position:absolute;left:-3%;top:-3%;width:106%;height:106%;max-width:none;max-height:none;object-fit:cover;object-position:50% 46%}
 /* the cut layers are cropped to their content and placed over the painting by script, so the bitmaps that move stay small */
-.plate img.lyr{left:0;top:0;width:auto;height:auto;object-fit:fill}
+.plate img.lyr{left:0;top:0;width:auto;height:auto;object-fit:fill;will-change:transform}
+/* Load-in. The painting settles, then each cut layer arrives from its own side, nearest last; the two
+   foreground layers keep a slow sway afterwards. Tilt uses the separate translate property, so the
+   animations and the tilt never fight over transform. */
+.plate.is-ready #plateBase{animation:plate-settle 2.4s cubic-bezier(.2,.6,.2,1) both}
+@keyframes plate-settle{from{transform:scale(1.06)}to{transform:scale(1)}}
+.plate.is-ready .lyr-cliff{animation:in-cliff 1.6s cubic-bezier(.2,.7,.2,1) .4s backwards}
+@keyframes in-cliff{from{opacity:0;transform:translate(7%,2%)}}
+.plate.is-ready .lyr-ledge{animation:in-ledge 1.4s cubic-bezier(.2,.7,.2,1) .7s backwards}
+@keyframes in-ledge{from{opacity:0;transform:translateY(12%)}}
+.plate.is-ready .lyr-bushes{transform-origin:50% 100%;animation:in-bushes 1.5s cubic-bezier(.2,.7,.2,1) .9s backwards,sway-bushes 9s ease-in-out 2.4s infinite}
+@keyframes in-bushes{from{opacity:0;transform:translateY(16%)}}
+@keyframes sway-bushes{0%,100%{transform:rotate(0)}50%{transform:rotate(.5deg)}}
+.plate.is-ready .lyr-corner{transform-origin:6% 4%;animation:in-corner 1.6s cubic-bezier(.2,.7,.2,1) 1.05s backwards,sway-corner 7.5s ease-in-out 2.65s infinite}
+@keyframes in-corner{from{opacity:0;transform:translate(-9%,-11%) rotate(-4deg)}}
+@keyframes sway-corner{0%,100%{transform:rotate(0)}50%{transform:rotate(.8deg)}}
+/* the envelope and captions wait for the scene, then rise into place */
+.stage.is-loading .env,.stage.is-loading .passport,.stage.is-loading .cap-top,.stage.is-loading .hint{opacity:0!important}
+.stage.is-in .env{animation:rise-in 1.1s cubic-bezier(.2,.7,.2,1) 1.35s backwards}
+.stage.is-in .passport{animation:fade-in 1.1s ease-out 1.35s backwards}
+.stage.is-in .cap-top{animation:drop-in 1.1s cubic-bezier(.2,.7,.2,1) 1.6s backwards}
+.stage.is-in .hint{animation:rise-in 1.1s cubic-bezier(.2,.7,.2,1) 1.75s backwards}
+@keyframes rise-in{from{opacity:0;translate:0 36px}to{opacity:1;translate:0 0}}
+@keyframes drop-in{from{opacity:0;translate:0 -22px}to{opacity:1;translate:0 0}}
+@keyframes fade-in{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){
+  .plate.is-ready img,.stage.is-in .env,.stage.is-in .passport,.stage.is-in .cap-top,.stage.is-in .hint{animation:none!important}
+}
 .vista .v-wash{animation:vwash 11s ease-in-out infinite alternate}
 @keyframes vwash{from{transform:translateX(-7px)}to{transform:translateX(7px)}}
 @media (prefers-reduced-motion:reduce){.vista .v-wash{animation:none}}
@@ -435,7 +462,7 @@ hr.rule{border:0;border-top:1px solid rgba(36,39,34,.2);margin:2.5em 0}
 <!-- =======================================================================
      OPENING SEQUENCE
      ======================================================================= -->
-<section class="stage" id="stage" aria-label="Your invitation">
+<section class="stage is-loading" id="stage" aria-label="Your invitation">
   <div class="stage-viewport">
     <div class="scene" id="scene">
 
@@ -567,11 +594,10 @@ hr.rule{border:0;border-top:1px solid rgba(36,39,34,.2);margin:2.5em 0}
 
       <div class="plate" id="plate" aria-hidden="true">
         <img id="plateBase" src="assets/bali-cliff.jpg" alt="" decoding="async">
-        <img class="lyr" data-k="0.35" data-box="512,676,429,731" src="assets/l2-cliff.webp" alt="" decoding="async">
-        <img class="lyr" data-k="0.55" data-box="0,432,368,756" src="assets/l6-gate.webp" alt="" decoding="async">
-        <img class="lyr" data-k="0.7" data-box="0,1291,941,381" src="assets/l7-ledge.webp" alt="" decoding="async">
-        <img class="lyr" data-k="1" data-box="0,1111,709,561" src="assets/l5-flowers-bottom.webp" alt="" decoding="async">
-        <img class="lyr" data-k="1.15" data-box="0,0,629,668" src="assets/l4-flowers-top.webp" alt="" decoding="async">
+        <img class="lyr lyr-cliff" data-k="0.35" data-box="367,412,574,796" src="assets/l-cliff.webp" alt="" decoding="async">
+        <img class="lyr lyr-ledge" data-k="0.7" data-box="0,1267,941,405" src="assets/l-ledge.webp" alt="" decoding="async">
+        <img class="lyr lyr-bushes" data-k="1" data-box="0,1063,941,609" src="assets/l-bushes.webp" alt="" decoding="async">
+        <img class="lyr lyr-corner" data-k="1.15" data-box="0,0,588,554" src="assets/l-corner.webp" alt="" decoding="async">
       </div>
 
       <svg class="flock" id="flock" aria-hidden="true"></svg>
@@ -1072,14 +1098,16 @@ var RSVP_ENDPOINT = "";
   var bpass = $('bpass'), passport = $('passport'), cover = $('ppCover');
   var arc = $('arc'), arcMask = $('arcMask'), plane = $('plane'), stamp = $('stamp');
   var openBtn = $('openBtn'), flock = $('flock'), more = $('more'), sealArt = $('sealArt'), capTop = $('capTop');
-  /* ---- The painted plate is stacked in depth: the base painting, then the cliff, the gate,
-     the ledge and the foreground flowers cut from it. Each layer drifts by its own factor with
-     the scroll and with the device's tilt or the pointer, so the scene pops out around the
-     envelope. If the base fails to load the drawn scene stays. ---- */
+  /* ---- The painted plate is stacked in depth: the base painting, then the temple cliff, the
+     stone ledge, the flowering bushes and the plumeria corner. On load each arrives in turn (CSS),
+     then the layers answer the device's tilt by their own factor. If the base fails to load the
+     drawn scene stays and the envelope still appears. ---- */
   var plate = $('plate'), vista = $('vista'), plateBase = $('plateBase');
   var layers = Array.prototype.slice.call(plate.querySelectorAll('.lyr'));
+  function sceneIn() { stage.classList.remove('is-loading'); stage.classList.add('is-in'); }
   function plateReady() {
     plate.classList.add('is-ready');
+    sceneIn();
     var hideVista = function () { vista.style.display = 'none'; };
     plate.addEventListener('transitionend', hideVista, { once: true });
     setTimeout(hideVista, 900);
@@ -1088,7 +1116,8 @@ var RSVP_ENDPOINT = "";
   var decodes = [plateBase].concat(layers).map(function (img) { return (img.decode ? img.decode() : Promise.resolve()).catch(function () {}); });
   Promise.all(decodes).then(function () { if (plateBase.naturalWidth > 0) { fitPlate(); layoutPlate(); plateReady(); } });
   window.addEventListener('resize', function () { fitPlate(); layoutPlate(); }, { passive: true });
-  plateBase.addEventListener('error', function () { plate.parentNode.removeChild(plate); });
+  plateBase.addEventListener('error', function () { plate.parentNode.removeChild(plate); sceneIn(); });
+  setTimeout(function () { if (stage.classList.contains('is-loading')) sceneIn(); }, 6000);   /* never wait on a stalled image */
   layers.forEach(function (l) { l.addEventListener('error', function () { l.parentNode.removeChild(l); }); });
   var tiltX = 0, tiltY = 0, reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var SRC_W = 941, SRC_H = 1672;   /* the painting's pixel size; every layer box is in these units */
@@ -1115,9 +1144,9 @@ var RSVP_ENDPOINT = "";
       var k = parseFloat(layers[i].getAttribute('data-k')) || 0;
       /* whole pixels and no scaling: a bitmap that is resampled every frame goes soft */
       var dx = snap(tiltX * 10 * k), dy = snap(tiltY * 8 * k);
-      layers[i].style.transform = 'translate(' + dx + 'px,' + dy + 'px)';
+      layers[i].style.translate = dx + 'px ' + dy + 'px';
     }
-    plateBase.style.transform = 'translate(' + snap(-tiltX * 3) + 'px,' + snap(-tiltY * 2) + 'px)';
+    plateBase.style.translate = snap(-tiltX * 3) + 'px ' + snap(-tiltY * 2) + 'px';
   }
   var plateTick = false;
   function queuePlate() { if (plateTick) return; plateTick = true; requestAnimationFrame(function () { plateTick = false; layoutPlate(); }); }
@@ -1152,6 +1181,7 @@ var RSVP_ENDPOINT = "";
     openBtn.parentNode.removeChild(openBtn);
     flock.parentNode.removeChild(flock);   /* the ocean stays, but its CSS animation is off */
     stage.classList.add('is-static');
+    stage.classList.remove('is-loading');
     passport.classList.add('is-out');
     arcMask.style.strokeDashoffset = 0;
     plane.style.opacity = 1;
