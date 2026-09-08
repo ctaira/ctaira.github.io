@@ -121,8 +121,9 @@ button,input,select,textarea{font:inherit;color:inherit}
 .vista{left:0;top:0;width:100%;height:100%;z-index:0;pointer-events:none;display:block}
 /* A painted plate, when one is present in assets/, sits over the drawn vista. It fades in once loaded;
    if it is missing or fails, the drawn scene stays. */
-.plate{left:0;top:0;width:100%;height:100%;z-index:0;pointer-events:none;object-fit:cover;object-position:50% 46%;opacity:0;transition:opacity .6s ease}
+.plate{left:0;top:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:0;transition:opacity .6s ease;overflow:hidden}
 .plate.is-ready{opacity:1}
+.plate img{position:absolute;left:-4%;top:-4%;width:108%;height:108%;object-fit:cover;object-position:50% 46%;will-change:transform}
 .vista .v-wash{animation:vwash 11s ease-in-out infinite alternate}
 @keyframes vwash{from{transform:translateX(-7px)}to{transform:translateX(7px)}}
 @media (prefers-reduced-motion:reduce){.vista .v-wash{animation:none}}
@@ -575,7 +576,14 @@ hr.rule{border:0;border-top:1px solid rgba(36,39,34,.2);margin:2.5em 0}
         <rect width="1590" height="844" filter="url(#vPaper)" style="mix-blend-mode:multiply" opacity=".6"/>
       </svg>
 
-      <img class="plate" id="plate" src="assets/bali-cliff.jpg" alt="" decoding="async" aria-hidden="true">
+      <div class="plate" id="plate" aria-hidden="true">
+        <img id="plateBase" src="assets/bali-cliff.jpg" alt="" decoding="async">
+        <img class="lyr" data-k="0.35" src="assets/l2-cliff.webp" alt="" decoding="async">
+        <img class="lyr" data-k="0.55" src="assets/l6-gate.webp" alt="" decoding="async">
+        <img class="lyr" data-k="0.7" src="assets/l7-ledge.webp" alt="" decoding="async">
+        <img class="lyr" data-k="1" src="assets/l5-flowers-bottom.webp" alt="" decoding="async">
+        <img class="lyr" data-k="1.15" src="assets/l4-flowers-top.webp" alt="" decoding="async">
+      </div>
 
       <svg class="flock" id="flock" aria-hidden="true"></svg>
 
@@ -1103,11 +1111,39 @@ var RSVP_ENDPOINT = "";
   var arc = $('arc'), arcMask = $('arcMask'), plane = $('plane'), stamp = $('stamp');
   var openBtn = $('openBtn'), flock = $('flock'), more = $('more'), sealArt = $('sealArt'), capTop = $('capTop');
   var paw = $('paw'), pawClaws = $('pawClaws');
-  var plate = $('plate'), vista = $('vista');
+  /* ---- The painted plate is stacked in depth: the base painting, then the cliff, the gate,
+     the ledge and the foreground flowers cut from it. Each layer drifts by its own factor with
+     the scroll and with the device's tilt or the pointer, so the scene pops out around the
+     envelope. If the base fails to load the drawn scene stays. ---- */
+  var plate = $('plate'), vista = $('vista'), plateBase = $('plateBase');
+  var layers = Array.prototype.slice.call(plate.querySelectorAll('.lyr'));
   function plateReady() { plate.classList.add('is-ready'); vista.style.display = 'none'; }
-  if (plate.complete && plate.naturalWidth > 0) plateReady();
-  plate.addEventListener('load', plateReady);
-  plate.addEventListener('error', function () { plate.parentNode.removeChild(plate); });
+  /* fade in only once every layer is decoded, so no layer ever shows before the painting under it */
+  var decodes = [plateBase].concat(layers).map(function (img) { return (img.decode ? img.decode() : Promise.resolve()).catch(function () {}); });
+  Promise.all(decodes).then(function () { if (plateBase.naturalWidth > 0) plateReady(); });
+  plateBase.addEventListener('error', function () { plate.parentNode.removeChild(plate); });
+  layers.forEach(function (l) { l.addEventListener('error', function () { l.parentNode.removeChild(l); }); });
+  var tiltX = 0, tiltY = 0, scrollDepth = 0, reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function layoutPlate() {
+    if (reduceMotion) return;
+    for (var i = 0; i < layers.length; i++) {
+      var k = parseFloat(layers[i].getAttribute('data-k')) || 0;
+      var dx = tiltX * 14 * k, dy = tiltY * 10 * k + scrollDepth * 26 * k;
+      layers[i].style.transform = 'translate(' + dx.toFixed(1) + 'px,' + dy.toFixed(1) + 'px) scale(' + (1 + scrollDepth * 0.03 * k).toFixed(4) + ')';
+    }
+    plateBase.style.transform = 'translate(' + (-tiltX * 4).toFixed(1) + 'px,' + (-tiltY * 3 - scrollDepth * 8).toFixed(1) + 'px)';
+  }
+  var plateTick = false;
+  function queuePlate() { if (plateTick) return; plateTick = true; requestAnimationFrame(function () { plateTick = false; layoutPlate(); }); }
+  if (window.matchMedia('(pointer:fine)').matches) {
+    window.addEventListener('pointermove', function (e) { tiltX = (e.clientX / window.innerWidth - .5) * 2; tiltY = (e.clientY / window.innerHeight - .5) * 2; queuePlate(); }, { passive: true });
+  }
+  if ('DeviceOrientationEvent' in window) {
+    window.addEventListener('deviceorientation', function (e) {
+      if (e.gamma == null || e.beta == null) return;
+      tiltX = Math.max(-1, Math.min(1, e.gamma / 25)); tiltY = Math.max(-1, Math.min(1, (e.beta - 45) / 25)); queuePlate();
+    }, { passive: true });
+  }
   var envParts = [envBack, envPocket, envFlap];
 
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1238,6 +1274,7 @@ var RSVP_ENDPOINT = "";
       /* -- Hint fades out immediately ------------------------------ 0.00–0.05 */
       hint.style.opacity = 1 - seg(p, 0, .05);
       capTop.style.opacity = 1 - seg(p, .38, .50);   /* the caption clears before the passport rises */
+      scrollDepth = ease(seg(p, .05, .6)); layoutPlate();
       openBtn.classList.toggle('is-hidden', p > .04);
 
 
