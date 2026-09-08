@@ -159,7 +159,6 @@ button,input,select,textarea{font:inherit;color:inherit}
 .env-back{z-index:2;background:#E3DBC9;border-radius:6px}
 .env-pocket{z-index:5;border-radius:6px;overflow:hidden;background:url("assets/envelope.jpg") center/100% 100% no-repeat;
   clip-path:polygon(0 0,48% 55%,100% 0,100% 100%,0 100%);-webkit-clip-path:polygon(0 0,48% 55%,100% 0,100% 100%,0 100%)}
-.env-pocket .seal-residue{z-index:2}
 .env-pocket .addr{
   position:absolute;left:8%;right:44%;bottom:7%;text-align:center;
   font-family:var(--script);font-size:clamp(19px,5.2vw,26px);color:#6B6558;
@@ -179,19 +178,9 @@ button,input,select,textarea{font:inherit;color:inherit}
   will-change:transform;
 }
 .seal-art{position:absolute;inset:0;background:url("assets/seal.png") center/100% 100% no-repeat;filter:drop-shadow(0 3px 3px rgba(60,40,5,.35))}
-/* Breaking the seal: one jagged crack across the middle. The upper half stays on the
-   flap and lifts away with it; the lower half stays on the envelope as residue. */
-.seal.is-broken > .seal-art{
-  clip-path:polygon(-12% -12%,112% -12%,112% 45%,79% 51%,61% 46%,43% 54%,23% 48%,-12% 53%);
-  -webkit-clip-path:polygon(-12% -12%,112% -12%,112% 45%,79% 51%,61% 46%,43% 54%,23% 48%,-12% 53%);
-}
+/* The seal stays whole and rides up on the flap; it is on the flap's front face, so it goes
+   out of sight as the flap turns over. */
 .env-flap .seal{backface-visibility:hidden;-webkit-backface-visibility:hidden}
-.seal-residue{visibility:hidden}
-.seal-residue > .seal-art{
-  clip-path:polygon(-12% 53%,23% 48%,43% 54%,61% 46%,79% 51%,112% 45%,112% 112%,-12% 112%);
-  -webkit-clip-path:polygon(-12% 53%,23% 48%,43% 54%,61% 46%,79% 51%,112% 45%,112% 112%,-12% 112%);
-}
-.seal-residue.is-visible{visibility:visible}
 /* Boarding pass ------------------------------------------------------------ */
 .bpass{
   z-index:3;width:calc(var(--ew) * .92);height:calc(var(--ew) * .92 * .446);
@@ -1000,14 +989,6 @@ var RSVP_ENDPOINT = "";
   } else {
     var vh = window.innerHeight, vw = window.innerWidth, eh = envBack.offsetHeight;
 
-    /* ---- Seal residue: a clone of the seal art on the pocket, clipped to the lower half.
-       It appears the moment the seal breaks and stays behind when the flap lifts. ---- */
-    var residue = document.createElement('div');
-    residue.className = 'seal seal-residue';
-    residue.appendChild(sealArt.cloneNode(true));
-    residue.firstChild.removeAttribute('id');
-    envPocket.appendChild(residue);
-
     /* ---- The stage is measured in beats: the opening takes OPEN of them, then every spread
        takes PER, then a short hold. On a phone the spread cannot fit at reading size, so each
        spread also gets a close-up of its left page and a pan across to its right page, and PER
@@ -1036,13 +1017,7 @@ var RSVP_ENDPOINT = "";
       openBtn.classList.toggle('is-hidden', p > .04);
 
 
-      /* -- 1. Wax seal cracks: scales up, rotates, fades ---------- 0.03–0.12 */
-      var s1 = seg(p, .03, .12), snap = Math.min(1, s1 * 4);   /* the snap is quick */
-      seal.classList.toggle('is-broken', s1 > 0);
-      residue.classList.toggle('is-visible', s1 > 0);
-      /* the halves part by a hair at the crack; the flap carries the top half from here */
-      seal.style.transform = 'translateY(' + (-2.5 * snap) + 'px) rotate(' + (-2 * snap) + 'deg)';
-      residue.style.transform = 'translateY(' + (1.5 * snap) + 'px)';
+      /* -- 1. The seal stays whole: it lifts with the flap, nothing breaks. */
 
       /* -- 2. Flap opens, rotateX 0 → -181deg -------------------- 0.08–0.24 */
       var s2 = ease(seg(p, .08, .24));
