@@ -31,7 +31,7 @@
   --mono:'Roboto Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
   --script:'Pinyon Script','Snell Roundhand','Brush Script MT',cursive;
   --ew:min(86vw,440px);            /* envelope width */
-  --eh:calc(var(--ew) * .72);       /* envelope height */
+  --eh:calc(var(--ew) * .70);       /* envelope height */
   --pw:min(86vw,380px,60svh);      /* passport width  */
   --ph:calc(var(--pw) * 1.42);      /* passport height */
   --gutter:clamp(20px,6vw,48px);
@@ -84,7 +84,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 .scene>*{position:absolute;left:50%;top:50%}
 
 /* Captions above and below the envelope, in the manner of the printed suite. */
-.cap,.hint{position:absolute;left:0;right:0;text-align:center;z-index:1;pointer-events:none;color:var(--ink)}
+.cap,.hint{position:absolute;left:0;right:0;text-align:center;z-index:1;pointer-events:none;color:var(--ink);text-shadow:0 0 14px rgba(255,250,238,.95),0 0 4px rgba(255,250,238,.9)}
 .cap-top{top:max(8.5%,calc(env(safe-area-inset-top) + 44px))}
 .cap .caps,.hint .caps{display:block;font-family:var(--serif);font-size:clamp(15px,4vw,19px);letter-spacing:.34em;text-transform:uppercase;line-height:1.5;padding-left:.34em}
 .cap .rule,.hint .rule{display:block;width:34px;height:1px;background:var(--husk);margin:.75em auto;opacity:.8}
@@ -141,32 +141,29 @@ button,input,select,textarea{font:inherit;color:inherit}
 
 /* Envelope parts share size and centre; JS applies the same transform to each. */
 .env{width:var(--ew);height:var(--eh);margin-left:calc(var(--ew) / -2);margin-top:calc(var(--eh) / -2)}
-.env-back{z-index:2;background:#E7DFCD;border-radius:6px}
-.env-pocket{z-index:5;border-radius:6px;overflow:hidden}
-.env-pocket::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;mix-blend-mode:multiply;opacity:.55;
-  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .4 0 0 0 0 .3 0 0 0 .12 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
-.env-pocket svg.toile{inset:auto;right:2%;bottom:2%;width:56%;height:auto}
+.env-back{z-index:2;background:#E3DBC9;border-radius:6px}
+.env-pocket{z-index:5;border-radius:6px;overflow:hidden;background:url("assets/envelope.jpg") center/100% 100% no-repeat;
+  clip-path:polygon(0 0,48% 55%,100% 0,100% 100%,0 100%);-webkit-clip-path:polygon(0 0,48% 55%,100% 0,100% 100%,0 100%)}
 .env-pocket .seal-residue{z-index:2}
-.env-pocket svg{position:absolute;inset:0;width:100%;height:100%}
 .env-pocket .addr{
-  position:absolute;left:0;right:0;bottom:8%;text-align:center;
-  font-family:var(--script);font-size:clamp(20px,5.6vw,28px);color:var(--ink-soft);
-  padding:0 12%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  position:absolute;left:8%;right:44%;bottom:7%;text-align:center;
+  font-family:var(--script);font-size:clamp(19px,5.2vw,26px);color:#6B6558;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
 .env-flap{
   z-index:6;transform-origin:50% 0;transform-style:preserve-3d;
   will-change:transform;
 }
 .env-flap .flap-face{
-  position:absolute;inset:0;background:linear-gradient(180deg,#F5F0E5,#EAE2D1);box-shadow:0 1px 0 rgba(36,39,34,.06);
-  clip-path:polygon(0 0,100% 0,50% 58%);
-  -webkit-clip-path:polygon(0 0,100% 0,50% 58%);
+  position:absolute;inset:0;background:url("assets/envelope.jpg") center/100% 100% no-repeat;
+  clip-path:polygon(0 0,100% 0,48% 55%);
+  -webkit-clip-path:polygon(0 0,100% 0,48% 55%);
 }
 .seal{
-  position:absolute;left:50%;top:55%;width:82px;height:82px;margin:-41px 0 0 -41px;
+  position:absolute;left:48%;top:55%;width:112px;height:112px;margin:-56px 0 0 -56px;
   will-change:transform;
 }
-.seal-art{position:absolute;inset:0}
+.seal-art{position:absolute;inset:0;background:url("assets/seal.png") center/100% 100% no-repeat;filter:drop-shadow(0 3px 3px rgba(60,40,5,.35))}
 /* Breaking the seal: one jagged crack across the middle. The upper half stays on the
    flap and lifts away with it; the lower half stays on the envelope as residue. */
 .seal.is-broken > .seal-art{
@@ -180,46 +177,6 @@ button,input,select,textarea{font:inherit;color:inherit}
   -webkit-clip-path:polygon(-12% 53%,23% 48%,43% 54%,61% 46%,79% 51%,112% 45%,112% 112%,-12% 112%);
 }
 .seal-residue.is-visible{visibility:visible}
-/* Sealing wax in gold: uneven lobes, a glossy rim, deep lower shadow, grain from an SVG filter. */
-.seal .wax{
-  position:absolute;inset:0;
-  border-radius:53% 47% 49% 51% / 48% 52% 47% 53%;
-  background:
-    radial-gradient(circle at 32% 24%,rgba(255,250,225,.8) 0,rgba(255,250,225,0) 32%),
-    radial-gradient(circle at 70% 82%,rgba(80,55,10,.45) 0,rgba(80,55,10,0) 46%),
-    radial-gradient(circle at 50% 48%,#DFC277 0,#C4A257 50%,#8C6D2B 100%);
-  box-shadow:
-    inset 0 2px 3px rgba(255,250,225,.5),
-    inset 0 -4px 6px rgba(80,55,10,.55),
-    0 3px 4px -1px rgba(80,55,10,.45);
-  filter:url(#waxGrain);
-}
-.seal .wax::before{
-  content:"";position:absolute;inset:4px -4px -3px 2px;z-index:-1;
-  border-radius:46% 54% 57% 43% / 56% 44% 52% 48%;
-  background:radial-gradient(circle at 50% 40%,#C9A85E 0,#9E7D36 70%,#775B22 100%);
-  transform:rotate(21deg);
-  box-shadow:0 2px 3px rgba(80,55,10,.35);
-}
-.seal .wax::after{ /* a small third lobe where the wax ran */
-  content:"";position:absolute;right:-5px;bottom:8px;width:22px;height:18px;z-index:-1;
-  border-radius:60% 40% 55% 45% / 50% 60% 40% 50%;
-  background:radial-gradient(circle at 40% 35%,#D2B168 0,#A7853C 70%);
-  box-shadow:inset 0 1px 1px rgba(255,250,225,.3),inset 0 -2px 3px rgba(80,55,10,.5);
-}
-/* The die impression, lit from above so it reads as pressed in. */
-.seal .die{
-  position:absolute;inset:8px;border-radius:50%;
-  box-shadow:
-    inset 0 1.5px 1px rgba(255,250,225,.45),
-    inset 0 -1.5px 2px rgba(80,55,10,.7),
-    0 1px 0 rgba(255,250,225,.4),
-    0 -1px 0 rgba(80,55,10,.5);
-}
-.seal svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
-.seal .die-art.hi{color:rgba(255,248,222,.5)}
-.seal .die-art.lo{color:rgba(80,55,10,.78)}
-
 /* Cat paw: reaches in from the lower right and breaks the seal. */
 .paw{
   z-index:7;width:calc(var(--ew) * .5);height:calc(var(--ew) * .5 * 4.4);
@@ -235,41 +192,10 @@ button,input,select,textarea{font:inherit;color:inherit}
 
 /* Boarding pass ------------------------------------------------------------ */
 .bpass{
-  z-index:3;width:calc(var(--ew) * 1.02);height:calc(var(--ew) * 1.02 * .44);
-  margin-left:calc(var(--ew) * -.51);margin-top:calc(var(--ew) * 1.02 * -.22);
-  background:#F7F2E7;border-radius:8px;display:flex;overflow:hidden;
-  color:var(--ink);will-change:transform,opacity;box-shadow:0 12px 26px -16px rgba(36,39,34,.55);
-  font-family:var(--sans);font-size:clamp(6px,1.75vw,8px);letter-spacing:.14em;text-transform:uppercase;
-}
-.bpass .bp-strip{flex:0 0 11%;position:relative;background:var(--palm);color:var(--gold)}
-.bpass .bp-strip svg{position:absolute;left:50%;top:5%;width:46%;height:auto;transform:translateX(-50%)}
-.bpass .bp-strip span{position:absolute;left:50%;top:58%;transform:translate(-50%,-50%) rotate(-90deg);font-size:1.05em;letter-spacing:.3em;white-space:nowrap}
-.bpass .bp-main{flex:1 1 59%;position:relative;padding:4.5% 3% 4% 4.5%;display:flex;flex-direction:column;justify-content:space-between;min-width:0}
-.bpass .bp-main>*{position:relative;z-index:1}
-.bpass .bp-title{font-family:var(--serif);font-size:2.3em;letter-spacing:.14em;line-height:1;white-space:nowrap}
-.bpass .bp-title i{font-family:var(--script);font-style:normal;text-transform:none;letter-spacing:0;font-size:.95em;color:var(--palm)}
-.bpass .bp-kicker{color:var(--ink-soft);line-height:1.5;margin-top:.5em;white-space:nowrap}
-.bpass .bp-when{font-family:var(--serif);font-size:1.7em;letter-spacing:.12em;line-height:1.25;margin-top:.45em;white-space:nowrap}
-.bpass .bp-when span{display:block;font-size:.72em;letter-spacing:.24em}
-.bpass .bp-path{width:44%;margin-top:.3em;color:var(--palm)}
-.bpass .bp-path svg{display:block;width:100%;height:auto}
-.bpass .bp-tag{font-family:var(--script);text-transform:none;letter-spacing:0;font-size:1.75em;line-height:1.12;color:var(--husk);margin-top:.2em}
-.bpass .bp-pax{font-size:.9em;color:var(--ink-soft);margin-top:.5em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.bpass .bp-pax b{color:var(--ink);font-weight:500}
-.bpass .bp-art{position:absolute;right:0;top:0;bottom:0;width:34%;height:100%;pointer-events:none;z-index:0}
-.bpass .bp-stub{flex:0 0 30%;position:relative;border-left:1.5px dashed rgba(36,39,34,.35);padding:5% 15% 5% 4%;display:flex;flex-direction:column;justify-content:space-between;align-items:center;text-align:center;background:#F3EDE0;min-width:0}
-.bpass .bp-ft{font-family:var(--serif);line-height:1.1}
-.bpass .bp-ft span{display:block;font-family:var(--sans);font-size:.85em;color:var(--ink-soft);letter-spacing:.2em}
-.bpass .bp-ft b{display:block;font-weight:400;font-size:1.9em;letter-spacing:.14em}
-.bpass .bp-ft i{display:block;font-style:normal;color:var(--palm);line-height:1;margin:.15em 0}
-.bpass .bp-ft i svg{width:1.6em;height:1.6em}
-.bpass .bp-fl{width:38%;height:auto}
-.bpass .bp-bali{font-family:var(--serif);font-size:1.6em;letter-spacing:.22em;line-height:1}
-.bpass .bp-bali small{display:block;font-family:var(--sans);font-size:.5em;letter-spacing:.24em;color:var(--ink-soft);margin-top:.3em}
-.bpass .bp-love{color:var(--palm);line-height:1.5}
-.barcode{
-  position:absolute;right:4%;top:8%;bottom:8%;width:7%;
-  background:repeating-linear-gradient(180deg,var(--ink) 0 1px,transparent 1px 3px,var(--ink) 3px 4px,transparent 4px 7px,var(--ink) 7px 9px,transparent 9px 10px);
+  z-index:3;width:calc(var(--ew) * 1.04);height:calc(var(--ew) * 1.04 * .522);
+  margin-left:calc(var(--ew) * -.52);margin-top:calc(var(--ew) * 1.04 * -.261);
+  background:url("assets/boarding-pass.jpg") center/100% 100% no-repeat;border-radius:8px;
+  box-shadow:0 12px 26px -16px rgba(36,39,34,.55);will-change:transform,opacity;
 }
 
 /* Passport ------------------------------------------------------------------ */
@@ -337,17 +263,8 @@ button,input,select,textarea{font:inherit;color:inherit}
   position:absolute;inset:0;border-radius:6px 10px 10px 6px;
   backface-visibility:hidden;-webkit-backface-visibility:hidden;
 }
-.pp-cover .face-front{
-  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .16 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),linear-gradient(160deg,#3B5842 0%,#2F4A34 55%,#243B2A 100%);
-  color:var(--gold);display:flex;flex-direction:column;align-items:center;justify-content:space-between;
-  padding:calc(var(--pw) * .12) calc(var(--pw) * .08);text-align:center;
-}
-.pp-cover .face-front::before{content:"";position:absolute;inset:calc(var(--pw) * .035);border:1px solid rgba(192,162,100,.55);border-radius:4px 8px 8px 4px;pointer-events:none}
+.pp-cover .face-front{background:url("assets/passport-cover.jpg") center/100% 100% no-repeat}
 .pp-cover .face-front::after{content:"";position:absolute;left:0;top:0;bottom:0;width:9%;background:linear-gradient(90deg,rgba(0,0,0,.35),rgba(0,0,0,0));border-radius:6px 0 0 6px}
-.pp-cover .face-front h2{font-size:clamp(20px,6vw,28px);letter-spacing:.28em;text-transform:uppercase;padding-left:.28em}
-.pp-cover .cover-sub{font-family:var(--script);font-size:clamp(17px,5vw,24px);line-height:1.1;margin-top:.1em}
-.pp-cover .face-front .emblem{width:calc(var(--pw) * .66);height:calc(var(--pw) * .46);display:block}
-.pp-cover .face-front .cover-foot{font-family:var(--serif);font-size:clamp(18px,5.4vw,24px);letter-spacing:.22em;text-transform:uppercase;line-height:1;padding-left:.22em}
 .pp-cover .face-back{
   transform:rotateY(180deg);background:#E6DFD1;
   background-image:repeating-linear-gradient(45deg,rgba(63,91,69,.07) 0 2px,transparent 2px 14px);
@@ -671,71 +588,9 @@ hr.rule{border:0;border-top:1px solid rgba(36,39,34,.2);margin:2.5em 0}
       <!-- Envelope: back, boarding pass, pocket, flap (+ seal). Same transform on all. -->
       <div class="env env-back" id="envBack" aria-hidden="true"></div>
 
-      <div class="bpass" id="bpass" aria-hidden="true">
-        <div class="bp-strip"><svg viewBox="0 0 24 24"><use href="#planeIco"/></svg><span>Boarding pass</span></div>
-        <div class="bp-main">
-          <svg class="bp-art" viewBox="0 0 90 130" preserveAspectRatio="xMidYMid slice">
-            <defs>
-              <linearGradient id="bpFade" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity="1"/></linearGradient>
-              <mask id="bpMask"><rect width="90" height="130" fill="url(#bpFade)"/></mask>
-              <linearGradient id="bpSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F7F2E7"/><stop offset="1" stop-color="#F3D3B6"/></linearGradient>
-              <linearGradient id="bpSea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#BFD6D4"/><stop offset="1" stop-color="#6FA6AA"/></linearGradient>
-            </defs>
-            <g mask="url(#bpMask)">
-              <rect width="90" height="60" fill="url(#bpSky)"/>
-              <rect y="58" width="90" height="42" fill="url(#bpSea)"/>
-              <path d="M0 98C30 90 60 96 90 92V130H0Z" fill="#B9AE95"/>
-              <path d="M50 96C60 80 70 70 90 66V100Z" fill="#9C9480"/>
-              <path d="M56 78V58H58V50H60V42H62V34H64V26H67V34H69V42H71V50H73V58H75V78Z" fill="#4C4A44"/>
-              <path d="M40 90V72H42V64H44V56H46V50H48V56H50V64H52V72H54V90Z" fill="#5A5850"/>
-              <g fill="#5E7A55"><ellipse cx="20" cy="112" rx="18" ry="8"/><ellipse cx="60" cy="118" rx="24" ry="9"/><ellipse cx="84" cy="106" rx="14" ry="8"/></g>
-              <g fill="#8AA576"><ellipse cx="36" cy="120" rx="14" ry="6"/><ellipse cx="74" cy="124" rx="16" ry="6"/></g>
-              <g fill="#E88EA2"><circle cx="26" cy="106" r="3"/><circle cx="32" cy="110" r="2.4"/><circle cx="70" cy="110" r="2.6"/></g>
-              <g fill="#FFF8EA"><circle cx="14" cy="118" r="2.2"/><circle cx="52" cy="112" r="2"/><circle cx="80" cy="116" r="2"/></g>
-              <g fill="none" stroke="#FFF" stroke-width="1" opacity=".6"><path d="M4 70h14M30 76h10M12 84h16M40 88h8"/></g>
-            </g>
-          </svg>
-          <div class="bp-title">Save <i>the</i> Date</div>
-          <div class="bp-kicker">Our next chapter takes flight</div>
-          <div class="bp-when">August 28, 2027<span>Bali, Indonesia</span></div>
-          <div class="bp-path"><svg viewBox="0 0 120 24"><path d="M6 17C30 2 62 26 116 8" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="1.5 3" stroke-linecap="round"/><g transform="translate(6 17) rotate(-32) scale(.6) translate(-12 -12)"><use href="#planeIco"/></g></svg></div>
-          <div class="bp-tag">Good People<br>Great Adventures<br>A Lifetime Together</div>
-          <div class="bp-pax">Guest <b id="bpName">Our guest</b> &nbsp;·&nbsp; Seats <b id="bpSeats">1</b></div>
-        </div>
-        <div class="bp-stub">
-          <div class="bp-ft"><span>From</span><b>LAX</b><i><svg viewBox="0 0 24 24"><use href="#planeIco"/></svg></i><span>To</span><b>DPS</b></div>
-          <svg class="bp-fl" viewBox="-14 -14 28 28"><use href="#fr5" transform="scale(1.1)"/></svg>
-          <div class="bp-bali">Bali<small>Indonesia</small></div>
-          <div class="bp-love">Love knows<br>no borders</div>
-          <div class="barcode"></div>
-        </div>
-      </div>
+      <div class="bpass" id="bpass" aria-hidden="true"><span id="bpName" hidden></span><span id="bpSeats" hidden></span></div>
 
       <div class="env env-pocket" id="envPocket" aria-hidden="true">
-        <svg viewBox="0 0 100 72" preserveAspectRatio="none" aria-hidden="true">
-          <polygon points="0,0 50,42 0,72" fill="#F3EDE0"/>
-          <polygon points="100,0 50,42 100,72" fill="#F3EDE0"/>
-          <polygon points="0,72 50,42 100,72" fill="#ECE4D4"/>
-          <path d="M0 0L50 42L100 0" fill="none" stroke="rgba(36,39,34,.12)" stroke-width=".5" vector-effect="non-scaling-stroke"/>
-          <path d="M0 72L50 42L100 72" fill="none" stroke="rgba(36,39,34,.12)" stroke-width=".5" vector-effect="non-scaling-stroke"/>
-        </svg>
-        <svg class="toile" viewBox="0 0 180 110" aria-hidden="true">
-          <defs><linearGradient id="toileFade" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".3" stop-color="#fff" stop-opacity="1"/></linearGradient><mask id="toileMask"><rect width="180" height="110" fill="url(#toileFade)"/></mask></defs>
-          <g mask="url(#toileMask)">
-            <path d="M20 60C60 50 120 52 180 46V110H0Z" fill="#B9CBBD" opacity=".28"/>
-            <path d="M0 74C30 66 70 68 100 62" fill="none" stroke="#7F9A86" stroke-width=".7" opacity=".45"/>
-            <g fill="none" stroke="#7F9A86" stroke-width=".8" opacity=".6"><path d="M26 44c3-3 5-3 8 0 3-3 5-3 8 0M40 38c2-2 4-2 6 0 2-2 4-2 6 0"/></g>
-            <path d="M56 86C60 92 66 98 60 108L124 108C118 98 122 92 126 86Z" fill="#9BB2A1" opacity=".45"/>
-            <path d="M56 86C60 92 66 98 60 108M126 86C122 92 118 98 124 108M64 90C68 96 70 100 68 106M112 92C110 98 114 102 116 106" fill="none" stroke="#7F9A86" stroke-width=".8"/>
-            <rect x="76" y="86" width="40" height="7" fill="#9BB2A1" opacity=".5"/><path d="M72 93H120M74 89H118" stroke="#7F9A86" stroke-width=".8"/><path d="M76.0 86L84.0 74Q96 72 108.0 74L116.0 86Z" fill="#9BB2A1" opacity=".55"/><path d="M76.0 86L84.0 74Q96 72 108.0 74L116.0 86" fill="none" stroke="#7F9A86" stroke-width=".9" stroke-linejoin="round"/><path d="M86.0 74V82 M106.0 74V82" stroke="#7F9A86" stroke-width=".8"/><path d="M96.0 75V82" stroke="#7F9A86" stroke-width=".6" opacity=".7"/><path d="M81.0 70L87.0 58Q96 56 105.0 58L111.0 70Z" fill="#9BB2A1" opacity=".55"/><path d="M81.0 70L87.0 58Q96 56 105.0 58L111.0 70" fill="none" stroke="#7F9A86" stroke-width=".9" stroke-linejoin="round"/><path d="M89.0 58V66 M103.0 58V66" stroke="#7F9A86" stroke-width=".8"/><path d="M96.0 59V66" stroke="#7F9A86" stroke-width=".6" opacity=".7"/><path d="M86.0 55L90.5 43Q96 41 101.5 43L106.0 55Z" fill="#9BB2A1" opacity=".55"/><path d="M86.0 55L90.5 43Q96 41 101.5 43L106.0 55" fill="none" stroke="#7F9A86" stroke-width=".9" stroke-linejoin="round"/><path d="M92.5 43V51 M99.5 43V51" stroke="#7F9A86" stroke-width=".8"/><path d="M96.0 44V51" stroke="#7F9A86" stroke-width=".6" opacity=".7"/><path d="M96 43L93 36L96 30L99 36Z" fill="#9BB2A1" stroke="#7F9A86" stroke-width=".7"/><path d="M40 88L52 78L64 88Z" fill="#9BB2A1" opacity=".5"/><path d="M40 88L52 78L64 88M44 88V96M60 88V96M42 96H62" fill="none" stroke="#7F9A86" stroke-width=".9" stroke-linejoin="round"/>
-            <g fill="none" stroke="#7F9A86" stroke-width=".9" stroke-linecap="round"><path d="M4 98q6-4 12 0t12 0t12 0t12 0M2 104q6-4 12 0t12 0t12 0"/></g>
-            <g opacity=".8"><path d="M128.9 102.1 L129.3 96.6 L129.8 91.3 L130.2 86.0 L130.7 80.9 L131.3 75.8 L131.8 70.9 L132.5 66.0 L133.1 61.3 L133.8 56.6 L134.5 52.1 L133.5 51.9 L132.7 56.5 L131.9 61.1 L131.2 65.9 L130.5 70.7 L129.8 75.7 L129.2 80.7 L128.6 85.9 L128.1 91.1 L127.5 96.5 L127.1 101.9Z" fill="#7F9A86"/><path d="M129.8 96.1L127.2 95.8M130.3 90.1L127.8 89.9M130.8 84.3L128.4 84.1M131.3 78.7L129.1 78.4M131.9 73.1L129.8 72.9M132.6 67.7L130.6 67.4M133.3 62.4L131.5 62.1M134.0 57.2L132.3 56.9" stroke="#7F9A86" stroke-width="0.44" opacity=".55" stroke-linecap="round"/><path d="M134.0 52.0Q118.6 41.8 103.1 64.5" fill="none" stroke="#7F9A86" stroke-width="0.61" stroke-linecap="round"/><path d="M131.6 50.6L131.1 48.4M131.6 50.6L129.5 51.6M129.2 49.6L127.9 45.9M129.2 49.6L125.9 51.8M126.9 49.1L125.0 45.7M126.9 49.1L124.0 51.6M124.5 48.9L122.2 46.0M124.5 48.9L122.2 51.7M122.1 49.0L119.6 46.7M122.1 49.0L120.4 52.0M119.7 49.6L117.0 47.8M119.7 49.6L118.6 52.7M117.4 50.6L114.6 49.3M117.4 50.6L116.7 53.6M115.0 51.9L112.3 51.0M115.0 51.9L114.7 54.8M112.6 53.7L110.0 53.1M112.6 53.7L112.6 56.4M110.2 55.8L107.7 55.5M110.2 55.8L110.5 58.3M107.9 58.3L105.5 58.2M107.9 58.3L108.3 60.6M105.5 61.2L103.3 61.3M105.5 61.2L106.0 63.3M103.1 64.5L101.2 64.7M103.1 64.5L103.7 66.4" fill="none" stroke="#7F9A86" stroke-width="0.47" stroke-linecap="round"/><path d="M134.0 52.0Q121.3 33.5 112.2 61.8" fill="none" stroke="#7F9A86" stroke-width="0.61" stroke-linecap="round"/><path d="M132.1 49.4L132.5 47.2M132.1 49.4L129.8 49.5M130.2 47.4L130.5 43.4M130.2 47.4L126.2 48.0M128.3 46.0L127.9 42.2M128.3 46.0L124.7 47.2M126.5 45.1L125.3 41.6M126.5 45.1L123.4 47.0M124.8 44.7L122.7 41.9M124.8 44.7L122.5 47.3M123.0 44.9L120.4 43.0M123.0 44.9L121.8 47.9M121.4 45.7L118.5 44.6M121.4 45.7L121.0 48.7M119.7 47.0L116.9 46.6M119.7 47.0L120.0 49.9M118.1 48.8L115.4 48.9M118.1 48.8L118.8 51.5M116.6 51.3L114.1 51.7M116.6 51.3L117.5 53.6M115.1 54.2L112.8 54.8M115.1 54.2L116.1 56.3M113.6 57.7L111.5 58.4M113.6 57.7L114.7 59.6M112.2 61.8L110.3 62.5M112.2 61.8L113.2 63.5" fill="none" stroke="#7F9A86" stroke-width="0.47" stroke-linecap="round"/><path d="M134.0 52.0Q127.4 27.9 120.9 60.0" fill="none" stroke="#7F9A86" stroke-width="0.61" stroke-linecap="round"/><path d="M133.0 48.6L134.2 46.7M133.0 48.6L130.8 47.8M132.0 45.9L133.9 42.4M132.0 45.9L128.1 44.8M131.0 43.9L132.3 40.3M131.0 43.9L127.2 43.3M130.0 42.5L130.4 38.9M130.0 42.5L126.4 42.8M129.0 41.8L127.9 38.5M129.0 41.8L126.0 43.5M128.0 41.7L125.3 39.8M128.0 41.7L126.7 44.7M126.9 42.3L123.9 41.9M126.9 42.3L127.2 45.4M125.9 43.6L123.1 43.9M125.9 43.6L126.9 46.3M124.9 45.5L122.3 46.2M124.9 45.5L126.2 47.9M123.9 48.1L121.6 49.0M123.9 48.1L125.3 50.3M122.9 51.4L120.8 52.3M122.9 51.4L124.3 53.3M121.9 55.4L120.0 56.3M121.9 55.4L123.2 57.1M120.9 60.0L119.1 60.9M120.9 60.0L122.2 61.5" fill="none" stroke="#7F9A86" stroke-width="0.47" stroke-linecap="round"/><path d="M134.0 52.0Q135.4 26.3 136.3 59.5" fill="none" stroke="#7F9A86" stroke-width="0.61" stroke-linecap="round"/><path d="M134.2 48.4L136.1 47.1M134.2 48.4L132.5 46.9M134.4 45.5L137.7 43.2M134.4 45.5L131.5 42.8M134.6 43.3L137.8 41.2M134.6 43.3L131.9 40.6M134.8 41.8L138.0 40.0M134.8 41.8L132.4 39.1M135.0 41.0L138.3 39.9M135.0 41.0L133.3 38.0M135.2 40.8L134.5 44.0M135.2 40.8L138.4 40.8M135.3 41.4L133.3 43.7M135.3 41.4L138.1 42.8M135.5 42.7L133.5 44.7M135.5 42.7L138.0 44.2M135.7 44.6L133.7 46.5M135.7 44.6L137.9 46.2M135.9 47.3L134.0 49.0M135.9 47.3L137.9 48.8M136.0 50.7L134.3 52.2M136.0 50.7L137.9 52.0M136.2 54.7L134.5 56.1M136.2 54.7L137.9 56.0M136.3 59.5L134.8 60.7M136.3 59.5L137.9 60.6" fill="none" stroke="#7F9A86" stroke-width="0.47" stroke-linecap="round"/><path d="M134.0 52.0Q142.9 29.4 151.8 60.4" fill="none" stroke="#7F9A86" stroke-width="0.61" stroke-linecap="round"/><path d="M135.4 48.8L137.6 48.3M135.4 48.8L134.4 46.8M136.7 46.3L140.7 45.8M136.7 46.3L135.4 42.5M138.1 44.4L141.9 44.6M138.1 44.4L137.4 40.7M139.5 43.2L142.9 44.2M139.5 43.2L139.7 39.5M140.8 42.5L143.5 44.7M140.8 42.5L142.4 39.4M142.2 42.5L143.6 45.5M142.2 42.5L144.8 40.6M143.6 43.2L143.8 46.3M143.6 43.2L146.5 42.3M144.9 44.5L144.4 47.3M144.9 44.5L147.8 44.4M146.3 46.4L145.4 48.9M146.3 46.4L149.0 46.7M147.7 49.0L146.6 51.2M147.7 49.0L150.1 49.5M149.0 52.2L147.9 54.2M149.0 52.2L151.3 52.9M150.4 56.0L149.2 57.8M150.4 56.0L152.4 56.7M151.8 60.4L150.6 62.1M151.8 60.4L153.6 61.2" fill="none" stroke="#7F9A86" stroke-width="0.47" stroke-linecap="round"/><path d="M134.0 52.0Q148.0 36.1 158.2 62.7" fill="none" stroke="#7F9A86" stroke-width="0.61" stroke-linecap="round"/><path d="M136.1 49.8L138.4 50.2M136.1 49.8L136.0 47.5M138.2 48.1L142.1 49.3M138.2 48.1L138.5 44.1M140.3 46.9L143.7 48.6M140.3 46.9L141.2 43.2M142.3 46.2L145.1 48.5M142.3 46.2L143.9 43.0M144.2 46.1L146.3 48.8M144.2 46.1L146.5 43.4M146.1 46.4L147.3 49.4M146.1 46.4L148.8 44.5M148.0 47.2L148.4 50.2M148.0 47.2L150.9 46.1M149.8 48.5L149.7 51.4M149.8 48.5L152.6 48.0M151.6 50.3L151.0 53.0M151.6 50.3L154.3 50.3M153.3 52.7L152.5 55.1M153.3 52.7L155.8 52.9M155.0 55.5L154.0 57.6M155.0 55.5L157.3 55.9M156.6 58.8L155.6 60.7M156.6 58.8L158.7 59.4M158.2 62.7L157.2 64.4M158.2 62.7L160.0 63.3" fill="none" stroke="#7F9A86" stroke-width="0.47" stroke-linecap="round"/><g fill="#7F9A86"><circle cx="132.8" cy="53.6" r="1.1"/><circle cx="135.1" cy="53.9" r="1.1"/><circle cx="134.0" cy="55.3" r="1.0"/></g></g>
-            <path d="M153.8 105.9 L153.1 97.2 L152.4 88.6 L151.6 80.2 L150.8 71.9 L150.0 63.9 L149.1 55.9 L148.1 48.2 L147.1 40.6 L146.1 33.1 L145.0 25.9 L143.0 26.1 L144.0 33.4 L144.9 40.9 L145.7 48.5 L146.5 56.2 L147.2 64.1 L147.9 72.2 L148.6 80.4 L149.2 88.8 L149.7 97.4 L150.2 106.1Z" fill="#7F9A86"/><path d="M153.8 96.1L148.8 96.5M153.0 86.7L148.3 87.0M152.1 77.4L147.6 77.8M151.1 68.3L146.9 68.7M150.1 59.4L146.2 59.8M149.0 50.7L145.4 51.1M147.9 42.2L144.5 42.6M146.7 33.9L143.6 34.3" stroke="#7F9A86" stroke-width="0.64" opacity=".55" stroke-linecap="round"/><path d="M144.0 26.0Q119.3 9.7 94.6 46.1" fill="none" stroke="#7F9A86" stroke-width="0.88" stroke-linecap="round"/><path d="M140.2 23.8L139.4 20.2M140.2 23.8L136.9 25.4M136.4 22.2L134.2 16.2M136.4 22.2L131.0 25.7M132.6 21.3L129.6 16.0M132.6 21.3L128.1 25.4M128.8 21.0L125.2 16.4M128.8 21.0L125.2 25.5M125.0 21.3L120.9 17.6M125.0 21.3L122.3 26.1M121.2 22.2L116.8 19.3M121.2 22.2L119.4 27.1M117.4 23.7L112.9 21.6M117.4 23.7L116.3 28.5M113.6 25.9L109.2 24.4M113.6 25.9L113.1 30.5M109.8 28.7L105.6 27.8M109.8 28.7L109.8 33.0M106.0 32.1L102.0 31.6M106.0 32.1L106.4 36.1M102.2 36.1L98.5 36.0M102.2 36.1L102.8 39.8M98.4 40.8L95.0 40.9M98.4 40.8L99.2 44.1M94.6 46.1L91.5 46.3M94.6 46.1L95.5 49.1" fill="none" stroke="#7F9A86" stroke-width="0.68" stroke-linecap="round"/><path d="M144.0 26.0Q121.8 -0.0 105.8 42.9" fill="none" stroke="#7F9A86" stroke-width="0.88" stroke-linecap="round"/><path d="M140.6 22.4L140.9 18.7M140.6 22.4L137.0 22.9M137.3 19.6L137.0 13.2M137.3 19.6L131.1 21.3M134.1 17.7L132.7 11.7M134.1 17.7L128.6 20.3M130.9 16.5L128.4 11.3M130.9 16.5L126.3 20.1M127.8 16.2L124.3 12.0M127.8 16.2L124.5 20.6M124.8 16.7L120.5 13.7M124.8 16.7L122.9 21.5M121.9 18.0L117.3 16.2M121.9 18.0L121.2 22.8M119.0 20.1L114.5 19.3M119.0 20.1L119.3 24.7M116.2 23.0L111.9 22.9M116.2 23.0L117.1 27.2M113.5 26.7L109.5 27.1M113.5 26.7L114.8 30.6M110.9 31.3L107.2 32.0M110.9 31.3L112.4 34.7M108.3 36.7L105.0 37.6M108.3 36.7L109.9 39.7M105.8 42.9L102.8 43.8M105.8 42.9L107.4 45.6" fill="none" stroke="#7F9A86" stroke-width="0.68" stroke-linecap="round"/><path d="M144.0 26.0Q127.4 -8.1 110.7 40.2" fill="none" stroke="#7F9A86" stroke-width="0.88" stroke-linecap="round"/><path d="M141.4 21.2L142.7 17.8M141.4 21.2L137.8 20.7M138.9 17.5L140.4 11.2M138.9 17.5L132.5 17.4M136.3 14.6L136.7 8.6M136.3 14.6L130.3 15.6M133.8 12.8L132.7 7.1M133.8 12.8L128.4 15.1M131.2 12.0L128.4 7.2M131.2 12.0L127.2 15.7M128.6 12.1L124.5 8.9M128.6 12.1L126.4 16.8M126.1 13.2L121.4 11.5M126.1 13.2L125.5 18.0M123.5 15.2L118.9 14.7M123.5 15.2L124.0 19.8M121.0 18.3L116.6 18.5M121.0 18.3L122.1 22.4M118.4 22.3L114.4 22.9M118.4 22.3L119.9 26.0M115.8 27.3L112.2 28.2M115.8 27.3L117.5 30.6M113.3 33.3L110.0 34.3M113.3 33.3L115.0 36.3M110.7 40.2L107.8 41.3M110.7 40.2L112.4 42.9" fill="none" stroke="#7F9A86" stroke-width="0.68" stroke-linecap="round"/><path d="M144.0 26.0Q135.2 -13.4 128.9 38.5" fill="none" stroke="#7F9A86" stroke-width="0.88" stroke-linecap="round"/><path d="M142.7 20.5L144.9 17.5M142.7 20.5L139.3 19.0M141.4 16.0L144.8 10.7M141.4 16.0L135.4 13.8M140.1 12.7L142.9 7.3M140.1 12.7L134.2 11.1M138.8 10.4L140.4 4.8M138.8 10.4L133.0 10.1M137.6 9.2L136.7 3.8M137.6 9.2L132.5 11.3M136.4 9.1L132.0 6.3M136.4 9.1L134.7 14.0M135.3 10.0L130.3 10.1M135.3 10.0L136.5 14.8M134.1 12.1L129.7 13.3M134.1 12.1L136.3 16.2M133.0 15.2L129.0 16.8M133.0 15.2L135.5 18.7M132.0 19.4L128.3 21.2M132.0 19.4L134.5 22.5M130.9 24.7L127.6 26.5M130.9 24.7L133.4 27.5M129.9 31.0L126.9 32.8M129.9 31.0L132.2 33.6M128.9 38.5L126.2 40.1M128.9 38.5L131.1 40.7" fill="none" stroke="#7F9A86" stroke-width="0.68" stroke-linecap="round"/><path d="M144.0 26.0Q144.3 -15.2 144.6 37.9" fill="none" stroke="#7F9A86" stroke-width="0.88" stroke-linecap="round"/><path d="M144.0 20.2L146.9 18.0M144.0 20.2L141.2 17.9M144.1 15.6L149.1 11.6M144.1 15.6L139.1 11.5M144.1 12.0L149.0 8.3M144.1 12.0L139.4 8.1M144.2 9.6L148.8 6.1M144.2 9.6L139.8 5.8M144.2 8.3L148.7 5.1M144.2 8.3L140.2 4.6M144.3 8.1L140.7 11.8M144.3 8.1L148.7 10.8M144.3 9.0L140.6 12.2M144.3 9.0L148.3 11.9M144.4 11.0L140.8 14.0M144.4 11.0L148.0 13.8M144.4 14.2L141.1 16.9M144.4 14.2L147.8 16.8M144.5 18.4L141.4 21.0M144.5 18.4L147.6 20.9M144.5 23.8L141.6 26.2M144.5 23.8L147.5 26.1M144.6 30.3L141.9 32.5M144.6 30.3L147.3 32.4M144.6 37.9L142.2 39.9M144.6 37.9L147.1 39.9" fill="none" stroke="#7F9A86" stroke-width="0.68" stroke-linecap="round"/><path d="M144.0 26.0Q153.3 -13.2 160.1 38.6" fill="none" stroke="#7F9A86" stroke-width="0.88" stroke-linecap="round"/><path d="M145.4 20.5L148.8 19.1M145.4 20.5L143.3 17.5M146.8 16.1L152.9 14.0M146.8 16.1L143.4 10.7M148.2 12.8L154.1 11.4M148.2 12.8L145.5 7.3M149.5 10.5L155.3 10.4M149.5 10.5L148.1 4.9M150.8 9.3L155.8 11.6M150.8 9.3L151.9 3.9M152.1 9.2L153.8 14.1M152.1 9.2L156.5 6.4M153.3 10.2L152.3 15.0M153.3 10.2L158.2 10.1M154.5 12.2L152.4 16.4M154.5 12.2L159.0 13.3M155.7 15.3L153.3 18.9M155.7 15.3L159.7 16.9M156.8 19.5L154.4 22.7M156.8 19.5L160.5 21.3M157.9 24.8L155.5 27.6M157.9 24.8L161.2 26.6M159.0 31.1L156.7 33.7M159.0 31.1L162.0 32.9M160.1 38.6L157.9 40.8M160.1 38.6L162.8 40.2" fill="none" stroke="#7F9A86" stroke-width="0.68" stroke-linecap="round"/><path d="M144.0 26.0Q161.1 -7.7 178.2 40.4" fill="none" stroke="#7F9A86" stroke-width="0.88" stroke-linecap="round"/><path d="M146.6 21.3L150.3 20.9M146.6 21.3L145.4 17.8M149.3 17.6L155.7 17.6M149.3 17.6L147.9 11.3M151.9 14.8L157.9 15.9M151.9 14.8L151.7 8.7M154.5 13.0L159.8 15.5M154.5 13.0L155.7 7.3M157.1 12.2L161.1 16.0M157.1 12.2L160.0 7.5M159.8 12.3L162.0 17.0M159.8 12.3L163.9 9.1M162.4 13.4L163.1 18.3M162.4 13.4L167.0 11.7M165.0 15.5L164.6 20.1M165.0 15.5L169.6 14.9M167.7 18.5L166.6 22.7M167.7 18.5L172.0 18.7M170.3 22.6L168.9 26.3M170.3 22.6L174.3 23.1M172.9 27.5L171.3 30.9M172.9 27.5L176.6 28.4M175.6 33.5L173.9 36.5M175.6 33.5L178.9 34.4M178.2 40.4L176.5 43.0M178.2 40.4L181.2 41.4" fill="none" stroke="#7F9A86" stroke-width="0.68" stroke-linecap="round"/><path d="M144.0 26.0Q166.5 0.6 182.7 43.1" fill="none" stroke="#7F9A86" stroke-width="0.88" stroke-linecap="round"/><path d="M147.4 22.5L151.1 23.1M147.4 22.5L147.2 18.8M150.8 19.8L156.9 21.6M150.8 19.8L151.2 13.4M154.0 17.9L159.5 20.6M154.0 17.9L155.5 12.0M157.2 16.8L161.8 20.4M157.2 16.8L159.8 11.6M160.4 16.5L163.6 20.9M160.4 16.5L163.9 12.3M163.4 17.0L165.3 21.8M163.4 17.0L167.7 14.0M166.4 18.3L167.1 23.2M166.4 18.3L171.0 16.5M169.3 20.4L169.1 25.0M169.3 20.4L173.8 19.6M172.1 23.3L171.3 27.6M172.1 23.3L176.4 23.2M174.9 27.1L173.6 30.9M174.9 27.1L178.9 27.4M177.5 31.6L176.1 35.0M177.5 31.6L181.2 32.3M180.1 36.9L178.6 40.0M180.1 36.9L183.5 37.8M182.7 43.1L181.1 45.8M182.7 43.1L185.7 44.0" fill="none" stroke="#7F9A86" stroke-width="0.68" stroke-linecap="round"/><g fill="#7F9A86"><circle cx="142.2" cy="28.4" r="1.6"/><circle cx="145.6" cy="28.7" r="1.6"/><circle cx="144.0" cy="30.8" r="1.4"/></g>
-            <g transform="translate(30 94) rotate(-15) scale(1.15)"><path d="M0 14C-10 10 -14 2 -12 -6C-11 -12 -6 -16 0 -14C6 -16 11 -12 12 -6C14 2 10 10 0 14Z" fill="#B9CBBD" opacity=".55"/><path d="M0 14C-10 10 -14 2 -12 -6C-11 -12 -6 -16 0 -14C6 -16 11 -12 12 -6C14 2 10 10 0 14Z" fill="none" stroke="#7F9A86" stroke-width=".7"/><path d="M0 -12V13M-9 -4C-6 -3 -4 -1 -3 2M9 -4C6 -3 4 -1 3 2M-8 4C-6 5 -4 7 -3 9M8 4C6 5 4 7 3 9" fill="none" stroke="#7F9A86" stroke-width=".6"/><path d="M-10 -6C-8 -7 -6 -6 -5 -4L-8 -1ZM10 -6C8 -7 6 -6 5 -4L8 -1Z" fill="#F3EDE0"/></g><g transform="translate(46 100) rotate(20) scale(0.85)"><path d="M0 14C-10 10 -14 2 -12 -6C-11 -12 -6 -16 0 -14C6 -16 11 -12 12 -6C14 2 10 10 0 14Z" fill="#B9CBBD" opacity=".55"/><path d="M0 14C-10 10 -14 2 -12 -6C-11 -12 -6 -16 0 -14C6 -16 11 -12 12 -6C14 2 10 10 0 14Z" fill="none" stroke="#7F9A86" stroke-width=".7"/><path d="M0 -12V13M-9 -4C-6 -3 -4 -1 -3 2M9 -4C6 -3 4 -1 3 2M-8 4C-6 5 -4 7 -3 9M8 4C6 5 4 7 3 9" fill="none" stroke="#7F9A86" stroke-width=".6"/><path d="M-10 -6C-8 -7 -6 -6 -5 -4L-8 -1ZM10 -6C8 -7 6 -6 5 -4L8 -1Z" fill="#F3EDE0"/></g>
-            <g><path d="M12.0 108.0Q20.0 92.0 34.0 80.0" fill="none" stroke="#7F9A86" stroke-width="0.91" stroke-linecap="round"/><path d="M13.9 104.5L15.5 104.9M13.9 104.5L12.6 103.3M15.9 101.1L18.7 101.8M15.9 101.1L13.9 98.9M18.0 97.8L20.6 98.6M18.0 97.8L16.3 95.7M20.3 94.6L22.7 95.4M20.3 94.6L18.8 92.5M22.7 91.5L24.9 92.4M22.7 91.5L21.4 89.5M25.3 88.4L27.2 89.3M25.3 88.4L24.2 86.6M28.1 85.5L29.8 86.4M28.1 85.5L27.2 83.9M31.0 82.7L32.4 83.6M31.0 82.7L30.2 81.2M34.0 80.0L35.3 80.8M34.0 80.0L33.4 78.6" fill="none" stroke="#7F9A86" stroke-width="0.70" stroke-linecap="round"/><path d="M6.0 108.0Q6.0 94.0 14.0 82.0" fill="none" stroke="#7F9A86" stroke-width="0.91" stroke-linecap="round"/><path d="M6.1 104.5L7.6 104.2M6.1 104.5L4.7 104.0M6.5 101.1L9.0 100.8M6.5 101.1L4.2 100.1M7.1 97.8L9.4 97.6M7.1 97.8L5.1 96.6M8.0 94.5L10.1 94.5M8.0 94.5L6.2 93.3M9.1 91.3L11.0 91.4M9.1 91.3L7.6 90.1M10.5 88.1L12.2 88.4M10.5 88.1L9.2 87.0M12.1 85.0L13.6 85.4M12.1 85.0L11.1 83.9M14.0 82.0L15.3 82.4M14.0 82.0L13.2 81.0" fill="none" stroke="#7F9A86" stroke-width="0.70" stroke-linecap="round"/><path d="M140.0 108.0Q150.0 98.0 166.0 92.0" fill="none" stroke="#7F9A86" stroke-width="0.91" stroke-linecap="round"/><path d="M142.6 105.6L144.0 106.4M142.6 105.6L141.9 104.1M145.4 103.2L147.6 104.8M145.4 103.2L144.4 100.7M148.3 101.1L150.3 102.6M148.3 101.1L147.6 98.7M151.5 99.0L153.2 100.5M151.5 99.0L150.9 96.8M154.8 97.1L156.3 98.5M154.8 97.1L154.4 95.1M158.4 95.2L159.6 96.6M158.4 95.2L158.1 93.4M162.1 93.6L163.1 94.8M162.1 93.6L161.9 91.9M166.0 92.0L166.9 93.1M166.0 92.0L165.9 90.6" fill="none" stroke="#7F9A86" stroke-width="0.70" stroke-linecap="round"/></g>
-            <path d="M58 104C62 98 70 96 76 100C70 102 64 104 58 104Z" fill="#9BB2A1" opacity=".5" stroke="#7F9A86" stroke-width=".6"/>
-          </g>
-        </svg>
         <div class="addr"><span id="envName">Our dearest guest</span></div>
       </div>
 
@@ -743,12 +598,6 @@ hr.rule{border:0;border-top:1px solid rgba(36,39,34,.2);margin:2.5em 0}
         <div class="flap-face"></div>
         <div class="seal" id="seal">
           <div class="seal-art" id="sealArt">
-            <div class="wax"></div>
-            <div class="die"></div>
-            <svg viewBox="0 0 82 82" aria-hidden="true">
-              <use class="die-art hi" href="#sealDie" transform="translate(0 .75)"/>
-              <use class="die-art lo" href="#sealDie"/>
-            </svg>
           </div>
         </div>
       </div>
@@ -848,11 +697,7 @@ hr.rule{border:0;border-top:1px solid rgba(36,39,34,.2);margin:2.5em 0}
         </div>
 
         <div class="pp-cover" id="ppCover" aria-hidden="true">
-          <div class="face face-front">
-            <div><h2>Passport</h2><div class="cover-sub">to a lifetime together</div></div>
-            <svg class="emblem" viewBox="0 0 160 112" aria-hidden="true"><use href="#coverEmblem"/></svg>
-            <div class="cover-foot">A + C</div>
-          </div>
+          <div class="face face-front"></div>
           <div class="face face-back"></div>
         </div>
       </div>
@@ -1400,7 +1245,7 @@ var RSVP_ENDPOINT = "";
       var press = seg(p, .05, .062) * (1 - seg(p, .07, .085));            /* a short push */
       if (reach > 0.001) {
         /* the seal sits at 55% down the envelope; the paw's pad lands just below and right of it */
-        var sealX = 0, sealY = envY + eh * 0.05;
+        var sealX = -envBack.offsetWidth * 0.02, sealY = envY + eh * 0.05;
         /* translate moves the element's corner; the pad centre sits at (50%, 12%) of the box */
         var padDX = paw.offsetWidth * 0.5, padDY = paw.offsetHeight * 0.068;
         var fromX = vw * 0.55, fromY = vh * 0.6;
