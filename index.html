@@ -119,6 +119,10 @@ button,input,select,textarea{font:inherit;color:inherit}
 
 /* The vista: a painted view from the cliff. One SVG, drawn once; only the wave washes move. */
 .vista{left:0;top:0;width:100%;height:100%;z-index:0;pointer-events:none;display:block}
+/* A painted plate, when one is present in assets/, sits over the drawn vista. It fades in once loaded;
+   if it is missing or fails, the drawn scene stays. */
+.plate{left:0;top:0;width:100%;height:100%;z-index:0;pointer-events:none;object-fit:cover;object-position:50% 46%;opacity:0;transition:opacity .6s ease}
+.plate.is-ready{opacity:1}
 .vista .v-wash{animation:vwash 11s ease-in-out infinite alternate}
 @keyframes vwash{from{transform:translateX(-7px)}to{transform:translateX(7px)}}
 @media (prefers-reduced-motion:reduce){.vista .v-wash{animation:none}}
@@ -652,6 +656,8 @@ hr.rule{border:0;border-top:1px solid rgba(36,39,34,.2);margin:2.5em 0}
         <!-- paper -->
         <rect width="1590" height="844" filter="url(#vPaper)" style="mix-blend-mode:multiply" opacity=".6"/>
       </svg>
+
+      <img class="plate" id="plate" src="assets/bali-cliff.jpg" alt="" decoding="async" aria-hidden="true">
 
       <svg class="flock" id="flock" aria-hidden="true"></svg>
 
@@ -1251,6 +1257,11 @@ var RSVP_ENDPOINT = "";
   var arc = $('arc'), arcMask = $('arcMask'), plane = $('plane'), stamp = $('stamp');
   var openBtn = $('openBtn'), flock = $('flock'), more = $('more'), sealArt = $('sealArt'), capTop = $('capTop');
   var paw = $('paw'), pawClaws = $('pawClaws');
+  var plate = $('plate'), vista = $('vista');
+  function plateReady() { plate.classList.add('is-ready'); vista.style.display = 'none'; }
+  if (plate.complete && plate.naturalWidth > 0) plateReady();
+  plate.addEventListener('load', plateReady);
+  plate.addEventListener('error', function () { plate.parentNode.removeChild(plate); });
   var envParts = [envBack, envPocket, envFlap];
 
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
