@@ -109,20 +109,24 @@ button,input,select,textarea{font:inherit;color:inherit}
 .scene>*{position:absolute;left:50%;top:50%}
 
 /* Captions above and below the envelope, in the manner of the printed suite. */
-/* Each caption sits on a soft frosted label so it reads over sky and flowers alike. */
-.cap,.hint{
-  position:absolute;left:50%;right:auto;transform:translateX(-50%);width:max-content;max-width:min(92vw,520px);
-  text-align:center;z-index:1;pointer-events:none;color:var(--ink);
-  padding:.9em 1.6em 1em;border-radius:22px;
-  background:rgba(244,239,229,.62);box-shadow:inset 0 0 0 1px rgba(255,255,255,.45),0 10px 30px -18px rgba(36,39,34,.5);
-  backdrop-filter:blur(14px) saturate(.9);-webkit-backdrop-filter:blur(14px) saturate(.9);
-  text-shadow:0 0 6px rgba(255,250,238,.7);
-}
+/* Captions above and below the envelope. No panels: the painting is washed and softened at the top
+   and bottom edges (the scrims below), and the ink gets a light halo. */
+.cap,.hint{position:absolute;left:0;right:0;text-align:center;z-index:1;pointer-events:none;color:var(--ink);
+  text-shadow:0 1px 0 rgba(255,250,238,.55),0 0 12px rgba(255,250,238,.85),0 0 3px rgba(255,250,238,.8)}
+/* Edge scrims: a cream wash that fades into the picture, with a blur that fades the same way, so the
+   painting dissolves under the captions without a visible edge. Each scrim leaves with its caption. */
+.scrim{left:0;right:0;width:100%;height:38%;z-index:0;pointer-events:none;
+  -webkit-backdrop-filter:blur(9px);backdrop-filter:blur(9px)}
+.scrim-top{top:0;background:linear-gradient(180deg,rgba(244,239,229,.9) 0%,rgba(244,239,229,.62) 40%,rgba(244,239,229,0) 100%);
+  -webkit-mask-image:linear-gradient(180deg,#000 35%,transparent 100%);mask-image:linear-gradient(180deg,#000 35%,transparent 100%)}
+.scrim-bottom{top:auto;bottom:0;height:36%;background:linear-gradient(0deg,rgba(244,239,229,.9) 0%,rgba(244,239,229,.62) 40%,rgba(244,239,229,0) 100%);
+  -webkit-mask-image:linear-gradient(0deg,#000 35%,transparent 100%);mask-image:linear-gradient(0deg,#000 35%,transparent 100%)}
+.stage.is-static .scrim{display:none}
 .cap-top{top:max(8.5%,calc(env(safe-area-inset-top) + 44px))}
 .cap .caps,.hint .caps{display:block;font-family:var(--serif);font-size:clamp(15px,4vw,19px);letter-spacing:.34em;text-transform:uppercase;line-height:1.5;padding-left:.34em}
 .cap .rule,.hint .rule{display:block;width:34px;height:1px;background:var(--husk);margin:.75em auto;opacity:.8}
 .cap .script{display:block;font-family:var(--script);font-size:clamp(30px,8.6vw,42px);line-height:1;color:var(--ink)}
-.hint{top:auto;bottom:max(18px,env(safe-area-inset-bottom))}
+.hint{top:auto;bottom:max(22px,env(safe-area-inset-bottom))}
 .hint .tap{display:block;margin-top:1em;font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft)}
 .hint svg{display:block;margin:6px auto 0;width:18px;height:18px}
 
@@ -572,6 +576,8 @@ button,input,select,textarea{font:inherit;color:inherit}
       <div class="plate" id="plate" aria-hidden="true">
         <img id="plateBase" src="assets/bali-cliff.jpg" alt="" decoding="async">
       </div>
+      <div class="scrim scrim-top" id="scrimTop" aria-hidden="true"></div>
+      <div class="scrim scrim-bottom" id="scrimBottom" aria-hidden="true"></div>
 
 
       <div class="cap cap-top" id="capTop" aria-hidden="true"><span class="caps">A journey<br>to forever</span><i class="rule"></i><span class="script">Bali, Indonesia</span></div>
@@ -939,7 +945,7 @@ var RSVP_ENDPOINT = "";
   /* the leaves, first to last (the DOM holds them last to first so the first sits on top) */
   var leaves = Array.prototype.slice.call(passport.querySelectorAll('.pp-leaf')).sort(function (a, b) { return a.getAttribute('data-leaf') - b.getAttribute('data-leaf'); });
   var arc = $('arc'), arcMask = $('arcMask'), plane = $('plane'), stamp = $('stamp');
-  var openBtn = $('openBtn'), sealArt = $('sealArt'), capTop = $('capTop');
+  var openBtn = $('openBtn'), sealArt = $('sealArt'), capTop = $('capTop'), scrimTop = $('scrimTop'), scrimBottom = $('scrimBottom');
   /* ---- The painted plate: one image. It fades in once decoded; if it fails to load the
      drawn scene stays and the envelope still appears. ---- */
   var plate = $('plate'), vista = $('vista'), plateBase = $('plateBase');
@@ -1013,6 +1019,8 @@ var RSVP_ENDPOINT = "";
       /* -- Hint fades out immediately ------------------------------ 0.00–0.05 */
       hint.style.opacity = 1 - seg(p, 0, .05);
       capTop.style.opacity = 1 - seg(p, .50, .62);   /* the caption clears before the passport rises */
+      scrimBottom.style.opacity = 1 - seg(p, 0, .10);
+      scrimTop.style.opacity = 1 - seg(p, .50, .62);
       openBtn.classList.toggle('is-hidden', p > .04);
 
 
