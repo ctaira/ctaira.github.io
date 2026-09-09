@@ -328,6 +328,7 @@ html.is-locked,html.is-locked body{overflow:hidden;overscroll-behavior:none}
 --------------------------------------------------------------------------- */
 :root{--ivory:#F8F3E8;--olive:#596044;--olive-soft:rgba(89,96,68,.74);--gold-line:#9B8B57;
   --arch-w:min(88vw,620px);--arch-r:calc(var(--arch-w) / 2);
+  --bloom:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-13 -13 26 26' fill='none' stroke='%239B8B57' stroke-width='1.1'%3E%3Cg%3E%3Cpath d='M0-11c4-6 9-4 6 2-2 4-4 6-6 9-2-3-4-5-6-9-3-6 2-8 6-2z'/%3E%3Cpath d='M0-11c4-6 9-4 6 2-2 4-4 6-6 9-2-3-4-5-6-9-3-6 2-8 6-2z' transform='rotate(72)'/%3E%3Cpath d='M0-11c4-6 9-4 6 2-2 4-4 6-6 9-2-3-4-5-6-9-3-6 2-8 6-2z' transform='rotate(144)'/%3E%3Cpath d='M0-11c4-6 9-4 6 2-2 4-4 6-6 9-2-3-4-5-6-9-3-6 2-8 6-2z' transform='rotate(216)'/%3E%3Cpath d='M0-11c4-6 9-4 6 2-2 4-4 6-6 9-2-3-4-5-6-9-3-6 2-8 6-2z' transform='rotate(288)'/%3E%3Ccircle r='1.6' fill='%239B8B57' stroke='none'/%3E%3C/g%3E%3C/svg%3E");
   --motif:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 120' fill='none' stroke='%239B8B57' stroke-width='1.1' stroke-linecap='round'%3E%3Cpath d='M18 0v36'/%3E%3Cg transform='translate(18 54)'%3E%3Cpath d='M0-11c4-6 9-4 6 2-2 4-4 6-6 9-2-3-4-5-6-9-3-6 2-8 6-2z'/%3E%3Cpath d='M0-11c4-6 9-4 6 2-2 4-4 6-6 9-2-3-4-5-6-9-3-6 2-8 6-2z' transform='rotate(72)'/%3E%3Cpath d='M0-11c4-6 9-4 6 2-2 4-4 6-6 9-2-3-4-5-6-9-3-6 2-8 6-2z' transform='rotate(144)'/%3E%3Cpath d='M0-11c4-6 9-4 6 2-2 4-4 6-6 9-2-3-4-5-6-9-3-6 2-8 6-2z' transform='rotate(216)'/%3E%3Cpath d='M0-11c4-6 9-4 6 2-2 4-4 6-6 9-2-3-4-5-6-9-3-6 2-8 6-2z' transform='rotate(288)'/%3E%3Ccircle r='1.6' fill='%239B8B57' stroke='none'/%3E%3C/g%3E%3Cpath d='M18 72v42'/%3E%3Ccircle cx='18' cy='117' r='1.8' fill='%239B8B57' stroke='none'/%3E%3C/svg%3E")}
 .bg-fixed{position:fixed;inset:0;z-index:-1;background:#E4D9C4 url("assets/bali-cliff.jpg") 50% 46%/cover no-repeat}
 .section{padding:clamp(22px,5vh,56px) var(--gutter);color:var(--olive)}
@@ -414,14 +415,14 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
 
 /* Dress to impress: a wide pavilion, the models arriving in their own time */
 .dress{padding-top:clamp(22px,5vh,56px)}
-.dress .pav{
+.pav{
   position:relative;width:min(96vw,1180px);margin:0 auto;text-align:center;color:var(--olive);
   padding:clamp(64px,8vw,104px) clamp(22px,5vw,72px) clamp(56px,6vw,84px);
   background:rgba(248,243,232,.88);border:1px solid rgba(155,139,87,.75);
   border-radius:clamp(90px,24vw,300px) clamp(90px,24vw,300px) 34px 34px / clamp(70px,11vw,150px) clamp(70px,11vw,150px) 34px 34px;
   opacity:0;transform:translateY(12px);transition:opacity 1.3s ease,transform 1.3s ease;
 }
-.dress .pav.is-in{opacity:1;transform:none}
+.pav.is-in{opacity:1;transform:none}
 .pav-motif{position:absolute;left:50%;width:30px;height:calc(30px * 3.33);transform:translateX(-50%);background:var(--motif) center/contain no-repeat;opacity:.85}
 .pav-motif-top{top:10px}
 .pav-motif-bottom{bottom:6px;transform:translateX(-50%) scaleY(-1)}
@@ -446,17 +447,27 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
 .seats-box .val{font-family:var(--serif);font-size:clamp(24px,4.6vw,30px);line-height:1.1;margin-top:.15em}
 .seats-box .num{font-family:var(--serif);font-size:clamp(48px,11vw,64px);line-height:.9;color:var(--olive)}
 
-/* FAQ */
-.faq{list-style:none;margin:2.2em 0 0;padding:0;border-top:1px solid rgba(89,96,68,.2)}
-.faq details{border-bottom:1px solid rgba(89,96,68,.2)}
-.faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:baseline;gap:1.5em;padding:1em 0;font-family:var(--serif);font-size:clamp(20px,4.4vw,24px);line-height:1.2}
-.faq summary::-webkit-details-marker{display:none}
-.faq summary::after{content:"+";flex:0 0 auto;font-family:var(--mono);font-size:18px;color:var(--gold-line);transition:transform .25s;transform-origin:50% 50%}
-.faq details[open] summary::after{transform:rotate(45deg)}
-.faq summary:focus-visible{outline:2px solid var(--gold-line);outline-offset:4px;border-radius:4px}
-.faq .answer{padding:0 0 1.4em;max-width:56ch;font-size:15.5px;color:var(--olive-soft)}
-.faq .answer p{margin:0 0 .8em}
-.faq .answer p:last-child{margin:0}
+/* Questions: an illustrated travel journal on one tall pavilion */
+.pav-tall{width:min(92vw,900px);padding-top:clamp(64px,7vw,96px);padding-bottom:clamp(44px,5vw,64px);opacity:1;transform:none;transition:none}
+.fq-head{margin:0 auto clamp(28px,4vw,48px)}
+.fq-eyebrow{display:block;font-family:var(--serif);font-size:clamp(13px,1.6vw,16px);letter-spacing:.42em;text-transform:uppercase;padding-left:.42em;margin-bottom:.4em}
+.fq-head .script-line{font-size:clamp(42px,8vw,78px)}
+.fq-head .mt-rule{width:150px;margin:1em auto .9em}
+.fq-sub{font-family:var(--serif);font-size:clamp(12.5px,1.5vw,15px);letter-spacing:.3em;text-transform:uppercase;line-height:1.7;max-width:34ch;margin:0 auto;padding-left:.3em}
+.fq-list{list-style:none;margin:0;padding:0;text-align:left}
+.fq{position:relative;display:grid;grid-template-columns:minmax(150px,230px) 1fr;gap:clamp(20px,3.5vw,48px);align-items:center;padding:clamp(30px,4vw,48px) 0;border-top:1px solid rgba(155,139,87,.35)}
+.fq:first-child{border-top:0}
+.fq::before{content:"";position:absolute;left:50%;top:-11px;width:22px;height:22px;transform:translateX(-50%);background:var(--bloom) center/contain no-repeat;opacity:.9}
+.fq:first-child::before{display:none}
+.fq-art{display:block;width:100%;height:auto;max-width:none;justify-self:center;opacity:0;transform:translateY(12px) scale(.97);transition:opacity .45s ease,transform .45s ease}
+.fq-body h3{font-family:var(--serif);font-weight:400;font-size:clamp(25px,3.2vw,33px);line-height:1.15;margin:0 0 .35em;opacity:0;transform:translateY(12px);transition:opacity .45s ease .18s,transform .45s ease .18s}
+.fq-body p{font-size:clamp(16.5px,1.8vw,18.5px);line-height:1.65;margin:0;color:var(--olive-soft);max-width:52ch;opacity:0;transform:translateY(12px);transition:opacity .45s ease .34s,transform .45s ease .34s}
+.fq.is-in .fq-art,.fq.is-in h3,.fq.is-in p{opacity:1;transform:none}
+.fq-reveal{opacity:0;transform:translateY(12px);transition:opacity .55s ease,transform .55s ease}
+.fq-reveal.is-in{opacity:1;transform:none}
+.fq-close{font-family:var(--serif);font-size:clamp(12.5px,1.6vw,16px);letter-spacing:.34em;text-transform:uppercase;margin:clamp(30px,4vw,48px) 0 1.6em;padding-left:.34em}
+@media (max-width:640px){.fq{grid-template-columns:1fr;gap:14px;justify-items:start}.fq-art{width:min(62%,230px);justify-self:start}}
+.pav.is-static .fq-art,.pav.is-static .fq-body h3,.pav.is-static .fq-body p,.pav.is-static .fq-reveal{opacity:1;transform:none;transition:none}
 
 /* RSVP */
 .rsvp form{max-width:520px}
@@ -928,82 +939,51 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
 <!-- =======================================================================
      6 · FAQ
      ======================================================================= -->
-<section class="section" id="faq">
-  <div class="inner">
-    <span class="eyebrow">06 — Questions</span>
-    <h2>Things you might be wondering</h2>
-    <p class="lede">The short answers. If yours isn't here, write to us.</p>
-
-    <div class="faq">
-      <details>
-        <summary>When should I fly in?</summary>
-        <div class="answer">
-          <p>Fly into Denpasar (DPS), Bali's international airport. Aim to land by Friday afternoon so you're at Rock Bar for sunset, and remember that from most places it's a long trip with a connection, so build in the time. If you can spare it, arriving Thursday gives you a day to find your feet.</p>
-          <p>AYANA is 25 minutes from the airport. Transport is on you, and it's easy: Gojek and Grab both work in Bali and pick up at the airport from the marked ride-hailing points, with a small airport surcharge. There's also a fixed-fare taxi counter in arrivals, and AYANA can book a private transfer if you'd rather have someone holding a sign.</p>
-        </div>
-      </details>
-      <details>
-        <summary>Do I need a visa?</summary>
-        <div class="answer">
-          <p>US passport holders can get a 30-day visa on arrival, either at the airport or online beforehand, and there's a small Bali tourist levy paid on entry. Your passport needs at least six months' validity past your arrival date and a blank page.</p>
-          <p>Rules change, so we'll send a reminder with the current requirements in the spring.</p>
-        </div>
-      </details>
-      <details>
-        <summary>Where do I stay?</summary>
-        <div class="answer">
-          <p>On the estate. Rooms are held for our guests across AYANA Resort, AYANA Villas and RIMBA, which share the same grounds, pools and shuttle. Once you've replied we'll send booking details and the group rate.</p>
-        </div>
-      </details>
-      <details>
-        <summary>Do I need a car?</summary>
-        <div class="answer">
-          <p>No. Everything happens on the estate, and the resort shuttle runs between the three hotels around the clock. The only ride you'll need is from the airport, and Gojek, Grab or a taxi will do it.</p>
-        </div>
-      </details>
-      <details>
-        <summary>Can I bring a plus-one, or the kids?</summary>
-        <div class="answer">
-          <p>Your invitation says exactly how many seats it admits, and the RSVP form only lets you reply for that many. The weekend is adults only, which we say more about <a href="#adults">just above</a>.</p>
-        </div>
-      </details>
-      <details>
-        <summary>What's the weather like in late August?</summary>
-        <div class="answer">
-          <p>Dry season, and the best of it. Around 29°C in the afternoon, 24°C at night, humid, and very little chance of rain. The sun sets a little after six, which is why the ceremony is at half past four.</p>
-        </div>
-      </details>
-      <details>
-        <summary>What should I wear?</summary>
-        <div class="answer">
-          <p>Black tie formal, in vibrant colors and tropical hues. Come dressed in your formal best and ready to celebrate. The <a href="#dress">dress code section</a> has the picture.</p>
-        </div>
-      </details>
-      <details>
-        <summary>Is there a registry?</summary>
-        <div class="answer">
-          <p>Getting yourself to Bali is the gift, and we mean that. If you'd still like to give something, we'll add details here closer to the date.</p>
-        </div>
-      </details>
-      <details>
-        <summary>What about money?</summary>
-        <div class="answer">
-          <p>Indonesia uses the rupiah. The resort takes cards for everything. A little cash is handy for taxis, markets and tips if you head off the estate, and the airport ATMs are the easiest place to get it.</p>
-        </div>
-      </details>
-      <details>
-        <summary>Can I make a longer trip of it?</summary>
-        <div class="answer">
-          <p>Please do. Sunday is wide open, and Bali rewards a few extra days. Uluwatu's cliffs and temple are twenty minutes south, and Ubud's rice terraces are a couple of hours north. We're happy to share what we've loved.</p>
-        </div>
-      </details>
-      <details>
-        <summary>When do I need to reply by?</summary>
-        <div class="answer">
-          <p>1 March 2027, using the form <a href="#rsvp">below</a>. Earlier helps us hold the rooms.</p>
-        </div>
-      </details>
-    </div>
+<section class="section faqs" id="faq">
+  <div class="pav pav-tall" id="faqPav">
+    <i class="pav-motif pav-motif-top" aria-hidden="true"></i>
+    <header class="fq-head fq-reveal">
+      <span class="fq-eyebrow">Questions?</span>
+      <h2 class="script-line">You might be wondering</h2>
+      <i class="mt-rule"></i>
+      <p class="fq-sub">Here are a few details to help you plan your trip to Bali.</p>
+    </header>
+    <ol class="fq-list">
+      <li class="fq">
+        <img class="fq-art" src="assets/faq-plane.webp" alt="A watercolor airliner among soft clouds, with a plumeria below." loading="lazy" decoding="async">
+        <div class="fq-body"><h3>When should I fly in?</h3><p>Into Denpasar (DPS), by Friday afternoon for sunset at Rock Bar. It’s a long trip with a connection, so build in the time.</p></div>
+      </li>
+      <li class="fq">
+        <img class="fq-art" src="assets/faq-passport.webp" alt="A dark green passport among tropical leaves and plumeria." loading="lazy" decoding="async">
+        <div class="fq-body"><h3>Do I need a visa?</h3><p>US passports get a 30-day visa on arrival, plus a small tourist levy. Six months’ validity and a blank page. We’ll send the current rules in the spring.</p></div>
+      </li>
+      <li class="fq">
+        <img class="fq-art" src="assets/faq-resort.webp" alt="A Balinese cliffside resort above the sea." loading="lazy" decoding="async">
+        <div class="fq-body"><h3>Where do I stay?</h3><p>On the estate. Rooms are held across AYANA Resort, AYANA Villas and RIMBA. Booking details follow your reply.</p></div>
+      </li>
+      <li class="fq">
+        <img class="fq-art" src="assets/faq-beach.webp" alt="A beach at sunset with a thatched umbrella and two lounge chairs." loading="lazy" decoding="async">
+        <div class="fq-body"><h3>What’s the weather like?</h3><p>Dry season, and the best of it. Around 84°F in the afternoon, 75°F at night, humid, and very little rain. The sun sets a little after 6 PM.</p></div>
+      </li>
+      <li class="fq">
+        <img class="fq-art" src="assets/faq-money.webp" alt="Rupiah notes and coins in a woven basket." loading="lazy" decoding="async">
+        <div class="fq-body"><h3>What about money?</h3><p>Indonesia uses the rupiah. The resort takes cards for everything. A little cash is handy for taxis, markets and tips, and the airport ATMs are the easiest place to get it.</p></div>
+      </li>
+      <li class="fq">
+        <img class="fq-art" src="assets/faq-buggy.webp" alt="A cream resort buggy." loading="lazy" decoding="async">
+        <div class="fq-body"><h3>Do I need a car?</h3><p>No. Everything is on the estate and the shuttle runs around the clock. Gojek, Grab or a taxi from the airport also work well.</p></div>
+      </li>
+      <li class="fq">
+        <img class="fq-art" src="assets/faq-bunny.webp" alt="A plush bunny among leaves and plumeria." loading="lazy" decoding="async">
+        <div class="fq-body"><h3>Are children invited?</h3><p>We love your little ones, but our wedding will be an adults-only celebration. We hope this gives you a chance to enjoy a relaxing getaway.</p></div>
+      </li>
+      <li class="fq">
+        <img class="fq-art" src="assets/faq-envelope.webp" alt="An ivory envelope marked RSVP with a gold wax seal." loading="lazy" decoding="async">
+        <div class="fq-body"><h3>When do I need to reply by?</h3><p>Please RSVP by January 31, 2027. This helps us with final planning and room blocks.</p></div>
+      </li>
+    </ol>
+    <p class="fq-close fq-reveal">We can’t wait to see you in Bali</p>
+    <i class="pav-motif pav-motif-bottom" aria-hidden="true"></i>
   </div>
 </section>
 
@@ -1014,7 +994,7 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
   <div class="inner">
     <span class="eyebrow">07 — RSVP</span>
     <h2>Will you come?</h2>
-    <p class="deadline" id="deadline">Kindly reply by 1 March 2027</p>
+    <p class="deadline" id="deadline">Kindly reply by 31 January 2027</p>
 
     <div class="gate" id="rsvpGate" hidden>
       <p>We couldn't find your invitation. Please open the link from the message we sent you, which carries your name and seats, and reply from there.</p>
@@ -1076,7 +1056,7 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
     <div class="confirm" id="confirmNo">
       <h3>We'll miss you.</h3>
       <p>Thank you for letting us know. We understand completely, and we'll raise a glass to you from the cliff.</p>
-      <p>If anything changes before March, just open your invitation again and send a new reply.</p>
+      <p>If anything changes before the end of January, just open your invitation again and send a new reply.</p>
       <p class="muted confirm-mail" hidden>A copy of your reply is on its way to your inbox.</p>
       <span class="mono">With love · Ashley &amp; Charles</span>
     </div>
@@ -1583,6 +1563,19 @@ var RSVP_ENDPOINT = "";
     }
     if ('IntersectionObserver' in window) new IntersectionObserver(function (en) { if (en[0].isIntersecting) play(); }, { threshold: .22 }).observe(pav);
     else play();
+  })();
+
+  /* -------------------------------------------------------------------------
+     Questions: each question and its drawing arrive together as they come into view.
+  ------------------------------------------------------------------------- */
+  (function () {
+    var pav = $('faqPav');
+    var items = Array.prototype.slice.call(pav.querySelectorAll('.fq, .fq-reveal'));
+    if (reduce || !('IntersectionObserver' in window)) { pav.classList.add('is-static'); items.forEach(function (el) { el.classList.add('is-in'); }); return; }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('is-in'); io.unobserve(en.target); } });
+    }, { threshold: .18, rootMargin: '0px 0px -8% 0px' });
+    items.forEach(function (el) { io.observe(el); });
   })();
 
   /* -------------------------------------------------------------------------
