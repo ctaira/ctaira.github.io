@@ -203,7 +203,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 .env{width:var(--ew);height:var(--eh);margin-left:calc(var(--ew) / -2);margin-top:calc(var(--eh) / -2)}
 .env-back{z-index:2;background:#E3DBC9;border-radius:6px}
 .env-pocket{z-index:5;border-radius:6px;overflow:hidden;background:url("assets/envelope.jpg") center/100% 100% no-repeat;
-  clip-path:polygon(0 0,47.0% 55.2%,100% 0,100% 100%,0 100%);-webkit-clip-path:polygon(0 0,47.0% 55.2%,100% 0,100% 100%,0 100%)}
+  clip-path:polygon(0 0,48.1% 57.2%,100% 0,100% 100%,0 100%);-webkit-clip-path:polygon(0 0,48.1% 57.2%,100% 0,100% 100%,0 100%)}
 .env-pocket .addr{
   position:absolute;left:8%;right:44%;bottom:7%;text-align:center;
   font-family:var(--script);font-size:clamp(19px,5.2vw,26px);color:#6B6558;
@@ -215,11 +215,11 @@ button,input,select,textarea{font:inherit;color:inherit}
 }
 .env-flap .flap-face{
   position:absolute;inset:0;background:url("assets/envelope.jpg") center/100% 100% no-repeat;
-  clip-path:polygon(0 0,100% 0,47.0% 55.2%);
-  -webkit-clip-path:polygon(0 0,100% 0,47.0% 55.2%);
+  clip-path:polygon(0 0,100% 0,48.1% 57.2%);
+  -webkit-clip-path:polygon(0 0,100% 0,48.1% 57.2%);
 }
 .seal{
-  position:absolute;left:47.0%;top:55.2%;width:118px;height:118px;margin:-59px 0 0 -59px;
+  position:absolute;left:48.1%;top:57.2%;width:calc(var(--ew) * 0.226);height:calc(var(--ew) * 0.226);margin:calc(var(--ew) * -0.1131) 0 0 calc(var(--ew) * -0.1131);
   will-change:transform;
 }
 .seal-art{position:absolute;inset:0;background:url("assets/seal.png") center/100% 100% no-repeat;filter:drop-shadow(0 3px 3px rgba(60,40,5,.35))}
