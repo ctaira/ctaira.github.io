@@ -31,7 +31,7 @@
   --mono:'Roboto Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
   --script:'Pinyon Script','Snell Roundhand','Brush Script MT',cursive;
   --ew:min(86vw,440px);            /* envelope width */
-  --eh:calc(var(--ew) * .70);       /* envelope height */
+  --eh:calc(var(--ew) * 0.698);       /* envelope height */
   --pw:min(86vw,380px,60svh);      /* passport width  */
   --ph:calc(var(--pw) * 1.435);     /* passport height */
   --gutter:clamp(20px,6vw,48px);
@@ -203,7 +203,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 .env{width:var(--ew);height:var(--eh);margin-left:calc(var(--ew) / -2);margin-top:calc(var(--eh) / -2)}
 .env-back{z-index:2;background:#E3DBC9;border-radius:6px}
 .env-pocket{z-index:5;border-radius:6px;overflow:hidden;background:url("assets/envelope.jpg") center/100% 100% no-repeat;
-  clip-path:polygon(0 0,48% 55%,100% 0,100% 100%,0 100%);-webkit-clip-path:polygon(0 0,48% 55%,100% 0,100% 100%,0 100%)}
+  clip-path:polygon(0 0,47.0% 55.2%,100% 0,100% 100%,0 100%);-webkit-clip-path:polygon(0 0,47.0% 55.2%,100% 0,100% 100%,0 100%)}
 .env-pocket .addr{
   position:absolute;left:8%;right:44%;bottom:7%;text-align:center;
   font-family:var(--script);font-size:clamp(19px,5.2vw,26px);color:#6B6558;
@@ -215,11 +215,11 @@ button,input,select,textarea{font:inherit;color:inherit}
 }
 .env-flap .flap-face{
   position:absolute;inset:0;background:url("assets/envelope.jpg") center/100% 100% no-repeat;
-  clip-path:polygon(0 0,100% 0,48% 55%);
-  -webkit-clip-path:polygon(0 0,100% 0,48% 55%);
+  clip-path:polygon(0 0,100% 0,47.0% 55.2%);
+  -webkit-clip-path:polygon(0 0,100% 0,47.0% 55.2%);
 }
 .seal{
-  position:absolute;left:48%;top:55%;width:112px;height:112px;margin:-56px 0 0 -56px;
+  position:absolute;left:47.0%;top:55.2%;width:118px;height:118px;margin:-59px 0 0 -59px;
   will-change:transform;
 }
 .seal-art{position:absolute;inset:0;background:url("assets/seal.png") center/100% 100% no-repeat;filter:drop-shadow(0 3px 3px rgba(60,40,5,.35))}
@@ -366,6 +366,13 @@ html.is-locked,html.is-locked body{overflow:hidden;overscroll-behavior:none}
 .muted{color:var(--olive-soft)}
 hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
 .section a{color:var(--olive);text-decoration-color:var(--gold-line);text-underline-offset:3px}
+/* every arch reads centred */
+.section>.inner{text-align:center}
+.section h2,.lede,.letter p,.note,.seats-box,.travel,.countdown,.date-grid,.gate,.confirm,.rsvp form,.letter .signoff{margin-left:auto;margin-right:auto}
+.note{border-left:0;border-top:1px solid var(--gold-line);padding:1em 0 0}
+.travel{justify-items:center}
+.rsvp form,.rsvp .field{text-align:left}
+.pills{justify-content:center}
 
 /* Letter */
 .letter p{max-width:58ch}
@@ -447,6 +454,13 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
 .dress-plate.is-in{opacity:1;transform:none}
 .dress-plate img{display:block;width:100%;height:auto;max-width:100%}
 .dress-plate.is-static{opacity:1;transform:none;transition:none}
+.pav.is-static,.pav.is-static *{transition:none!important}
+
+/* Adults only */
+.seats-box{border:1px solid var(--gold-line);border-radius:999px;padding:1.1em 1.8em;margin-top:2.2em;max-width:420px;display:grid;grid-template-columns:1fr auto;gap:1em;align-items:center}
+.seats-box .lbl{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--olive-soft)}
+.seats-box .val{font-family:var(--serif);font-size:clamp(24px,4.6vw,30px);line-height:1.1;margin-top:.15em}
+.seats-box .num{font-family:var(--serif);font-size:clamp(48px,11vw,64px);line-height:.9;color:var(--olive)}
 .pav-tall{--pw2:min(92vw,900px);--cap:calc(var(--pw2) * .15);padding:calc(var(--pw2) * .01) calc(var(--pw2) * .06) calc(var(--pw2) * .05);border-radius:0 0 calc(var(--pw2) * .05) calc(var(--pw2) * .05);opacity:1;transform:none;transition:none}
 .fq-head{margin:0 auto calc(var(--pw2) * .02)}
 .fq-eyebrow{display:block;font-family:var(--serif);font-size:max(11px,calc(var(--pw2) * .019));letter-spacing:.42em;text-transform:uppercase;padding-left:.42em;margin-bottom:.3em}
