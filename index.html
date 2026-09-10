@@ -443,19 +443,10 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
 .pav-motif{position:absolute;left:50%;width:max(18px,calc(var(--pw2) * .026));height:calc(max(18px,calc(var(--pw2) * .026)) * 3.33);transform:translateX(-50%);background:var(--motif) center/contain no-repeat;opacity:.85}
 .pav-motif-top{top:calc(var(--cap) * -.72)}
 .pav-motif-bottom{bottom:6px;transform:translateX(-50%) scaleY(-1)}
-".dc-reveal{opacity:0;transform:translateY(14px);transition:opacity 1.1s ease,transform 1.1s ease}
-.dc-reveal.is-in{opacity:1;transform:none}
-.dc-title{margin:0}
-.script-line{display:block;font-family:var(--script);font-size:calc(var(--pw2) * .076);line-height:1;color:var(--olive)}
-.dress .dc-sub{display:block;font-family:var(--serif);font-size:max(10px,calc(var(--pw2) * .024));letter-spacing:.42em;text-transform:uppercase;padding-left:.42em;margin:.3em 0 0}
-.dress .dc-sub::after{content:"";display:block;width:calc(var(--pw2) * .16);height:1px;background:var(--gold-line);margin:.9em auto 0}
-.dress .dc-copy{font-family:var(--serif);font-size:max(10.5px,calc(var(--pw2) * .0165));line-height:1.45;max-width:64ch;margin:1.2em auto 0;color:var(--olive)}
-.lineup{display:flex;flex-wrap:nowrap;justify-content:center;align-items:flex-end;gap:calc(var(--pw2) * .004);margin:calc(var(--pw2) * .03) auto calc(var(--pw2) * .022);width:100%}
-.model{flex:0 0 auto;height:calc(var(--pw2) * .262);width:auto;max-width:none;display:block;opacity:0;transform:translateY(16px) scale(.96);transition:opacity 1.2s ease,transform 1.2s ease;will-change:opacity,transform}
-.model.is-in{opacity:1;transform:none}
-.dress .dc-tags{font-family:var(--serif);font-size:max(8.5px,calc(var(--pw2) * .0135));letter-spacing:.3em;text-transform:uppercase;margin:0 0 1.2em;color:var(--olive)}
-.dress .dc-tags span{color:var(--gold-line);margin:0 .5em}
-.pav.is-static,.pav.is-static *{transition:none!important}
+".dress-plate{width:min(96vw,1180px);margin:0 auto;opacity:0;transform:translateY(14px) scale(.985);transition:opacity 1.2s ease,transform 1.2s ease}
+.dress-plate.is-in{opacity:1;transform:none}
+.dress-plate img{display:block;width:100%;height:auto;max-width:100%}
+.dress-plate.is-static{opacity:1;transform:none;transition:none}
 .pav-tall{--pw2:min(92vw,900px);--cap:calc(var(--pw2) * .15);padding:calc(var(--pw2) * .01) calc(var(--pw2) * .06) calc(var(--pw2) * .05);border-radius:0 0 calc(var(--pw2) * .05) calc(var(--pw2) * .05);opacity:1;transform:none;transition:none}
 .fq-head{margin:0 auto calc(var(--pw2) * .02)}
 .fq-eyebrow{display:block;font-family:var(--serif);font-size:max(11px,calc(var(--pw2) * .019));letter-spacing:.42em;text-transform:uppercase;padding-left:.42em;margin-bottom:.3em}
@@ -907,24 +898,9 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
      4 · DRESS CODE
      ======================================================================= -->
 <section class="section dress" id="dress">
-  <div class="pav" id="dressPav">
-    <i class="pav-motif pav-motif-top" aria-hidden="true"></i>
-    <h2 class="dc-title"><span class="script-line dc-reveal" id="dcTitle">Dress to Impress</span><span class="dc-sub dc-reveal" id="dcSub">In full color</span></h2>
-    <p class="dc-copy dc-reveal" id="dcCopy">Black tie formal attire is requested, with vibrant colors and tropical hues warmly encouraged. Above all, come dressed in your formal best and ready to celebrate with us.</p>
-    <div class="lineup" aria-label="Examples of colorful black tie attire">
-      <img class="model" data-g="1" src="assets/model-green.webp" alt="A sage green tuxedo with black lapels" loading="lazy" decoding="async">
-      <img class="model" data-g="1" src="assets/model-pink.webp" alt="A ruffled pink and magenta gown" loading="lazy" decoding="async">
-      <img class="model" data-g="5" src="assets/model-yellow.webp" alt="A draped golden yellow gown" loading="lazy" decoding="async">
-      <img class="model" data-g="3" src="assets/model-gray.webp" alt="A pale grey suit with a patterned bow tie" loading="lazy" decoding="async">
-      <img class="model" data-g="2" src="assets/model-coral.webp" alt="A coral gown with a flower at the shoulder" loading="lazy" decoding="async">
-      <img class="model" data-g="5" src="assets/model-blue.webp" alt="A navy blue tuxedo" loading="lazy" decoding="async">
-      <img class="model" data-g="3" src="assets/model-floral.webp" alt="A floral gown in sage and blush" loading="lazy" decoding="async">
-      <img class="model" data-g="4" src="assets/model-lavender.webp" alt="A lavender gown with a high slit" loading="lazy" decoding="async">
-      <img class="model" data-g="6" src="assets/model-terracotta.webp" alt="A terracotta suit with a black bow tie" loading="lazy" decoding="async">
-    </div>
-    <p class="dc-tags dc-reveal" id="dcTags">Black tie formal<span>·</span>Vibrant hues<span>·</span>Tropical elegance</p>
-    <i class="pav-motif pav-motif-bottom" aria-hidden="true"></i>
-  </div>
+  <figure class="dress-plate" id="dressPlate">
+    <img src="assets/dress-plate.webp" alt="Dress to impress, in full color. Black tie formal attire is requested, with vibrant colors and tropical hues warmly encouraged. Above all, come dressed in your formal best and ready to celebrate with us. Nine guests in colorful formalwear: a sage green tuxedo, gowns in pink, yellow, coral, floral and lavender, and suits in grey, navy and terracotta. Black tie formal, vibrant hues, tropical elegance." loading="lazy" decoding="async">
+  </figure>
 </section>
 
 <!-- =======================================================================
@@ -1568,29 +1544,13 @@ var RSVP_ENDPOINT = "";
   }
 
   /* -------------------------------------------------------------------------
-     Dress to impress: the pavilion, the words, then the models in small groups,
-     in a deliberately unpredictable order around the line-up.
+     Dress to impress: the painted pavilion arrives as it comes into view.
   ------------------------------------------------------------------------- */
   (function () {
-    var pav = $('dressPav');
-    var groups = {};
-    Array.prototype.forEach.call(pav.querySelectorAll('.model'), function (m) { var g = m.getAttribute('data-g'); (groups[g] = groups[g] || []).push(m); });
-    function showAll() { pav.classList.add('is-in'); Array.prototype.forEach.call(pav.querySelectorAll('.dc-reveal,.model'), function (el) { el.classList.add('is-in'); }); }
-    if (reduce) { pav.classList.add('is-static'); showAll(); return; }
-    var played = false;
-    function play() {
-      if (played) return; played = true;
-      var at = function (ms, fn) { setTimeout(fn, ms); };
-      pav.classList.add('is-in');
-      at(500, function () { $('dcTitle').classList.add('is-in'); });
-      at(1050, function () { $('dcSub').classList.add('is-in'); });
-      at(1550, function () { $('dcCopy').classList.add('is-in'); });
-      var order = ['1', '2', '3', '4', '5', '6'], t0 = 2200;
-      order.forEach(function (g, i) { (groups[g] || []).forEach(function (m, j) { at(t0 + i * 650 + j * 170, function () { m.classList.add('is-in'); }); }); });
-      at(t0 + order.length * 650 + 250, function () { $('dcTags').classList.add('is-in'); });
-    }
-    if ('IntersectionObserver' in window) new IntersectionObserver(function (en) { if (en[0].isIntersecting) play(); }, { threshold: .22 }).observe(pav);
-    else play();
+    var plate = $('dressPlate');
+    if (reduce || !('IntersectionObserver' in window)) { plate.classList.add('is-static'); return; }
+    var io = new IntersectionObserver(function (en) { if (en[0].isIntersecting) { plate.classList.add('is-in'); io.disconnect(); } }, { threshold: .2 });
+    io.observe(plate);
   })();
 
   /* -------------------------------------------------------------------------
