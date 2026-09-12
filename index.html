@@ -1247,8 +1247,14 @@ var RSVP_ENDPOINT = "";
 
       /* -- 5. Passport rises out, scale .46 → 1 ------------------ 0.50–0.72 */
       var s5 = ease(seg(p, .50, .72));
-      var ppY = (envY + eh * 0.03) * (1 - s5);
       var ppS = .46 + .54 * s5;
+      /* it comes out of the top only: its bottom edge starts tucked inside and finishes on the
+         envelope's bottom line, so nothing ever slips out below */
+      var envBottom = envY + eh * 0.5, ph = passport.offsetHeight;
+      var ppBottom = (envBottom - 6) + 6 * s5;
+      var ppY = ppBottom - ppS * ph * 0.5;
+      /* once the envelope has gone, the passport settles to the centre of the screen */
+      ppY *= 1 - ease(seg(p, .74, .90));
       /* the address on the pocket fades early so it never overprints the cover */
       for (var t = 0; t < pocketText.length; t++) pocketText[t].style.opacity = 1 - seg(p, .52, .62);
       /* the page-turn phases (below) may pan and scale the passport on top of this */
