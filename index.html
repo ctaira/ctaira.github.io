@@ -1245,25 +1245,23 @@ var RSVP_ENDPOINT = "";
       bpass.style.opacity = bpFade;
       bpass.style.visibility = (bpFade <= 0 || p < .14) ? 'hidden' : 'visible';
 
-      /* -- 5. Passport rises out, scale .46 → 1 ------------------ 0.50–0.72 */
-      var s5 = ease(seg(p, .50, .72));
-      var ppS = .46 + .54 * s5;
-      /* it comes out of the top only: its bottom edge starts tucked inside and finishes on the
-         envelope's bottom line, so nothing ever slips out below */
-      var envBottom = envY + eh * 0.5, ph = passport.offsetHeight;
-      var ppBottom = (envBottom - 6) + 6 * s5;
+      /* -- 5. Passport slides up out of the pocket, small, until it is clear of it --- 0.54–0.66
+            then, in front, it grows to full size while the envelope drops away --- 0.66–0.80 */
+      var slide = ease(seg(p, .54, .66)), grow = ease(seg(p, .66, .80));
+      var ppS = .46 + .54 * grow;
+      var envTop = envY - eh * 0.5, envBottom = envY + eh * 0.5, ph = passport.offsetHeight;
+      var bottomA = (envBottom - 6) + ((envTop - 4) - (envBottom - 6)) * slide;   /* its bottom edge, inside the pocket then just above it */
+      var ppBottom = bottomA + (ph * 0.5 - bottomA) * grow;                        /* then down to rest centred on the screen */
       var ppY = ppBottom - ppS * ph * 0.5;
-      /* once the envelope has gone, the passport settles to the centre of the screen */
-      ppY *= 1 - ease(seg(p, .74, .90));
       /* the address on the pocket fades early so it never overprints the cover */
       for (var t = 0; t < pocketText.length; t++) pocketText[t].style.opacity = 1 - seg(p, .52, .62);
       /* the page-turn phases (below) may pan and scale the passport on top of this */
       var ppTX = 0, ppSZ = 1;
-      /* pocket stays above the passport until it is clear of the envelope */
-      passport.classList.toggle('is-out', p > .68);
+      /* pocket stays above the passport until the passport is clear of it */
+      passport.classList.toggle('is-out', p > .66);
 
-      /* -- 6. Envelope fades and sinks ---------------------------- 0.62–0.74 */
-      var s6 = seg(p, .62, .74);
+      /* -- 6. Envelope drops away and fades ------------------------ 0.66–0.80 */
+      var s6 = seg(p, .66, .80);
       var sinkY = envY + s6 * vh * 0.22;
       envBack.style.transform = 'translateY(' + sinkY + 'px)';
       envPocket.style.transform = 'translateY(' + sinkY + 'px)';
@@ -1274,16 +1272,16 @@ var RSVP_ENDPOINT = "";
       }
       bpass.style.opacity = Math.min(bpFade, 1 - s6);
 
-      /* -- 7. Cover swings open, rotateY 0 → -174deg -------------- 0.72–0.88 */
-      var s7 = ease(seg(p, .72, .88));
+      /* -- 7. Cover swings open, rotateY 0 → -174deg -------------- 0.78–0.92 */
+      var s7 = ease(seg(p, .78, .92));
       cover.style.transform = 'rotateY(' + (-174 * s7) + 'deg)';
 
-      /* -- 8. Flight path draws, plane rides it, stamp lands ------ 0.86–1.00 */
-      var s8 = seg(p, .86, .97);
+      /* -- 8. Flight path draws, plane rides it, stamp lands ------ 0.90–1.00 */
+      var s8 = seg(p, .90, .98);
       arcMask.style.strokeDashoffset = arcLen * (1 - s8);
-      plane.style.opacity = p > .86 ? 1 : 0;
+      plane.style.opacity = p > .90 ? 1 : 0;
       placePlane(s8);
-      var s8b = seg(p, .94, 1);
+      var s8b = seg(p, .955, 1);
       stamp.style.opacity = s8b;
       stamp.style.transform = 'rotate(-12deg) scale(' + (1.9 - .9 * ease(s8b)) + ')';
       stamp.style.visibility = s8b > 0 ? 'visible' : 'hidden';
