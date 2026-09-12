@@ -31,7 +31,7 @@
   --mono:'Roboto Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
   --script:'Pinyon Script','Snell Roundhand','Brush Script MT',cursive;
   --ew:min(86vw,440px);            /* envelope width */
-  --eh:calc(var(--ew) * 0.698);       /* envelope height */
+  --eh:calc(var(--ew) * 0.692);       /* envelope height */
   --pw:min(86vw,380px,60svh);      /* passport width  */
   --ph:calc(var(--pw) * 1.435);     /* passport height */
   --gutter:clamp(20px,6vw,48px);
@@ -203,7 +203,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 .env{width:var(--ew);height:var(--eh);margin-left:calc(var(--ew) / -2);margin-top:calc(var(--eh) / -2)}
 .env-back{z-index:2;background:#E3DBC9;border-radius:6px}
 .env-pocket{z-index:5;border-radius:6px;overflow:hidden;background:url("assets/envelope-sealed.jpg") center/100% 100% no-repeat;
-  clip-path:polygon(0 0,48.10% 57.17%,100% 0,100% 100%,0 100%);-webkit-clip-path:polygon(0 0,48.10% 57.17%,100% 0,100% 100%,0 100%)}
+  clip-path:polygon(0 0,48.07% 57.45%,100% 0,100% 100%,0 100%);-webkit-clip-path:polygon(0 0,48.07% 57.45%,100% 0,100% 100%,0 100%)}
 .env-pocket .addr{
   position:absolute;left:8%;right:44%;bottom:7%;text-align:center;
   font-family:var(--script);font-size:clamp(19px,5.2vw,26px);color:#6B6558;
@@ -215,11 +215,11 @@ button,input,select,textarea{font:inherit;color:inherit}
 }
 .env-flap .flap-face{
   position:absolute;inset:0;background:url("assets/envelope-sealed.jpg") center/100% 100% no-repeat;
-  clip-path:polygon(0 0,100% 0,48.10% 57.17%);
-  -webkit-clip-path:polygon(0 0,100% 0,48.10% 57.17%);
+  clip-path:polygon(0 0,100% 0,48.07% 57.45%);
+  -webkit-clip-path:polygon(0 0,100% 0,48.07% 57.45%);
 }
 .seal{
-  position:absolute;left:48.10%;top:57.17%;width:calc(var(--ew) * 0.2280);height:calc(var(--ew) * 0.2280);margin:calc(var(--ew) * -0.1140) 0 0 calc(var(--ew) * -0.1140);
+  position:absolute;left:48.07%;top:57.45%;width:calc(var(--ew) * 0.2315);height:calc(var(--ew) * 0.2315);margin:calc(var(--ew) * -0.1157) 0 0 calc(var(--ew) * -0.1157);
   will-change:transform;
 }
 .seal-art{position:absolute;inset:0;background:url("assets/seal.png") center/100% 100% no-repeat;filter:drop-shadow(0 3px 3px rgba(60,40,5,.35))}
