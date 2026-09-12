@@ -1493,6 +1493,8 @@ var RSVP_ENDPOINT = "";
        row nudged sideways by two slow sines, more so nearer the shore; the cliff and rocks are cut out
        so only the water sways. Starts after the painting has settled, and rests when off screen. ---- */
     var sea = $('sea'), seaCtx = sea.getContext('2d'), seaOff = null, seaOn = false, seaLast = 0;
+    var seaMask = new Image(); seaMask.src = 'assets/sea-mask.png';        /* water only; the cliff and rocks are cut out of the source too */
+    seaMask.onload = function () { if (seaOn) fitSea(); };
     var SEA = { x: 0, y: 715, w: 941, h: 615 };                        /* the water, in the painting's pixels */
     function fitSea() {
       if (!plateBase.naturalWidth) return;
@@ -1503,7 +1505,9 @@ var RSVP_ENDPOINT = "";
       sea.style.width = cw.toFixed(2) + 'px'; sea.style.height = ch.toFixed(2) + 'px';
       sea.width = Math.round(cw * dpr); sea.height = Math.round(ch * dpr);
       seaOff = document.createElement('canvas'); seaOff.width = sea.width; seaOff.height = sea.height;
-      seaOff.getContext('2d').drawImage(plateBase, SEA.x, SEA.y, SEA.w, SEA.h, 0, 0, sea.width, sea.height);
+      var oc = seaOff.getContext('2d');
+      oc.drawImage(plateBase, SEA.x, SEA.y, SEA.w, SEA.h, 0, 0, sea.width, sea.height);
+      if (seaMask.naturalWidth) { oc.globalCompositeOperation = 'destination-in'; oc.drawImage(seaMask, 0, 0, sea.width, sea.height); }
     }
     function seaFrame(now) {
       if (!seaOn) return;
