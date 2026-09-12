@@ -202,8 +202,8 @@ button,input,select,textarea{font:inherit;color:inherit}
 /* Envelope parts share size and centre; JS applies the same transform to each. */
 .env{width:var(--ew);height:var(--eh);margin-left:calc(var(--ew) / -2);margin-top:calc(var(--eh) / -2)}
 .env-back{z-index:2;background:#E3DBC9;border-radius:6px}
-.env-pocket{z-index:5;border-radius:6px;overflow:hidden;background:url("assets/envelope.jpg") center/100% 100% no-repeat;
-  clip-path:polygon(0 0,48.1% 57.2%,100% 0,100% 100%,0 100%);-webkit-clip-path:polygon(0 0,48.1% 57.2%,100% 0,100% 100%,0 100%)}
+.env-pocket{z-index:5;border-radius:6px;overflow:hidden;background:url("assets/envelope-sealed.jpg") center/100% 100% no-repeat;
+  clip-path:polygon(0 0,48.10% 57.17%,100% 0,100% 100%,0 100%);-webkit-clip-path:polygon(0 0,48.10% 57.17%,100% 0,100% 100%,0 100%)}
 .env-pocket .addr{
   position:absolute;left:8%;right:44%;bottom:7%;text-align:center;
   font-family:var(--script);font-size:clamp(19px,5.2vw,26px);color:#6B6558;
@@ -214,15 +214,19 @@ button,input,select,textarea{font:inherit;color:inherit}
   will-change:transform;
 }
 .env-flap .flap-face{
-  position:absolute;inset:0;background:url("assets/envelope.jpg") center/100% 100% no-repeat;
-  clip-path:polygon(0 0,100% 0,48.1% 57.2%);
-  -webkit-clip-path:polygon(0 0,100% 0,48.1% 57.2%);
+  position:absolute;inset:0;background:url("assets/envelope-sealed.jpg") center/100% 100% no-repeat;
+  clip-path:polygon(0 0,100% 0,48.10% 57.17%);
+  -webkit-clip-path:polygon(0 0,100% 0,48.10% 57.17%);
 }
 .seal{
-  position:absolute;left:48.1%;top:57.2%;width:calc(var(--ew) * 0.226);height:calc(var(--ew) * 0.226);margin:calc(var(--ew) * -0.1131) 0 0 calc(var(--ew) * -0.1131);
+  position:absolute;left:48.10%;top:57.17%;width:calc(var(--ew) * 0.2280);height:calc(var(--ew) * 0.2280);margin:calc(var(--ew) * -0.1140) 0 0 calc(var(--ew) * -0.1140);
   will-change:transform;
 }
 .seal-art{position:absolute;inset:0;background:url("assets/seal.png") center/100% 100% no-repeat;filter:drop-shadow(0 3px 3px rgba(60,40,5,.35))}
+.stage.is-open .env-pocket,.stage.is-open .env-flap .flap-face{background-image:url("assets/envelope.jpg")}
+.seal{opacity:0}
+.stage.is-open .seal{opacity:1}
+.env-pocket .addr{display:none}
 /* The seal stays whole and rides up on the flap; it is on the flap's front face, so it goes
    out of sight as the flap turns over. */
 .env-flap .seal{backface-visibility:hidden;-webkit-backface-visibility:hidden}
@@ -1214,6 +1218,7 @@ var RSVP_ENDPOINT = "";
       var envY = vh * 0.06;
 
       /* -- Hint fades out immediately ------------------------------ 0.00–0.05 */
+      stage.classList.toggle('is-open', p > .015);
       hint.style.opacity = 1 - seg(p, 0, .05);
       capTop.style.opacity = 1 - seg(p, .50, .62);   /* the caption clears before the passport rises */
       scrimBottom.style.opacity = 1 - seg(p, 0, .10);
