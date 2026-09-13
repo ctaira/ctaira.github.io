@@ -573,8 +573,9 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
     <li><a href="#date"><small>02</small>The date</a></li>
     <li><a href="#weekend"><small>03</small>The weekend</a></li>
     <li><a href="#dress"><small>04</small>Dress code</a></li>
-    <li><a href="#faq"><small>05</small>Questions</a></li>
-    <li><a href="#rsvp"><small>06</small>RSVP</a></li>
+    <li><a href="#adults"><small>05</small>Adults only</a></li>
+    <li><a href="#faq"><small>06</small>Questions</a></li>
+    <li><a href="#rsvp"><small>07</small>RSVP</a></li>
   </ol>
 </nav>
 
@@ -925,13 +926,34 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
 </section>
 
 <!-- =======================================================================
+     5 · ADULTS ONLY
+     ======================================================================= -->
+<section class="section" id="adults">
+  <div class="inner">
+    <span class="eyebrow">05 — A note on children</span>
+    <img class="arch-art" src="assets/faq-bunny.webp" alt="" width="268" height="142" loading="lazy" decoding="async">
+    <h2>Adults only</h2>
+    <p class="lede">We love your children. We're also asking you to leave them at home this time.</p>
+    <p style="max-width:52ch;margin-left:auto;margin-right:auto">The weekend runs late, the cliffs are real, and the bar never quite closes. We would rather you had a few days that felt like a holiday of your own. We've kept the guest list to adults, and we hope you'll take that as an invitation to sleep in.</p>
+
+    <div class="seats-box" role="note">
+      <div>
+        <div class="lbl">Your invitation</div>
+        <div class="val" id="seatsLine">Admits one guest</div>
+      </div>
+      <div class="num" id="seatsNum" aria-hidden="true">1</div>
+    </div>
+  </div>
+</section>
+
+<!-- =======================================================================
      6 · FAQ
      ======================================================================= -->
 <section class="section faqs" id="faq">
   <div class="pav pav-tall" id="faqPav">
     <i class="pav-motif pav-motif-top" aria-hidden="true"></i>
     <header class="fq-head fq-reveal">
-      <span class="fq-eyebrow">05 — Questions</span>
+      <span class="fq-eyebrow">06 — Questions</span>
       <h2 class="script-line">You might be wondering</h2>
       <i class="mt-rule"></i>
       <p class="fq-sub">Here are a few details to help you plan your trip to Bali.</p>
@@ -980,7 +1002,7 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
      ======================================================================= -->
 <section class="section rsvp" id="rsvp">
   <div class="inner">
-    <span class="eyebrow">06 — RSVP</span>
+    <span class="eyebrow">07 — RSVP</span>
     <h2>Will you come?</h2>
     <p class="deadline" id="deadline">Reply by January 31, 2027</p>
 
@@ -1110,6 +1132,9 @@ var RSVP_ENDPOINT = "";
     put('bpName', hasName ? guestName.toUpperCase() : 'GUEST');
     put('ppSeats', seats + (seats === 1 ? ' guest' : ' guests'));
     put('bpSeats', String(seats));
+    put('seatsNum', String(seats));
+    $('seatsNum').hidden = false;
+    put('seatsLine', 'Admits ' + words[seats - 1] + (seats === 1 ? ' guest' : ' guests'));
     if (hasName && !$('name').value) $('name').value = guestName;
 
     /* MRZ line 1 carries the guest's name, OCR-B style. */
@@ -1692,6 +1717,8 @@ var RSVP_ENDPOINT = "";
     form.hidden = true;
     $('deadline').hidden = true;
     gate.hidden = false;
+    $('seatsLine').textContent = 'Seats are on your invitation link';
+    $('seatsNum').hidden = true;
     console.warn('RSVP gated:', reason);
   }
   if (RSVP_ENDPOINT) {
