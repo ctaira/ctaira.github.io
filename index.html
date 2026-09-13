@@ -401,6 +401,15 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
 /* Letter */
 .letter p{max-width:58ch}
 @media (max-width:500px){.letter p{font-size:16px;line-height:1.5;margin-bottom:.85em}.letter .salutation{font-size:32px}}
+/* Snapshots tucked into the letter: three prints, each a little askew, captions in the mono */
+.snaps{list-style:none;margin:2.2em auto 1.2em;padding:0;display:flex;justify-content:center;align-items:flex-start;gap:clamp(10px,3vw,26px);max-width:58ch}
+.snaps li{width:31%;max-width:190px;background:#FBF8F1;padding:5% 5% 0;box-shadow:0 10px 24px -12px rgba(36,39,34,.55),0 1px 0 rgba(155,139,87,.35);transform:rotate(-2.5deg);transition:transform .35s ease}
+.snaps li:nth-child(2){transform:rotate(1.8deg) translateY(10px)}
+.snaps li:nth-child(3){transform:rotate(-1.2deg)}
+.snaps li:hover{transform:rotate(0) scale(1.03)}
+.snaps img{display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover}
+.snaps span{display:block;font-family:var(--mono);font-size:14px;letter-spacing:.06em;color:var(--olive-soft);text-align:center;padding:.7em 0 .8em;line-height:1.3}
+@media (max-width:500px){.snaps{gap:6px}.snaps li{width:32%;padding:4% 4% 0}.snaps span{font-size:12px;letter-spacing:.03em}}
 .letter .salutation{font-family:var(--script);font-size:clamp(34px,6.5vw,46px);line-height:1.1;margin-bottom:.6em}
 .letter .signoff{font-family:var(--serif);font-style:italic;font-size:clamp(24px,4.6vw,32px);margin-top:1.4em;line-height:1.2}
 .letter .signoff small{display:block;font-family:var(--mono);font-style:normal;font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-line);margin-top:.9em}
@@ -855,6 +864,11 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
     <p>Ashley joined run club for the running. Charles joined for Ashley. He has yet to catch her. Along the way we fostered fourteen cats. Twelve found wonderful homes. Two found ours and stopped looking.</p>
     <p>When we're not home, we're somewhere new, golfing our way around the world and leaving lost golf balls on several continents. So for the wedding we didn't want a typical venue. We wanted a cliff, an ocean, and everyone we love in one place.</p>
     <p>Your only job is to show up in linen. It's going to be perfect. We checked.</p>
+    <ul class="snaps" aria-label="A few photos of us">
+      <li><img src="assets/photo-runclub.webp" alt="Ashley and Charles at run club." width="900" height="1125" loading="lazy" decoding="async"><span>Run club</span></li>
+      <li><img src="assets/photo-golf.webp" alt="Ashley and Charles on a golf course." width="900" height="1125" loading="lazy" decoding="async"><span>The back nine</span></li>
+      <li><img src="assets/photo-cats.webp" alt="Ashley and Charles with two of the cats." width="900" height="1125" loading="lazy" decoding="async"><span>Two of the fourteen</span></li>
+    </ul>
     <p class="signoff">With all our love,<br>Ashley &amp; Charles
       <small>Los Angeles · September 2026</small>
     </p>
