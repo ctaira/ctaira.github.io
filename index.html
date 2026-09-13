@@ -462,8 +462,7 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
 .dress-plate.is-in{opacity:1;transform:none}
 .dress-plate img{display:block;width:100%;height:auto;max-width:100%}
 .dress-plate.is-static{opacity:1;transform:none;transition:none}
-.dress-copy{display:none}
-@media (max-width:700px){.dress-copy{display:block;width:min(88vw,520px);margin:16px auto 0;padding:1em 1.3em;background:rgba(248,243,232,.86);border:1px solid rgba(155,139,87,.7);border-radius:22px;font-size:17px;line-height:1.5;color:var(--olive);text-align:center}.dress-copy b{display:block;font-family:var(--serif);font-weight:400;font-size:21px;margin-bottom:.35em}}
+.dress-copy{display:block;width:min(88vw,560px);margin:18px auto 0;padding:1.05em 1.5em;background:rgba(248,243,232,.86);border:1px solid rgba(155,139,87,.7);border-radius:26px;font-size:17px;line-height:1.5;color:var(--olive);text-align:center}
 .pav.is-static,.pav.is-static *{transition:none!important}
 
 /* Adults only */
@@ -515,7 +514,7 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
 .btn{display:inline-block;background:var(--olive);color:var(--ivory);border:1px solid var(--olive);padding:.9em 1.9em;border-radius:999px;font-weight:500;cursor:pointer;letter-spacing:.01em;transition:background .2s,opacity .2s}
 .btn:hover{background:#485038}
 .btn[disabled]{opacity:.55;cursor:default}
-.rsvp form .btn{display:block;margin:.8em auto 0}
+.rsvp form .btn{display:block;margin:.8em auto 0;position:sticky;bottom:max(16px,env(safe-area-inset-bottom));z-index:3;box-shadow:0 10px 26px -10px rgba(36,39,34,.55),0 0 0 6px rgba(248,243,232,.85)}
 .rsvp .form-error{margin-left:auto;margin-right:auto;text-align:center}
 .form-error{display:none;margin-top:1.2em;font-size:14.5px;color:#A2623F;max-width:44ch}
 .form-error.is-visible{display:block}
@@ -525,7 +524,7 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
 .confirm .mono{font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-line);display:block;margin-top:1.6em}
 .gate{max-width:46ch;font-size:16.5px}
 .gate p{margin-bottom:.8em}
-.rsvp .deadline{font-family:var(--mono);font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-line);margin:-1.6em 0 2.6em}
+.rsvp .deadline{font-family:var(--mono);font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-line);margin:-.6em 0 2.4em;line-height:1.5}
 
 /* Footer: a small arch of its own */
 .footer{color:var(--olive);padding:0 var(--gutter) max(48px,env(safe-area-inset-bottom))}
@@ -927,7 +926,7 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
   <figure class="dress-plate" id="dressPlate">
     <img src="assets/dress-plate.webp" alt="Dress to impress, in full color. Black tie formal attire is requested, with vibrant colors and tropical hues warmly encouraged. Above all, come dressed in your formal best and ready to celebrate with us. Nine guests in colorful formalwear: a sage green tuxedo, gowns in pink, yellow, coral, floral and lavender, and suits in grey, navy and terracotta. Black tie formal, vibrant hues, tropical elegance." width="1255" height="885" loading="lazy" decoding="async">
   </figure>
-  <p class="dress-copy"><b>Dress to impress, in full color.</b> Black tie formal attire is requested, with vibrant colors and tropical hues warmly encouraged. Above all, come dressed in your formal best and ready to celebrate with us.</p>
+  <p class="dress-copy">Black tie formal attire is requested, with vibrant colors and tropical hues warmly encouraged. Above all, come dressed in your formal best and ready to celebrate with us.</p>
 </section>
 
 <!-- =======================================================================
