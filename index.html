@@ -1511,9 +1511,9 @@ var RSVP_ENDPOINT = "";
         e.text.style.opacity = tt; e.text.style.transform = 'translateY(' + (16 * (1 - tt)).toFixed(1) + 'px)';
       }
     }
-    /* The route draws itself once the island is in view: about five seconds, stop by stop, and it
+    /* The route draws itself once the island is in view: about four seconds, stop by stop, and it
        finishes even if the guest scrolls on, so the map is complete when they come back. Plays once. */
-    var MAP_MS = 5500, mapPlayed = false;
+    var MAP_MS = 4000, mapPlayed = false;
     function playMap() {
       if (mapPlayed) return; mapPlayed = true;
       var t0 = performance.now();
