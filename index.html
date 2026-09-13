@@ -439,16 +439,20 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
 .mp-text strong{display:block;font-weight:500;letter-spacing:.13em;text-transform:uppercase;font-size:1.22em}
 .mp-text small{display:block;font-size:.92em;letter-spacing:.14em;text-transform:uppercase;margin-top:.2em;color:var(--olive-soft)}
 .mp-text em{display:block;font-style:normal;font-size:.7em;letter-spacing:.2em;color:var(--olive-soft)}
-/* Phones: one full label at a time. A stop's label appears as the car arrives and folds to a
-   name chip once the car moves on, so the drawings and the route keep their room. */
+/* Phones: each stop is a name pill. A tap on the pill or its number opens the date and time. */
+.mp-pill{display:none}
 @media (max-width:640px){
-  .mp-text{line-height:1.25}
-  .mp-text small{display:none}
-  .mp-text b,.mp-text em,.mp-text .mt-rule{transition:opacity .35s,max-height .35s,margin .35s;overflow:hidden;max-height:2em}
-  .mp-text strong{display:inline-block;transition:font-size .35s,padding .35s,background .35s;border-radius:999px;padding:.1em .3em;letter-spacing:.06em}
-  .mp-text.is-chip b,.mp-text.is-chip em,.mp-text.is-chip .mt-rule{opacity:0;max-height:0;margin:0}
-  .mp-text.is-chip{display:flex;justify-content:center}
-  .mp-text.is-chip strong{font-size:.95em;padding:.3em .7em;white-space:nowrap;background:rgba(248,243,232,.9);border:1px solid rgba(155,139,87,.6)}
+  .mp-text{display:flex;justify-content:center}
+  .mp-text > :not(.mp-pill){display:none}
+  .mp-pill{display:inline-flex;flex-direction:column;align-items:center;font:inherit;color:inherit;cursor:pointer;white-space:nowrap;
+    background:rgba(248,243,232,.92);border:1px solid rgba(155,139,87,.6);border-radius:1.6em;padding:.32em .8em;line-height:1.3;
+    -webkit-tap-highlight-color:transparent;transition:padding .25s}
+  .mp-pill strong{font-weight:500;font-size:.95em;letter-spacing:.06em;text-transform:uppercase}
+  .mp-pill .mp-when{display:none;font-size:.86em;letter-spacing:.04em;color:var(--olive-soft);margin-top:.15em}
+  .mp-pill[aria-expanded="true"]{padding:.45em 1em .5em}
+  .mp-pill[aria-expanded="true"] .mp-when{display:block}
+  .mp-pill:focus-visible{outline:2px solid var(--gold-line);outline-offset:3px}
+  .mp-badge{cursor:pointer}
 }
 .map-stage.is-static{height:auto;padding:24px 0}
 .map-stage.is-static .map-pin{position:static;height:auto}
@@ -1488,6 +1492,20 @@ var RSVP_ENDPOINT = "";
     mapCue.firstChild.textContent = VERB + ' to follow the weekend';
     var mapDeco = Array.prototype.slice.call(mapStage.querySelectorAll('.mp-deco')).map(function (el) { var v = el.getAttribute('data-in').split(','); return { el: el, a: +v[0], b: +v[1] }; });
     var mapEvs = [1, 2, 3, 4].map(function (n) { var e = $('mev' + n); return { badge: e.querySelector('.mp-badge'), ill: e.querySelector('.mp-ill'), text: e.querySelector('.mp-text') }; });
+    /* phones: a pill per stop, opened by a tap on the pill or its number */
+    mapEvs.forEach(function (e) {
+      var tx = e.text, bs = tx.querySelectorAll('b'), em = tx.querySelector('em');
+      var pill = document.createElement('button'); pill.type = 'button'; pill.className = 'mp-pill'; pill.setAttribute('aria-expanded', 'false');
+      pill.innerHTML = '<strong>' + tx.querySelector('strong').textContent + '</strong><span class="mp-when">' + bs[0].textContent + ' · ' + bs[1].textContent + (em ? ' · ' + em.textContent.replace(/[()]/g, '') : '') + '</span>';
+      tx.appendChild(pill); e.pill = pill;
+    });
+    function openStop(k) {
+      mapEvs.forEach(function (e, i) { e.pill.setAttribute('aria-expanded', i === k && e.pill.getAttribute('aria-expanded') !== 'true' ? 'true' : 'false'); });
+    }
+    mapStage.addEventListener('click', function (ev) {
+      var hit = ev.target.closest('.mp-badge,.mp-pill'); if (!hit) return;
+      var box = hit.closest('.mp-ev'); openStop(parseInt(box.id.slice(3), 10) - 1);
+    });
     var MSEG = [[0, .16], [.26, .42], [.52, .66], [.76, .90]], MREV = [[.16, .26], [.42, .52], [.66, .76], [.90, 1]];
     function renderMap(p) {
       var D = 0;
@@ -1505,7 +1523,6 @@ var RSVP_ENDPOINT = "";
       }
       mapCar.setAttribute('opacity', carOn ? seg(p, MSEG[1][0], MSEG[1][0] + .03).toFixed(2) : 0);
       mapCue.style.opacity = (1 - seg(p, 0, .05)).toFixed(2);
-      for (var ck = 0; ck < 3; ck++) mapEvs[ck].text.classList.toggle('is-chip', p >= MSEG[ck + 1][0]);   /* the car has moved on */
       for (var si = 0; si < 4; si++) mapSteps.children[si].className = p >= MREV[si][1] ? 'is-done' : (p >= MSEG[si][0] ? 'is-now' : '');
       for (var di = 0; di < mapDeco.length; di++) { var dv = ease(seg(p, mapDeco[di].a, mapDeco[di].b)); mapDeco[di].el.style.opacity = (dv * .92).toFixed(3); mapDeco[di].el.style.transform = 'scale(' + (.96 + .04 * dv).toFixed(3) + ')'; }
       for (var k = 0; k < 4; k++) {
