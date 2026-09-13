@@ -132,9 +132,8 @@ button,input,select,textarea{font:inherit;color:inherit}
 .cap .caps,.hint .caps{display:block;font-family:var(--serif);font-size:clamp(15px,4vw,19px);letter-spacing:.34em;text-transform:uppercase;line-height:1.5;padding-left:.34em}
 .cap .rule,.hint .rule{display:block;width:34px;height:1px;background:var(--husk);margin:.75em auto;opacity:.8}
 .cap .script{display:block;font-family:var(--script);font-size:clamp(30px,8.6vw,42px);line-height:1;color:var(--ink)}
-.hint{top:auto;bottom:calc(max(22px,env(safe-area-inset-bottom)) + 124px)}
-/* the caption under the envelope shows only where there is room for it above the controls */
-@media (max-height:700px),(min-width:700px) and (max-height:920px){.hint{display:none}}
+.hint{top:calc(50% + 6vh + var(--eh) / 2 + 16px);bottom:auto}
+.hint.is-tight{display:none}   /* no room between the envelope and the controls */
 
 /* The controls: one clear action at a time. Open the invitation (and a plain route to the details),
    Skip while it plays, then See the details. */
@@ -1435,8 +1434,14 @@ var RSVP_ENDPOINT = "";
       else if (e.key === 'Escape' && state === 'playing') { e.preventDefault(); skipPlay(); }
     });
 
+    function fitHint() {
+      hint.classList.remove('is-tight');
+      var h = hint.getBoundingClientRect(), c = ctrl.getBoundingClientRect();
+      if (h.bottom > c.top - 10) hint.classList.add('is-tight');
+    }
     function onResize() {
       vh = window.innerHeight; vw = window.innerWidth; eh = envBack.offsetHeight;
+      fitHint();
       measureBook();
       var cps = checkpoints();
       if (!playing) { beat = cps[Math.min(step, cps.length - 1)]; draw(); }
