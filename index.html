@@ -408,8 +408,6 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
 .snaps li:nth-child(3){transform:rotate(-1.2deg)}
 .snaps li:hover{transform:rotate(0) scale(1.03)}
 .snaps img{display:block;width:100%;height:auto;aspect-ratio:1;object-fit:cover}   /* square, like a Polaroid */
-.snaps li:first-child img{object-position:40% 50%}   /* run club: keeps both of them in the square */
-.snaps li:nth-child(2) img{object-position:50% 45%}
 .snaps span{display:block;font-family:var(--mono);font-size:14px;letter-spacing:.06em;color:var(--olive-soft);text-align:center;padding:.7em 0 .8em;line-height:1.3}
 @media (max-width:500px){.snaps{gap:6px}.snaps li{width:32%;padding:4% 4% 0}.snaps span{font-size:12px;letter-spacing:.03em}.snap-zoom{width:18px;height:18px;right:3px;top:3px}.snap-zoom svg{width:10px;height:10px}}
 .snaps .snap{display:block;position:relative;width:100%;padding:0;border:0;background:none;cursor:zoom-in;-webkit-tap-highlight-color:transparent}
@@ -885,9 +883,9 @@ html.has-lightbox{overflow:hidden}
     <p>When we're not home, we're somewhere new, golfing our way around the world and leaving lost golf balls on several continents. So for the wedding we didn't want a typical venue. We wanted a cliff, an ocean, and everyone we love in one place.</p>
     <p>Your only job is to show up in linen. It's going to be perfect. We checked.</p>
     <ul class="snaps" aria-label="A few photos of us">
-      <li><button type="button" class="snap" aria-label="View larger: Run club"><img src="assets/photo-runclub.webp" alt="Ashley and Charles, sweaty and smiling after run club on the Santa Monica boardwalk." width="2000" height="1500" loading="lazy" decoding="async"><i class="snap-zoom" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></i></button><span>Run club</span></li>
-      <li><button type="button" class="snap" aria-label="View larger: The back nine"><img src="assets/photo-golf.webp" alt="Ashley and Charles on the tee at Torrey Pines, the Pacific behind them." width="1125" height="1500" loading="lazy" decoding="async"><i class="snap-zoom" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></i></button><span>The back nine</span></li>
-      <li><button type="button" class="snap" aria-label="View larger: Two of the fourteen"><img src="assets/photo-cats.webp" alt="Ashley and Charles with two of the cats." width="900" height="1125" loading="lazy" decoding="async"><i class="snap-zoom" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></i></button><span>Two of the fourteen</span></li>
+      <li><button type="button" class="snap" aria-label="View larger: Run club"><img src="assets/photo-runclub-thumb.webp" data-full="assets/photo-runclub.webp" alt="Ashley and Charles, sweaty and smiling after run club on the Santa Monica boardwalk." width="480" height="480" loading="lazy" decoding="async"><i class="snap-zoom" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></i></button><span>Run club</span></li>
+      <li><button type="button" class="snap" aria-label="View larger: The back nine"><img src="assets/photo-golf-thumb.webp" data-full="assets/photo-golf.webp" alt="Ashley and Charles on the tee at Torrey Pines, the Pacific behind them." width="480" height="480" loading="lazy" decoding="async"><i class="snap-zoom" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></i></button><span>The back nine</span></li>
+      <li><button type="button" class="snap" aria-label="View larger: Two of the fourteen"><img src="assets/photo-cats-thumb.webp" data-full="assets/photo-cats.webp" alt="Ashley and Charles with two of the cats." width="480" height="480" loading="lazy" decoding="async"><i class="snap-zoom" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></i></button><span>Two of the fourteen</span></li>
     </ul>
     <p class="signoff">With all our love,<br>Ashley &amp; Charles
       <small>Los Angeles · September 2026</small>
@@ -972,12 +970,12 @@ html.has-lightbox{overflow:hidden}
   <span class="eyebrow">04 — Dress code</span>
   <span class="eyebrow dress-day">Friday · The welcome party</span>
   <figure class="dress-plate" id="whitePlate">
-    <img src="assets/white-plate.webp" alt="Welcome party, all white attire. Eight guests in white: linen shirts with shorts or trousers, and white dresses and a jumpsuit. Sunset cocktails, ocean views, great company." width="1268" height="893" loading="lazy" decoding="async">
+    <img src="assets/white-plate.webp" srcset="assets/white-plate-m.webp 720w, assets/white-plate.webp 1268w" sizes="min(92vw, 960px)" alt="Welcome party, all white attire. Eight guests in white: linen shirts with shorts or trousers, and white dresses and a jumpsuit. Sunset cocktails, ocean views, great company." width="1268" height="893" loading="lazy" decoding="async">
   </figure>
   <p class="dress-copy">Join us for sunset cocktails at Rock Bar! We’d love for everyone to wear white — think relaxed, elevated, and beach chic.</p>
   <span class="eyebrow dress-day">Saturday · The wedding</span>
   <figure class="dress-plate" id="dressPlate">
-    <img src="assets/dress-plate.webp" alt="Tropical black tie. Ten guests in colourful formalwear: suits in sage, sky blue, navy, sand and terracotta; gowns in lilac floral, gold, green floral, coral and blush pink. Elevated attire, vibrant hues, destination-friendly." width="1407" height="950" loading="lazy" decoding="async">
+    <img src="assets/dress-plate.webp" srcset="assets/dress-plate-m.webp 720w, assets/dress-plate.webp 1407w" sizes="min(92vw, 960px)" alt="Tropical black tie. Ten guests in colourful formalwear: suits in sage, sky blue, navy, sand and terracotta; gowns in lilac floral, gold, green floral, coral and blush pink. Elevated attire, vibrant hues, destination-friendly." width="1407" height="950" loading="lazy" decoding="async">
   </figure>
   <p class="dress-copy">Tropical black tie attire is requested, with vibrant colors and tropical hues warmly encouraged. Lightweight fabrics and destination-friendly silhouettes are welcome. Above all, come dressed in your formal best and ready to celebrate with us.</p>
 </section>
@@ -1687,7 +1685,7 @@ var RSVP_ENDPOINT = "";
       function show(i) {
         at = (i + snaps.length) % snaps.length;
         var pic = snaps[at].querySelector('img'), text = snaps[at].querySelector('span');
-        img.src = pic.currentSrc || pic.src; img.alt = pic.alt; cap.textContent = text ? text.textContent : '';
+        img.src = pic.getAttribute('data-full') || pic.currentSrc || pic.src; img.alt = pic.alt; cap.textContent = text ? text.textContent : '';
       }
       function open(i, from) {
         opener = from || null; show(i); box.hidden = false; document.documentElement.classList.add('has-lightbox');
