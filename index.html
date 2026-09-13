@@ -132,8 +132,9 @@ button,input,select,textarea{font:inherit;color:inherit}
 .cap .caps,.hint .caps{display:block;font-family:var(--serif);font-size:clamp(15px,4vw,19px);letter-spacing:.34em;text-transform:uppercase;line-height:1.5;padding-left:.34em}
 .cap .rule,.hint .rule{display:block;width:34px;height:1px;background:var(--husk);margin:.75em auto;opacity:.8}
 .cap .script{display:block;font-family:var(--script);font-size:clamp(30px,8.6vw,42px);line-height:1;color:var(--ink)}
-.hint{top:calc(50% + 6vh + var(--eh) / 2 + 16px);bottom:auto}
-.hint.is-tight{display:none}   /* no room between the envelope and the controls */
+/* the caption sits just above the envelope, under the title */
+.hint{top:auto;bottom:calc(50% - 6vh + var(--eh) / 2 + 18px)}
+.hint.is-tight{display:none}   /* no room between the title and the envelope */
 
 /* The controls: one clear action at a time. Open the invitation (and a plain route to the details),
    Skip while it plays, then See the details. */
@@ -1441,8 +1442,8 @@ var RSVP_ENDPOINT = "";
 
     function fitHint() {
       hint.classList.remove('is-tight');
-      var h = hint.getBoundingClientRect(), c = ctrl.getBoundingClientRect();
-      if (h.bottom > c.top - 10) hint.classList.add('is-tight');
+      var h = hint.getBoundingClientRect(), c = capTop.getBoundingClientRect();
+      if (h.top < c.bottom + 8) hint.classList.add('is-tight');
     }
     function onResize() {
       vh = window.innerHeight; vw = window.innerWidth; eh = envBack.offsetHeight;
