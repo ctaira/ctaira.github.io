@@ -59,7 +59,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 --------------------------------------------------------------------------- */
 .skip{
   position:fixed;top:max(14px,env(safe-area-inset-top));right:16px;z-index:50;
-  font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;
+  font-family:var(--mono);font-size:14px;letter-spacing:.08em;text-transform:uppercase;
   text-decoration:none;color:var(--ink);background:rgba(242,237,227,.85);
   border:1px solid rgba(36,39,34,.25);border-radius:999px;padding:8px 14px;
   backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
@@ -70,7 +70,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 /* Contents: a pill at the top left opens a short list of the passport's pages. */
 .nav-btn{
   position:fixed;top:max(14px,env(safe-area-inset-top));left:16px;z-index:50;
-  font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;
+  font-family:var(--mono);font-size:14px;letter-spacing:.08em;text-transform:uppercase;
   color:var(--ink);background:rgba(242,237,227,.85);
   border:1px solid rgba(36,39,34,.25);border-radius:999px;padding:8px 14px;cursor:pointer;
   backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
@@ -88,7 +88,7 @@ button,input,select,textarea{font:inherit;color:inherit}
   display:grid;grid-template-columns:1.6em 1fr;align-items:baseline;gap:.4em;
   padding:8px 16px;text-decoration:none;color:var(--ink);font-family:var(--serif);font-size:17px;line-height:1.2;
 }
-.nav a small{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--husk)}
+.nav a small{font-family:var(--mono);font-size:14px;letter-spacing:.14em;color:var(--husk)}
 .nav a:hover,.nav a:focus-visible{background:rgba(36,39,34,.06);outline:none}
 .nav .rule{height:1px;background:rgba(36,39,34,.15);margin:6px 16px}
 
@@ -132,36 +132,37 @@ button,input,select,textarea{font:inherit;color:inherit}
 .cap .caps,.hint .caps{display:block;font-family:var(--serif);font-size:clamp(15px,4vw,19px);letter-spacing:.34em;text-transform:uppercase;line-height:1.5;padding-left:.34em}
 .cap .rule,.hint .rule{display:block;width:34px;height:1px;background:var(--husk);margin:.75em auto;opacity:.8}
 .cap .script{display:block;font-family:var(--script);font-size:clamp(30px,8.6vw,42px);line-height:1;color:var(--ink)}
-.hint{top:auto;bottom:max(22px,env(safe-area-inset-bottom))}
-.hint .tap{display:block;margin-top:1em;font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft)}
-.hint svg{display:block;margin:6px auto 0;width:18px;height:18px}
+.hint{top:auto;bottom:calc(max(22px,env(safe-area-inset-bottom)) + 124px)}
+/* the caption under the envelope shows only where there is room for it above the controls */
+@media (max-height:700px),(min-width:700px) and (max-height:920px){.hint{display:none}}
 
-/* Appears once the passport is stamped: the sequence is over, the details are below. */
-.more{
-  position:absolute;transition:opacity .4s,visibility .4s;left:0;right:0;top:auto;bottom:calc(max(30px,env(safe-area-inset-bottom)) + 10px);
-  text-align:center;text-decoration:none;
-  font-family:var(--mono);font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);
-  z-index:1;
-}
-.more.is-hidden{opacity:0!important;visibility:hidden!important}
-/* Step dots: one per resting point, the current one filled. They show only while the book holds the page. */
+/* The controls: one clear action at a time. Open the invitation (and a plain route to the details),
+   Skip while it plays, then See the details. */
+.ctrl{position:absolute;left:0;right:0;top:auto;bottom:max(22px,env(safe-area-inset-bottom));z-index:9;text-align:center;
+  display:flex;flex-direction:column;align-items:center;gap:12px;transition:opacity .4s,visibility .4s}
+.ctrl.is-hidden{opacity:0!important;visibility:hidden!important;pointer-events:none}
+.ctrl [hidden]{display:none!important}
+.ctrl-main{font-size:17px;padding:.95em 2.1em;box-shadow:0 10px 26px -10px rgba(36,39,34,.55)}
+.ctrl-plain{font-size:15px;color:var(--ink);text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(36,39,34,.4);
+  background:rgba(242,237,227,.72);border-radius:999px;padding:7px 14px;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.ctrl-skip{font-family:var(--mono);font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink);cursor:pointer;
+  background:rgba(242,237,227,.78);border:1px solid rgba(36,39,34,.25);border-radius:999px;padding:9px 18px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.ctrl button:focus-visible,.ctrl a:focus-visible{outline:2px solid var(--gold);outline-offset:4px}
+.stage.is-static .ctrl{display:none}
+/* Step dots on the weekend map, one per stop. */
 .steps{position:absolute;right:max(12px,env(safe-area-inset-right));top:50%;transform:translateY(-50%);left:auto;margin:0;padding:0;list-style:none;display:grid;gap:10px;z-index:9;opacity:0;transition:opacity .4s;pointer-events:none}
 .steps li{width:9px;height:9px;border-radius:50%;border:1.5px solid rgba(89,96,68,.9);background:rgba(248,243,232,.7);box-shadow:0 0 8px rgba(255,250,238,.9);transition:background .3s,transform .3s}
 .steps li.is-done{background:rgba(89,96,68,.55)}
 .steps li.is-now{background:var(--olive);transform:scale(1.25)}
-.stage.is-locked .steps,.map-pin .steps{opacity:1}
+.map-pin .steps{opacity:1}
 .map-pin .steps{right:max(10px,env(safe-area-inset-right))}
-.map-cue{position:absolute;left:0;right:0;bottom:max(24px,env(safe-area-inset-bottom));text-align:center;font-family:var(--mono);font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);pointer-events:none;z-index:6;margin:0}
+.map-cue{position:absolute;left:0;right:0;bottom:max(24px,env(safe-area-inset-bottom));text-align:center;font-family:var(--mono);font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);pointer-events:none;z-index:6;margin:0}
 .map-cue span{display:inline-block;background:rgba(242,237,227,.72);border-radius:999px;padding:6px 14px;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
 .map-cue svg{display:block;margin:6px auto 0;width:18px;height:18px;animation:bob 1.8s ease-in-out infinite}
 .map-stage.is-static .map-cue,.map-stage.is-static .steps{display:none}
 @media (prefers-reduced-motion:reduce){.map-cue svg{animation:none}}
-.more span{display:inline-block;background:rgba(242,237,227,.72);border-radius:999px;padding:6px 14px;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
-.more svg{display:block;margin:10px auto 0;width:18px;height:18px;animation:bob 1.8s ease-in-out infinite}
-.more:focus-visible{outline:2px solid var(--gold);outline-offset:6px;border-radius:4px}
 @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
-@media (prefers-reduced-motion:reduce){.more svg{animation:none}}
-.stage.is-static .more{opacity:1;visibility:visible}
+.stage.is-static 
 
 /* Tap target over the envelope: opening on demand is not autoplay. */
 .open-btn{
@@ -184,16 +185,17 @@ button,input,select,textarea{font:inherit;color:inherit}
 .plate.is-ready img{animation:plate-settle 2.4s cubic-bezier(.2,.6,.2,1) both}
 @keyframes plate-settle{from{transform:scale(1.06)}to{transform:scale(1)}}
 /* the envelope and captions wait for the scene, then rise into place */
-.stage.is-loading .env,.stage.is-loading .passport,.stage.is-loading .cap-top,.stage.is-loading .hint{opacity:0!important}
+.stage.is-loading .env,.stage.is-loading .passport,.stage.is-loading .cap-top,.stage.is-loading .hint,.stage.is-loading .ctrl{opacity:0!important}
 .stage.is-in .env{animation:rise-in 1.1s cubic-bezier(.2,.7,.2,1) 1.35s backwards}
 .stage.is-in .passport{animation:fade-in 1.1s ease-out 1.35s backwards}
 .stage.is-in .cap-top{animation:drop-in 1.1s cubic-bezier(.2,.7,.2,1) 1.6s backwards}
 .stage.is-in .hint{animation:rise-in 1.1s cubic-bezier(.2,.7,.2,1) 1.75s backwards}
+.stage.is-in .ctrl{animation:rise-in 1.1s cubic-bezier(.2,.7,.2,1) 1.9s backwards}
 @keyframes rise-in{from{opacity:0;translate:0 36px}to{opacity:1;translate:0 0}}
 @keyframes drop-in{from{opacity:0;translate:0 -22px}to{opacity:1;translate:0 0}}
 @keyframes fade-in{from{opacity:0}to{opacity:1}}
 @media (prefers-reduced-motion:reduce){
-  .plate.is-ready img,.stage.is-in .env,.stage.is-in .passport,.stage.is-in .cap-top,.stage.is-in .hint{animation:none!important}
+  .plate.is-ready img,.stage.is-in .env,.stage.is-in .passport,.stage.is-in .cap-top,.stage.is-in .hint,.stage.is-in .ctrl{animation:none!important}
 }
 .vista .v-wash{animation:vwash 11s ease-in-out infinite alternate}
 @keyframes vwash{from{transform:translateX(-7px)}to{transform:translateX(7px)}}
@@ -325,7 +327,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 
 /* While the book plays, the page does not scroll: gestures step the book instead. */
 html.is-locked,html.is-locked body{overflow:hidden;overscroll-behavior:none}
-.stage.is-locked{touch-action:none}
+.stage.is-locked{touch-action:pinch-zoom}
 /* Reduced motion: no scrubbing. The passport lies open as a column of pages, first to last. */
 .stage.is-static{height:auto;padding:24px 0 40px}
 .stage.is-static .stage-viewport{position:static;height:auto;display:block}
@@ -364,7 +366,7 @@ html.is-locked,html.is-locked body{overflow:hidden;overscroll-behavior:none}
 }
 .section>.inner::before{top:calc(var(--arch-r) * .09)}
 .section>.inner::after{bottom:calc(var(--arch-r) * .09);transform:translateX(-50%) scaleY(-1)}
-.eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-line);margin-bottom:1.1em;display:block}
+.eyebrow{font-family:var(--mono);font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-line);margin-bottom:1.1em;display:block}
 .section h2{font-size:clamp(32px,7vw,50px);margin-bottom:.45em;max-width:16ch;color:var(--olive)}
 .lede{font-size:clamp(18px,2.4vw,21px);line-height:1.45;max-width:36ch}
 .muted{color:var(--olive-soft)}
@@ -382,37 +384,37 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
 .letter p{max-width:58ch}
 .letter .salutation{font-family:var(--script);font-size:clamp(34px,6.5vw,46px);line-height:1.1;margin-bottom:.6em}
 .letter .signoff{font-family:var(--serif);font-style:italic;font-size:clamp(24px,4.6vw,32px);margin-top:1.4em;line-height:1.2}
-.letter .signoff small{display:block;font-family:var(--mono);font-style:normal;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-line);margin-top:.9em}
+.letter .signoff small{display:block;font-family:var(--mono);font-style:normal;font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-line);margin-top:.9em}
 
 /* The date */
 .date-grid{display:grid;gap:clamp(24px,5vw,44px);align-items:start}
 .countdown{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;max-width:420px;margin-top:.4em}
 .countdown div{border-top:1px solid rgba(89,96,68,.3);padding-top:.6em}
 .countdown b{display:block;font-family:var(--serif);font-weight:400;font-size:clamp(32px,7vw,46px);line-height:1;font-variant-numeric:tabular-nums}
-.countdown span{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--olive-soft)}
+.countdown span{font-family:var(--mono);font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:var(--olive-soft)}
 
 /* Order of events */
 .timeline{list-style:none;margin:0;padding:0}
 .timeline>li{margin-top:2.4em}
 .timeline h3{font-size:clamp(26px,4.6vw,32px);margin-bottom:.15em}
-.timeline .day-sub{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-line);display:block;margin-bottom:1.1em}
+.timeline .day-sub{font-family:var(--mono);font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-line);display:block;margin-bottom:1.1em}
 .events{list-style:none;margin:0;padding:0;border-top:1px solid rgba(89,96,68,.2)}
 .events li{display:grid;grid-template-columns:1fr;gap:.15em 2em;padding:1em 0;border-bottom:1px solid rgba(89,96,68,.2)}
-.events time{font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:var(--olive-soft);padding-top:.35em}
+.events time{font-family:var(--mono);font-size:14px;letter-spacing:.12em;color:var(--olive-soft);padding-top:.35em}
 .events b{font-weight:500;font-size:18px;display:block}
 .events p{margin:.2em 0 0;color:var(--olive-soft);font-size:15px;max-width:44ch}
 @media (min-width:640px){.events li{grid-template-columns:110px 1fr}}
-.note{border-left:1px solid var(--gold-line);padding:.1em 0 .1em 1.2em;max-width:52ch;margin-top:2.6em;font-size:16px}
+.note{border-left:1px solid var(--gold-line);padding:.1em 0 .1em 1.2em;max-width:52ch;margin-top:2.6em;font-size:17px}
 .note p:last-child{margin:0}
 .travel{margin-top:2.6em;display:grid;gap:1.5em 3em}
 @media (min-width:640px){.travel{grid-template-columns:1fr 1fr}}
 .travel h4{font-family:var(--serif);font-weight:400;font-size:23px;margin:0 0 .3em}
-.travel p{font-size:15px;color:var(--olive-soft);margin:0}
+.travel p{font-size:17px;color:var(--olive-soft);margin:0}
 
 /* Our Bali weekend: a pinned island the journey is drawn across as the guest scrolls */
 .map-stage{position:relative;height:calc(100svh + 330vh);color:var(--olive)}
 .map-pin{position:sticky;top:0;height:100vh;height:100svh;display:grid;place-items:center;overflow:hidden}
-.map-island{--mw:min(94vw,calc(94svh * .5643));position:relative;width:var(--mw);height:calc(var(--mw) / .5643);font-size:max(11.5px,calc(var(--mw) * .028))}
+.map-island{--mw:min(94vw,calc(94svh * .5643));position:relative;width:var(--mw);height:calc(var(--mw) / .5643);font-size:max(12px,calc(var(--mw) * .028))}
 .map-ivory{position:absolute;inset:0;background:rgba(248,243,232,.8);clip-path:polygon(25.94% 0.02%,27.93% 0.31%,29.67% 0.64%,31.30% 1.16%,32.67% 1.80%,34.08% 2.43%,35.48% 3.06%,36.87% 3.72%,37.89% 4.64%,38.84% 5.58%,39.74% 6.54%,40.66% 7.49%,41.48% 8.40%,42.41% 9.41%,43.48% 10.38%,44.61% 11.31%,45.39% 12.26%,46.10% 13.25%,46.71% 14.25%,47.54% 15.11%,48.70% 15.87%,49.85% 16.65%,51.05% 17.39%,52.35% 18.08%,53.67% 18.75%,54.96% 19.46%,56.16% 20.21%,57.25% 21.02%,58.28% 21.85%,59.45% 22.69%,60.68% 23.50%,61.95% 24.29%,63.26% 25.07%,64.60% 25.74%,65.96% 26.39%,67.32% 27.04%,68.64% 27.72%,69.90% 28.43%,71.11% 29.13%,72.39% 29.85%,73.66% 30.56%,74.96% 31.26%,76.31% 31.92%,77.71% 32.55%,79.16% 33.22%,80.62% 33.89%,82.04% 34.57%,83.41% 35.29%,84.74% 36.04%,85.92% 36.80%,87.10% 37.55%,88.32% 38.29%,89.58% 39.00%,90.90% 39.67%,91.76% 40.65%,92.63% 41.63%,93.45% 42.62%,94.19% 43.64%,94.84% 44.66%,95.46% 45.70%,96.09% 46.74%,96.46% 47.77%,96.86% 48.79%,97.23% 49.82%,97.49% 50.84%,97.70% 51.85%,98.03% 52.86%,98.43% 53.86%,98.74% 54.87%,98.88% 55.90%,98.88% 56.93%,98.77% 57.93%,98.66% 58.95%,98.70% 59.97%,98.88% 60.98%,99.15% 62.00%,99.46% 63.01%,99.76% 64.03%,99.89% 65.07%,99.82% 66.08%,99.58% 67.09%,99.23% 68.10%,98.88% 69.11%,98.61% 70.12%,98.47% 71.13%,98.55% 72.15%,98.77% 73.16%,98.93% 74.18%,99.02% 75.19%,99.08% 76.21%,99.13% 77.23%,99.18% 78.25%,99.08% 79.24%,98.87% 80.25%,98.70% 81.27%,98.57% 82.28%,98.47% 83.30%,98.38% 84.32%,98.31% 85.34%,98.03% 86.30%,97.50% 87.28%,96.98% 88.26%,96.42% 89.24%,95.78% 90.19%,95.07% 91.13%,94.32% 92.06%,93.60% 93.02%,92.32% 93.80%,91.04% 94.56%,89.69% 95.28%,88.25% 95.96%,86.78% 96.62%,85.48% 97.25%,83.92% 97.61%,82.30% 98.11%,80.72% 98.66%,79.12% 99.17%,77.46% 99.61%,75.81% 100.00%,74.08% 99.66%,72.28% 99.35%,70.46% 99.09%,68.60% 98.89%,66.72% 98.73%,64.85% 98.57%,62.80% 98.31%,61.40% 97.49%,60.24% 96.73%,59.13% 95.94%,58.07% 95.12%,57.04% 94.29%,56.03% 93.45%,55.06% 92.58%,54.16% 91.69%,53.23% 90.81%,52.26% 89.95%,51.20% 89.12%,50.07% 88.32%,48.89% 87.54%,47.73% 86.75%,46.63% 85.93%,45.96% 84.96%,45.33% 84.00%,44.73% 83.04%,44.14% 82.07%,43.58% 81.10%,43.03% 80.12%,42.44% 79.16%,41.74% 78.20%,40.92% 77.27%,40.03% 76.35%,39.17% 75.43%,38.40% 74.49%,37.69% 73.53%,36.96% 72.57%,36.14% 71.64%,35.06% 70.85%,34.00% 70.05%,33.01% 69.22%,32.06% 68.38%,31.11% 67.54%,30.15% 66.70%,29.21% 65.86%,28.25% 65.02%,27.31% 64.13%,26.42% 63.22%,25.53% 62.30%,24.71% 61.37%,24.01% 60.41%,23.40% 59.43%,22.87% 58.42%,22.36% 57.41%,21.77% 56.42%,21.04% 55.47%,20.19% 54.54%,19.30% 53.63%,18.41% 52.71%,17.55% 51.79%,16.75% 50.86%,16.20% 49.84%,15.95% 48.81%,15.70% 47.78%,15.39% 46.76%,15.03% 45.75%,14.62% 44.74%,14.17% 43.73%,13.79% 42.72%,13.51% 41.71%,13.26% 40.70%,13.06% 39.68%,12.92% 38.66%,12.83% 37.63%,12.75% 36.61%,12.41% 35.57%,11.82% 34.54%,11.15% 33.53%,10.40% 32.53%,9.33% 31.68%,8.26% 30.83%,7.28% 29.96%,6.38% 29.06%,5.50% 28.15%,4.57% 27.25%,3.55% 26.39%,2.46% 25.53%,1.63% 24.53%,0.91% 23.51%,0.35% 22.46%,0.23% 21.38%,0.53% 20.37%,0.75% 19.35%,0.84% 18.39%,1.30% 17.41%,1.68% 16.36%,2.03% 15.32%,2.74% 14.36%,3.85% 13.47%,5.02% 12.61%,6.20% 11.75%,7.52% 11.14%,9.15% 10.64%,10.74% 10.10%,12.29% 9.52%,13.83% 8.94%,15.38% 8.36%,16.96% 7.81%,18.11% 7.15%,19.07% 6.26%,20.06% 5.39%,21.06% 4.52%,22.04% 3.65%,23.00% 2.77%,23.92% 1.88%,24.83% 0.99%);-webkit-clip-path:polygon(25.94% 0.02%,27.93% 0.31%,29.67% 0.64%,31.30% 1.16%,32.67% 1.80%,34.08% 2.43%,35.48% 3.06%,36.87% 3.72%,37.89% 4.64%,38.84% 5.58%,39.74% 6.54%,40.66% 7.49%,41.48% 8.40%,42.41% 9.41%,43.48% 10.38%,44.61% 11.31%,45.39% 12.26%,46.10% 13.25%,46.71% 14.25%,47.54% 15.11%,48.70% 15.87%,49.85% 16.65%,51.05% 17.39%,52.35% 18.08%,53.67% 18.75%,54.96% 19.46%,56.16% 20.21%,57.25% 21.02%,58.28% 21.85%,59.45% 22.69%,60.68% 23.50%,61.95% 24.29%,63.26% 25.07%,64.60% 25.74%,65.96% 26.39%,67.32% 27.04%,68.64% 27.72%,69.90% 28.43%,71.11% 29.13%,72.39% 29.85%,73.66% 30.56%,74.96% 31.26%,76.31% 31.92%,77.71% 32.55%,79.16% 33.22%,80.62% 33.89%,82.04% 34.57%,83.41% 35.29%,84.74% 36.04%,85.92% 36.80%,87.10% 37.55%,88.32% 38.29%,89.58% 39.00%,90.90% 39.67%,91.76% 40.65%,92.63% 41.63%,93.45% 42.62%,94.19% 43.64%,94.84% 44.66%,95.46% 45.70%,96.09% 46.74%,96.46% 47.77%,96.86% 48.79%,97.23% 49.82%,97.49% 50.84%,97.70% 51.85%,98.03% 52.86%,98.43% 53.86%,98.74% 54.87%,98.88% 55.90%,98.88% 56.93%,98.77% 57.93%,98.66% 58.95%,98.70% 59.97%,98.88% 60.98%,99.15% 62.00%,99.46% 63.01%,99.76% 64.03%,99.89% 65.07%,99.82% 66.08%,99.58% 67.09%,99.23% 68.10%,98.88% 69.11%,98.61% 70.12%,98.47% 71.13%,98.55% 72.15%,98.77% 73.16%,98.93% 74.18%,99.02% 75.19%,99.08% 76.21%,99.13% 77.23%,99.18% 78.25%,99.08% 79.24%,98.87% 80.25%,98.70% 81.27%,98.57% 82.28%,98.47% 83.30%,98.38% 84.32%,98.31% 85.34%,98.03% 86.30%,97.50% 87.28%,96.98% 88.26%,96.42% 89.24%,95.78% 90.19%,95.07% 91.13%,94.32% 92.06%,93.60% 93.02%,92.32% 93.80%,91.04% 94.56%,89.69% 95.28%,88.25% 95.96%,86.78% 96.62%,85.48% 97.25%,83.92% 97.61%,82.30% 98.11%,80.72% 98.66%,79.12% 99.17%,77.46% 99.61%,75.81% 100.00%,74.08% 99.66%,72.28% 99.35%,70.46% 99.09%,68.60% 98.89%,66.72% 98.73%,64.85% 98.57%,62.80% 98.31%,61.40% 97.49%,60.24% 96.73%,59.13% 95.94%,58.07% 95.12%,57.04% 94.29%,56.03% 93.45%,55.06% 92.58%,54.16% 91.69%,53.23% 90.81%,52.26% 89.95%,51.20% 89.12%,50.07% 88.32%,48.89% 87.54%,47.73% 86.75%,46.63% 85.93%,45.96% 84.96%,45.33% 84.00%,44.73% 83.04%,44.14% 82.07%,43.58% 81.10%,43.03% 80.12%,42.44% 79.16%,41.74% 78.20%,40.92% 77.27%,40.03% 76.35%,39.17% 75.43%,38.40% 74.49%,37.69% 73.53%,36.96% 72.57%,36.14% 71.64%,35.06% 70.85%,34.00% 70.05%,33.01% 69.22%,32.06% 68.38%,31.11% 67.54%,30.15% 66.70%,29.21% 65.86%,28.25% 65.02%,27.31% 64.13%,26.42% 63.22%,25.53% 62.30%,24.71% 61.37%,24.01% 60.41%,23.40% 59.43%,22.87% 58.42%,22.36% 57.41%,21.77% 56.42%,21.04% 55.47%,20.19% 54.54%,19.30% 53.63%,18.41% 52.71%,17.55% 51.79%,16.75% 50.86%,16.20% 49.84%,15.95% 48.81%,15.70% 47.78%,15.39% 46.76%,15.03% 45.75%,14.62% 44.74%,14.17% 43.73%,13.79% 42.72%,13.51% 41.71%,13.26% 40.70%,13.06% 39.68%,12.92% 38.66%,12.83% 37.63%,12.75% 36.61%,12.41% 35.57%,11.82% 34.54%,11.15% 33.53%,10.40% 32.53%,9.33% 31.68%,8.26% 30.83%,7.28% 29.96%,6.38% 29.06%,5.50% 28.15%,4.57% 27.25%,3.55% 26.39%,2.46% 25.53%,1.63% 24.53%,0.91% 23.51%,0.35% 22.46%,0.23% 21.38%,0.53% 20.37%,0.75% 19.35%,0.84% 18.39%,1.30% 17.41%,1.68% 16.36%,2.03% 15.32%,2.74% 14.36%,3.85% 13.47%,5.02% 12.61%,6.20% 11.75%,7.52% 11.14%,9.15% 10.64%,10.74% 10.10%,12.29% 9.52%,13.83% 8.94%,15.38% 8.36%,16.96% 7.81%,18.11% 7.15%,19.07% 6.26%,20.06% 5.39%,21.06% 4.52%,22.04% 3.65%,23.00% 2.77%,23.92% 1.88%,24.83% 0.99%)}
 .map-rim{position:absolute;inset:0;width:100%;height:100%;z-index:1;overflow:visible;pointer-events:none}
 .map-title{position:absolute;left:70%;top:1%;transform:translateX(-50%);width:auto;text-align:center;z-index:5;white-space:nowrap;color:var(--olive);margin:0;
@@ -429,10 +431,10 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
 .mp-ill{z-index:3;opacity:0;will-change:opacity,transform}
 .mp-badge{position:absolute;z-index:4;width:2.9em;height:2.9em;border-radius:50%;background:#5E5A3C;color:#F3E9C8;display:grid;place-items:center;font-family:var(--serif);font-size:1.15em;letter-spacing:.02em;transform:translate(-50%,-50%);box-shadow:0 2px 6px rgba(60,50,20,.25);opacity:0}
 .mp-text{position:absolute;z-index:4;text-align:center;opacity:0;font-family:var(--serif);line-height:1.35;will-change:opacity,transform}
-.mp-text b{display:block;font-weight:400;letter-spacing:.24em;text-transform:uppercase;font-size:1.12em}
+.mp-text b{display:block;font-weight:400;letter-spacing:.16em;text-transform:uppercase;font-size:1.12em}
 .mp-text .mt-rule{width:38%;margin:.3em auto .4em}
 .mp-text strong{display:block;font-weight:500;letter-spacing:.13em;text-transform:uppercase;font-size:1.22em}
-.mp-text small{display:block;font-size:.84em;letter-spacing:.22em;text-transform:uppercase;margin-top:.2em;color:var(--olive-soft)}
+.mp-text small{display:block;font-size:.92em;letter-spacing:.14em;text-transform:uppercase;margin-top:.2em;color:var(--olive-soft)}
 .mp-text em{display:block;font-style:normal;font-size:.7em;letter-spacing:.2em;color:var(--olive-soft)}
 .map-stage.is-static{height:auto;padding:24px 0}
 .map-stage.is-static .map-pin{position:static;height:auto}
@@ -460,16 +462,18 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
 .dress-plate.is-in{opacity:1;transform:none}
 .dress-plate img{display:block;width:100%;height:auto;max-width:100%}
 .dress-plate.is-static{opacity:1;transform:none;transition:none}
+.dress-copy{display:none}
+@media (max-width:700px){.dress-copy{display:block;width:min(88vw,520px);margin:16px auto 0;padding:1em 1.3em;background:rgba(248,243,232,.86);border:1px solid rgba(155,139,87,.7);border-radius:22px;font-size:17px;line-height:1.5;color:var(--olive);text-align:center}.dress-copy b{display:block;font-family:var(--serif);font-weight:400;font-size:21px;margin-bottom:.35em}}
 .pav.is-static,.pav.is-static *{transition:none!important}
 
 /* Adults only */
 .seats-box{border:1px solid var(--gold-line);border-radius:999px;padding:1.1em 1.8em;margin-top:2.2em;max-width:420px;display:grid;grid-template-columns:1fr auto;gap:1em;align-items:center}
-.seats-box .lbl{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--olive-soft)}
+.seats-box .lbl{font-family:var(--mono);font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:var(--olive-soft)}
 .seats-box .val{font-family:var(--serif);font-size:clamp(24px,4.6vw,30px);line-height:1.1;margin-top:.15em}
 .seats-box .num{font-family:var(--serif);font-size:clamp(48px,11vw,64px);line-height:.9;color:var(--olive)}
 .pav-tall{--pw2:min(92vw,900px);--cap:calc(var(--pw2) * .15);padding:calc(var(--pw2) * .01) calc(var(--pw2) * .06) calc(var(--pw2) * .05);border-radius:0 0 calc(var(--pw2) * .05) calc(var(--pw2) * .05);opacity:1;transform:none;transition:none}
 .fq-head{margin:0 auto calc(var(--pw2) * .02)}
-.fq-eyebrow{display:block;font-family:var(--serif);font-size:max(11px,calc(var(--pw2) * .019));letter-spacing:.42em;text-transform:uppercase;padding-left:.42em;margin-bottom:.3em}
+.fq-eyebrow{display:block;font-family:var(--serif);font-size:max(14px,calc(var(--pw2) * .019));letter-spacing:.42em;text-transform:uppercase;padding-left:.42em;margin-bottom:.3em}
 .fq-head .script-line{font-size:max(34px,calc(var(--pw2) * .08))}
 .fq-head .mt-rule{width:calc(var(--pw2) * .42);margin:.45em auto .6em}
 .fq-head .mt-rule::after{width:18px;height:18px;top:-9px;border-radius:0;background:var(--bloom) center/contain no-repeat}
@@ -481,7 +485,7 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
 .fq:first-child::before{display:none}
 .fq-art{display:block;width:100%;height:auto;max-width:none;justify-self:center;opacity:0;transform:translateY(12px) scale(.97);transition:opacity .45s ease,transform .45s ease}
 .fq-body h3{font-family:var(--serif);font-weight:400;font-size:max(17px,calc(var(--pw2) * .033));line-height:1.15;margin:0 0 .3em;opacity:0;transform:translateY(12px);transition:opacity .45s ease .18s,transform .45s ease .18s}
-.fq-body p{font-size:max(13.5px,calc(var(--pw2) * .019));line-height:1.5;margin:0;color:var(--olive-soft);opacity:0;transform:translateY(12px);transition:opacity .45s ease .34s,transform .45s ease .34s}
+.fq-body p{font-size:max(15px,calc(var(--pw2) * .019));line-height:1.5;margin:0;color:var(--olive-soft);opacity:0;transform:translateY(12px);transition:opacity .45s ease .34s,transform .45s ease .34s}
 .fq.is-in .fq-art,.fq.is-in h3,.fq.is-in p{opacity:1;transform:none}
 .fq-reveal{opacity:0;transform:translateY(12px);transition:opacity .55s ease,transform .55s ease}
 .fq-reveal.is-in{opacity:1;transform:none}
@@ -491,14 +495,14 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
 /* RSVP */
 .rsvp form{max-width:520px}
 .field{margin-bottom:1.5em}
-.field label,.field legend{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--olive-soft);margin-bottom:.55em;padding:0}
+.field label,.field legend{display:block;font-family:var(--mono);font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:var(--olive-soft);margin-bottom:.55em;padding:0}
 .field input,.field select,.field textarea{width:100%;background:transparent;border:0;border-bottom:1px solid rgba(89,96,68,.4);padding:.55em 0;border-radius:0;color:var(--olive)}
 .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-bottom-color:var(--gold-line)}
 .field input:focus-visible,.field select:focus-visible,.field textarea:focus-visible{outline:2px solid var(--gold-line);outline-offset:4px}
 .field select{appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--olive) 50%),linear-gradient(135deg,var(--olive) 50%,transparent 50%);background-position:calc(100% - 14px) 55%,calc(100% - 8px) 55%;background-size:6px 6px;background-repeat:no-repeat;padding-right:28px}
 .field textarea{min-height:5em;resize:vertical}
 .field fieldset{border:0;padding:0;margin:0;min-width:0}
-.field .err{display:none;font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:#A2623F;margin-top:.5em}
+.field .err{display:none;font-family:var(--mono);font-size:14px;letter-spacing:.06em;color:#A2623F;margin-top:.5em}
 .field.is-invalid .err{display:block}
 .field.is-invalid input,.field.is-invalid select{border-bottom-color:#A2623F}
 .pills{display:flex;flex-wrap:wrap;gap:10px}
@@ -507,7 +511,7 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
 .pills span{display:inline-block;border:1px solid rgba(89,96,68,.45);border-radius:999px;padding:.6em 1.1em;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
 .pills input:checked+span{background:var(--olive);color:var(--ivory);border-color:var(--olive)}
 .pills input:focus-visible+span{outline:2px solid var(--gold-line);outline-offset:3px}
-.hint-line{font-size:13.5px;color:var(--olive-soft);margin:.5em 0 0}
+.hint-line{font-size:14px;color:var(--olive-soft);margin:.5em 0 0}
 .btn{display:inline-block;background:var(--olive);color:var(--ivory);border:1px solid var(--olive);padding:.9em 1.9em;border-radius:999px;font-weight:500;cursor:pointer;letter-spacing:.01em;transition:background .2s,opacity .2s}
 .btn:hover{background:#485038}
 .btn[disabled]{opacity:.55;cursor:default}
@@ -518,10 +522,10 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
 .confirm{display:none;max-width:48ch}
 .confirm.is-visible{display:block}
 .confirm h3{font-size:clamp(28px,5.6vw,40px);margin-bottom:.4em}
-.confirm .mono{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-line);display:block;margin-top:1.6em}
+.confirm .mono{font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-line);display:block;margin-top:1.6em}
 .gate{max-width:46ch;font-size:16.5px}
 .gate p{margin-bottom:.8em}
-.rsvp .deadline{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-line);margin:-1.6em 0 2.6em}
+.rsvp .deadline{font-family:var(--mono);font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-line);margin:-1.6em 0 2.6em}
 
 /* Footer: a small arch of its own */
 .footer{color:var(--olive);padding:0 var(--gutter) max(48px,env(safe-area-inset-bottom))}
@@ -531,7 +535,7 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
 .medallion span{padding-left:.1em}
 .footer h2{font-size:clamp(28px,5.6vw,40px);color:var(--olive);margin-bottom:.3em}
 .footer p{margin:0;font-size:15px;color:var(--olive-soft)}
-.footer .mono{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-line);margin-top:1.2em;display:block}
+.footer .mono{font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-line);margin-top:1.2em;display:block}
 @media (max-width:420px){.footer .inner{grid-template-columns:1fr;text-align:center;justify-items:center}}
 </style>
 </head>
@@ -697,10 +701,7 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
 
       <div class="cap cap-top" id="capTop" aria-hidden="true"><span class="caps">A journey<br>to forever</span><i class="rule"></i><span class="script">Bali, Indonesia</span></div>
 
-      <div class="hint" id="hint" aria-hidden="true"><span class="caps">You're invited</span><i class="rule"></i><span class="caps">August 28, 2027</span>
-        <span class="tap">Tap the seal, or swipe up, to open</span>
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9l8 8 8-8" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
-      </div>
+      <div class="hint" id="hint" aria-hidden="true"><span class="caps">You're invited</span><i class="rule"></i><span class="caps">August 28, 2027</span></div>
 
       <!-- Envelope: back, boarding pass, pocket, flap (+ seal). Same transform on all. -->
       <div class="env env-back" id="envBack" aria-hidden="true"></div>
@@ -721,10 +722,12 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
 
       <button class="open-btn" id="openBtn" type="button" aria-label="Open the invitation"></button>
 
-      <ol class="steps" id="steps" aria-hidden="true"></ol>
-      <a class="more is-hidden" id="more" href="#letter"><span id="moreText">Swipe up for the details</span>
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9l8 8 8-8" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
-      </a>
+      <div class="ctrl" id="ctrl">
+        <button class="btn ctrl-main" id="playBtn" type="button">Open your invitation</button>
+        <a class="ctrl-plain" id="plainLink" href="#letter">Just show me the details</a>
+        <button class="ctrl-skip" id="skipBtn" type="button" hidden>Skip</button>
+        <button class="btn ctrl-main" id="doneBtn" type="button" hidden>See the details</button>
+      </div>
 
       <!-- Passport -->
       <div class="passport" id="passport">
@@ -924,6 +927,7 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
   <figure class="dress-plate" id="dressPlate">
     <img src="assets/dress-plate.webp" alt="Dress to impress, in full color. Black tie formal attire is requested, with vibrant colors and tropical hues warmly encouraged. Above all, come dressed in your formal best and ready to celebrate with us. Nine guests in colorful formalwear: a sage green tuxedo, gowns in pink, yellow, coral, floral and lavender, and suits in grey, navy and terracotta. Black tie formal, vibrant hues, tropical elegance." width="1255" height="885" loading="lazy" decoding="async">
   </figure>
+  <p class="dress-copy"><b>Dress to impress, in full color.</b> Black tie formal attire is requested, with vibrant colors and tropical hues warmly encouraged. Above all, come dressed in your formal best and ready to celebrate with us.</p>
 </section>
 
 <!-- =======================================================================
@@ -1190,6 +1194,7 @@ var RSVP_ENDPOINT = "";
     hint.parentNode.removeChild(hint);
     capTop.parentNode.removeChild(capTop);
     openBtn.parentNode.removeChild(openBtn);
+    $('ctrl').parentNode.removeChild($('ctrl'));
     stage.classList.add('is-static');
     stage.classList.remove('is-loading');
     $('weekend').classList.add('is-static');
@@ -1319,29 +1324,28 @@ var RSVP_ENDPOINT = "";
 
     }
 
-    /* ---- Stepping. The book has a few resting points; one gesture plays the animation on to the
-       next, on its own clock, and the guest need not keep scrolling. The page itself is locked
-       while the book plays; the last step releases it and scrolls on to the details. Scrolling
-       up at the top of the page steps back into the book. ---- */
+    /* ---- The opening plays itself. One tap on "Open your invitation" (or on the envelope, or a first
+       scroll or swipe) runs the whole sequence to the calendar spread on its own clock; the page is
+       locked meanwhile and Skip stays on screen. One more tap takes the guest on to the details.
+       Scrolling up at the top of the page steps back into the book at its last resting point. ---- */
     function checkpoints() {
       var c = [0, OPEN * .46, OPEN, OPEN + PER * (mobileSpread ? .62 : .7)];   /* sealed, ticket out, stamped, calendar */
       if (mobileSpread) c.push(OPEN + PER * .93);                                 /* ...and the itinerary, on a phone */
       return c;
     }
-    var DUR = [0, 5200, 6500, 4200, 2200];   /* ms to play from one resting point to the next */
-    /* the words match the input: a finger swipes, a mouse scrolls */
+    var DUR = [0, 5200, 6500, 4200, 2200];    /* ms for each part of the opening */
+    var HOLDS = [0, 250, 900, 1100, 0];       /* a breath at each resting point before the next part */
     var isTouch = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
     var VERB = isTouch ? 'Swipe up' : 'Scroll';
-    var tapLine = hint.querySelector('.tap'); if (tapLine) tapLine.textContent = isTouch ? 'Tap the seal, or swipe up, to open' : 'Tap the seal, or scroll, to open';
-    var moreText = $('moreText'), stepsEl = $('steps');
-    function cue(text) { moreText.textContent = text; more.classList.remove('is-hidden'); }
-    function setDots(n) {
-      var total = checkpoints().length;
-      while (stepsEl.children.length < total) stepsEl.appendChild(document.createElement('li'));
-      while (stepsEl.children.length > total) stepsEl.removeChild(stepsEl.lastChild);
-      for (var i = 0; i < total; i++) { stepsEl.children[i].className = i < n ? 'is-done' : (i === n ? 'is-now' : ''); }
+    var ctrl = $('ctrl'), playBtn = $('playBtn'), skipBtn = $('skipBtn'), doneBtn = $('doneBtn'), plainLink = $('plainLink');
+    var state = 'idle';
+    function setCtrl(st) {
+      state = st;
+      playBtn.hidden = st !== 'idle'; plainLink.hidden = st !== 'idle';
+      skipBtn.hidden = st !== 'playing'; doneBtn.hidden = st !== 'done';
+      ctrl.classList.toggle('is-hidden', st === 'off');
     }
-    var beat = 0, step = 0, locked = false, playing = null, cooldownUntil = 0;
+    var beat = 0, step = 0, locked = false, playing = null, cooldownUntil = 0, pending = 0;
     function draw() { render(beat / BEATS); }
     function tweenBook(target, dur, done) {
       if (playing) cancelAnimationFrame(playing.raf);
@@ -1354,81 +1358,82 @@ var RSVP_ENDPOINT = "";
       }
       playing = st; st.raf = requestAnimationFrame(frame);
     }
+    function stopPlay() { if (playing) { cancelAnimationFrame(playing.raf); playing = null; } clearTimeout(pending); pending = 0; }
     function lock(on) {
       locked = on;
       document.documentElement.classList.toggle('is-locked', on);
       stage.classList.toggle('is-locked', on);
-      skip.classList.toggle('is-hidden', !on);
     }
     function lastStep() { return checkpoints().length; }
     function release(to, dur) {
       var cps = checkpoints();
-      if (playing) { cancelAnimationFrame(playing.raf); playing = null; }
+      stopPlay();
       beat = cps[cps.length - 1]; draw();
-      step = cps.length; lock(false); more.classList.add('is-hidden');
+      step = cps.length; lock(false); setCtrl('off');
       cooldownUntil = performance.now() + (dur || 900) + 200;
       scrollTween(to, dur || 900);
     }
-    function go(n) {
-      var cps = checkpoints(), LAST = cps.length;
-      n = clamp(n, 0, LAST);
-      if (playing || performance.now() < cooldownUntil || n === step) return;
-      if (n === LAST) { release(stage.offsetTop + stage.offsetHeight, 900); return; }
-      var dur = DUR[Math.max(n, step)] * (n < step ? .7 : 1);
-      lock(true); more.classList.add('is-hidden');
-      step = n;
-      setDots(n);
-      tweenBook(cps[n], dur, function () {
-        cooldownUntil = performance.now() + 450;
-        cue(step === LAST - 1 ? VERB + ' for the details' : VERB + ' to continue');
-      });
+    function playAll() {
+      if (state !== 'idle' || playing) return;
+      lock(true); setCtrl('playing');
+      var cps = checkpoints();
+      (function part(n) {
+        if (n >= cps.length) { setCtrl('done'); cooldownUntil = performance.now() + 400; return; }
+        step = n;
+        tweenBook(cps[n], DUR[n], function () { pending = setTimeout(function () { part(n + 1); }, HOLDS[n]); });
+      })(1);
     }
+    function toDetails() { if (state !== 'done') return; release(stage.offsetTop + stage.offsetHeight, 900); }
+    function skipPlay() { release(function () { return topOf('letter'); }, 1100); }
+    function forward() { if (state === 'idle') playAll(); else if (state === 'done') toDetails(); }
     function reenter() {   /* from the top of the details, back into the book at its last resting point */
-      lock(true); step = lastStep() - 1; cooldownUntil = performance.now() + 500;
-      setDots(step); cue(VERB + ' for the details');
+      lock(true); step = lastStep() - 1; cooldownUntil = performance.now() + 500; setCtrl('done');
     }
     function enter(n) {    /* the contents menu: straight to a resting point */
-      if (playing) { cancelAnimationFrame(playing.raf); playing = null; }
-      lock(true); window.scrollTo(0, 0);
-      step = n; setDots(n); tweenBook(checkpoints()[n], 900, function () { cue(step === lastStep() - 1 ? VERB + ' for the details' : (step === 0 ? '' : VERB + ' to continue')); if (step === 0) more.classList.add('is-hidden'); });
+      stopPlay(); lock(true); window.scrollTo(0, 0);
+      step = n; setCtrl(n === 0 ? 'idle' : 'done');
+      tweenBook(checkpoints()[n], 900);
     }
 
-    /* wheel: one gesture, one step; inertia after a step is swallowed */
+    /* wheel: a scroll down opens the invitation, or goes on to the details; inertia is swallowed */
     var wheelSum = 0, wheelReset = 0;
     window.addEventListener('wheel', function (e) {
+      if (e.ctrlKey) return;                                  /* a trackpad pinch: the browser zooms */
       if (!locked) {
         if (performance.now() < cooldownUntil) { e.preventDefault(); return; }
         if (e.deltaY < 0 && window.pageYOffset <= 0 && step === lastStep()) { e.preventDefault(); reenter(); }
         return;
       }
       e.preventDefault();
-      if (playing || performance.now() < cooldownUntil) return;
+      if (performance.now() < cooldownUntil) return;
       wheelSum += e.deltaY;
       clearTimeout(wheelReset); wheelReset = setTimeout(function () { wheelSum = 0; }, 220);
-      if (Math.abs(wheelSum) > 30) { var d = wheelSum > 0 ? 1 : -1; wheelSum = 0; go(step + d); }
+      if (wheelSum > 30) { wheelSum = 0; forward(); }
+      else if (wheelSum < -30) wheelSum = 0;
     }, { passive: false });
-    /* touch: one swipe, one step */
+    /* touch: one swipe up, the same; two fingers, or a zoomed-in page, are left to the browser */
     var touchY = null, touchFired = false;
-    window.addEventListener('touchstart', function (e) { touchY = e.touches[0].clientY; touchFired = false; }, { passive: true });
+    function zoomed() { return !!(window.visualViewport && window.visualViewport.scale > 1.01); }
+    window.addEventListener('touchstart', function (e) { touchY = e.touches.length === 1 ? e.touches[0].clientY : null; touchFired = false; }, { passive: true });
     window.addEventListener('touchmove', function (e) {
-      if (touchY == null) return;
+      if (touchY == null || e.touches.length > 1 || zoomed()) return;
       var dy = touchY - e.touches[0].clientY;
       if (!locked) {
         if (!touchFired && dy < -24 && window.pageYOffset <= 0 && step === lastStep()) { touchFired = true; reenter(); if (e.cancelable) e.preventDefault(); }
         return;
       }
       if (e.cancelable) e.preventDefault();
-      if (touchFired || playing || performance.now() < cooldownUntil) return;
-      if (Math.abs(dy) > 30) { touchFired = true; go(step + (dy > 0 ? 1 : -1)); }
+      if (touchFired || performance.now() < cooldownUntil) return;
+      if (dy > 30) { touchFired = true; forward(); }
     }, { passive: false });
     window.addEventListener('touchend', function () { touchY = null; }, { passive: true });
     /* keys */
     window.addEventListener('keydown', function (e) {
       if (!locked) return;
       var tag = (e.target && e.target.tagName) || '';
-      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
-      if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); go(step + 1); }
-      else if (e.key === 'ArrowUp' || e.key === 'PageUp') { e.preventDefault(); go(step - 1); }
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || tag === 'BUTTON' || tag === 'A') return;
+      if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ' || e.key === 'Enter') { e.preventDefault(); forward(); }
+      else if (e.key === 'Escape' && state === 'playing') { e.preventDefault(); skipPlay(); }
     });
 
     function onResize() {
@@ -1439,7 +1444,7 @@ var RSVP_ENDPOINT = "";
     }
     window.addEventListener('resize', onResize, { passive: true });
     onResize();
-    lock(true); setDots(0);
+    lock(true); setCtrl('idle');
 
     /* ---- Our Bali weekend. The stage is pinned; the guest's scroll draws the route down the island,
        stop by stop. At each stop the badge, the drawing and the words arrive in turn; between stops a
@@ -1558,8 +1563,14 @@ var RSVP_ENDPOINT = "";
     }
     function topOf(id) { var el = $(id); return el ? el.getBoundingClientRect().top + window.pageYOffset : 0; }
     skip.addEventListener('click', function (e) { e.preventDefault(); release(function () { return topOf('rsvp'); }, 1300); });
-    more.addEventListener('click', function (e) { e.preventDefault(); go(lastStep()); });
-    openBtn.addEventListener('click', function () { go(1); });
+    playBtn.addEventListener('click', playAll);
+    skipBtn.addEventListener('click', skipPlay);
+    doneBtn.addEventListener('click', toDetails);
+    plainLink.addEventListener('click', function (e) { e.preventDefault(); skipPlay(); });
+    openBtn.addEventListener('click', playAll);
+    stage.addEventListener('click', function (e) { if (e.target.closest('a,button')) return; forward(); });   /* a tap anywhere does the obvious thing */
+    /* the RSVP pill stays on screen until the reply form itself is in view */
+    new IntersectionObserver(function (en) { skip.classList.toggle('is-hidden', en[0].isIntersecting); }, { threshold: .1 }).observe($('rsvp'));
 
     /* ---- Contents ---- */
     var navBtn = $('navBtn'), nav = $('nav');
