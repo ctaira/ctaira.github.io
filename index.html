@@ -1486,7 +1486,7 @@ var RSVP_ENDPOINT = "";
       var hit = ev.target.closest('.mp-badge,.mp-pill'); if (!hit) return;
       var box = hit.closest('.mp-ev'); openStop(parseInt(box.id.slice(3), 10) - 1);
     });
-    var MSEG = [[0, .16], [.26, .42], [.52, .66], [.76, .90]], MREV = [[.16, .26], [.42, .52], [.66, .76], [.90, 1]];
+    var MSEG = [[0, .05], [.11, .36], [.43, .66], [.73, .93]], MREV = [[0, .10], [.36, .43], [.66, .73], [.93, 1]];   /* the first stop is there at once; the car sets off within a second */
     function renderMap(p) {
       var D = 0;
       for (var i = 0; i < 4; i++) {
