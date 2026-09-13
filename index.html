@@ -451,6 +451,7 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
   .mp-pill .mp-when{display:none;font-size:.86em;letter-spacing:.04em;color:var(--olive-soft);margin-top:.15em}
   .mp-pill[aria-expanded="true"]{padding:.45em 1em .5em}
   .mp-pill[aria-expanded="true"] .mp-when{display:block}
+  .mp-pill .mp-where{margin-top:0;color:var(--olive)}
   .mp-pill:focus-visible{outline:2px solid var(--gold-line);outline-offset:3px}
   .mp-badge{cursor:pointer}
 }
@@ -1494,9 +1495,10 @@ var RSVP_ENDPOINT = "";
     var mapEvs = [1, 2, 3, 4].map(function (n) { var e = $('mev' + n); return { badge: e.querySelector('.mp-badge'), ill: e.querySelector('.mp-ill'), text: e.querySelector('.mp-text') }; });
     /* phones: a pill per stop, opened by a tap on the pill or its number */
     mapEvs.forEach(function (e) {
-      var tx = e.text, bs = tx.querySelectorAll('b'), em = tx.querySelector('em');
+      var tx = e.text, bs = tx.querySelectorAll('b'), em = tx.querySelector('em'), sm = tx.querySelector('small');
       var pill = document.createElement('button'); pill.type = 'button'; pill.className = 'mp-pill'; pill.setAttribute('aria-expanded', 'false');
-      pill.innerHTML = '<strong>' + tx.querySelector('strong').textContent + '</strong><span class="mp-when">' + bs[0].textContent + ' · ' + bs[1].textContent + (em ? ' · ' + em.textContent.replace(/[()]/g, '') : '') + '</span>';
+      pill.innerHTML = '<strong>' + tx.querySelector('strong').textContent + '</strong><span class="mp-when">' + bs[0].textContent + ' · ' + bs[1].textContent + (em ? ' · ' + em.textContent.replace(/[()]/g, '') : '') + '</span>'
+        + (sm ? '<span class="mp-when mp-where">' + sm.textContent + '</span>' : '');
       tx.appendChild(pill); e.pill = pill;
     });
     function openStop(k) {
