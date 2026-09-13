@@ -479,6 +479,8 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
 .dress,.faqs{padding-left:0;padding-right:0}
 .section.dress,.section.faqs{padding-top:56px}
 .dress .eyebrow{display:table;margin:0 auto 1.3em;padding:.6em 1.2em;color:var(--gold-line);background:rgba(248,243,232,.86);border:1px solid rgba(155,139,87,.7);border-radius:999px}
+.dress .dress-day{color:var(--olive);margin:-.4em auto 1.1em}
+.dress .dress-copy + .dress-day{margin-top:clamp(28px,5vh,52px)}
 .pav{
   --pw2:min(96vw,1180px);--cap:calc(var(--pw2) * .12);
   position:relative;width:var(--pw2);margin:var(--cap) auto 0;text-align:center;color:var(--olive);
@@ -934,10 +936,16 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
      ======================================================================= -->
 <section class="section dress" id="dress">
   <span class="eyebrow">04 — Dress code</span>
+  <span class="eyebrow dress-day">Saturday · The wedding</span>
   <figure class="dress-plate" id="dressPlate">
     <img src="assets/dress-plate.webp" alt="Dress to impress, in full color. Black tie formal attire is requested, with vibrant colors and tropical hues warmly encouraged. Above all, come dressed in your formal best and ready to celebrate with us. Nine guests in colorful formalwear: a sage green tuxedo, gowns in pink, yellow, coral, floral and lavender, and suits in grey, navy and terracotta. Black tie formal, vibrant hues, tropical elegance." width="1255" height="885" loading="lazy" decoding="async">
   </figure>
   <p class="dress-copy">Black tie formal attire is requested, with vibrant colors and tropical hues warmly encouraged. Above all, come dressed in your formal best and ready to celebrate with us.</p>
+  <span class="eyebrow dress-day">Friday · The welcome party</span>
+  <figure class="dress-plate" id="whitePlate">
+    <img src="assets/white-plate.webp" alt="Welcome party, all white attire. Eight guests in white: linen shirts with shorts or trousers, and long white dresses. Sunset cocktails, ocean views, good company." width="1268" height="894" loading="lazy" decoding="async">
+  </figure>
+  <p class="dress-copy">Join us for sunset cocktails at Rock Bar! We’d love for everyone to wear white — think relaxed, elevated, and beach chic.</p>
 </section>
 
 <!-- =======================================================================
@@ -1650,10 +1658,10 @@ var RSVP_ENDPOINT = "";
      Dress to impress: the painted pavilion arrives as it comes into view.
   ------------------------------------------------------------------------- */
   (function () {
-    var plate = $('dressPlate');
-    if (reduce || !('IntersectionObserver' in window)) { plate.classList.add('is-static'); return; }
-    var io = new IntersectionObserver(function (en) { if (en[0].isIntersecting) { plate.classList.add('is-in'); io.disconnect(); } }, { threshold: .2 });
-    io.observe(plate);
+    var plates = Array.prototype.slice.call(document.querySelectorAll('.dress-plate'));
+    if (reduce || !('IntersectionObserver' in window)) { plates.forEach(function (pl) { pl.classList.add('is-static'); }); return; }
+    var io = new IntersectionObserver(function (en) { en.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); } }); }, { threshold: .2 });
+    plates.forEach(function (pl) { io.observe(pl); });
   })();
 
   /* -------------------------------------------------------------------------
