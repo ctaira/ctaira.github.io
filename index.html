@@ -147,6 +147,13 @@ button,input,select,textarea{font:inherit;color:inherit}
 .ctrl-skip{font-family:var(--mono);font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink);cursor:pointer;
   background:rgba(242,237,227,.9);border:1px solid rgba(36,39,34,.25);border-radius:999px;padding:9px 18px;}
 .ctrl button:focus-visible,.ctrl a:focus-visible{outline:2px solid var(--gold);outline-offset:4px}
+.chapters{display:flex;gap:6px;list-style:none;margin:0 0 2px;padding:0;width:min(62vw,280px)}
+.chapters li{flex:1;position:relative;height:22px}
+.chapters li::before,.chapters li::after{content:"";position:absolute;left:0;top:10px;height:3px;border-radius:2px;pointer-events:none}
+.chapters li::before{right:0;background:rgba(248,243,232,.5);box-shadow:0 0 4px rgba(36,39,34,.25)}
+.chapters li::after{width:calc(var(--f,0) * 100%);background:rgba(248,243,232,.98)}
+.chapters button{position:absolute;inset:0;width:100%;z-index:1;background:none;border:0;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.chapters button:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:4px}
 .stage.is-static .ctrl{display:none}
 /* Step dots on the weekend map, one per stop. */
 .steps{position:absolute;right:max(12px,env(safe-area-inset-right));top:50%;transform:translateY(-50%);left:auto;margin:0;padding:0;list-style:none;display:grid;gap:10px;z-index:9;opacity:0;transition:opacity .4s;pointer-events:none}
@@ -737,8 +744,10 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
       <div class="ctrl" id="ctrl">
         <button class="btn ctrl-main" id="playBtn" type="button">Open your invitation</button>
         <a class="ctrl-plain" id="plainLink" href="#letter">Just show me the details</a>
+        <ol class="chapters" id="chapters" aria-label="Chapters" hidden></ol>
         <button class="ctrl-skip" id="skipBtn" type="button" hidden>Skip</button>
         <button class="btn ctrl-main ctrl-light" id="doneBtn" type="button" hidden>See the details</button>
+        <a class="ctrl-plain" id="againLink" href="#" hidden>Watch again</a>
       </div>
 
       <!-- Passport -->
@@ -1304,15 +1313,27 @@ var RSVP_ENDPOINT = "";
     var isTouch = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
     var VERB = isTouch ? 'Swipe up' : 'Scroll';
     var ctrl = $('ctrl'), playBtn = $('playBtn'), skipBtn = $('skipBtn'), doneBtn = $('doneBtn'), plainLink = $('plainLink');
+    var chapters = $('chapters'), againLink = $('againLink');
     var state = 'idle';
     function setCtrl(st) {
       state = st;
       playBtn.hidden = st !== 'idle'; plainLink.hidden = st !== 'idle';
-      skipBtn.hidden = st !== 'playing'; doneBtn.hidden = st !== 'done';
+      skipBtn.hidden = st !== 'playing'; chapters.hidden = st !== 'playing'; doneBtn.hidden = st !== 'done'; againLink.hidden = st !== 'done';
       ctrl.classList.toggle('is-hidden', st === 'off');
     }
     var beat = 0, step = 0, locked = false, playing = null, cooldownUntil = 0, pending = 0;
-    function draw() { render(beat / BEATS); }
+    function draw() { render(beat / BEATS); paintChapters(); }
+    /* one chapter per part of the opening; a chapter fills as its part plays */
+    function buildChapters() {
+      var n = checkpoints().length - 1;
+      if (chapters.children.length === n) return;
+      chapters.innerHTML = '';
+      for (var k = 1; k <= n; k++) { var li = document.createElement('li'); li.innerHTML = '<button type="button" data-chapter="' + k + '" aria-label="Chapter ' + k + '"></button>'; chapters.appendChild(li); }
+    }
+    function paintChapters() {
+      var cps = checkpoints(), lis = chapters.children;
+      for (var i = 0; i < lis.length && i + 1 < cps.length; i++) lis[i].style.setProperty('--f', clamp((beat - cps[i]) / (cps[i + 1] - cps[i]), 0, 1).toFixed(3));
+    }
     function tweenBook(target, dur, done) {
       if (playing) cancelAnimationFrame(playing.raf);
       var from = beat, t0 = performance.now(), st = { raf: 0 };
@@ -1339,16 +1360,21 @@ var RSVP_ENDPOINT = "";
       cooldownUntil = performance.now() + (dur || 900) + 200;
       scrollTween(to, dur || 900);
     }
-    function playAll() {
-      if (state !== 'idle' || playing) return;
+    function playFrom(n) {   /* play chapter n and everything after it */
       lock(true); setCtrl('playing');
       var cps = checkpoints();
-      (function part(n) {
-        if (n >= cps.length) { setCtrl('done'); cooldownUntil = performance.now() + 400; return; }
-        step = n;
-        tweenBook(cps[n], DUR[n], function () { pending = setTimeout(function () { part(n + 1); }, HOLDS[n]); });
-      })(1);
+      (function part(k) {
+        if (k >= cps.length) { setCtrl('done'); cooldownUntil = performance.now() + 400; return; }
+        step = k;
+        tweenBook(cps[k], DUR[k], function () { pending = setTimeout(function () { part(k + 1); }, HOLDS[k]); });
+      })(n);
     }
+    function playAll() { if (state !== 'idle' || playing) return; playFrom(1); }
+    function jumpTo(k) {     /* rewind or skip ahead to the start of chapter k, then play on */
+      var cps = checkpoints(); k = clamp(k, 1, cps.length - 1);
+      stopPlay(); beat = cps[k - 1]; draw(); playFrom(k);
+    }
+    function replay() { stopPlay(); beat = 0; draw(); playFrom(1); }
     function toDetails() { if (state !== 'done') return; release(stage.offsetTop + stage.offsetHeight, 900); }
     function skipPlay() { release(function () { return topOf('letter'); }, 1100); }
     function forward() { if (state === 'idle') playAll(); else if (state === 'done') toDetails(); }
@@ -1400,11 +1426,13 @@ var RSVP_ENDPOINT = "";
       if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || tag === 'BUTTON' || tag === 'A') return;
       if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ' || e.key === 'Enter') { e.preventDefault(); forward(); }
       else if (e.key === 'Escape' && state === 'playing') { e.preventDefault(); skipPlay(); }
+      else if (e.key === 'ArrowLeft' && (state === 'playing' || state === 'done')) { e.preventDefault(); jumpTo(state === 'done' ? lastStep() - 1 : step - 1); }
+      else if (e.key === 'ArrowRight' && state === 'playing') { e.preventDefault(); jumpTo(step + 1); }
     });
 
     function onResize() {
       vh = window.innerHeight; vw = window.innerWidth; eh = envBack.offsetHeight;
-      measureBook();
+      measureBook(); buildChapters();
       var cps = checkpoints();
       if (!playing) { beat = cps[Math.min(step, cps.length - 1)]; draw(); }
     }
@@ -1555,6 +1583,8 @@ var RSVP_ENDPOINT = "";
     skipBtn.addEventListener('click', skipPlay);
     doneBtn.addEventListener('click', toDetails);
     plainLink.addEventListener('click', function (e) { e.preventDefault(); skipPlay(); });
+    againLink.addEventListener('click', function (e) { e.preventDefault(); replay(); });
+    chapters.addEventListener('click', function (e) { var li = e.target.closest('li'); if (li) jumpTo(Array.prototype.indexOf.call(chapters.children, li) + 1); });
     openBtn.addEventListener('click', playAll);
     stage.addEventListener('click', function (e) { if (e.target.closest('a,button')) return; forward(); });   /* a tap anywhere does the obvious thing */
     /* the RSVP pill stays on screen until the reply form itself is in view */
