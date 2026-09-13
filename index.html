@@ -570,6 +570,7 @@ html.has-lightbox{overflow:hidden}
 .rsvp>.inner{padding-left:calc(var(--arch-w) * .07);padding-right:calc(var(--arch-w) * .07)}
 .field{margin-bottom:1em}
 .field-row{display:grid;gap:0 1.4em}
+.field-row.is-single{grid-template-columns:1fr!important}   /* the name alone spans the row */
 @media (min-width:480px){.field-row{grid-template-columns:1fr 1fr}}
 .field label,.field legend{display:block;font-family:var(--mono);font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:var(--olive-soft);margin-bottom:.25em;padding:0}
 .field input,.field select,.field textarea{width:100%;background:transparent;border:0;border-bottom:1px solid rgba(89,96,68,.4);padding:.4em 0;border-radius:0;color:var(--olive)}
@@ -1077,7 +1078,7 @@ html.has-lightbox{overflow:hidden}
     </div>
 
     <form id="rsvpForm" novalidate>
-      <div class="field-row">
+      <div class="field-row is-single" id="nameRow">
         <div class="field" id="fName">
           <label for="name">Your name</label>
           <input type="text" id="name" name="name" autocomplete="name" maxlength="80" required>
@@ -1797,6 +1798,7 @@ var RSVP_ENDPOINT = "";
     var declined = attendingValue() === 'no';
     fDiet.hidden = declined;
     fParty.hidden = declined || !partyAllowed;
+    $('nameRow').classList.toggle('is-single', fParty.hidden);
   }
   var radios = form.querySelectorAll('input[name="attending"]');
   for (var r = 0; r < radios.length; r++) {
