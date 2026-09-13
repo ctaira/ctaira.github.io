@@ -141,6 +141,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 .ctrl.is-hidden{opacity:0!important;visibility:hidden!important;pointer-events:none}
 .ctrl [hidden]{display:none!important}
 .ctrl-main{font-size:17px;padding:.95em 2.1em;box-shadow:0 10px 26px -10px rgba(36,39,34,.55)}
+.ctrl .ctrl-light,.ctrl .ctrl-light:hover{background:rgba(248,243,232,.96);color:var(--olive);border-color:rgba(155,139,87,.8)}
 .ctrl-plain{font-size:15px;color:var(--ink);text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(36,39,34,.4);
   background:rgba(242,237,227,.88);border-radius:999px;padding:7px 14px;}
 .ctrl-skip{font-family:var(--mono);font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink);cursor:pointer;
@@ -564,11 +565,9 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
     <li><a href="#letter"><small>01</small>A letter</a></li>
     <li><a href="#date"><small>02</small>The date</a></li>
     <li><a href="#weekend"><small>03</small>The weekend</a></li>
-    <li><a href="#travel"><small>04</small>Getting there</a></li>
-    <li><a href="#dress"><small>05</small>Dress code</a></li>
-    <li><a href="#adults"><small>06</small>Adults only</a></li>
-    <li><a href="#faq"><small>07</small>Questions</a></li>
-    <li><a href="#rsvp"><small>08</small>RSVP</a></li>
+    <li><a href="#dress"><small>04</small>Dress code</a></li>
+    <li><a href="#faq"><small>05</small>Questions</a></li>
+    <li><a href="#rsvp"><small>06</small>RSVP</a></li>
   </ol>
 </nav>
 
@@ -739,7 +738,7 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
         <button class="btn ctrl-main" id="playBtn" type="button">Open your invitation</button>
         <a class="ctrl-plain" id="plainLink" href="#letter">Just show me the details</a>
         <button class="ctrl-skip" id="skipBtn" type="button" hidden>Skip</button>
-        <button class="btn ctrl-main" id="doneBtn" type="button" hidden>See the details</button>
+        <button class="btn ctrl-main ctrl-light" id="doneBtn" type="button" hidden>See the details</button>
       </div>
 
       <!-- Passport -->
@@ -906,60 +905,14 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
 </section>
 
 <!-- =======================================================================
-     3 · GETTING THERE
-     ======================================================================= -->
-<section class="section" id="travel">
-  <div class="inner">
-    <span class="eyebrow">04 — Getting there</span>
-    <img class="arch-art" src="assets/faq-plane.webp" alt="" width="306" height="145" loading="lazy" decoding="async">
-    <h2>On the estate, all weekend</h2>
-    <p class="lede">Everything happens at AYANA Bali in Jimbaran, on the estate where you're staying.</p>
-    <div class="travel">
-      <div>
-        <h4>Getting there</h4>
-        <p>Fly into Denpasar (DPS). AYANA is 25 minutes from the airport by Gojek, Grab or taxi, all of which pick up in arrivals.</p>
-      </div>
-      <div>
-        <h4>Staying</h4>
-        <p>Rooms are held for our guests across AYANA Resort, AYANA Villas and RIMBA, all on the same estate. We'll send booking details once you've replied.</p>
-      </div>
-    </div>
-    <div class="note">
-      <p>Nobody drives anywhere all weekend. The resort runs a shuttle between AYANA Resort, AYANA Villas and RIMBA around the clock. Sunday is yours: sleep in, find a pool, and fly home whenever you're ready.</p>
-    </div>
-  </div>
-</section>
-
-<!-- =======================================================================
      4 · DRESS CODE
      ======================================================================= -->
 <section class="section dress" id="dress">
-  <span class="eyebrow">05 — Dress code</span>
+  <span class="eyebrow">04 — Dress code</span>
   <figure class="dress-plate" id="dressPlate">
     <img src="assets/dress-plate.webp" alt="Dress to impress, in full color. Black tie formal attire is requested, with vibrant colors and tropical hues warmly encouraged. Above all, come dressed in your formal best and ready to celebrate with us. Nine guests in colorful formalwear: a sage green tuxedo, gowns in pink, yellow, coral, floral and lavender, and suits in grey, navy and terracotta. Black tie formal, vibrant hues, tropical elegance." width="1255" height="885" loading="lazy" decoding="async">
   </figure>
   <p class="dress-copy">Black tie formal attire is requested, with vibrant colors and tropical hues warmly encouraged. Above all, come dressed in your formal best and ready to celebrate with us.</p>
-</section>
-
-<!-- =======================================================================
-     5 · ADULTS ONLY
-     ======================================================================= -->
-<section class="section" id="adults">
-  <div class="inner">
-    <span class="eyebrow">06 — A note on children</span>
-    <img class="arch-art" src="assets/faq-bunny.webp" alt="" width="268" height="142" loading="lazy" decoding="async">
-    <h2>Adults only</h2>
-    <p class="lede">We love your children. We're also asking you to leave them at home this time.</p>
-    <p style="max-width:52ch;margin-left:auto;margin-right:auto">The weekend runs late, the cliffs are real, and the bar never quite closes. We would rather you had a few days that felt like a holiday of your own. We've kept the guest list to adults, and we hope you'll take that as an invitation to sleep in.</p>
-
-    <div class="seats-box" role="note">
-      <div>
-        <div class="lbl">Your invitation</div>
-        <div class="val" id="seatsLine">Admits one guest</div>
-      </div>
-      <div class="num" id="seatsNum" aria-hidden="true">1</div>
-    </div>
-  </div>
 </section>
 
 <!-- =======================================================================
@@ -969,7 +922,7 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
   <div class="pav pav-tall" id="faqPav">
     <i class="pav-motif pav-motif-top" aria-hidden="true"></i>
     <header class="fq-head fq-reveal">
-      <span class="fq-eyebrow">07 — Questions</span>
+      <span class="fq-eyebrow">05 — Questions</span>
       <h2 class="script-line">You might be wondering</h2>
       <i class="mt-rule"></i>
       <p class="fq-sub">Here are a few details to help you plan your trip to Bali.</p>
@@ -1018,7 +971,7 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
      ======================================================================= -->
 <section class="section rsvp" id="rsvp">
   <div class="inner">
-    <span class="eyebrow">08 — RSVP</span>
+    <span class="eyebrow">06 — RSVP</span>
     <h2>Will you come?</h2>
     <p class="deadline" id="deadline">Reply by January 31, 2027</p>
 
@@ -1148,9 +1101,6 @@ var RSVP_ENDPOINT = "";
     put('bpName', hasName ? guestName.toUpperCase() : 'GUEST');
     put('ppSeats', seats + (seats === 1 ? ' guest' : ' guests'));
     put('bpSeats', String(seats));
-    put('seatsNum', String(seats));
-    $('seatsNum').hidden = false;
-    put('seatsLine', 'Admits ' + words[seats - 1] + (seats === 1 ? ' guest' : ' guests'));
     if (hasName && !$('name').value) $('name').value = guestName;
 
     /* MRZ line 1 carries the guest's name, OCR-B style. */
@@ -1345,12 +1295,12 @@ var RSVP_ENDPOINT = "";
        locked meanwhile and Skip stays on screen. One more tap takes the guest on to the details.
        Scrolling up at the top of the page steps back into the book at its last resting point. ---- */
     function checkpoints() {
-      var c = [0, OPEN * .46, OPEN, OPEN + PER * (mobileSpread ? .62 : .7)];   /* sealed, ticket out, stamped, calendar */
+      var c = [0, OPEN * .46, OPEN * .79, OPEN, OPEN + PER * (mobileSpread ? .62 : .7)];   /* sealed, ticket out, passport out (cover), stamped, calendar */
       if (mobileSpread) c.push(OPEN + PER * .93);                                 /* ...and the itinerary, on a phone */
       return c;
     }
-    var DUR = [0, 5200, 6500, 4200, 2200];    /* ms for each part of the opening */
-    var HOLDS = [0, 250, 900, 1100, 0];       /* a breath at each resting point before the next part */
+    var DUR = [0, 4000, 4100, 2400, 4200, 2200];   /* ms for each part: ticket out, passport out, stamped, calendar, itinerary */
+    var HOLDS = [0, 150, 1800, 900, 1100, 0];      /* a breath at each resting point; the closed cover holds longest */
     var isTouch = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
     var VERB = isTouch ? 'Swipe up' : 'Scroll';
     var ctrl = $('ctrl'), playBtn = $('playBtn'), skipBtn = $('skipBtn'), doneBtn = $('doneBtn'), plainLink = $('plainLink');
@@ -1712,8 +1662,6 @@ var RSVP_ENDPOINT = "";
     form.hidden = true;
     $('deadline').hidden = true;
     gate.hidden = false;
-    $('seatsLine').textContent = 'Seats are on your invitation link';
-    $('seatsNum').hidden = true;
     console.warn('RSVP gated:', reason);
   }
   if (RSVP_ENDPOINT) {
