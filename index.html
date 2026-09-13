@@ -492,28 +492,31 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
 
 /* RSVP */
 .rsvp form{max-width:520px}
-.field{margin-bottom:1.5em}
-.field label,.field legend{display:block;font-family:var(--mono);font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:var(--olive-soft);margin-bottom:.55em;padding:0}
-.field input,.field select,.field textarea{width:100%;background:transparent;border:0;border-bottom:1px solid rgba(89,96,68,.4);padding:.55em 0;border-radius:0;color:var(--olive)}
+.rsvp>.inner{padding-left:calc(var(--arch-w) * .07);padding-right:calc(var(--arch-w) * .07)}
+.field{margin-bottom:1em}
+.field-row{display:grid;gap:0 1.4em}
+@media (min-width:480px){.field-row{grid-template-columns:1fr 1fr}}
+.field label,.field legend{display:block;font-family:var(--mono);font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:var(--olive-soft);margin-bottom:.25em;padding:0}
+.field input,.field select,.field textarea{width:100%;background:transparent;border:0;border-bottom:1px solid rgba(89,96,68,.4);padding:.4em 0;border-radius:0;color:var(--olive)}
 .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-bottom-color:var(--gold-line)}
 .field input:focus-visible,.field select:focus-visible,.field textarea:focus-visible{outline:2px solid var(--gold-line);outline-offset:4px}
 .field select{appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--olive) 50%),linear-gradient(135deg,var(--olive) 50%,transparent 50%);background-position:calc(100% - 14px) 55%,calc(100% - 8px) 55%;background-size:6px 6px;background-repeat:no-repeat;padding-right:28px}
-.field textarea{min-height:5em;resize:vertical}
+.field textarea{min-height:3.2em;resize:vertical}
 .field fieldset{border:0;padding:0;margin:0;min-width:0}
 .field .err{display:none;font-family:var(--mono);font-size:14px;letter-spacing:.06em;color:#A2623F;margin-top:.5em}
 .field.is-invalid .err{display:block}
 .field.is-invalid input,.field.is-invalid select{border-bottom-color:#A2623F}
-.pills{display:flex;flex-wrap:wrap;gap:10px}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:.2em}
 .pills label{position:relative;margin:0;font-family:var(--sans);font-size:15px;letter-spacing:0;text-transform:none;color:var(--olive)}
 .pills input{position:absolute;opacity:0;width:1px;height:1px;margin:0}
-.pills span{display:inline-block;border:1px solid rgba(89,96,68,.45);border-radius:999px;padding:.6em 1.1em;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.pills span{display:inline-block;border:1px solid rgba(89,96,68,.45);border-radius:999px;padding:.5em .85em;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
 .pills input:checked+span{background:var(--olive);color:var(--ivory);border-color:var(--olive)}
 .pills input:focus-visible+span{outline:2px solid var(--gold-line);outline-offset:3px}
-.hint-line{font-size:14px;color:var(--olive-soft);margin:.5em 0 0}
+.hint-line{font-size:14px;color:var(--olive-soft);margin:.35em 0 0}
 .btn{display:inline-block;background:var(--olive);color:var(--ivory);border:1px solid var(--olive);padding:.9em 1.9em;border-radius:999px;font-weight:500;cursor:pointer;letter-spacing:.01em;transition:background .2s,opacity .2s}
 .btn:hover{background:#485038}
 .btn[disabled]{opacity:.55;cursor:default}
-.rsvp form .btn{display:block;margin:.8em auto 0;position:sticky;bottom:max(16px,env(safe-area-inset-bottom));z-index:3;box-shadow:0 10px 26px -10px rgba(36,39,34,.55),0 0 0 6px rgba(248,243,232,.85)}
+.rsvp form .btn{display:block;margin:.6em auto 0}
 .rsvp .form-error{margin-left:auto;margin-right:auto;text-align:center}
 .form-error{display:none;margin-top:1.2em;font-size:14.5px;color:#A2623F;max-width:44ch}
 .form-error.is-visible{display:block}
@@ -523,7 +526,7 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
 .confirm .mono{font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-line);display:block;margin-top:1.6em}
 .gate{max-width:46ch;font-size:16.5px}
 .gate p{margin-bottom:.8em}
-.rsvp .deadline{font-family:var(--mono);font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-line);margin:-.6em 0 2.4em;line-height:1.5}
+.rsvp .deadline{font-family:var(--mono);font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-line);margin:-.6em 0 1.5em;line-height:1.5}
 
 /* Footer: a small arch of its own */
 .footer{color:var(--olive);padding:0 var(--gutter) max(48px,env(safe-area-inset-bottom))}
@@ -1006,7 +1009,7 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
   <div class="inner">
     <span class="eyebrow">07 — RSVP</span>
     <h2>Will you come?</h2>
-    <p class="deadline" id="deadline">Kindly reply by 31 January 2027</p>
+    <p class="deadline" id="deadline">Reply by 31 January 2027</p>
 
     <div class="gate" id="rsvpGate" hidden>
       <p>We couldn't find your invitation. Please open the link from the message we sent you, which carries your name and seats, and reply from there.</p>
@@ -1014,16 +1017,17 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
     </div>
 
     <form id="rsvpForm" novalidate>
-      <div class="field" id="fName">
-        <label for="name">Your name</label>
-        <input type="text" id="name" name="name" autocomplete="name" maxlength="80" required>
-        <p class="err">Please tell us who you are.</p>
-      </div>
-
-      <div class="field" id="fEmail">
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" autocomplete="email" inputmode="email" maxlength="120" required>
-        <p class="err">That email doesn't look right.</p>
+      <div class="field-row">
+        <div class="field" id="fName">
+          <label for="name">Your name</label>
+          <input type="text" id="name" name="name" autocomplete="name" maxlength="80" required>
+          <p class="err">Please tell us who you are.</p>
+        </div>
+        <div class="field" id="fEmail">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" autocomplete="email" inputmode="email" maxlength="120" required>
+          <p class="err">That email doesn't look right.</p>
+        </div>
       </div>
 
       <div class="field" id="fAttending">
@@ -1038,15 +1042,16 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
         <p class="err">Let us know if you can make it.</p>
       </div>
 
-      <div class="field" id="fParty" hidden>
-        <label for="party">Party size</label>
-        <select id="party" name="party"></select>
-        <p class="hint-line" id="partyHint"></p>
-      </div>
-
-      <div class="field" id="fDiet">
-        <label for="diet">Dietary needs</label>
-        <input type="text" id="diet" name="diet" maxlength="200" placeholder="Anything the kitchen should know">
+      <div class="field-row">
+        <div class="field" id="fParty" hidden>
+          <label for="party">Party size</label>
+          <select id="party" name="party"></select>
+          <p class="hint-line" id="partyHint"></p>
+        </div>
+        <div class="field" id="fDiet">
+          <label for="diet">Dietary needs</label>
+          <input type="text" id="diet" name="diet" maxlength="200" placeholder="Anything the kitchen should know">
+        </div>
       </div>
 
       <div class="field">
