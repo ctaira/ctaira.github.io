@@ -1083,10 +1083,10 @@ html.has-lightbox{overflow:hidden}
           <input type="text" id="name" name="name" autocomplete="name" maxlength="80" required>
           <p class="err">Please tell us who you are.</p>
         </div>
-        <div class="field" id="fEmail">
-          <label for="email">Email</label>
-          <input type="email" id="email" name="email" autocomplete="email" inputmode="email" maxlength="120" required>
-          <p class="err">That email doesn't look right.</p>
+        <div class="field" id="fParty" hidden>
+          <label for="party">Party size</label>
+          <select id="party" name="party"></select>
+          <p class="hint-line" id="partyHint"></p>
         </div>
       </div>
 
@@ -1102,16 +1102,9 @@ html.has-lightbox{overflow:hidden}
         <p class="err">Let us know if you can make it.</p>
       </div>
 
-      <div class="field-row">
-        <div class="field" id="fParty" hidden>
-          <label for="party">Party size</label>
-          <select id="party" name="party"></select>
-          <p class="hint-line" id="partyHint"></p>
-        </div>
-        <div class="field" id="fDiet">
-          <label for="diet">Dietary needs</label>
-          <input type="text" id="diet" name="diet" maxlength="200" placeholder="Anything the kitchen should know">
-        </div>
+      <div class="field" id="fDiet">
+        <label for="diet">Dietary needs</label>
+        <input type="text" id="diet" name="diet" maxlength="200" placeholder="Anything the kitchen should know">
       </div>
 
       <div class="field">
@@ -1127,14 +1120,12 @@ html.has-lightbox{overflow:hidden}
       <h3>We can't wait.</h3>
       <p>Thank you. Your reply is in, and we'll be in touch with booking details for the estate and a few notes on getting to Bali.</p>
       <p>Start thinking about linen.</p>
-      <p class="muted confirm-mail" hidden>A copy of your reply is on its way to your inbox.</p>
       <span class="mono">See you on the cliff · Aug 28, 2027</span>
     </div>
     <div class="confirm" id="confirmNo">
       <h3>We'll miss you.</h3>
       <p>Thank you for letting us know. We understand completely, and we'll raise a glass to you from the cliff.</p>
       <p>If anything changes before the end of January, just open your invitation again and send a new reply.</p>
-      <p class="muted confirm-mail" hidden>A copy of your reply is on its way to your inbox.</p>
       <span class="mono">With love · Ashley &amp; Charles</span>
     </div>
   </div>
@@ -1779,7 +1770,7 @@ var RSVP_ENDPOINT = "";
      RSVP
   ------------------------------------------------------------------------- */
   var form = $('rsvpForm'), submitBtn = $('submitBtn'), formError = $('formError');
-  var fName = $('fName'), fEmail = $('fEmail'), fAttending = $('fAttending'), fParty = $('fParty'), fDiet = $('fDiet');
+  var fName = $('fName'), fAttending = $('fAttending'), fParty = $('fParty'), fDiet = $('fDiet');
   var partySel = $('party'), partyHint = $('partyHint');
 
   /* Party-size dropdown is capped at the invitation's seat count. Hidden when it's 1. */
@@ -1836,7 +1827,6 @@ var RSVP_ENDPOINT = "";
         .then(function (d) {
           if (d && d.ok) {
             applyGuest(d.name, d.seats);
-            if (d.email && !$('email').value) $('email').value = d.email;
           } else {
             closeGate('code not found');
           }
@@ -1851,15 +1841,12 @@ var RSVP_ENDPOINT = "";
     applyGuest(params.get('to') || '', isFinite(n) ? n : 1);
   }
 
-  var emailOk = function (v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v); };
   $('name').addEventListener('input', function () { if (this.value.trim()) fName.classList.remove('is-invalid'); });
-  $('email').addEventListener('input', function () { if (emailOk(this.value.trim())) fEmail.classList.remove('is-invalid'); });
 
   function validate() {
     var ok = true, first = null;
-    var name = $('name').value.trim(), email = $('email').value.trim();
+    var name = $('name').value.trim();
     fName.classList.toggle('is-invalid', !name); if (!name) { ok = false; first = first || $('name'); }
-    fEmail.classList.toggle('is-invalid', !emailOk(email)); if (!emailOk(email)) { ok = false; first = first || $('email'); }
     var att = attendingValue();
     fAttending.classList.toggle('is-invalid', !att); if (!att) { ok = false; first = first || radios[0]; }
     if (first) first.focus();
@@ -1870,7 +1857,6 @@ var RSVP_ENDPOINT = "";
     form.hidden = true;
     $('deadline').hidden = true;
     var el = $(declined ? 'confirmNo' : 'confirmYes');
-    el.querySelector('.confirm-mail').hidden = !emailed;
     el.classList.add('is-visible');
     el.setAttribute('tabindex', '-1');
     el.focus({ preventScroll: true });
@@ -1885,7 +1871,6 @@ var RSVP_ENDPOINT = "";
     var party = declined ? 0 : (partyAllowed ? clamp(parseInt(partySel.value, 10) || 1, 1, seats) : 1);
     var payload = {
       name: $('name').value.trim(),
-      email: $('email').value.trim(),
       attending: attendingValue(),
       party: party,
       dietary: declined ? '' : $('diet').value.trim(),
