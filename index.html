@@ -439,7 +439,17 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
 .mp-text strong{display:block;font-weight:500;letter-spacing:.13em;text-transform:uppercase;font-size:1.22em}
 .mp-text small{display:block;font-size:.92em;letter-spacing:.14em;text-transform:uppercase;margin-top:.2em;color:var(--olive-soft)}
 .mp-text em{display:block;font-style:normal;font-size:.7em;letter-spacing:.2em;color:var(--olive-soft)}
-@media (max-width:500px){.mp-text{margin-top:-2.4%;line-height:1.25}.mp-text .mt-rule{display:none}.mp-text b{letter-spacing:.08em}.mp-text strong{letter-spacing:.05em;margin-top:.25em}.mp-text small{display:none}}
+.map-caption{display:none}
+@media (max-width:640px){
+  .map-stage:not(.is-static) .mp-text{display:none}
+  .map-caption{display:block;position:absolute;left:14px;right:14px;bottom:max(20px,env(safe-area-inset-bottom));z-index:6;margin:0;text-align:center;
+    background:rgba(248,243,232,.9);border:1px solid rgba(155,139,87,.7);border-radius:999px;padding:.75em 1.4em .8em;color:var(--olive);
+    font-family:var(--serif);line-height:1.35;opacity:0;transform:translateY(6px);transition:opacity .4s,transform .4s;pointer-events:none}
+  .map-caption.is-on{opacity:1;transform:none}
+  .map-caption b{display:block;font-weight:500;font-size:17px;letter-spacing:.1em;text-transform:uppercase}
+  .map-caption span{display:block;font-size:14px;letter-spacing:.06em;color:var(--olive-soft);margin-top:.15em}
+  .map-stage.is-static .map-caption{display:none}
+}
 .map-stage.is-static{height:auto;padding:24px 0}
 .map-stage.is-static .map-pin{position:static;height:auto}
 .map-stage.is-static .mp-badge,.map-stage.is-static .mp-ill,.map-stage.is-static .mp-text,.map-stage.is-static .mp-deco{opacity:1!important;transform:translate(-50%,-50%)!important}
@@ -858,6 +868,7 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
 <section class="map-stage" id="weekend" aria-label="Our Bali weekend">
   <div class="map-pin">
     <ol class="steps" id="mapSteps" aria-hidden="true"><li></li><li></li><li></li><li></li></ol>
+    <p class="map-caption" id="mapCaption" aria-live="polite"></p>
     <p class="map-cue" id="mapCue"><span>Scroll to follow the weekend</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9l8 8 8-8" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></p>
     <div class="map-island" id="mapIsland">
       <div class="map-ivory" aria-hidden="true"></div>
@@ -1474,7 +1485,7 @@ var RSVP_ENDPOINT = "";
       for (var i = 0; i <= 800; i++) { var L = routeLen * i / 800, pt = mapRoute.getPointAtLength(L); var dd = (pt.x - st[0]) * (pt.x - st[0]) + (pt.y - st[1]) * (pt.y - st[1]); if (dd < bd) { bd = dd; best = L; } }
       return best;
     });
-    var mapCue = $('mapCue'), mapSteps = $('mapSteps');
+    var mapCue = $('mapCue'), mapSteps = $('mapSteps'), mapCaption = $('mapCaption'), captionAt = -1;
     mapCue.firstChild.textContent = VERB + ' to follow the weekend';
     var mapDeco = Array.prototype.slice.call(mapStage.querySelectorAll('.mp-deco')).map(function (el) { var v = el.getAttribute('data-in').split(','); return { el: el, a: +v[0], b: +v[1] }; });
     var mapEvs = [1, 2, 3, 4].map(function (n) { var e = $('mev' + n); return { badge: e.querySelector('.mp-badge'), ill: e.querySelector('.mp-ill'), text: e.querySelector('.mp-text') }; });
@@ -1495,6 +1506,17 @@ var RSVP_ENDPOINT = "";
       }
       mapCar.setAttribute('opacity', carOn ? seg(p, MSEG[1][0], MSEG[1][0] + .03).toFixed(2) : 0);
       mapCue.style.opacity = (1 - seg(p, 0, .05)).toFixed(2);
+      var cur = -1;                                            /* the stop the route has reached */
+      for (var ci = 0; ci < 4; ci++) if (p >= MREV[ci][0]) cur = ci;
+      if (cur !== captionAt) {
+        captionAt = cur;
+        if (cur >= 0) {
+          var tx = mapEvs[cur].text, bs = tx.querySelectorAll('b'), sm = tx.querySelector('small'), em = tx.querySelector('em');
+          var line = bs[0].textContent + ' · ' + bs[1].textContent + (em ? ' · ' + em.textContent.replace(/[()]/g, '') : '') + (sm ? ' · ' + sm.textContent.replace(/^at /, '') : '');
+          mapCaption.innerHTML = '<b>' + tx.querySelector('strong').textContent + '</b><span>' + line + '</span>';
+        }
+        mapCaption.classList.toggle('is-on', cur >= 0);
+      }
       for (var si = 0; si < 4; si++) mapSteps.children[si].className = p >= MREV[si][1] ? 'is-done' : (p >= MSEG[si][0] ? 'is-now' : '');
       for (var di = 0; di < mapDeco.length; di++) { var dv = ease(seg(p, mapDeco[di].a, mapDeco[di].b)); mapDeco[di].el.style.opacity = (dv * .92).toFixed(3); mapDeco[di].el.style.transform = 'scale(' + (.96 + .04 * dv).toFixed(3) + ')'; }
       for (var k = 0; k < 4; k++) {
