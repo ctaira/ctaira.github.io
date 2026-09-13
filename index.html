@@ -410,6 +410,22 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
 .snaps img{display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover}
 .snaps span{display:block;font-family:var(--mono);font-size:14px;letter-spacing:.06em;color:var(--olive-soft);text-align:center;padding:.7em 0 .8em;line-height:1.3}
 @media (max-width:500px){.snaps{gap:6px}.snaps li{width:32%;padding:4% 4% 0}.snaps span{font-size:12px;letter-spacing:.03em}}
+.snaps .snap{display:block;width:100%;padding:0;border:0;background:none;cursor:zoom-in;-webkit-tap-highlight-color:transparent}
+.snaps .snap:focus-visible{outline:2px solid var(--gold-line);outline-offset:3px}
+/* Lightbox: one photo at a time, full screen, on a dark wash */
+.lightbox{position:fixed;inset:0;z-index:80;background:rgba(36,39,34,.9);display:grid;place-items:center;padding:max(16px,env(safe-area-inset-top)) 16px max(16px,env(safe-area-inset-bottom));opacity:0;transition:opacity .25s}
+.lightbox.is-on{opacity:1}
+.lightbox[hidden]{display:none}
+html.has-lightbox{overflow:hidden}
+.lb-fig{margin:0;max-width:min(92vw,1100px);max-height:100%;display:grid;grid-template-rows:1fr auto;justify-items:center}
+.lb-fig img{max-width:100%;max-height:calc(100svh - 96px);width:auto;height:auto;object-fit:contain;box-shadow:0 20px 60px -20px rgba(0,0,0,.7);background:#FBF8F1;padding:6px}
+.lb-fig figcaption{font-family:var(--mono);font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--ivory);margin-top:14px;text-align:center}
+.lb-close,.lb-arrow{position:absolute;background:rgba(248,243,232,.16);color:var(--ivory);border:1px solid rgba(248,243,232,.35);border-radius:999px;cursor:pointer;font-family:var(--serif);line-height:1;display:grid;place-items:center;-webkit-tap-highlight-color:transparent}
+.lb-close{top:max(14px,env(safe-area-inset-top));right:16px;width:44px;height:44px;font-size:30px}
+.lb-arrow{top:50%;transform:translateY(-50%);width:44px;height:44px;font-size:34px}
+.lb-prev{left:12px}.lb-next{right:12px}
+.lb-close:focus-visible,.lb-arrow:focus-visible{outline:2px solid var(--gold-line);outline-offset:3px}
+@media (max-width:640px){.lb-arrow{display:none}}
 .letter .salutation{font-family:var(--script);font-size:clamp(34px,6.5vw,46px);line-height:1.1;margin-bottom:.6em}
 .letter .signoff{font-family:var(--serif);font-style:italic;font-size:clamp(24px,4.6vw,32px);margin-top:1.4em;line-height:1.2}
 .letter .signoff small{display:block;font-family:var(--mono);font-style:normal;font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-line);margin-top:.9em}
@@ -865,9 +881,9 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
     <p>When we're not home, we're somewhere new, golfing our way around the world and leaving lost golf balls on several continents. So for the wedding we didn't want a typical venue. We wanted a cliff, an ocean, and everyone we love in one place.</p>
     <p>Your only job is to show up in linen. It's going to be perfect. We checked.</p>
     <ul class="snaps" aria-label="A few photos of us">
-      <li><img src="assets/photo-runclub.webp" alt="Ashley and Charles at run club." width="900" height="1125" loading="lazy" decoding="async"><span>Run club</span></li>
-      <li><img src="assets/photo-golf.webp" alt="Ashley and Charles on a golf course." width="900" height="1125" loading="lazy" decoding="async"><span>The back nine</span></li>
-      <li><img src="assets/photo-cats.webp" alt="Ashley and Charles with two of the cats." width="900" height="1125" loading="lazy" decoding="async"><span>Two of the fourteen</span></li>
+      <li><button type="button" class="snap" aria-label="View larger: Run club"><img src="assets/photo-runclub.webp" alt="Ashley and Charles at run club." width="900" height="1125" loading="lazy" decoding="async"></button><span>Run club</span></li>
+      <li><button type="button" class="snap" aria-label="View larger: The back nine"><img src="assets/photo-golf.webp" alt="Ashley and Charles on the tee at Torrey Pines, the Pacific behind them." width="1125" height="1500" loading="lazy" decoding="async"></button><span>The back nine</span></li>
+      <li><button type="button" class="snap" aria-label="View larger: Two of the fourteen"><img src="assets/photo-cats.webp" alt="Ashley and Charles with two of the cats." width="900" height="1125" loading="lazy" decoding="async"></button><span>Two of the fourteen</span></li>
     </ul>
     <p class="signoff">With all our love,<br>Ashley &amp; Charles
       <small>Los Angeles · September 2026</small>
@@ -1126,6 +1142,13 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
     </div>
   </div>
 </footer>
+
+<div class="lightbox" id="lightbox" hidden role="dialog" aria-modal="true" aria-label="Photo">
+  <button type="button" class="lb-close" id="lbClose" aria-label="Close">&times;</button>
+  <button type="button" class="lb-arrow lb-prev" id="lbPrev" aria-label="Previous photo">&#8249;</button>
+  <figure class="lb-fig"><img id="lbImg" src="" alt=""><figcaption id="lbCap"></figcaption></figure>
+  <button type="button" class="lb-arrow lb-next" id="lbNext" aria-label="Next photo">&#8250;</button>
+</div>
 
 <script>
 /* ---------------------------------------------------------------------------
@@ -1651,6 +1674,39 @@ var RSVP_ENDPOINT = "";
     stage.addEventListener('click', function (e) { if (e.target.closest('a,button')) return; forward(); });   /* a tap anywhere does the obvious thing */
     /* the RSVP pill stays on screen until the reply form itself is in view */
     new IntersectionObserver(function (en) { skip.classList.toggle('is-hidden', en[0].isIntersecting); }, { threshold: .1 }).observe($('rsvp'));
+
+    /* ---- Lightbox for the letter's snapshots: tap to open, tap or Escape to close, arrows or swipe to move ---- */
+    (function () {
+      var box = $('lightbox'), img = $('lbImg'), cap = $('lbCap'), snaps = Array.prototype.slice.call(document.querySelectorAll('.snaps li'));
+      if (!box || !snaps.length) return;
+      var at = -1, opener = null, sx = null;
+      function show(i) {
+        at = (i + snaps.length) % snaps.length;
+        var pic = snaps[at].querySelector('img'), text = snaps[at].querySelector('span');
+        img.src = pic.currentSrc || pic.src; img.alt = pic.alt; cap.textContent = text ? text.textContent : '';
+      }
+      function open(i, from) {
+        opener = from || null; show(i); box.hidden = false; document.documentElement.classList.add('has-lightbox');
+        requestAnimationFrame(function () { box.classList.add('is-on'); $('lbClose').focus(); });
+      }
+      function close() {
+        box.classList.remove('is-on'); document.documentElement.classList.remove('has-lightbox');
+        setTimeout(function () { box.hidden = true; if (opener) opener.focus(); }, 250);
+      }
+      snaps.forEach(function (li, i) { li.querySelector('.snap').addEventListener('click', function (e) { open(i, e.currentTarget); }); });
+      $('lbClose').addEventListener('click', close);
+      $('lbPrev').addEventListener('click', function (e) { e.stopPropagation(); show(at - 1); });
+      $('lbNext').addEventListener('click', function (e) { e.stopPropagation(); show(at + 1); });
+      box.addEventListener('click', function (e) { if (e.target === box || e.target.closest('.lb-fig')) close(); });
+      box.addEventListener('touchstart', function (e) { sx = e.touches.length === 1 ? e.touches[0].clientX : null; }, { passive: true });
+      box.addEventListener('touchend', function (e) { if (sx == null) return; var dx = e.changedTouches[0].clientX - sx; sx = null; if (Math.abs(dx) > 50) show(at + (dx < 0 ? 1 : -1)); }, { passive: true });
+      window.addEventListener('keydown', function (e) {
+        if (box.hidden) return;
+        if (e.key === 'Escape') { e.preventDefault(); close(); }
+        else if (e.key === 'ArrowRight') { e.preventDefault(); show(at + 1); }
+        else if (e.key === 'ArrowLeft') { e.preventDefault(); show(at - 1); }
+      }, true);
+    })();
 
     /* ---- Contents ---- */
     var navBtn = $('navBtn'), nav = $('nav');
