@@ -112,7 +112,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 /* Captions above and below the envelope, in the manner of the printed suite. */
 /* Captions above and below the envelope. No panels: the painting is washed and softened at the top
    and bottom edges (the scrims below), and the ink gets a light halo. */
-.cap,.hint{position:absolute;left:0;right:0;text-align:center;z-index:1;pointer-events:none;color:var(--ink);
+.cap{position:absolute;left:0;right:0;text-align:center;z-index:1;pointer-events:none;color:var(--ink);
   text-shadow:0 1px 0 rgba(255,250,238,.55),0 0 12px rgba(255,250,238,.85),0 0 3px rgba(255,250,238,.8)}
 /* Edge scrims: a cream wash that fades into the picture, with a blur that fades the same way, so the
    painting dissolves under the captions without a visible edge. Each scrim leaves with its caption. */
@@ -129,12 +129,11 @@ button,input,select,textarea{font:inherit;color:inherit}
 .sea.is-on{opacity:1}
 .stage.is-static .sea{display:none}
 .cap-top{top:max(8.5%,calc(env(safe-area-inset-top) + 44px))}
-.cap .caps,.hint .caps{display:block;font-family:var(--serif);font-size:clamp(15px,4vw,19px);letter-spacing:.34em;text-transform:uppercase;line-height:1.5;padding-left:.34em}
-.cap .rule,.hint .rule{display:block;width:34px;height:1px;background:var(--husk);margin:.75em auto;opacity:.8}
+.cap .caps{display:block;font-family:var(--serif);font-size:clamp(15px,4vw,19px);letter-spacing:.34em;text-transform:uppercase;line-height:1.5;padding-left:.34em}
+.cap .rule{display:block;width:34px;height:1px;background:var(--husk);margin:.75em auto;opacity:.8}
+.cap .cap-sub{font-size:clamp(13px,3.4vw,15px);letter-spacing:.22em;padding-left:.22em}
 .cap .script{display:block;font-family:var(--script);font-size:clamp(30px,8.6vw,42px);line-height:1;color:var(--ink)}
 /* the caption sits just above the envelope, under the title */
-.hint{top:auto;bottom:calc(50% - 6vh + var(--eh) / 2 + 18px)}
-.hint.is-tight{display:none}   /* no room between the title and the envelope */
 
 /* The controls: one clear action at a time. Open the invitation (and a plain route to the details),
    Skip while it plays, then See the details. */
@@ -185,17 +184,16 @@ button,input,select,textarea{font:inherit;color:inherit}
 .plate.is-ready img{animation:plate-settle 2.4s cubic-bezier(.2,.6,.2,1) both}
 @keyframes plate-settle{from{transform:scale(1.06)}to{transform:scale(1)}}
 /* the envelope and captions wait for the scene, then rise into place */
-.stage.is-loading .env,.stage.is-loading .passport,.stage.is-loading .cap-top,.stage.is-loading .hint,.stage.is-loading .ctrl{opacity:0!important}
+.stage.is-loading .env,.stage.is-loading .passport,.stage.is-loading .cap-top,.stage.is-loading .ctrl{opacity:0!important}
 .stage.is-in .env{animation:rise-in 1.1s cubic-bezier(.2,.7,.2,1) 1.35s backwards}
 .stage.is-in .passport{animation:fade-in 1.1s ease-out 1.35s backwards}
 .stage.is-in .cap-top{animation:drop-in 1.1s cubic-bezier(.2,.7,.2,1) 1.6s backwards}
-.stage.is-in .hint{animation:rise-in 1.1s cubic-bezier(.2,.7,.2,1) 1.75s backwards}
 .stage.is-in .ctrl{animation:rise-in 1.1s cubic-bezier(.2,.7,.2,1) 1.9s backwards}
 @keyframes rise-in{from{opacity:0;translate:0 36px}to{opacity:1;translate:0 0}}
 @keyframes drop-in{from{opacity:0;translate:0 -22px}to{opacity:1;translate:0 0}}
 @keyframes fade-in{from{opacity:0}to{opacity:1}}
 @media (prefers-reduced-motion:reduce){
-  .plate.is-ready img,.stage.is-in .env,.stage.is-in .passport,.stage.is-in .cap-top,.stage.is-in .hint,.stage.is-in .ctrl{animation:none!important}
+  .plate.is-ready img,.stage.is-in .env,.stage.is-in .passport,.stage.is-in .cap-top,.stage.is-in .ctrl{animation:none!important}
 }
 .vista .v-wash{animation:vwash 11s ease-in-out infinite alternate}
 @keyframes vwash{from{transform:translateX(-7px)}to{transform:translateX(7px)}}
@@ -721,9 +719,8 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
       <div class="scrim scrim-bottom" id="scrimBottom" aria-hidden="true"></div>
 
 
-      <div class="cap cap-top" id="capTop" aria-hidden="true"><span class="caps">A journey<br>to forever</span><i class="rule"></i><span class="script">Bali, Indonesia</span></div>
+      <div class="cap cap-top" id="capTop" aria-hidden="true"><span class="caps">A journey<br>to forever</span><i class="rule"></i><span class="script">Bali, Indonesia</span><i class="rule"></i><span class="caps cap-sub">You’re invited · August 28, 2027</span></div>
 
-      <div class="hint" id="hint" aria-hidden="true"><span class="caps">You're invited</span><i class="rule"></i><span class="caps">August 28, 2027</span></div>
 
       <!-- Envelope: back, boarding pass, pocket, flap (+ seal). Same transform on all. -->
       <div class="env env-back" id="envBack" aria-hidden="true"></div>
@@ -1174,7 +1171,7 @@ var RSVP_ENDPOINT = "";
   /* -------------------------------------------------------------------------
      Opening sequence
   ------------------------------------------------------------------------- */
-  var stage = $('stage'), scene = $('scene'), hint = $('hint'), skip = $('skip');
+  var stage = $('stage'), scene = $('scene'), skip = $('skip');
   var envBack = $('envBack'), envPocket = $('envPocket'), envFlap = $('envFlap'), seal = $('seal');
   var pocketText = envPocket.querySelectorAll('.addr, .par-avion');
   var bpass = $('bpass'), passport = $('passport'), cover = $('ppCover');
@@ -1216,7 +1213,6 @@ var RSVP_ENDPOINT = "";
     /* No scrubbing: envelope and boarding pass leave the DOM; passport opens stamped. */
     envParts.forEach(function (el) { el.parentNode.removeChild(el); });
     bpass.parentNode.removeChild(bpass);
-    hint.parentNode.removeChild(hint);
     capTop.parentNode.removeChild(capTop);
     openBtn.parentNode.removeChild(openBtn);
     $('ctrl').parentNode.removeChild($('ctrl'));
@@ -1254,7 +1250,6 @@ var RSVP_ENDPOINT = "";
 
       /* -- Hint fades out immediately ------------------------------ 0.00–0.05 */
       stage.classList.toggle('is-open', p > .015);
-      hint.style.opacity = 1 - seg(p, 0, .05);
       capTop.style.opacity = 1 - seg(p, .50, .62);   /* the caption clears before the passport rises */
       scrimBottom.style.opacity = 1 - seg(p, 0, .10);
       scrimTop.style.opacity = 1 - seg(p, .50, .62);
@@ -1461,14 +1456,8 @@ var RSVP_ENDPOINT = "";
       else if (e.key === 'Escape' && state === 'playing') { e.preventDefault(); skipPlay(); }
     });
 
-    function fitHint() {
-      hint.classList.remove('is-tight');
-      var h = hint.getBoundingClientRect(), c = capTop.getBoundingClientRect();
-      if (h.top < c.bottom + 8) hint.classList.add('is-tight');
-    }
     function onResize() {
       vh = window.innerHeight; vw = window.innerWidth; eh = envBack.offsetHeight;
-      fitHint();
       measureBook();
       var cps = checkpoints();
       if (!playing) { beat = cps[Math.min(step, cps.length - 1)]; draw(); }
