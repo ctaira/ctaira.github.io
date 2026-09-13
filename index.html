@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Ashley &amp; Charles · 28 August 2027 · AYANA Bali</title>
-<meta name="description" content="Ashley and Charles are celebrating their marriage at AYANA Bali, Jimbaran, on Saturday 28 August 2027. Open your invitation and RSVP.">
+<title>Ashley &amp; Charles · August 28, 2027 · AYANA Bali</title>
+<meta name="description" content="Ashley and Charles are celebrating their marriage at AYANA Bali, Jimbaran, on Saturday, August 28, 2027. Open your invitation and RSVP.">
 <meta name="theme-color" content="#242722">
 <meta name="robots" content="noindex, nofollow">
-<meta property="og:title" content="Ashley &amp; Charles · 28 August 2027">
+<meta property="og:title" content="Ashley &amp; Charles · August 28, 2027">
 <meta property="og:description" content="A celebration on the cliffs of Jimbaran, Bali. Open your invitation.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -366,6 +366,7 @@ html.is-locked,html.is-locked body{overflow:hidden;overscroll-behavior:none}
 }
 .section>.inner::before{top:calc(var(--arch-r) * .09)}
 .section>.inner::after{bottom:calc(var(--arch-r) * .09);transform:translateX(-50%) scaleY(-1)}
+.arch-art{display:block;width:min(46%,170px);height:auto;margin:-.4em auto .9em}
 .eyebrow{font-family:var(--mono);font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-line);margin-bottom:1.1em;display:block}
 .section h2{font-size:clamp(32px,7vw,50px);margin-bottom:.45em;max-width:16ch;color:var(--olive)}
 .lede{font-size:clamp(18px,2.4vw,21px);line-height:1.45;max-width:36ch}
@@ -382,13 +383,14 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
 
 /* Letter */
 .letter p{max-width:58ch}
+@media (max-width:500px){.letter p{font-size:16px;line-height:1.5;margin-bottom:.85em}.letter .salutation{font-size:32px}}
 .letter .salutation{font-family:var(--script);font-size:clamp(34px,6.5vw,46px);line-height:1.1;margin-bottom:.6em}
 .letter .signoff{font-family:var(--serif);font-style:italic;font-size:clamp(24px,4.6vw,32px);margin-top:1.4em;line-height:1.2}
 .letter .signoff small{display:block;font-family:var(--mono);font-style:normal;font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-line);margin-top:.9em}
 
 /* The date */
 .date-grid{display:grid;gap:clamp(24px,5vw,44px);align-items:start}
-.countdown{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;max-width:420px;margin-top:.4em}
+.countdown{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;max-width:360px;margin-top:.4em}
 .countdown div{border-top:1px solid rgba(89,96,68,.3);padding-top:.6em}
 .countdown b{display:block;font-family:var(--serif);font-weight:400;font-size:clamp(32px,7vw,46px);line-height:1;font-variant-numeric:tabular-nums}
 .countdown span{font-family:var(--mono);font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:var(--olive-soft)}
@@ -412,14 +414,15 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
 .travel p{font-size:17px;color:var(--olive-soft);margin:0}
 
 /* Our Bali weekend: a pinned island the journey is drawn across as the guest scrolls */
-.map-stage{position:relative;height:calc(100svh + 330vh);color:var(--olive)}
-.map-pin{position:sticky;top:0;height:100vh;height:100svh;display:grid;place-items:center;overflow:hidden}
-.map-island{--mw:min(94vw,calc(94svh * .5643));position:relative;width:var(--mw);height:calc(var(--mw) / .5643);font-size:max(12px,calc(var(--mw) * .028))}
+.map-stage{position:relative;height:calc(100svh + 260vh);color:var(--olive)}
+.map-pin{position:sticky;top:0;height:100vh;height:100svh;display:grid;place-items:center;overflow:hidden;box-sizing:border-box;padding-bottom:56px}
+.map-island{--mw:min(94vw,calc((100svh - 130px) * .5643));position:relative;width:var(--mw);height:calc(var(--mw) / .5643);font-size:max(12px,calc(var(--mw) * .028))}
 .map-ivory{position:absolute;inset:0;background:rgba(248,243,232,.8);clip-path:polygon(25.94% 0.02%,27.93% 0.31%,29.67% 0.64%,31.30% 1.16%,32.67% 1.80%,34.08% 2.43%,35.48% 3.06%,36.87% 3.72%,37.89% 4.64%,38.84% 5.58%,39.74% 6.54%,40.66% 7.49%,41.48% 8.40%,42.41% 9.41%,43.48% 10.38%,44.61% 11.31%,45.39% 12.26%,46.10% 13.25%,46.71% 14.25%,47.54% 15.11%,48.70% 15.87%,49.85% 16.65%,51.05% 17.39%,52.35% 18.08%,53.67% 18.75%,54.96% 19.46%,56.16% 20.21%,57.25% 21.02%,58.28% 21.85%,59.45% 22.69%,60.68% 23.50%,61.95% 24.29%,63.26% 25.07%,64.60% 25.74%,65.96% 26.39%,67.32% 27.04%,68.64% 27.72%,69.90% 28.43%,71.11% 29.13%,72.39% 29.85%,73.66% 30.56%,74.96% 31.26%,76.31% 31.92%,77.71% 32.55%,79.16% 33.22%,80.62% 33.89%,82.04% 34.57%,83.41% 35.29%,84.74% 36.04%,85.92% 36.80%,87.10% 37.55%,88.32% 38.29%,89.58% 39.00%,90.90% 39.67%,91.76% 40.65%,92.63% 41.63%,93.45% 42.62%,94.19% 43.64%,94.84% 44.66%,95.46% 45.70%,96.09% 46.74%,96.46% 47.77%,96.86% 48.79%,97.23% 49.82%,97.49% 50.84%,97.70% 51.85%,98.03% 52.86%,98.43% 53.86%,98.74% 54.87%,98.88% 55.90%,98.88% 56.93%,98.77% 57.93%,98.66% 58.95%,98.70% 59.97%,98.88% 60.98%,99.15% 62.00%,99.46% 63.01%,99.76% 64.03%,99.89% 65.07%,99.82% 66.08%,99.58% 67.09%,99.23% 68.10%,98.88% 69.11%,98.61% 70.12%,98.47% 71.13%,98.55% 72.15%,98.77% 73.16%,98.93% 74.18%,99.02% 75.19%,99.08% 76.21%,99.13% 77.23%,99.18% 78.25%,99.08% 79.24%,98.87% 80.25%,98.70% 81.27%,98.57% 82.28%,98.47% 83.30%,98.38% 84.32%,98.31% 85.34%,98.03% 86.30%,97.50% 87.28%,96.98% 88.26%,96.42% 89.24%,95.78% 90.19%,95.07% 91.13%,94.32% 92.06%,93.60% 93.02%,92.32% 93.80%,91.04% 94.56%,89.69% 95.28%,88.25% 95.96%,86.78% 96.62%,85.48% 97.25%,83.92% 97.61%,82.30% 98.11%,80.72% 98.66%,79.12% 99.17%,77.46% 99.61%,75.81% 100.00%,74.08% 99.66%,72.28% 99.35%,70.46% 99.09%,68.60% 98.89%,66.72% 98.73%,64.85% 98.57%,62.80% 98.31%,61.40% 97.49%,60.24% 96.73%,59.13% 95.94%,58.07% 95.12%,57.04% 94.29%,56.03% 93.45%,55.06% 92.58%,54.16% 91.69%,53.23% 90.81%,52.26% 89.95%,51.20% 89.12%,50.07% 88.32%,48.89% 87.54%,47.73% 86.75%,46.63% 85.93%,45.96% 84.96%,45.33% 84.00%,44.73% 83.04%,44.14% 82.07%,43.58% 81.10%,43.03% 80.12%,42.44% 79.16%,41.74% 78.20%,40.92% 77.27%,40.03% 76.35%,39.17% 75.43%,38.40% 74.49%,37.69% 73.53%,36.96% 72.57%,36.14% 71.64%,35.06% 70.85%,34.00% 70.05%,33.01% 69.22%,32.06% 68.38%,31.11% 67.54%,30.15% 66.70%,29.21% 65.86%,28.25% 65.02%,27.31% 64.13%,26.42% 63.22%,25.53% 62.30%,24.71% 61.37%,24.01% 60.41%,23.40% 59.43%,22.87% 58.42%,22.36% 57.41%,21.77% 56.42%,21.04% 55.47%,20.19% 54.54%,19.30% 53.63%,18.41% 52.71%,17.55% 51.79%,16.75% 50.86%,16.20% 49.84%,15.95% 48.81%,15.70% 47.78%,15.39% 46.76%,15.03% 45.75%,14.62% 44.74%,14.17% 43.73%,13.79% 42.72%,13.51% 41.71%,13.26% 40.70%,13.06% 39.68%,12.92% 38.66%,12.83% 37.63%,12.75% 36.61%,12.41% 35.57%,11.82% 34.54%,11.15% 33.53%,10.40% 32.53%,9.33% 31.68%,8.26% 30.83%,7.28% 29.96%,6.38% 29.06%,5.50% 28.15%,4.57% 27.25%,3.55% 26.39%,2.46% 25.53%,1.63% 24.53%,0.91% 23.51%,0.35% 22.46%,0.23% 21.38%,0.53% 20.37%,0.75% 19.35%,0.84% 18.39%,1.30% 17.41%,1.68% 16.36%,2.03% 15.32%,2.74% 14.36%,3.85% 13.47%,5.02% 12.61%,6.20% 11.75%,7.52% 11.14%,9.15% 10.64%,10.74% 10.10%,12.29% 9.52%,13.83% 8.94%,15.38% 8.36%,16.96% 7.81%,18.11% 7.15%,19.07% 6.26%,20.06% 5.39%,21.06% 4.52%,22.04% 3.65%,23.00% 2.77%,23.92% 1.88%,24.83% 0.99%);-webkit-clip-path:polygon(25.94% 0.02%,27.93% 0.31%,29.67% 0.64%,31.30% 1.16%,32.67% 1.80%,34.08% 2.43%,35.48% 3.06%,36.87% 3.72%,37.89% 4.64%,38.84% 5.58%,39.74% 6.54%,40.66% 7.49%,41.48% 8.40%,42.41% 9.41%,43.48% 10.38%,44.61% 11.31%,45.39% 12.26%,46.10% 13.25%,46.71% 14.25%,47.54% 15.11%,48.70% 15.87%,49.85% 16.65%,51.05% 17.39%,52.35% 18.08%,53.67% 18.75%,54.96% 19.46%,56.16% 20.21%,57.25% 21.02%,58.28% 21.85%,59.45% 22.69%,60.68% 23.50%,61.95% 24.29%,63.26% 25.07%,64.60% 25.74%,65.96% 26.39%,67.32% 27.04%,68.64% 27.72%,69.90% 28.43%,71.11% 29.13%,72.39% 29.85%,73.66% 30.56%,74.96% 31.26%,76.31% 31.92%,77.71% 32.55%,79.16% 33.22%,80.62% 33.89%,82.04% 34.57%,83.41% 35.29%,84.74% 36.04%,85.92% 36.80%,87.10% 37.55%,88.32% 38.29%,89.58% 39.00%,90.90% 39.67%,91.76% 40.65%,92.63% 41.63%,93.45% 42.62%,94.19% 43.64%,94.84% 44.66%,95.46% 45.70%,96.09% 46.74%,96.46% 47.77%,96.86% 48.79%,97.23% 49.82%,97.49% 50.84%,97.70% 51.85%,98.03% 52.86%,98.43% 53.86%,98.74% 54.87%,98.88% 55.90%,98.88% 56.93%,98.77% 57.93%,98.66% 58.95%,98.70% 59.97%,98.88% 60.98%,99.15% 62.00%,99.46% 63.01%,99.76% 64.03%,99.89% 65.07%,99.82% 66.08%,99.58% 67.09%,99.23% 68.10%,98.88% 69.11%,98.61% 70.12%,98.47% 71.13%,98.55% 72.15%,98.77% 73.16%,98.93% 74.18%,99.02% 75.19%,99.08% 76.21%,99.13% 77.23%,99.18% 78.25%,99.08% 79.24%,98.87% 80.25%,98.70% 81.27%,98.57% 82.28%,98.47% 83.30%,98.38% 84.32%,98.31% 85.34%,98.03% 86.30%,97.50% 87.28%,96.98% 88.26%,96.42% 89.24%,95.78% 90.19%,95.07% 91.13%,94.32% 92.06%,93.60% 93.02%,92.32% 93.80%,91.04% 94.56%,89.69% 95.28%,88.25% 95.96%,86.78% 96.62%,85.48% 97.25%,83.92% 97.61%,82.30% 98.11%,80.72% 98.66%,79.12% 99.17%,77.46% 99.61%,75.81% 100.00%,74.08% 99.66%,72.28% 99.35%,70.46% 99.09%,68.60% 98.89%,66.72% 98.73%,64.85% 98.57%,62.80% 98.31%,61.40% 97.49%,60.24% 96.73%,59.13% 95.94%,58.07% 95.12%,57.04% 94.29%,56.03% 93.45%,55.06% 92.58%,54.16% 91.69%,53.23% 90.81%,52.26% 89.95%,51.20% 89.12%,50.07% 88.32%,48.89% 87.54%,47.73% 86.75%,46.63% 85.93%,45.96% 84.96%,45.33% 84.00%,44.73% 83.04%,44.14% 82.07%,43.58% 81.10%,43.03% 80.12%,42.44% 79.16%,41.74% 78.20%,40.92% 77.27%,40.03% 76.35%,39.17% 75.43%,38.40% 74.49%,37.69% 73.53%,36.96% 72.57%,36.14% 71.64%,35.06% 70.85%,34.00% 70.05%,33.01% 69.22%,32.06% 68.38%,31.11% 67.54%,30.15% 66.70%,29.21% 65.86%,28.25% 65.02%,27.31% 64.13%,26.42% 63.22%,25.53% 62.30%,24.71% 61.37%,24.01% 60.41%,23.40% 59.43%,22.87% 58.42%,22.36% 57.41%,21.77% 56.42%,21.04% 55.47%,20.19% 54.54%,19.30% 53.63%,18.41% 52.71%,17.55% 51.79%,16.75% 50.86%,16.20% 49.84%,15.95% 48.81%,15.70% 47.78%,15.39% 46.76%,15.03% 45.75%,14.62% 44.74%,14.17% 43.73%,13.79% 42.72%,13.51% 41.71%,13.26% 40.70%,13.06% 39.68%,12.92% 38.66%,12.83% 37.63%,12.75% 36.61%,12.41% 35.57%,11.82% 34.54%,11.15% 33.53%,10.40% 32.53%,9.33% 31.68%,8.26% 30.83%,7.28% 29.96%,6.38% 29.06%,5.50% 28.15%,4.57% 27.25%,3.55% 26.39%,2.46% 25.53%,1.63% 24.53%,0.91% 23.51%,0.35% 22.46%,0.23% 21.38%,0.53% 20.37%,0.75% 19.35%,0.84% 18.39%,1.30% 17.41%,1.68% 16.36%,2.03% 15.32%,2.74% 14.36%,3.85% 13.47%,5.02% 12.61%,6.20% 11.75%,7.52% 11.14%,9.15% 10.64%,10.74% 10.10%,12.29% 9.52%,13.83% 8.94%,15.38% 8.36%,16.96% 7.81%,18.11% 7.15%,19.07% 6.26%,20.06% 5.39%,21.06% 4.52%,22.04% 3.65%,23.00% 2.77%,23.92% 1.88%,24.83% 0.99%)}
 .map-rim{position:absolute;inset:0;width:100%;height:100%;z-index:1;overflow:visible;pointer-events:none}
 .map-title{position:absolute;left:70%;top:1%;transform:translateX(-50%);width:auto;text-align:center;z-index:5;white-space:nowrap;color:var(--olive);margin:0;
   background:rgba(248,243,232,.86);border:1px solid rgba(155,139,87,.7);border-radius:999px;padding:1.15em 1.7em 1.25em}
-@media (max-width:640px){.map-title{left:50%;padding:.95em 1.4em 1.05em}.map-title .mt-script{font-size:2.35em}}
+@media (max-width:640px){.map-title{left:64%;padding:.8em 1.1em .9em}.map-title .mt-script{font-size:1.9em}.map-title .mt-our{font-size:.95em}.map-title .mt-date{font-size:.9em;letter-spacing:.16em}.mt-eyebrow{margin-bottom:.5em}}
+.mt-eyebrow{margin-bottom:.7em;letter-spacing:.14em}
 .mt-our{display:block;font-family:var(--serif);font-size:1.1em;letter-spacing:.38em;text-transform:uppercase;padding-left:.38em}
 .mt-script{display:block;font-family:var(--script);font-size:2.8em;line-height:1;margin:.02em 0 .12em}
 .mt-date{display:block;font-family:var(--serif);font-size:1em;letter-spacing:.22em;text-transform:uppercase;padding-left:.26em}
@@ -436,6 +439,7 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
 .mp-text strong{display:block;font-weight:500;letter-spacing:.13em;text-transform:uppercase;font-size:1.22em}
 .mp-text small{display:block;font-size:.92em;letter-spacing:.14em;text-transform:uppercase;margin-top:.2em;color:var(--olive-soft)}
 .mp-text em{display:block;font-style:normal;font-size:.7em;letter-spacing:.2em;color:var(--olive-soft)}
+@media (max-width:500px){.mp-text{margin-top:-2.4%;line-height:1.25}.mp-text .mt-rule{display:none}.mp-text b{letter-spacing:.08em}.mp-text strong{letter-spacing:.05em;margin-top:.25em}.mp-text small{display:none}}
 .map-stage.is-static{height:auto;padding:24px 0}
 .map-stage.is-static .map-pin{position:static;height:auto}
 .map-stage.is-static .mp-badge,.map-stage.is-static .mp-ill,.map-stage.is-static .mp-text,.map-stage.is-static .mp-deco{opacity:1!important;transform:translate(-50%,-50%)!important}
@@ -443,6 +447,7 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
 
 /* Dress to impress: a wide pavilion, the models arriving in their own time */
 .dress,.faqs{padding-left:0;padding-right:0}
+.section.dress,.section.faqs{padding-top:56px}
 .dress .eyebrow{display:table;margin:0 auto 1.3em;padding:.6em 1.2em;color:var(--gold-line);background:rgba(248,243,232,.86);border:1px solid rgba(155,139,87,.7);border-radius:999px}
 .pav{
   --pw2:min(96vw,1180px);--cap:calc(var(--pw2) * .12);
@@ -462,8 +467,9 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
 .dress-plate.is-in{opacity:1;transform:none}
 .dress-plate img{display:block;width:100%;height:auto;max-width:100%}
 .dress-plate.is-static{opacity:1;transform:none;transition:none}
-.dress-copy{display:block;width:min(88vw,560px);margin:18px auto 0;padding:1.05em 1.5em;background:rgba(248,243,232,.86);border:1px solid rgba(155,139,87,.7);border-radius:26px;font-size:17px;line-height:1.5;color:var(--olive);text-align:center}
+.dress-copy{display:block;width:min(88vw,600px);margin:18px auto 0;padding:1.15em 2.4em;background:rgba(248,243,232,.86);border:1px solid rgba(155,139,87,.7);border-radius:999px;font-size:17px;line-height:1.5;color:var(--olive);text-align:center}
 .pav.is-static,.pav.is-static *{transition:none!important}
+@media (max-width:500px){.pav .fq-close{letter-spacing:.08em;padding-left:.08em}}
 
 /* Adults only */
 .seats-box{border:1px solid var(--gold-line);border-radius:999px;padding:1.1em 1.8em;margin-top:2.2em;max-width:420px;display:grid;grid-template-columns:1fr auto;gap:1em;align-items:center}
@@ -530,13 +536,13 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
 
 /* Footer: a small arch of its own */
 .footer{color:var(--olive);padding:0 var(--gutter) max(48px,env(safe-area-inset-bottom))}
-.footer .inner{width:var(--arch-w);max-width:100%;margin:0 auto;padding:34px 9%;border-radius:999px;background:rgba(248,243,232,.82);border:1px solid rgba(155,139,87,.7);display:grid;gap:1.6em;align-items:center;grid-template-columns:auto 1fr}
+.footer .inner{width:min(94vw,700px);max-width:100%;margin:0 auto;padding:34px 8%;border-radius:999px;background:rgba(248,243,232,.82);border:1px solid rgba(155,139,87,.7);display:grid;gap:1.6em;align-items:center;grid-template-columns:auto 1fr}
 .medallion{width:clamp(88px,20vw,120px);height:clamp(88px,20vw,120px);border-radius:50%;border:1px solid var(--gold-line);display:grid;place-items:center;position:relative;font-family:var(--serif);color:var(--olive);font-size:clamp(30px,7vw,42px);letter-spacing:.04em}
 .medallion::before{content:"";position:absolute;inset:6px;border:1px solid rgba(155,139,87,.45);border-radius:50%}
 .medallion span{padding-left:.1em}
-.footer h2{font-size:clamp(28px,5.6vw,40px);color:var(--olive);margin-bottom:.3em}
+.footer h2{font-size:clamp(26px,5.6vw,36px);color:var(--olive);margin-bottom:.3em;white-space:nowrap}
 .footer p{margin:0;font-size:15px;color:var(--olive-soft)}
-.footer .mono{font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-line);margin-top:1.2em;display:block}
+.footer .mono{font-size:14px;letter-spacing:.12em;line-height:1.7;text-transform:uppercase;color:var(--gold-line);margin-top:1.2em;display:block}
 @media (max-width:420px){.footer .inner{grid-template-columns:1fr;text-align:center;justify-items:center}}
 </style>
 </head>
@@ -548,8 +554,8 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
 <nav class="nav" id="nav" hidden aria-label="Pages of the invitation">
   <ol>
     <li><a href="#stage" data-step="0"><small>—</small>The invitation</a></li>
-    <li><a href="#pg-date" data-step="3"><small>01</small>The date</a></li>
-    <li><a href="#letter"><small>02</small>A letter</a></li>
+    <li><a href="#letter"><small>01</small>A letter</a></li>
+    <li><a href="#date"><small>02</small>The date</a></li>
     <li><a href="#weekend"><small>03</small>The weekend</a></li>
     <li><a href="#travel"><small>04</small>Getting there</a></li>
     <li><a href="#dress"><small>05</small>Dress code</a></li>
@@ -764,7 +770,7 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
           <dl class="pp-data">
             <dt>Issued to</dt><dd id="ppName">Our dearest guest</dd>
             <dt>Admits</dt><dd id="ppSeats">1 guest</dd>
-            <dt>Valid</dt><dd>27 – 28 August 2027</dd>
+            <dt>Valid</dt><dd>August 27 – 28, 2027</dd>
             <dt>Port of entry</dt><dd>DPS <small>· Denpasar, Bali</small></dd>
             <dt>Destination</dt><dd>AYANA Bali <small>· Jimbaran</small></dd>
             <dt>Issued by</dt><dd>Ashley &amp; Charles <small>· Los Angeles</small></dd>
@@ -839,7 +845,6 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
           <div><b id="cdD">—</b><span>days</span></div>
           <div><b id="cdH">—</b><span>hours</span></div>
           <div><b id="cdM">—</b><span>min</span></div>
-          <div><b id="cdS">—</b><span>sec</span></div>
         </div>
       </div>
       <p class="muted" style="max-width:36ch;margin-left:auto;margin-right:auto">Friday the 27th is the welcome party at Rock Bar. Saturday the 28th is the ceremony and reception on the cliff. Sunday is yours.</p>
@@ -857,7 +862,7 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
     <div class="map-island" id="mapIsland">
       <div class="map-ivory" aria-hidden="true"></div>
       <svg class="map-rim" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="25.94,0.02 27.93,0.31 29.67,0.64 31.30,1.16 32.67,1.80 34.08,2.43 35.48,3.06 36.87,3.72 37.89,4.64 38.84,5.58 39.74,6.54 40.66,7.49 41.48,8.40 42.41,9.41 43.48,10.38 44.61,11.31 45.39,12.26 46.10,13.25 46.71,14.25 47.54,15.11 48.70,15.87 49.85,16.65 51.05,17.39 52.35,18.08 53.67,18.75 54.96,19.46 56.16,20.21 57.25,21.02 58.28,21.85 59.45,22.69 60.68,23.50 61.95,24.29 63.26,25.07 64.60,25.74 65.96,26.39 67.32,27.04 68.64,27.72 69.90,28.43 71.11,29.13 72.39,29.85 73.66,30.56 74.96,31.26 76.31,31.92 77.71,32.55 79.16,33.22 80.62,33.89 82.04,34.57 83.41,35.29 84.74,36.04 85.92,36.80 87.10,37.55 88.32,38.29 89.58,39.00 90.90,39.67 91.76,40.65 92.63,41.63 93.45,42.62 94.19,43.64 94.84,44.66 95.46,45.70 96.09,46.74 96.46,47.77 96.86,48.79 97.23,49.82 97.49,50.84 97.70,51.85 98.03,52.86 98.43,53.86 98.74,54.87 98.88,55.90 98.88,56.93 98.77,57.93 98.66,58.95 98.70,59.97 98.88,60.98 99.15,62.00 99.46,63.01 99.76,64.03 99.89,65.07 99.82,66.08 99.58,67.09 99.23,68.10 98.88,69.11 98.61,70.12 98.47,71.13 98.55,72.15 98.77,73.16 98.93,74.18 99.02,75.19 99.08,76.21 99.13,77.23 99.18,78.25 99.08,79.24 98.87,80.25 98.70,81.27 98.57,82.28 98.47,83.30 98.38,84.32 98.31,85.34 98.03,86.30 97.50,87.28 96.98,88.26 96.42,89.24 95.78,90.19 95.07,91.13 94.32,92.06 93.60,93.02 92.32,93.80 91.04,94.56 89.69,95.28 88.25,95.96 86.78,96.62 85.48,97.25 83.92,97.61 82.30,98.11 80.72,98.66 79.12,99.17 77.46,99.61 75.81,100.00 74.08,99.66 72.28,99.35 70.46,99.09 68.60,98.89 66.72,98.73 64.85,98.57 62.80,98.31 61.40,97.49 60.24,96.73 59.13,95.94 58.07,95.12 57.04,94.29 56.03,93.45 55.06,92.58 54.16,91.69 53.23,90.81 52.26,89.95 51.20,89.12 50.07,88.32 48.89,87.54 47.73,86.75 46.63,85.93 45.96,84.96 45.33,84.00 44.73,83.04 44.14,82.07 43.58,81.10 43.03,80.12 42.44,79.16 41.74,78.20 40.92,77.27 40.03,76.35 39.17,75.43 38.40,74.49 37.69,73.53 36.96,72.57 36.14,71.64 35.06,70.85 34.00,70.05 33.01,69.22 32.06,68.38 31.11,67.54 30.15,66.70 29.21,65.86 28.25,65.02 27.31,64.13 26.42,63.22 25.53,62.30 24.71,61.37 24.01,60.41 23.40,59.43 22.87,58.42 22.36,57.41 21.77,56.42 21.04,55.47 20.19,54.54 19.30,53.63 18.41,52.71 17.55,51.79 16.75,50.86 16.20,49.84 15.95,48.81 15.70,47.78 15.39,46.76 15.03,45.75 14.62,44.74 14.17,43.73 13.79,42.72 13.51,41.71 13.26,40.70 13.06,39.68 12.92,38.66 12.83,37.63 12.75,36.61 12.41,35.57 11.82,34.54 11.15,33.53 10.40,32.53 9.33,31.68 8.26,30.83 7.28,29.96 6.38,29.06 5.50,28.15 4.57,27.25 3.55,26.39 2.46,25.53 1.63,24.53 0.91,23.51 0.35,22.46 0.23,21.38 0.53,20.37 0.75,19.35 0.84,18.39 1.30,17.41 1.68,16.36 2.03,15.32 2.74,14.36 3.85,13.47 5.02,12.61 6.20,11.75 7.52,11.14 9.15,10.64 10.74,10.10 12.29,9.52 13.83,8.94 15.38,8.36 16.96,7.81 18.11,7.15 19.07,6.26 20.06,5.39 21.06,4.52 22.04,3.65 23.00,2.77 23.92,1.88 24.83,0.99" fill="none" stroke="#9B8B57" stroke-opacity=".85" stroke-width="1" vector-effect="non-scaling-stroke"/></svg>
-      <h2 class="map-title"><span class="mt-our">Our</span><span class="mt-script">Bali Weekend</span><span class="mt-date">August 27 – 28, 2027</span><i class="mt-rule"></i></h2>
+      <h2 class="map-title"><span class="eyebrow mt-eyebrow">03 — The weekend</span><span class="mt-our">Our</span><span class="mt-script">Bali Weekend</span><span class="mt-date">August 27 – 28, 2027</span><i class="mt-rule"></i></h2>
       <img class="mp mp-deco" data-in=".30,.40" src="assets/map-gate.webp" style="left:15.99%;top:35.39%;width:32.12%" alt="" decoding="async">
       <img class="mp mp-deco" data-in=".17,.24" src="assets/map-palms1.webp" style="left:50.63%;top:25.30%;width:8.82%" alt="" decoding="async">
       <img class="mp mp-deco" data-in=".44,.52" src="assets/map-palm2.webp" style="left:24.43%;top:50.32%;width:12.09%" alt="" decoding="async">
@@ -885,7 +890,7 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
       <div class="mp-ev" id="mev3">
         <img class="mp mp-ill" src="assets/map-e3.webp" style="left:36.78%;top:54.44%;width:49.12%" alt="A flower-covered arch and white chairs above the ocean at sunset." decoding="async">
         <span class="mp-badge" style="left:38.92%;top:54.94%">03</span>
-        <div class="mp-text" style="left:44%;top:68.2%;width:36%"><b>August 28</b><b>4:30 PM</b><i class="mt-rule"></i><strong>Wedding Ceremony</strong><small>AYANA SKY</small></div>
+        <div class="mp-text" style="left:44%;top:68.2%;width:36%"><b>August 28</b><b>4:30 PM</b><i class="mt-rule"></i><strong>Ceremony</strong><small>AYANA SKY</small></div>
       </div>
       <div class="mp-ev" id="mev4">
         <img class="mp mp-ill" src="assets/map-e4.webp" style="left:57.56%;top:72.57%;width:41.18%" alt="A candlelit dinner table under hanging lanterns and flowers." decoding="async">
@@ -901,7 +906,8 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
      ======================================================================= -->
 <section class="section" id="travel">
   <div class="inner">
-    <span class="eyebrow">03 — Getting there</span>
+    <span class="eyebrow">04 — Getting there</span>
+    <img class="arch-art" src="assets/faq-plane.webp" alt="" width="306" height="145" loading="lazy" decoding="async">
     <h2>On the estate, all weekend</h2>
     <p class="lede">Everything happens at AYANA Bali in Jimbaran, on the estate where you're staying.</p>
     <div class="travel">
@@ -924,7 +930,7 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
      4 · DRESS CODE
      ======================================================================= -->
 <section class="section dress" id="dress">
-  <span class="eyebrow">04 — Dress code</span>
+  <span class="eyebrow">05 — Dress code</span>
   <figure class="dress-plate" id="dressPlate">
     <img src="assets/dress-plate.webp" alt="Dress to impress, in full color. Black tie formal attire is requested, with vibrant colors and tropical hues warmly encouraged. Above all, come dressed in your formal best and ready to celebrate with us. Nine guests in colorful formalwear: a sage green tuxedo, gowns in pink, yellow, coral, floral and lavender, and suits in grey, navy and terracotta. Black tie formal, vibrant hues, tropical elegance." width="1255" height="885" loading="lazy" decoding="async">
   </figure>
@@ -936,7 +942,8 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
      ======================================================================= -->
 <section class="section" id="adults">
   <div class="inner">
-    <span class="eyebrow">05 — A note on children</span>
+    <span class="eyebrow">06 — A note on children</span>
+    <img class="arch-art" src="assets/faq-bunny.webp" alt="" width="268" height="142" loading="lazy" decoding="async">
     <h2>Adults only</h2>
     <p class="lede">We love your children. We're also asking you to leave them at home this time.</p>
     <p style="max-width:52ch;margin-left:auto;margin-right:auto">The weekend runs late, the cliffs are real, and the bar never quite closes. We would rather you had a few days that felt like a holiday of your own. We've kept the guest list to adults, and we hope you'll take that as an invitation to sleep in.</p>
@@ -958,7 +965,7 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
   <div class="pav pav-tall" id="faqPav">
     <i class="pav-motif pav-motif-top" aria-hidden="true"></i>
     <header class="fq-head fq-reveal">
-      <span class="fq-eyebrow">06 — Questions</span>
+      <span class="fq-eyebrow">07 — Questions</span>
       <h2 class="script-line">You might be wondering</h2>
       <i class="mt-rule"></i>
       <p class="fq-sub">Here are a few details to help you plan your trip to Bali.</p>
@@ -1007,9 +1014,9 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
      ======================================================================= -->
 <section class="section rsvp" id="rsvp">
   <div class="inner">
-    <span class="eyebrow">07 — RSVP</span>
+    <span class="eyebrow">08 — RSVP</span>
     <h2>Will you come?</h2>
-    <p class="deadline" id="deadline">Reply by 31 January 2027</p>
+    <p class="deadline" id="deadline">Reply by January 31, 2027</p>
 
     <div class="gate" id="rsvpGate" hidden>
       <p>We couldn't find your invitation. Please open the link from the message we sent you, which carries your name and seats, and reply from there.</p>
@@ -1068,7 +1075,7 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
       <p>Thank you. Your reply is in, and we'll be in touch with booking details for the estate and a few notes on getting to Bali.</p>
       <p>Start thinking about linen.</p>
       <p class="muted confirm-mail" hidden>A copy of your reply is on its way to your inbox.</p>
-      <span class="mono">See you on the cliff · 28 Aug 2027</span>
+      <span class="mono">See you on the cliff · Aug 28, 2027</span>
     </div>
     <div class="confirm" id="confirmNo">
       <h3>We'll miss you.</h3>
@@ -1089,8 +1096,8 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
     <div>
       <h2>Ashley &amp; Charles</h2>
       <p>AYANA Bali, Jimbaran</p>
-      <p>Saturday, 28 August 2027</p>
-      <span class="mono">LAX → DPS · Admit adults only</span>
+      <p>Saturday, August 28, 2027</p>
+      <span class="mono">LAX → DPS<br>Admit adults only</span>
     </div>
   </div>
 </footer>
@@ -1624,7 +1631,7 @@ var RSVP_ENDPOINT = "";
      Countdown to the ceremony
   ------------------------------------------------------------------------- */
   var target = new Date('2027-08-28T16:30:00+08:00').getTime();
-  var cdD = $('cdD'), cdH = $('cdH'), cdM = $('cdM'), cdS = $('cdS');
+  var cdD = $('cdD'), cdH = $('cdH'), cdM = $('cdM');
   function pad(n) { return (n < 10 ? '0' : '') + n; }
   function tick() {
     var diff = Math.max(0, target - Date.now());
@@ -1632,7 +1639,6 @@ var RSVP_ENDPOINT = "";
     cdD.textContent = Math.floor(s / 86400);
     cdH.textContent = pad(Math.floor(s % 86400 / 3600));
     cdM.textContent = pad(Math.floor(s % 3600 / 60));
-    cdS.textContent = pad(s % 60);
   }
   tick();
   setInterval(tick, 1000);
