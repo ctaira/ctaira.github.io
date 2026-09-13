@@ -406,6 +406,8 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
 .snaps li{width:31%;max-width:190px;background:#FBF8F1;padding:5% 5% 0;box-shadow:0 10px 24px -12px rgba(36,39,34,.55),0 1px 0 rgba(155,139,87,.35);transform:rotate(-2.5deg);transition:transform .35s ease}
 .snaps li:nth-child(2){transform:rotate(1.8deg) translateY(10px)}
 .snaps li:nth-child(3){transform:rotate(-1.2deg)}
+.snaps-two{margin:1.4em auto 1.6em}
+.snaps-two li:nth-child(2){transform:rotate(1.6deg) translateY(6px)}
 .snaps li:hover{transform:rotate(0) scale(1.03)}
 .snaps img{display:block;width:100%;height:auto;aspect-ratio:1;object-fit:cover}   /* square, like a Polaroid */
 .snaps span{display:block;font-family:var(--mono);font-size:14px;letter-spacing:.06em;color:var(--olive-soft);text-align:center;padding:.7em 0 .8em;line-height:1.3}
@@ -891,6 +893,10 @@ html.has-lightbox{overflow:hidden}
     <p class="salutation">Dear friends and family,</p>
     <p>Our first date was an Ed Sheeran concert. You might say everything about it, and everything since, has been “Perfect.”</p>
     <p>But first, we have Bethany to thank. Friends with Ashley from run club and Charles from golf, she invited Ashley to a BBQ Charles was hosting—and the rest is history.</p>
+    <ul class="snaps snaps-two" aria-label="Photos with Bethany">
+      <li><button type="button" class="snap" aria-label="View larger: Bethany and Charles"><img src="assets/photo-golf2-thumb.webp" data-full="assets/photo-golf2.webp" alt="Charles and Bethany on a golf green, a blue flag behind them." width="480" height="480" loading="lazy" decoding="async"><i class="snap-zoom" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></i></button><span>Bethany &amp; Charles</span></li>
+      <li><button type="button" class="snap" aria-label="View larger: Bethany and Ashley"><img src="assets/photo-runclub2-thumb.webp" data-full="assets/photo-runclub2.webp" alt="Bethany and Ashley running at night, one waving a golf club and the other a box of doughnuts." width="480" height="480" loading="lazy" decoding="async"><i class="snap-zoom" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></i></button><span>Bethany &amp; Ashley</span></li>
+    </ul>
     <p>Ashley joined run club for the running. Charles joined for Ashley. He has yet to catch her. Along the way, we fostered fourteen cats. Twelve found wonderful homes. Two found ours and stopped looking.</p>
     <p>When we’re not home, we’re somewhere new, golfing our way around the world and leaving lost golf balls on several continents. So for the wedding, we didn’t want a typical venue. We wanted a cliff, an ocean, and everyone we love in one place.</p>
     <p>Your only job is to show up in linen. It’s going to be perfect. We checked.</p>
@@ -1447,7 +1453,7 @@ var RSVP_ENDPOINT = "";
       stopPlay();
       beat = cps[cps.length - 1]; draw();
       step = cps.length; lock(false); setCtrl('off');
-      cooldownUntil = performance.now() + (dur || 900) + 200;
+      cooldownUntil = performance.now() + 350;
       scrollTween(to, dur || 900);
     }
     function playFrom(n) {   /* play chapter n and everything after it */
@@ -1464,13 +1470,10 @@ var RSVP_ENDPOINT = "";
       var cps = checkpoints(); k = clamp(k, 1, cps.length - 1);
       stopPlay(); beat = cps[k - 1]; draw(); playFrom(k);
     }
-    function replay() { stopPlay(); beat = 0; draw(); playFrom(1); }
+    function replay() { stopPlay(); beat = 0; draw(); window.scrollTo(0, 0); playFrom(1); }
     function toDetails() { if (state !== 'done') return; release(stage.offsetTop + stage.offsetHeight, 900); }
     function skipPlay() { release(function () { return topOf('letter'); }, 1100); }
     function forward() { if (state === 'idle') playAll(); else if (state === 'done') toDetails(); }
-    function reenter() {   /* from the top of the details, back into the book at its last resting point */
-      lock(true); step = lastStep() - 1; cooldownUntil = performance.now() + 500; setCtrl('done');
-    }
     function enter(n) {    /* the contents menu: straight to a resting point */
       stopPlay(); lock(true); window.scrollTo(0, 0);
       step = n; setCtrl(n === 0 ? 'idle' : 'done');
@@ -1482,8 +1485,8 @@ var RSVP_ENDPOINT = "";
     window.addEventListener('wheel', function (e) {
       if (e.ctrlKey) return;                                  /* a trackpad pinch: the browser zooms */
       if (!locked) {
-        if (performance.now() < cooldownUntil) { e.preventDefault(); return; }
-        if (e.deltaY < 0 && window.pageYOffset <= 0 && step === lastStep()) { e.preventDefault(); reenter(); }
+        if (performance.now() < cooldownUntil) { e.preventDefault(); return; }   /* the inertia of the gesture that just released the page */
+        cancelOpen();                                                               /* otherwise the guest's scroll wins over any glide in progress */
         return;
       }
       e.preventDefault();
@@ -1500,10 +1503,7 @@ var RSVP_ENDPOINT = "";
     window.addEventListener('touchmove', function (e) {
       if (touchY == null || e.touches.length > 1 || zoomed()) return;
       var dy = touchY - e.touches[0].clientY;
-      if (!locked) {
-        if (!touchFired && dy < -24 && window.pageYOffset <= 0 && step === lastStep()) { touchFired = true; reenter(); if (e.cancelable) e.preventDefault(); }
-        return;
-      }
+      if (!locked) { if (performance.now() >= cooldownUntil) cancelOpen(); return; }
       if (e.cancelable) e.preventDefault();
       if (touchFired || performance.now() < cooldownUntil) return;
       if (dy > 30) { touchFired = true; forward(); }
@@ -1677,6 +1677,12 @@ var RSVP_ENDPOINT = "";
     chapters.addEventListener('click', function (e) { var li = e.target.closest('li'); if (li) jumpTo(Array.prototype.indexOf.call(chapters.children, li) + 1); });
     openBtn.addEventListener('click', playAll);
     stage.addEventListener('click', function (e) { if (e.target.closest('a,button')) return; forward(); });   /* a tap anywhere does the obvious thing */
+    /* after the film, the scene's controls appear whenever the scene scrolls into view; nothing locks */
+    if ('IntersectionObserver' in window) new IntersectionObserver(function (en) {
+      if (locked || state === 'playing') return;
+      if (en[0].intersectionRatio > .45 && step === lastStep()) setCtrl('done');
+      else if (state === 'done' && !locked) setCtrl('off');
+    }, { threshold: [.2, .45, .7] }).observe(stage);
     /* the RSVP pill stays on screen until the reply form itself is in view */
     new IntersectionObserver(function (en) { skip.classList.toggle('is-hidden', en[0].isIntersecting); }, { threshold: .1 }).observe($('rsvp'));
 
