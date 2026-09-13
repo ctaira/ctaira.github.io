@@ -197,7 +197,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 /* Envelope parts share size and centre; JS applies the same transform to each. */
 .env{width:var(--ew);height:var(--eh);margin-left:calc(var(--ew) / -2);margin-top:calc(var(--eh) / -2)}
 .env-back{z-index:2;background:#E3DBC9;border-radius:6px;box-shadow:0 16px 36px -10px rgba(45,35,20,.42),0 3px 8px rgba(45,35,20,.16)}
-.env-pocket{z-index:5;border-radius:6px;overflow:hidden;background:url("assets/envelope-sealed.jpg") center/100% 100% no-repeat;
+.env-pocket{z-index:5;border-radius:6px;overflow:hidden;background:url("assets/envelope.jpg") center/100% 100% no-repeat;
   clip-path:polygon(0 0,48.07% 57.45%,100% 0,100% 100%,0 100%);-webkit-clip-path:polygon(0 0,48.07% 57.45%,100% 0,100% 100%,0 100%)}
 .env-pocket .addr{
   position:absolute;left:8%;right:44%;bottom:7%;text-align:center;
@@ -209,18 +209,20 @@ button,input,select,textarea{font:inherit;color:inherit}
   will-change:transform;
 }
 .env-flap .flap-face{
-  position:absolute;inset:0;background:url("assets/envelope-sealed.jpg") center/100% 100% no-repeat;
+  position:absolute;inset:0;background:url("assets/envelope.jpg") center/100% 100% no-repeat;
   clip-path:polygon(0 0,100% 0,48.07% 57.45%);
   -webkit-clip-path:polygon(0 0,100% 0,48.07% 57.45%);
 }
-.seal{
-  position:absolute;left:48.07%;top:57.45%;width:calc(var(--ew) * 0.2315);height:calc(var(--ew) * 0.2315);margin:calc(var(--ew) * -0.1157) 0 0 calc(var(--ew) * -0.1157);
+.seal{   /* the seal and its painted shadow, cut from the sealed artwork at this exact box */
+  position:absolute;left:35.750%;top:39.952%;width:24.833%;height:36.582%;
   will-change:transform;
 }
-.seal-art{position:absolute;inset:0;background:url("assets/seal.png") center/100% 100% no-repeat;filter:drop-shadow(0 3px 3px rgba(60,40,5,.35))}
-.stage.is-open .env-pocket,.stage.is-open .env-flap .flap-face{background-image:url("assets/envelope.jpg")}
-.seal{opacity:0}
-.stage.is-open .seal{opacity:1}
+.seal-art{position:absolute;inset:0;background:url("assets/seal.png") center/100% 100% no-repeat}
+/* The seal element (cut from the sealed artwork with its painted shadow) is on top from the first
+   frame, so the pocket and flap can trade the sealed face for the seal-less copy underneath it as
+   the opening starts without anything visible changing. */
+.env-pocket::after,.env-flap .flap-face::after{content:"";position:absolute;inset:0;background:url("assets/envelope-sealed.jpg") center/100% 100% no-repeat;transition:opacity .4s ease;pointer-events:none}
+.stage.is-open .env-pocket::after,.stage.is-open .env-flap .flap-face::after{opacity:0}
 .env-pocket .addr{display:none}
 /* The seal stays whole and rides up on the flap; it is on the flap's front face, so it goes
    out of sight as the flap turns over. */
