@@ -148,6 +148,8 @@ button,input,select,textarea{font:inherit;color:inherit}
 .sea.is-on{opacity:1}
 .stage.is-static .sea{display:none}
 .cap-top{top:max(8.5%,calc(env(safe-area-inset-top) + 44px))}
+.cap-top::before{content:"";position:absolute;left:50%;top:50%;width:min(96vw,560px);height:150%;transform:translate(-50%,-50%);z-index:-1;
+  background:radial-gradient(ellipse at center,rgba(244,239,229,.88) 0%,rgba(244,239,229,.72) 42%,rgba(244,239,229,0) 74%)}
 .cap .caps{display:block;font-family:var(--serif);font-size:clamp(15px,4vw,19px);letter-spacing:.34em;text-transform:uppercase;line-height:1.5;padding-left:.34em}
 .cap .rule{display:block;width:34px;height:1px;background:var(--husk);margin:.75em auto;opacity:.8}
 .cap .cap-sub{font-size:clamp(13px,3.4vw,15px);letter-spacing:.22em;padding-left:.22em}
@@ -170,8 +172,9 @@ button,input,select,textarea{font:inherit;color:inherit}
 .ctrl-row{display:flex;gap:10px}
 .ctrl-row:empty,.ctrl-row.is-empty{display:none}
 .chapters{display:flex;gap:6px;list-style:none;margin:0 0 2px;padding:0;width:min(62vw,280px)}
-.chapters li{flex:1;position:relative;height:22px}
-.chapters li::before,.chapters li::after{content:"";position:absolute;left:0;top:10px;height:3px;border-radius:2px;pointer-events:none}
+.chapters{touch-action:none;cursor:ew-resize}
+.chapters li{flex:1;position:relative;height:28px}
+.chapters li::before,.chapters li::after{content:"";position:absolute;left:0;top:13px;height:3px;border-radius:2px;pointer-events:none}
 .chapters li::before{right:0;background:rgba(248,243,232,.5);box-shadow:0 0 4px rgba(36,39,34,.25)}
 .chapters li::after{width:calc(var(--f,0) * 100%);background:rgba(248,243,232,.98)}
 .chapters button{position:absolute;inset:0;width:100%;z-index:1;background:none;border:0;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
@@ -435,7 +438,7 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
 .snaps li:hover{transform:rotate(0) scale(1.03)}
 .snaps img{display:block;width:100%;height:auto;aspect-ratio:1;object-fit:cover}   /* square, like a Polaroid */
 /* One more print, at the foot of the reply card */
-.hope{margin:2.6em auto 0;width:min(64%,250px);background:#FBF8F1;padding:4% 4% 0;box-shadow:0 12px 28px -12px rgba(36,39,34,.55),0 1px 0 rgba(155,139,87,.35);transform:rotate(-1.6deg)}
+.hope{margin:2.6em auto 3.6em;width:min(64%,250px);background:#FBF8F1;padding:4% 4% 0;box-shadow:0 12px 28px -12px rgba(36,39,34,.55),0 1px 0 rgba(155,139,87,.35);transform:rotate(-1.6deg)}
 .hope img{display:block;width:100%;height:auto}
 .hope figcaption{font-family:var(--script);font-size:clamp(21px,5.8vw,27px);color:var(--olive);text-align:center;padding:.5em 0 .55em;line-height:1}
 .snaps span{display:block;font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--olive-soft);text-align:center;padding:.6em 0 .7em;line-height:1.3}
@@ -990,7 +993,10 @@ html.has-lightbox{overflow:hidden}
         <div class="fq-body"><h3>When do I need to reply by?</h3><p>Please RSVP by January 31, 2027. This helps us with final planning and room blocks.</p></div>
       </li>
     </ol>
-    <p class="fq-close fq-reveal">We can’t wait to see you in Bali</p>
+    <figure class="hope">
+      <img src="assets/photo-hope.webp" alt="Ashley and Charles, hand in hand on a sandy beach, looking out over the sea." width="900" height="1350" loading="lazy" decoding="async">
+      <figcaption>We hope to see you there!</figcaption>
+    </figure>
     <i class="pav-motif pav-motif-bottom" aria-hidden="true"></i>
   </div>
 </section>
@@ -1062,10 +1068,6 @@ html.has-lightbox{overflow:hidden}
       <span class="mono">With love · Ashley &amp; Charles</span>
     </div>
 
-    <figure class="hope">
-      <img src="assets/photo-hope.webp" alt="Ashley and Charles, hand in hand on a sandy beach, looking out over the sea." width="900" height="1350" loading="lazy" decoding="async">
-      <figcaption>We hope to see you there!</figcaption>
-    </figure>
   </div>
 </section>
 
@@ -1223,7 +1225,7 @@ var RSVP_ENDPOINT = "";
       mobileSpread = spreadS < .9;                                    /* a phone: the spread cannot be read across, so it gets a close-up and a pan */
       pageS = Math.min((vw - 24) / ppW, vh * .78 / ppH);             /* one page, close */
       coverS = Math.min((vw - 24) / ppW, vh * .62 / ppH);            /* the closed book, held up */
-      T_HOLD = T_BOOK + (mobileSpread ? 13600 : 8400); END = T_HOLD; DIVE = END + 1000;   /* the film rests at END until the guest goes on */
+      T_HOLD = T_BOOK + (mobileSpread ? 12000 : 8400); END = T_HOLD; DIVE = END + 1000;   /* the film rests at END until the guest goes on */
       CPS = [0, T_TICKET, T_BOOK, T_PAGES, T_HOLD];
       var envTop = envY - eh / 2;
       /* the pocket's edge: a V from the envelope's top corners down to the notch */
@@ -1300,7 +1302,7 @@ var RSVP_ENDPOINT = "";
       if (mobileSpread) {
         /* the cover opens at reading size with the right-hand page centred; the view pulls back to watch the
            turn, closes in on the calendar, then pans across to the itinerary */
-        var zoom = soft(seg(t4, 8600, 9600)), pan = soft(seg(t4, 12600, 13600));
+        var zoom = soft(seg(t4, 8600, 9600)), pan = soft(seg(t4, 11000, 12000));
         bs = lerp(bs, spreadS, turn); bx = lerp(bx, ppW * spreadS / 2, turn);
         bs = lerp(bs, pageS, zoom); bx = lerp(bx, ppW * pageS, zoom); by = lerp(by, -vh * .04, zoom);
         bx = lerp(bx, 0, pan);
@@ -1620,7 +1622,35 @@ var RSVP_ENDPOINT = "";
     doneBtn.addEventListener('click', toDetails);
     plainLink.addEventListener('click', function (e) { e.preventDefault(); skipPlay(); });
     againLink.addEventListener('click', function (e) { e.preventDefault(); replay(); });
-    chapters.addEventListener('click', function (e) { var li = e.target.closest('li'); if (li) jumpTo(Array.prototype.indexOf.call(chapters.children, li) + 1); });
+    /* the chapter bar: a tap goes to that chapter; a drag scrubs the film, forward or back, and it plays on from
+       wherever it is let go (or stays, if it was paused) */
+    (function () {
+      var drag = null;
+      function beatAt(x) {
+        var r = chapters.getBoundingClientRect(), f = clamp((x - r.left) / r.width, 0, 1), n = CPS.length - 1;
+        var k = Math.min(n - 1, Math.floor(f * n)), u = f * n - k;
+        return CPS[k] + (CPS[k + 1] - CPS[k]) * u;
+      }
+      chapters.addEventListener('pointerdown', function (e) {
+        if (state !== 'playing' && state !== 'paused') return;
+        drag = { x0: e.clientX, moved: false, wasPlaying: state === 'playing', target: e.target.closest('li') };
+        chapters.setPointerCapture(e.pointerId); e.preventDefault();
+      });
+      chapters.addEventListener('pointermove', function (e) {
+        if (!drag) return;
+        if (!drag.moved && Math.abs(e.clientX - drag.x0) < 6) return;
+        if (!drag.moved) { drag.moved = true; stopPlay(); setCtrl('paused'); }
+        beat = beatAt(e.clientX); draw();
+      });
+      function end(e) {
+        if (!drag) return;
+        var d = drag; drag = null;
+        if (!d.moved) { if (d.target) jumpTo(Array.prototype.indexOf.call(chapters.children, d.target) + 1); return; }
+        for (var k = 1; k < CPS.length; k++) if (CPS[k] > beat) { step = k; break; }
+        if (d.wasPlaying) { setCtrl('paused'); resume(); }
+      }
+      chapters.addEventListener('pointerup', end); chapters.addEventListener('pointercancel', end);
+    })();
     openBtn.addEventListener('click', playAll);
     stage.addEventListener('click', function (e) { if (e.target.closest('a,button')) return; forward(); });   /* a tap anywhere does the obvious thing */
     /* after the film, the scene's controls appear whenever the guest is back at the top; nothing locks.
