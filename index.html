@@ -435,9 +435,9 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
 .lightbox.is-on{opacity:1}
 .lightbox[hidden]{display:none}
 html.has-lightbox{overflow:hidden}
-.lb-fig{margin:0;max-width:min(92vw,1100px);max-height:100%;display:grid;grid-template-rows:1fr auto;justify-items:center}
-.lb-fig img{max-width:100%;max-height:calc(100svh - 96px);width:auto;height:auto;object-fit:contain;box-shadow:0 20px 60px -20px rgba(0,0,0,.7);background:#FBF8F1;padding:6px}
-.lb-fig figcaption{font-family:var(--mono);font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--ivory);margin-top:14px;text-align:center}
+.lb-fig{margin:0;max-width:min(92vw,1100px);max-height:100%;display:grid;grid-template-rows:1fr auto;justify-items:center;background:#FBF8F1;padding:10px 10px 0;border-radius:2px;box-shadow:0 24px 70px -20px rgba(0,0,0,.75)}
+.lb-fig img{max-width:100%;max-height:calc(100svh - 170px);width:auto;height:auto;object-fit:contain;display:block}
+.lb-fig figcaption{font-family:var(--serif);font-style:italic;font-size:clamp(17px,4.6vw,21px);line-height:1.3;color:var(--ink);padding:14px 14px 22px;text-align:center}
 .lb-close,.lb-arrow{position:absolute;background:rgba(248,243,232,.16);color:var(--ivory);border:1px solid rgba(248,243,232,.35);border-radius:999px;cursor:pointer;font-family:var(--serif);line-height:1;display:grid;place-items:center;-webkit-tap-highlight-color:transparent}
 .lb-close{top:max(14px,env(safe-area-inset-top));right:16px;width:44px;height:44px;font-size:30px}
 .lb-arrow{top:50%;transform:translateY(-50%);width:44px;height:44px;font-size:34px}
@@ -811,16 +811,16 @@ html.has-lightbox{overflow:hidden}
     <p>Our first date was an Ed Sheeran concert. You might say everything about it, and everything since, has been “Perfect.”</p>
     <p>But first, we have Bethany to thank. Friends with Ashley from run club and Charles from golf, she invited Ashley to a BBQ Charles was hosting, and the rest is history.</p>
     <ul class="snaps snaps-two" aria-label="Photos with Bethany">
-      <li><button type="button" class="snap" aria-label="View larger: Bethany and Charles"><img src="assets/photo-golf2-thumb.webp" data-full="assets/photo-golf2.webp" alt="Charles and Bethany on a golf green, a blue flag behind them." width="480" height="480" loading="lazy" decoding="async"><i class="snap-zoom" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></i></button><span>Bethany &amp; Charles</span></li>
-      <li><button type="button" class="snap" aria-label="View larger: Bethany and Ashley"><img src="assets/photo-runclub2-thumb.webp" data-full="assets/photo-runclub2.webp" alt="Bethany and Ashley running at night, one waving a golf club and the other a box of doughnuts." width="480" height="480" loading="lazy" decoding="async"><i class="snap-zoom" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></i></button><span>Bethany &amp; Ashley</span></li>
+      <li data-caption="Charles &amp; Bethany golfing"><button type="button" class="snap" aria-label="View larger: Charles and Bethany golfing"><img src="assets/photo-golf2-thumb.webp" data-full="assets/photo-golf2.webp" alt="Charles and Bethany on a golf green, a blue flag behind them." width="480" height="480" loading="lazy" decoding="async"><i class="snap-zoom" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></i></button><span>Charles &amp; Bethany</span></li>
+      <li data-caption="Ashley &amp; Bethany running on Halloween"><button type="button" class="snap" aria-label="View larger: Ashley and Bethany running on Halloween"><img src="assets/photo-runclub2-thumb.webp" data-full="assets/photo-runclub2.webp" alt="Bethany and Ashley running at night, one waving a golf club and the other a box of doughnuts." width="480" height="480" loading="lazy" decoding="async"><i class="snap-zoom" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></i></button><span>Ashley &amp; Bethany</span></li>
     </ul>
     <p>Ashley joined run club for the running. Charles joined for Ashley. He has yet to catch her. Along the way, we fostered fourteen cats. Twelve found wonderful homes. Two found ours and stopped looking.</p>
     <p>When we’re not home, we’re somewhere new, golfing our way around the world and leaving lost golf balls on several continents. So for the wedding, we didn’t want a typical venue. We wanted a cliff, an ocean, and everyone we love in one place.</p>
     <p>Your only job is to show up in linen. It’s going to be perfect. We checked.</p>
     <ul class="snaps" aria-label="A few photos of us">
-      <li><button type="button" class="snap" aria-label="View larger: Run club"><img src="assets/photo-runclub-thumb.webp" data-full="assets/photo-runclub.webp" alt="Ashley and Charles, sweaty and smiling after run club on the Santa Monica boardwalk." width="480" height="480" loading="lazy" decoding="async"><i class="snap-zoom" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></i></button><span>Run club</span></li>
-      <li><button type="button" class="snap" aria-label="View larger: The back nine"><img src="assets/photo-golf-thumb.webp" data-full="assets/photo-golf.webp" alt="Ashley and Charles on the tee at Torrey Pines, the Pacific behind them." width="480" height="480" loading="lazy" decoding="async"><i class="snap-zoom" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></i></button><span>The back nine</span></li>
-      <li><button type="button" class="snap" aria-label="View larger: Our 2 foster fails"><img src="assets/photo-cats-thumb.webp" data-full="assets/photo-cats.webp" alt="The two foster fails, a white cat and a tabby, in matching red silk jackets in a fluffy cat bed." width="480" height="480" loading="lazy" decoding="async"><i class="snap-zoom" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></i></button><span>Our 2 foster fails</span></li>
+      <li data-caption="Run Club at Santa Monica"><button type="button" class="snap" aria-label="View larger: Run Club at Santa Monica"><img src="assets/photo-runclub-thumb.webp" data-full="assets/photo-runclub.webp" alt="Ashley and Charles, sweaty and smiling after run club on the Santa Monica boardwalk." width="480" height="480" loading="lazy" decoding="async"><i class="snap-zoom" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></i></button><span>Run club</span></li>
+      <li data-caption="The back nine at Torrey Pines"><button type="button" class="snap" aria-label="View larger: The back nine at Torrey Pines"><img src="assets/photo-golf-thumb.webp" data-full="assets/photo-golf.webp" alt="Ashley and Charles on the tee at Torrey Pines, the Pacific behind them." width="480" height="480" loading="lazy" decoding="async"><i class="snap-zoom" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></i></button><span>The back nine</span></li>
+      <li data-caption="Our two foster fails: Tuco &amp; Elsa"><button type="button" class="snap" aria-label="View larger: Our two foster fails, Tuco and Elsa"><img src="assets/photo-cats-thumb.webp" data-full="assets/photo-cats.webp" alt="The two foster fails, a white cat and a tabby, in matching red silk jackets in a fluffy cat bed." width="480" height="480" loading="lazy" decoding="async"><i class="snap-zoom" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></i></button><span>Our 2 foster fails</span></li>
     </ul>
     <p class="signoff">With all our love,<br>Ashley &amp; Charles
       <small>Los Angeles · September 2026</small>
@@ -1065,8 +1065,7 @@ html.has-lightbox{overflow:hidden}
     <div>
       <h2>Ashley &amp; Charles</h2>
       <p>AYANA Bali, Jimbaran</p>
-      <p>Saturday, August 28, 2027</p>
-      <span class="mono">LAX → DPS<br>Admit adults only</span>
+      <span class="mono">LAX → DPS</span>
     </div>
   </div>
 </footer>
@@ -1196,6 +1195,16 @@ var RSVP_ENDPOINT = "";
     var soft = function (t) { return .5 - .5 * Math.cos(Math.PI * t); };   /* a gentle ease in and out */
     function lerp(a, b, t) { return a + (b - a) * t; }
     var ppW = 0, ppH = 0, spreadS = 1, pageS = 1, coverS = 1, mobileSpread = false, V, TK, PH, BK;
+    var envY = 0, ctrlH = $('ctrl').offsetHeight || 118;   /* the idle controls: their height, measured once */
+    function fitEnvelope() {   /* the envelope sits below the caption and clear of the buttons; on a short screen it shrinks */
+      stage.style.removeProperty('--ew');
+      ew = envBack.offsetWidth; eh = envBack.offsetHeight;
+      var capBottom = capTop.getBoundingClientRect().bottom + 14, floor = vh - 22 - ctrlH - 26;
+      if (eh > floor - capBottom) { stage.style.setProperty('--ew', Math.max(220, (floor - capBottom) / 0.692).toFixed(0) + 'px'); ew = envBack.offsetWidth; eh = envBack.offsetHeight; }
+      envY = Math.min(vh * .14, floor - eh / 2 - vh / 2);
+      envY = Math.max(envY, capBottom + eh / 2 - vh / 2);
+      openBtn.style.top = 'calc(50% + ' + envY.toFixed(0) + 'px)';
+    }
     function measureBook() {
       ppW = passport.offsetWidth; ppH = passport.offsetHeight;
       spreadS = Math.min(1, (vw - 28) / (2 * ppW), vh * .70 / ppH);   /* both pages across the screen */
@@ -1204,7 +1213,7 @@ var RSVP_ENDPOINT = "";
       coverS = Math.min((vw - 24) / ppW, vh * .62 / ppH);            /* the closed book, held up */
       T_HOLD = T_BOOK + (mobileSpread ? 13600 : 8400); END = T_HOLD; DIVE = END + 1000;   /* the film rests at END until the guest goes on */
       CPS = [0, T_TICKET, T_BOOK, T_PAGES, T_HOLD];
-      var envY = vh * .14, envTop = envY - eh / 2;
+      var envTop = envY - eh / 2;
       /* the pocket's edge: a V from the envelope's top corners down to the notch */
       V = { lx: -ew / 2, ly: envTop, nx: -ew * .0193, ny: envTop + eh * .5745, rx: ew / 2, ry: envTop };
       var tw = ew * .92, th = tw * .4374, pw0 = ew * .60, ph0 = pw0 * 1.16, s0 = ew * .50 / ppW;
@@ -1247,7 +1256,6 @@ var RSVP_ENDPOINT = "";
     }
 
     function render(t) {
-      var envY = vh * .14;
       openBtn.classList.toggle('is-hidden', t > 30);
       stage.classList.toggle('is-open', t > 20);
       capTop.style.opacity = scrimTop.style.opacity = 1 - seg(t, T_PHOTO, T_PHOTO + 900);   /* the caption clears for the photograph */
@@ -1391,6 +1399,11 @@ var RSVP_ENDPOINT = "";
     function replay() { stopPlay(); beat = 0; draw(); window.scrollTo(0, 0); playFrom(1); }
     function toDetails() { if (state !== 'done') return; release(stage.offsetTop + stage.offsetHeight, 900); }
     function skipPlay() { release(function () { return topOf('letter'); }, 1100); }
+    function skipNext() {   /* on to the next chapter; from the last, straight to its end */
+      if (state !== 'playing' && state !== 'paused') return;
+      if (step < CPS.length - 1) jumpTo(step + 1);
+      else { stopPlay(); beat = END; draw(); step = CPS.length; setCtrl('done'); }
+    }
     function forward() { if (state === 'idle') playAll(); else if (state === 'paused') resume(); else if (state === 'done') toDetails(); }
     function enter(n) {    /* the contents menu: straight to a resting point */
       stopPlay(); lock(true); window.scrollTo(0, 0);
@@ -1434,13 +1447,13 @@ var RSVP_ENDPOINT = "";
       if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || tag === 'BUTTON' || tag === 'A') return;
       if (e.key === ' ' && (state === 'playing' || state === 'paused')) { e.preventDefault(); togglePause(); }
       else if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ' || e.key === 'Enter') { e.preventDefault(); forward(); }
-      else if (e.key === 'Escape' && (state === 'playing' || state === 'paused')) { e.preventDefault(); skipPlay(); }
+      else if (e.key === 'Escape' && (state === 'playing' || state === 'paused')) { e.preventDefault(); skipNext(); }
       else if (e.key === 'ArrowLeft' && state !== 'idle') { e.preventDefault(); jumpTo(state === 'done' ? lastStep() - 1 : step - 1); }
       else if (e.key === 'ArrowRight' && (state === 'playing' || state === 'paused')) { e.preventDefault(); jumpTo(step + 1); }
     });
 
     function onResize() {
-      vh = window.innerHeight; vw = window.innerWidth; ew = envBack.offsetWidth; eh = envBack.offsetHeight;
+      vh = window.innerHeight; vw = window.innerWidth; fitEnvelope();
       measureBook(); buildChapters();
       if (!playing) draw();
     }
@@ -1588,7 +1601,7 @@ var RSVP_ENDPOINT = "";
     function topOf(id) { var el = $(id); return el ? el.getBoundingClientRect().top + window.pageYOffset : 0; }
     skip.addEventListener('click', function (e) { e.preventDefault(); release(function () { return topOf('rsvp'); }, 1300); });
     playBtn.addEventListener('click', playAll);
-    skipBtn.addEventListener('click', skipPlay);
+    skipBtn.addEventListener('click', skipNext);
     pauseBtn.addEventListener('click', togglePause);
     doneBtn.addEventListener('click', toDetails);
     plainLink.addEventListener('click', function (e) { e.preventDefault(); skipPlay(); });
@@ -1616,7 +1629,7 @@ var RSVP_ENDPOINT = "";
       function show(i) {
         at = (i + snaps.length) % snaps.length;
         var pic = snaps[at].querySelector('img'), text = snaps[at].querySelector('span');
-        img.src = pic.getAttribute('data-full') || pic.currentSrc || pic.src; img.alt = pic.alt; cap.textContent = text ? text.textContent : '';
+        img.src = pic.getAttribute('data-full') || pic.currentSrc || pic.src; img.alt = pic.alt; cap.textContent = snaps[at].getAttribute('data-caption') || (text ? text.textContent : '');
       }
       function open(i, from) {
         opener = from || null; show(i); box.hidden = false; document.documentElement.classList.add('has-lightbox');
