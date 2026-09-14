@@ -574,8 +574,10 @@ html.has-lightbox{overflow:hidden}
 .dress,.faqs{padding-left:0;padding-right:0}
 .section.dress,.section.faqs{padding-top:56px}
 .dress .eyebrow{display:table;margin:0 auto 1.3em;padding:.6em 1.2em;color:var(--gold-line);background:rgba(248,243,232,.9);border:1px solid rgba(155,139,87,.7);border-radius:999px}
-.dress .dress-day{color:var(--olive);margin:-.4em auto 1.1em}
-.dress .dress-copy + .dress-day{margin-top:clamp(28px,5vh,52px)}
+/* each day is one card: its name, its painted panel, its words */
+.dress-card{width:min(94vw,1000px);margin:0 auto;padding:clamp(20px,3.2vw,34px) clamp(14px,2.6vw,30px) clamp(22px,3vw,32px);background:rgba(248,243,232,.9);border:1px solid rgba(155,139,87,.7);border-radius:clamp(22px,4vw,34px);box-sizing:border-box}
+.dress-card + .dress-card{margin-top:clamp(22px,4vh,40px)}
+.dress-day{display:block;text-align:center;font-family:var(--mono);font-size:14px;letter-spacing:.2em;text-transform:uppercase;color:var(--olive);margin:0 0 1.1em}
 .pav{
   --pw2:min(96vw,1180px);--cap:calc(var(--pw2) * .12);
   position:relative;width:var(--pw2);margin:var(--cap) auto 0;text-align:center;color:var(--olive);
@@ -590,11 +592,11 @@ html.has-lightbox{overflow:hidden}
 .pav-motif{position:absolute;left:50%;width:max(18px,calc(var(--pw2) * .026));height:calc(max(18px,calc(var(--pw2) * .026)) * 3.33);transform:translateX(-50%);background:var(--motif) center/contain no-repeat;opacity:.85}
 .pav-motif-top{top:calc(var(--cap) * -.72)}
 .pav-motif-bottom{bottom:6px;transform:translateX(-50%) scaleY(-1)}
-.dress-plate{width:min(92vw,960px);margin:0 auto;opacity:0;transform:translateY(12px);transition:opacity 1.3s ease,transform 1.3s ease}
+.dress-plate{width:100%;margin:0 auto;opacity:0;transform:translateY(12px);transition:opacity 1.3s ease,transform 1.3s ease}
 .dress-plate.is-in{opacity:1;transform:none}
 .dress-plate img{display:block;width:100%;height:auto;max-width:100%}
 .dress-plate.is-static{opacity:1;transform:none;transition:none}
-.dress-copy{display:block;width:min(88vw,600px);margin:18px auto 0;padding:1.15em 2.4em;background:rgba(248,243,232,.9);border:1px solid rgba(155,139,87,.7);border-radius:999px;font-size:17px;line-height:1.5;color:var(--olive);text-align:center}
+.dress-copy{display:block;max-width:58ch;margin:1.2em auto 0;padding:0 .5em;font-size:17px;line-height:1.55;color:var(--olive);text-align:center}
 .pav.is-static,.pav.is-static *{transition:none!important}
 @media (max-width:500px){.pav .fq-close{letter-spacing:.08em;padding-left:.08em}}
 
@@ -921,16 +923,20 @@ html.has-lightbox{overflow:hidden}
      ======================================================================= -->
 <section class="section dress" id="dress">
   <span class="eyebrow">04 — Dress code</span>
-  <span class="eyebrow dress-day">Friday · The welcome party</span>
+  <div class="dress-card">
+    <span class="dress-day">Friday · The welcome party</span>
   <figure class="dress-plate" id="whitePlate">
     <img data-src="assets/white-plate.webp" data-srcset="assets/white-plate-m.webp 720w, assets/white-plate.webp 1268w" sizes="min(92vw, 960px)" alt="Welcome party, all white attire. Eight guests in white: linen shirts with shorts or trousers, and white dresses and a jumpsuit. Sunset cocktails, ocean views, great company." width="1268" height="893" loading="lazy" decoding="async">
   </figure>
   <p class="dress-copy">Join us for sunset cocktails and our tea ceremony at Rock Bar! We’d love for everyone to wear white — think relaxed, elevated, and beach chic.</p>
-  <span class="eyebrow dress-day">Saturday · The wedding</span>
+  </div>
+  <div class="dress-card">
+    <span class="dress-day">Saturday · The wedding</span>
   <figure class="dress-plate" id="dressPlate">
     <img data-src="assets/dress-plate.webp" data-srcset="assets/dress-plate-m.webp 720w, assets/dress-plate.webp 1335w" sizes="min(92vw, 960px)" alt="Tropical black tie. Ten guests in colourful formalwear: suits in sage, sky blue, navy, sand and terracotta; gowns in lilac floral, gold, green floral, coral and blush pink. Elevated attire, vibrant hues, destination-friendly." width="1335" height="943" loading="lazy" decoding="async">
   </figure>
   <p class="dress-copy">Tropical black tie attire is requested, with vibrant colors and tropical hues warmly encouraged. Lightweight fabrics and destination-friendly silhouettes are welcome. Above all, come dressed in your formal best and ready to celebrate with us.</p>
+  </div>
 </section>
 
 <!-- =======================================================================
