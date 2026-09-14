@@ -177,6 +177,16 @@ button,input,select,textarea{font:inherit;color:inherit}
 .chapters button{position:absolute;inset:0;width:100%;z-index:1;background:none;border:0;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .chapters button:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:4px}
 .stage.is-static .ctrl{display:none}
+@media (max-height:560px){
+  .cap-top{top:max(4%,calc(env(safe-area-inset-top) + 8px))}
+  .cap .caps{font-size:clamp(11px,2.4vh,15px);line-height:1.35}
+  .cap .script{font-size:clamp(22px,6.4vh,34px)}
+  .cap .cap-sub{font-size:clamp(11px,2.2vh,13px)}
+  .cap .rule{margin:.4em auto}
+  .ctrl{flex-direction:row;justify-content:center;flex-wrap:wrap;gap:8px 14px;bottom:max(12px,env(safe-area-inset-bottom))}
+  .ctrl-main{font-size:15px;padding:.7em 1.5em}
+  .ctrl-plain{font-size:14px;padding:5px 12px}
+}
 /* Step dots on the weekend map, one per stop. */
 .steps{position:absolute;right:max(12px,env(safe-area-inset-right));top:50%;transform:translateY(-50%);left:auto;margin:0;padding:0;list-style:none;display:grid;gap:10px;z-index:9;opacity:0;transition:opacity .4s;pointer-events:none}
 .steps li{width:9px;height:9px;border-radius:50%;border:1.5px solid rgba(89,96,68,.9);background:rgba(248,243,232,.7);box-shadow:0 0 8px rgba(255,250,238,.9);transition:background .3s,transform .3s}
@@ -204,16 +214,16 @@ button,input,select,textarea{font:inherit;color:inherit}
 /* Load-in: the painting settles from a slight zoom as it fades up. */
 .plate.is-ready img{animation:plate-settle 2.4s cubic-bezier(.2,.6,.2,1) both}
 @keyframes plate-settle{from{transform:scale(1.06)}to{transform:scale(1)}}
-/* the envelope and captions wait for the scene, then rise into place */
+/* The envelope is in place as the painting fades in (no fade of its own: a half-seen envelope reads as a
+   pale square); the captions and controls follow it in. */
 .stage.is-loading .env,.stage.is-loading .piece,.stage.is-loading .cap-top,.stage.is-loading .ctrl{opacity:0!important}
-.stage.is-in .env,.stage.is-in .piece{animation:rise-in 1.1s cubic-bezier(.2,.7,.2,1) 1.35s backwards}
-.stage.is-in .cap-top{animation:drop-in 1.1s cubic-bezier(.2,.7,.2,1) 1.6s backwards}
-.stage.is-in .ctrl{animation:rise-in 1.1s cubic-bezier(.2,.7,.2,1) 1.9s backwards}
+.stage.is-in .cap-top{animation:drop-in 1.1s cubic-bezier(.2,.7,.2,1) .9s backwards}
+.stage.is-in .ctrl{animation:rise-in 1.1s cubic-bezier(.2,.7,.2,1) 1.2s backwards}
 @keyframes rise-in{from{opacity:0;translate:0 36px}to{opacity:1;translate:0 0}}
 @keyframes drop-in{from{opacity:0;translate:0 -22px}to{opacity:1;translate:0 0}}
 @keyframes fade-in{from{opacity:0}to{opacity:1}}
 @media (prefers-reduced-motion:reduce){
-  .plate.is-ready img,.stage.is-in .env,.stage.is-in .piece,.stage.is-in .cap-top,.stage.is-in .ctrl{animation:none!important}
+  .plate.is-ready img,.stage.is-in .cap-top,.stage.is-in .ctrl{animation:none!important}
 }
 
 /* Envelope parts share size and centre; JS applies the same transform to each. */
@@ -1197,12 +1207,16 @@ var RSVP_ENDPOINT = "";
     var soft = function (t) { return .5 - .5 * Math.cos(Math.PI * t); };   /* a gentle ease in and out */
     function lerp(a, b, t) { return a + (b - a) * t; }
     var ppW = 0, ppH = 0, spreadS = 1, pageS = 1, coverS = 1, mobileSpread = false, V, TK, PH, BK;
-    var envY = 0, ctrlH = $('ctrl').offsetHeight || 118;   /* the idle controls: their height, measured once */
+    var envY = 0, ctrl = $('ctrl');
     function fitEnvelope() {   /* the envelope sits below the caption and clear of the buttons; on a short screen it shrinks */
-      stage.style.removeProperty('--ew');
+      stage.style.removeProperty('--ew'); stage.style.removeProperty('--eh');
       ew = envBack.offsetWidth; eh = envBack.offsetHeight;
-      var capBottom = capTop.getBoundingClientRect().bottom + 14, floor = vh - 22 - ctrlH - 26;
-      if (eh > floor - capBottom) { stage.style.setProperty('--ew', Math.max(220, (floor - capBottom) / 0.692).toFixed(0) + 'px'); ew = envBack.offsetWidth; eh = envBack.offsetHeight; }
+      var capBottom = capTop.getBoundingClientRect().bottom + 14, floor = vh - 22 - ctrl.offsetHeight - 26;
+      if (eh > floor - capBottom) {
+        var w2 = Math.max(200, (floor - capBottom) / 0.692);
+        stage.style.setProperty('--ew', w2.toFixed(0) + 'px'); stage.style.setProperty('--eh', (w2 * 0.692).toFixed(0) + 'px');
+        ew = envBack.offsetWidth; eh = envBack.offsetHeight;
+      }
       envY = Math.min(vh * .14, floor - eh / 2 - vh / 2);
       envY = Math.max(envY, capBottom + eh / 2 - vh / 2);
       openBtn.style.top = 'calc(50% + ' + envY.toFixed(0) + 'px)';
@@ -1322,7 +1336,7 @@ var RSVP_ENDPOINT = "";
     /* ---- The film plays itself. One tap on "Open your invitation" (or on the envelope, or a first
        scroll or swipe) runs it on its own clock; the page is locked meanwhile and Pause and Skip stay
        on screen. It rests on the calendar until "See the details" (or a tap, scroll or swipe). ---- */
-    var ctrl = $('ctrl'), playBtn = $('playBtn'), skipBtn = $('skipBtn'), pauseBtn = $('pauseBtn'), doneBtn = $('doneBtn'), plainLink = $('plainLink');
+    var playBtn = $('playBtn'), skipBtn = $('skipBtn'), pauseBtn = $('pauseBtn'), doneBtn = $('doneBtn'), plainLink = $('plainLink');
     var chapters = $('chapters'), againLink = $('againLink');
     var state = 'idle';
     function setCtrl(st) {
@@ -1461,6 +1475,8 @@ var RSVP_ENDPOINT = "";
     }
     window.addEventListener('resize', onResize, { passive: true });
     onResize();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(onResize);   /* the caption grows when the web fonts arrive */
+    window.addEventListener('load', onResize);
     lock(true); setCtrl('idle');
 
     /* ---- Our Bali weekend. The stage is pinned; the guest's scroll draws the route down the island,
@@ -1631,7 +1647,7 @@ var RSVP_ENDPOINT = "";
       function show(i) {
         at = (i + snaps.length) % snaps.length;
         var pic = snaps[at].querySelector('img'), text = snaps[at].querySelector('span');
-        img.src = pic.getAttribute('data-full') || pic.currentSrc || pic.src; img.alt = pic.alt; cap.textContent = snaps[at].getAttribute('data-caption') || (text ? text.textContent : '');
+        var full = pic.getAttribute('data-full'); img.src = (window.FULL && FULL[full]) || full || pic.currentSrc || pic.src; img.alt = pic.alt; cap.textContent = snaps[at].getAttribute('data-caption') || (text ? text.textContent : '');
       }
       function open(i, from) {
         opener = from || null; show(i); box.hidden = false; document.documentElement.classList.add('has-lightbox');
