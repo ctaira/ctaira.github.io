@@ -27,11 +27,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="image" href="assets/bali-cliff.webp" fetchpriority="high">
+<link rel="preload" as="image" href="assets/envelope-sealed.webp">
+<link rel="preload" as="image" href="assets/seal.webp">
 <link rel="preload" as="image" href="assets/envelope.webp">
-<link rel="preload" as="image" href="assets/boarding-pass.webp">
-<link rel="preload" as="image" href="assets/polaroid.webp">
-<link rel="preload" as="image" href="assets/pp-calendar.webp">
-<link rel="preload" as="image" href="assets/pp-itinerary.webp">
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500&family=Instrument+Serif:ital@0;1&family=Pinyon+Script&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500&family=Instrument+Serif:ital@0;1&family=Pinyon+Script&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
 <style>
@@ -233,7 +231,7 @@ button,input,select,textarea{font:inherit;color:inherit}
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
 .env-flap{
-  z-index:1;transform-origin:50% 0;transform-style:preserve-3d;
+  z-index:7;transform-origin:50% 0;transform-style:preserve-3d;
   will-change:transform;
 }
 .env-flap .flap-face{
@@ -241,12 +239,26 @@ button,input,select,textarea{font:inherit;color:inherit}
   clip-path:polygon(0 0,100% 0,48.07% 57.45%);
   -webkit-clip-path:polygon(0 0,100% 0,48.07% 57.45%);
 }
+.seal{   /* the seal and its painted shadow, cut from the sealed artwork at this exact box */
+  position:absolute;left:35.750%;top:39.952%;width:24.833%;height:36.582%;
+  will-change:transform;
+}
+.seal-art{position:absolute;inset:0;background:url("assets/seal.webp") center/100% 100% no-repeat}
+/* The seal element (cut from the sealed artwork with its painted shadow) is on top from the first
+   frame, so the pocket and flap can trade the sealed face for the seal-less copy underneath it as
+   the opening starts without anything visible changing. */
+.env-pocket::after,.env-flap .flap-face::after{content:"";position:absolute;inset:0;background:url("assets/envelope-sealed.webp") center/100% 100% no-repeat;transition:opacity .4s ease;pointer-events:none}
+.stage.is-open .env-pocket::after,.stage.is-open .env-flap .flap-face::after{opacity:0}
+.env-pocket .addr{display:none}
+/* The seal stays whole and rides up on the flap; it is on the flap's front face, so it goes
+   out of sight as the flap turns over. */
+.env-flap .seal{backface-visibility:hidden;-webkit-backface-visibility:hidden}
 /* The pieces in the pocket. Each has a wrapper that carries its motion and, while it is in the pocket,
    a clip that follows the pocket's edge; the piece itself carries its slight tilt. */
 .piece{position:absolute;left:50%;top:50%;will-change:transform}
 .piece>*{position:absolute;inset:0}
-.pc-ticket{z-index:6;width:calc(var(--ew) * .92);height:calc(var(--ew) * .92 * 0.4374);margin-left:calc(var(--ew) * -.46);margin-top:calc(var(--ew) * .92 * -0.2187)}
-.pc-photo{z-index:5;width:calc(var(--ew) * .6);height:calc(var(--ew) * .696);margin-left:calc(var(--ew) * -.3);margin-top:calc(var(--ew) * -.348)}
+.pc-ticket{z-index:5;width:calc(var(--ew) * .92);height:calc(var(--ew) * .92 * 0.4374);margin-left:calc(var(--ew) * -.46);margin-top:calc(var(--ew) * .92 * -0.2187)}
+.pc-photo{z-index:6;width:calc(var(--ew) * .6);height:calc(var(--ew) * .696);margin-left:calc(var(--ew) * -.3);margin-top:calc(var(--ew) * -.348)}
 .pc-book{z-index:4;width:var(--pw);height:var(--ph);margin-left:calc(var(--pw) / -2);margin-top:calc(var(--ph) / -2)}
 /* the rest of the suite softens behind whichever piece is lifted */
 .veil{left:0;top:0;width:100%;height:100%;z-index:7;background:#F3EDE1;opacity:0;pointer-events:none;will-change:opacity}
@@ -266,7 +278,6 @@ button,input,select,textarea{font:inherit;color:inherit}
   box-shadow:0 14px 30px -12px rgba(36,39,34,.5),0 2px 5px rgba(36,39,34,.14);will-change:transform;
 }
 .polaroid img{display:block;width:100%;height:auto;aspect-ratio:1;object-fit:cover;background:#D9D3C7}
-.env-pocket .addr{display:none}
 .pol-cap{position:absolute;left:0;right:0;bottom:calc(var(--ew) * .033);text-align:center;font-family:var(--script);font-size:calc(var(--ew) * .05);line-height:1;color:#4C4841;white-space:nowrap}
 
 /* Passport ------------------------------------------------------------------ */
@@ -796,9 +807,10 @@ html.has-lightbox{overflow:hidden}
 
       <div class="env env-flap" id="envFlap" aria-hidden="true">
         <div class="flap-face"></div>
+        <div class="seal" id="seal"><div class="seal-art"></div></div>
       </div>
 
-      <!-- In the pocket, front to back: the ticket, the photograph, the passport (below, after the controls) -->
+      <!-- In the pocket, back to front: the passport (below, after the controls), the ticket, the photograph -->
       <div class="piece pc-ticket" id="pcTicket" aria-hidden="true"><div class="bpass" id="bpass"><span id="bpName" hidden></span><span id="bpSeats" hidden></span></div></div>
       <div class="piece pc-photo" id="pcPhoto" aria-hidden="true"><div class="polaroid" id="polaroid"><img src="assets/polaroid.webp" alt="" width="879" height="879" decoding="async"><span class="pol-cap">Ashley &amp; Charles</span></div></div>
 
@@ -815,7 +827,7 @@ html.has-lightbox{overflow:hidden}
         <a class="ctrl-plain" id="againLink" href="#" hidden>Watch again</a>
       </div>
 
-      <!-- Passport, open at its first spread -->
+      <!-- Passport -->
       <div class="piece pc-book" id="pcBook"><div class="passport" id="passport">
         <div class="pp-page pp-art art-itin pp-base" role="img" aria-label="August 27: welcome party at the Rock Bar from 5:30 PM, with our tea ceremony at 6:00 PM, then drinks and dinner with cliffside views. August 28: wedding ceremony, reception."></div>
         <div class="pp-leaf" data-leaf="1">
@@ -1236,7 +1248,10 @@ var RSVP_ENDPOINT = "";
   /* ---- The painted plate: one image. It fades in once decoded; if it fails to load the
      drawn scene stays and the envelope still appears. ---- */
   var plate = $('plate'), vista = $('vista'), plateBase = $('plateBase');
-  function sceneIn() { stage.classList.remove('is-loading'); stage.classList.add('is-in'); }
+  function sceneIn() {
+    stage.classList.remove('is-loading'); stage.classList.add('is-in');
+    ['boarding-pass', 'polaroid', 'passport-cover', 'pp-calendar', 'pp-itinerary'].forEach(decoded);
+  }
   function decoded(name) { var im = new Image(); im.src = 'assets/' + name + '.webp'; return (im.decode ? im.decode() : Promise.resolve()).catch(function () {}); }
   function plateReady() {
     plate.classList.add('is-ready');
@@ -1245,7 +1260,7 @@ var RSVP_ENDPOINT = "";
     plate.addEventListener('transitionend', hideVista, { once: true });
     setTimeout(hideVista, 900);
   }
-  Promise.all([plateBase.decode ? plateBase.decode().catch(function () {}) : Promise.resolve()].concat(['envelope', 'boarding-pass', 'polaroid', 'pp-calendar', 'pp-itinerary'].map(decoded)))
+  Promise.all([plateBase.decode ? plateBase.decode().catch(function () {}) : Promise.resolve()].concat(['envelope-sealed', 'seal', 'envelope'].map(decoded)))
     .then(function () { if (plateBase.naturalWidth > 0) plateReady(); });
   plateBase.addEventListener('error', function () { plate.parentNode.removeChild(plate); sceneIn(); });
   setTimeout(function () { if (stage.classList.contains('is-loading')) sceneIn(); }, 6000);   /* never wait on a stalled image */
@@ -1265,53 +1280,56 @@ var RSVP_ENDPOINT = "";
     plane.setAttribute('transform', 'translate(' + b.x.toFixed(2) + ' ' + b.y.toFixed(2) + ') rotate(' + deg.toFixed(2) + ') scale(1.15)');
   }
 
-  /* the passport is open at its first spread: cover back, first leaf turned, the data page stamped beneath */
-  arcMask.style.strokeDashoffset = 0; plane.style.opacity = 1; placePlane(1);
-  stamp.style.opacity = 1; stamp.style.transform = 'rotate(-12deg)'; stamp.style.visibility = 'visible';
-  cover.style.transform = 'rotateY(-180deg)'; cover.style.zIndex = 4;
-  leaves[0].style.transform = 'rotateY(-180deg)'; leaves[0].style.zIndex = 20;
-
   if (reduce) {
-    /* No film: the envelope, the ticket and the photograph leave the DOM; the passport lies open as a column of pages. */
+    /* No film: the envelope, the ticket and the photograph leave the DOM; the passport lies open and stamped as a column of pages. */
     envParts.concat([pcTicket, pcPhoto, veil, capTop, openBtn, $('ctrl')]).forEach(function (el) { el.parentNode.removeChild(el); });
     stage.classList.add('is-static');
     stage.classList.remove('is-loading');
     $('weekend').classList.add('is-static');
+    arcMask.style.strokeDashoffset = 0; plane.style.opacity = 1; placePlane(1);
+    stamp.style.opacity = 1; stamp.style.transform = 'rotate(-12deg)';
   } else {
     var vh = window.innerHeight, vw = window.innerWidth, ew = envBack.offsetWidth, eh = envBack.offsetHeight;
 
-    /* ---- The film, timed in milliseconds. The suite lies open with the ticket, the photograph and the
-       passport in its pocket. Each in turn is lifted out and toward the viewer, held, and set back; the
-       passport comes out open, the camera moves into its first page and rests there, then goes on into
-       the page as the details arrive below. ---- */
-    var T_TICKET = 0, T_PHOTO = 3600, T_BOOK = 7200, T_PAGE = 10100, END = 14100, DIVE = END + 1000;
-    var CPS = [T_TICKET, T_PHOTO, T_BOOK, T_PAGE];   /* the chapters: ticket, photograph, passport; then the close-up holds */
+    /* ---- The film, timed in milliseconds. The flap opens and the pocket's contents settle up into view:
+       the photograph, the ticket and the closed passport. Each in turn is lifted out and toward the
+       viewer, held, and set back. The passport comes out closed and holds on its cover; the cover opens,
+       the flight is drawn and stamped, and the page turns to the calendar spread (on a phone: a close-up
+       of the calendar, then a pan to the itinerary). The camera rests there, then goes on into the page
+       as the details arrive below. ---- */
+    var T_PHOTO = 2000, T_TICKET = 5400, T_BOOK = 9200, T_PAGES = T_BOOK + 6400, T_HOLD = 0, END = 0, DIVE = 0;
+    var CPS = [0, T_TICKET, T_BOOK, T_PAGES, T_HOLD];   /* chapters: the opening and the photograph, the ticket, the passport, its pages; then the hold */
     function checkpoints() { return CPS; }
     var soft = function (t) { return .5 - .5 * Math.cos(Math.PI * t); };   /* a gentle ease in and out */
     function lerp(a, b, t) { return a + (b - a) * t; }
-    var ppW = 0, ppH = 0, spreadS = 1, pageS = 1, V, TK, PH, BK;
+    var ppW = 0, ppH = 0, spreadS = 1, pageS = 1, coverS = 1, mobileSpread = false, V, TK, PH, BK;
     function measureBook() {
       ppW = passport.offsetWidth; ppH = passport.offsetHeight;
       spreadS = Math.min(1, (vw - 28) / (2 * ppW), vh * .70 / ppH);   /* both pages across the screen */
-      pageS = Math.min((vw - 24) / ppW, vh * (vw > vh ? .86 : .78) / ppH);   /* one page, close; closer still on a wide screen, where the facing page bleeds off the edge */
+      mobileSpread = spreadS < .9;                                    /* a phone: the spread cannot be read across, so it gets a close-up and a pan */
+      pageS = Math.min((vw - 24) / ppW, vh * .78 / ppH);             /* one page, close */
+      coverS = Math.min((vw - 24) / ppW, vh * .62 / ppH);            /* the closed book, held up */
+      T_HOLD = T_BOOK + (mobileSpread ? 13600 : 8400); END = T_HOLD + (mobileSpread ? 2400 : 4000); DIVE = END + 1000;
+      CPS = [0, T_TICKET, T_BOOK, T_PAGES, T_HOLD];
       var envY = vh * .14, envTop = envY - eh / 2;
       /* the pocket's edge: a V from the envelope's top corners down to the notch */
       V = { lx: -ew / 2, ly: envTop, nx: -ew * .0193, ny: envTop + eh * .5745, rx: ew / 2, ry: envTop };
-      var tw = ew * .92, th = tw * .4374, pw0 = ew * .60, ph0 = pw0 * 1.16, s0 = ew * .40 / ppW;
-      TK = piece(pcTicket, bpass, tw, th, { x: -ew * .015, y: envTop + eh * .05 + th / 2, s: 1, r: -2.5 }, { x: 0, y: -vh * .02, s: Math.min(1.35, (vw - 24) / tw), r: 0 }, envTop);
-      PH = piece(pcPhoto, polaroid, pw0, ph0, { x: ew * .05, y: envTop - eh * .16 + ph0 / 2, s: 1, r: 2 }, { x: 0, y: -vh * .03, s: Math.min(1.4, (vw - 24) / pw0, vh * .62 / ph0), r: 0 }, envTop);
-      BK = piece(pcBook, null, ppW, ppH, { x: 0, y: envTop - eh * .26 + ppH * s0 / 2, s: s0, r: 0 }, { x: 0, y: -vh * .03, s: spreadS, r: 0 }, envTop);
+      var tw = ew * .92, th = tw * .4374, pw0 = ew * .60, ph0 = pw0 * 1.16, s0 = ew * .50 / ppW;
+      /* where each rests once the flap is open (sealed, each sits lower, wholly inside), where it is held, and how far it sinks when sealed */
+      PH = piece(pcPhoto, polaroid, pw0, ph0, { x: ew * .07, y: envTop - eh * .16 + ph0 / 2, s: 1, r: 2 }, { x: 0, y: -vh * .03, s: Math.min(1.4, (vw - 24) / pw0, vh * .62 / ph0), r: 0 }, envTop, eh * .20);
+      TK = piece(pcTicket, bpass, tw, th, { x: -ew * .01, y: envTop + eh * .05 + th / 2, s: 1, r: -2.5 }, { x: 0, y: -vh * .02, s: Math.min(1.35, (vw - 24) / tw), r: 0 }, envTop, eh * .10);
+      BK = piece(pcBook, passport, ppW, ppH, { x: -ew * .06, y: envTop - eh * .26 + ppH * s0 / 2, s: s0, r: -1.5 }, { x: 0, y: -vh * .03, s: coverS, r: 0 }, envTop, eh * .28);
     }
     /* A piece: where it rests in the pocket, where it is held, and the path between. The path arcs: up
        and out of the pocket first, then toward the viewer. At f = .45 it is three quarters out, and the
        pocket lets go of it over the stretch that follows. */
-    function piece(el, inner, w, h, rest, focus, envTop) {
+    function piece(el, inner, w, h, rest, focus, envTop, sink) {
       var f = .45, u = 1 - f, sm = lerp(rest.s, focus.s, f), yPass = envTop - h * sm / 2 + h * sm * .25;
-      return { el: el, inner: inner, bw: w, bh: h, rest: rest, focus: focus, cx: (rest.x + focus.x) / 2, cy: (yPass - u * u * rest.y - f * f * focus.y) / (2 * u * f) };
+      return { el: el, inner: inner, bw: w, bh: h, rest: rest, focus: focus, sink: sink, cx: (rest.x + focus.x) / 2, cy: (yPass - u * u * rest.y - f * f * focus.y) / (2 * u * f) };
     }
-    function way(p, f, zoomMul) {
+    function way(p, f, zoomMul, settle) {
       var u = 1 - f;
-      return { x: u * u * p.rest.x + 2 * u * f * p.cx + f * f * p.focus.x, y: u * u * p.rest.y + 2 * u * f * p.cy + f * f * p.focus.y, s: lerp(p.rest.s, p.focus.s * (zoomMul || 1), f), r: lerp(p.rest.r, p.focus.r, f) };
+      return { x: u * u * p.rest.x + 2 * u * f * p.cx + f * f * p.focus.x, y: u * u * p.rest.y + 2 * u * f * p.cy + f * f * p.focus.y + p.sink * (1 - settle) * u, s: lerp(p.rest.s, p.focus.s * (zoomMul || 1), f), r: lerp(p.rest.r, p.focus.r, f) };
     }
     function put(el, x, y, s) { el.style.transform = 'translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px) scale(' + s.toFixed(4) + ')'; }
     /* while a piece is in the pocket its wrapper is clipped along the pocket's edge, in its own coordinates;
@@ -1328,8 +1346,8 @@ var RSVP_ENDPOINT = "";
       var a = soft(seg(t, t0, t0 + up)), z = seg(t, t0 + up, t0 + up + hold), b = soft(seg(t, t0 + up + hold, t0 + up + hold + back));
       return { f: a * (1 - b), z: z };
     }
-    function place(p, f, zoomMul, z) {
-      var q = way(p, f, zoomMul);
+    function place(p, f, zoomMul, z, settle) {
+      var q = way(p, f, zoomMul, settle);
       put(p.el, q.x, q.y, q.s); p.inner.style.transform = 'rotate(' + q.r.toFixed(2) + 'deg)';
       pocketClip(p, q.x, q.y, q.s, f);
       p.el.style.zIndex = z;
@@ -1338,34 +1356,62 @@ var RSVP_ENDPOINT = "";
     function render(t) {
       var envY = vh * .14;
       openBtn.classList.toggle('is-hidden', t > 30);
+      stage.classList.toggle('is-open', t > 20);
       capTop.style.opacity = scrimTop.style.opacity = 1 - seg(t, T_PHOTO, T_PHOTO + 900);   /* the caption clears for the photograph */
       scrimBottom.style.opacity = 1 - seg(t, 0, 700);
       var dv = soft(seg(t, END, DIVE));
       stage.classList.toggle('is-diving', t > END);
       scene.style.visibility = t >= DIVE ? 'hidden' : '';   /* fully beneath the details: nothing to paint */
 
-      /* 1. the ticket: out of the pocket, to the centre and a little closer, held, and set back */
-      var k1 = lift(t, T_TICKET, 1400, 1600, 1100);
-      place(TK, k1.f, 1 + .04 * k1.z, k1.f > 0 ? 8 : 6);
-      /* 2. the photograph: the same, with the slowest of zooms while it is held */
-      var k2 = lift(t, T_PHOTO, 1400, 1600, 1000);
-      place(PH, k2.f, 1 + .05 * k2.z, k2.f > 0 ? 8 : 5);
-      /* 3. the passport: out as a spread, then the camera moves into its first page and rests there;
-            as the details arrive it goes on in */
-      var t3 = t - T_BOOK, up = soft(seg(t3, 0, 1600)), zoom = soft(seg(t3, 1400, 2900)), hz = seg(t3, 2900, 6900);
-      var q = way(BK, up), sp = pageS * (1 + .03 * hz) * (1 + .30 * dv);
-      var bx = q.x + ppW * q.s / 2, by = q.y, bs = q.s;               /* the box is the right-hand page; the spread is centred on q */
-      bx = lerp(bx, ppW * sp, zoom); by = lerp(by, -vh * (vw > vh ? .055 : .04), zoom); bs = lerp(bs, sp, zoom);
-      put(pcBook, bx, by, bs);
+      /* 0. the flap opens, the seal riding up on it; past upright it lies behind the envelope.
+            The pocket's contents settle up into view as it does. */
+      var s2 = soft(seg(t, 0, 1500)), settle = soft(seg(t, 700, 1900));
+      envFlap.style.transform = 'translateY(' + envY + 'px) rotateX(' + (-181 * s2) + 'deg)';
+      envFlap.style.zIndex = s2 > .5 ? 1 : 7;
+      envBack.style.transform = envPocket.style.transform = 'translateY(' + envY + 'px)';
+
+      /* 1. the photograph: out of the pocket, to the centre, the slowest of zooms while it is held, and set back */
+      var k1 = lift(t, T_PHOTO, 1400, 1400, 1000);
+      place(PH, k1.f, 1 + .05 * k1.z, k1.f > 0 ? 8 : 6, settle);
+      /* 2. the ticket: the same, a little closer */
+      var k2 = lift(t, T_TICKET, 1400, 1700, 1100);
+      place(TK, k2.f, 1 + .04 * k2.z, k2.f > 0 ? 8 : 5, settle);
+
+      /* 3. the passport, closed: out and to the centre, a moment on the cover; then the cover opens, the
+            flight is drawn and stamped, and the first leaf turns to the calendar spread */
+      var t4 = t - T_BOOK, up = soft(seg(t4, 0, 1600)), q = way(BK, up, 1, settle);
+      var s7 = soft(seg(t4, 2800, 4200));                              /* the cover swings open */
+      var s8 = seg(t4, 4200, 5400), s8b = seg(t4, 5000, 5600);          /* the flight path draws, the plane rides it, the stamp lands */
+      var turn = soft(seg(t4, 6400, mobileSpread ? 8200 : 8400));      /* the leaf folds over: its back is the calendar, beneath it the itinerary */
+      var bx = q.x, by = q.y, bs = q.s;
+      if (mobileSpread) {
+        /* the cover opens at reading size with the right-hand page centred; the view pulls back to watch the
+           turn, closes in on the calendar, then pans across to the itinerary */
+        var zoom = soft(seg(t4, 8600, 9600)), pan = soft(seg(t4, 12600, 13600));
+        bs = lerp(bs, spreadS, turn); bx = lerp(bx, ppW * spreadS / 2, turn);
+        bs = lerp(bs, pageS, zoom); bx = lerp(bx, ppW * pageS, zoom); by = lerp(by, -vh * .04, zoom);
+        bx = lerp(bx, 0, pan);
+      } else {
+        /* the spread stays centred as the cover opens, and settles to reading size for the turn */
+        bs = lerp(bs, spreadS, turn); bx = lerp(bx, ppW * bs / 2, s7);
+      }
+      var sd = 1 + .30 * dv; bs *= sd; bx *= sd;                         /* the camera goes on into the page */
+      put(pcBook, bx, by, bs); passport.style.transform = 'rotate(' + q.r.toFixed(2) + 'deg)';
       pocketClip(BK, bx, by, bs, up);
-      pcBook.style.zIndex = t3 > 0 ? 8 : 4;
+      pcBook.style.zIndex = t4 > 0 ? 8 : 4;
       pcBook.style.opacity = (1 - soft(seg(t, END + 350, DIVE))).toFixed(3);   /* it dissolves as the details slide over it */
+      cover.style.transform = 'rotateY(' + (-174 * s7 - 6 * turn) + 'deg)';
+      cover.style.zIndex = s7 > .5 ? 4 : 40;                            /* open, the cover lies beneath the pages */
+      leaves[0].style.transform = 'rotateY(' + (-180 * turn) + 'deg)';
+      leaves[0].style.zIndex = turn > .5 ? 21 : 11;                     /* past the spine it lands atop the turned pile */
+      arcMask.style.strokeDashoffset = arcLen * (1 - s8);
+      plane.style.opacity = s8 > 0 ? 1 : 0; placePlane(s8);
+      stamp.style.opacity = s8b; stamp.style.transform = 'rotate(-12deg) scale(' + (1.9 - .9 * soft(s8b)).toFixed(3) + ')';
+      stamp.style.visibility = s8b > 0 ? 'visible' : 'hidden';
 
       /* the rest of the suite softens behind whichever piece is lifted, and leaves as the camera goes on */
       var v = Math.max(k1.f * k1.f, k2.f * k2.f, up * up) * (1 - dv), rest = (1 - dv).toFixed(3);
       veil.style.opacity = (v * .45).toFixed(3);
-      envFlap.style.transform = 'translateY(' + envY + 'px) rotateX(-181deg)';
-      envBack.style.transform = envPocket.style.transform = 'translateY(' + envY + 'px)';
       for (var i = 0; i < envParts.length; i++) envParts[i].style.opacity = rest;
       pcTicket.style.opacity = pcPhoto.style.opacity = rest;
     }
