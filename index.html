@@ -132,13 +132,13 @@ button,input,select,textarea{font:inherit;color:inherit}
 /* Captions above and below the envelope, in the manner of the printed suite. */
 /* Captions above and below the envelope. No panels: the painting is washed and softened at the top
    and bottom edges (the scrims below), and the ink gets a light halo. */
-.cap{position:absolute;left:0;right:0;text-align:center;z-index:1;pointer-events:none;color:var(--ink);
-  text-shadow:0 1px 0 rgba(255,250,238,.55),0 0 12px rgba(255,250,238,.85),0 0 3px rgba(255,250,238,.8)}
+.cap{position:absolute;left:0;right:0;text-align:center;z-index:1;pointer-events:none;color:#1C211D;
+  text-shadow:0 1px 0 rgba(255,250,238,.8),0 0 2px rgba(255,250,238,.95),0 0 6px rgba(255,250,238,.95),0 0 18px rgba(255,250,238,1),0 0 30px rgba(255,250,238,.9)}
 /* Edge scrims: a cream wash that fades into the picture, with a blur that fades the same way, so the
    painting dissolves under the captions without a visible edge. Each scrim leaves with its caption. */
 .scrim{left:0;right:0;width:100%;height:38%;z-index:0;pointer-events:none}
-.scrim-top{top:0;background:linear-gradient(180deg,rgba(244,239,229,.9) 0%,rgba(244,239,229,.62) 40%,rgba(244,239,229,0) 100%);
-  -webkit-mask-image:linear-gradient(180deg,#000 35%,transparent 100%);mask-image:linear-gradient(180deg,#000 35%,transparent 100%)}
+.scrim-top{top:0;height:44%;background:linear-gradient(180deg,rgba(244,239,229,.97) 0%,rgba(244,239,229,.8) 45%,rgba(244,239,229,0) 100%);
+  -webkit-mask-image:linear-gradient(180deg,#000 40%,transparent 100%);mask-image:linear-gradient(180deg,#000 40%,transparent 100%)}
 .scrim-bottom{top:auto;bottom:0;height:36%;background:linear-gradient(0deg,rgba(244,239,229,.9) 0%,rgba(244,239,229,.62) 40%,rgba(244,239,229,0) 100%);
   -webkit-mask-image:linear-gradient(0deg,#000 35%,transparent 100%);mask-image:linear-gradient(0deg,#000 35%,transparent 100%)}
 .stage.is-static .scrim{display:none}
@@ -346,7 +346,7 @@ button,input,select,textarea{font:inherit;color:inherit}
   position:absolute;inset:0;border-radius:6px 10px 10px 6px;
   backface-visibility:hidden;-webkit-backface-visibility:hidden;
 }
-.pp-cover .face-front{background:url("assets/passport-cover.webp") center/100% 100% no-repeat}
+.pp-cover .face-front{background:#2E4636 url("assets/passport-cover.webp") center/100% 100% no-repeat}
 .pp-cover .face-front::after{content:"";position:absolute;left:0;top:0;bottom:0;width:9%;background:linear-gradient(90deg,rgba(0,0,0,.35),rgba(0,0,0,0));border-radius:6px 0 0 6px}
 .pp-cover .face-back{
   transform:rotateY(180deg);background:#E6DFD1;
@@ -443,7 +443,7 @@ html.has-lightbox{overflow:hidden}
 .lb-arrow{top:50%;transform:translateY(-50%);width:44px;height:44px;font-size:34px}
 .lb-prev{left:12px}.lb-next{right:12px}
 .lb-close:focus-visible,.lb-arrow:focus-visible{outline:2px solid var(--gold-line);outline-offset:3px}
-@media (max-width:640px){.lb-arrow{display:none}}
+@media (max-width:640px){.lb-arrow{width:40px;height:40px;font-size:30px;background:rgba(36,39,34,.45);border-color:rgba(248,243,232,.5)}.lb-prev{left:8px}.lb-next{right:8px}}
 .letter .salutation{font-family:var(--script);font-size:clamp(34px,6.5vw,46px);line-height:1.1;margin-bottom:.6em}
 .letter .signoff{font-family:var(--serif);font-style:italic;font-size:clamp(24px,4.6vw,32px);margin-top:1.4em;line-height:1.2}
 .letter .signoff small{display:block;font-family:var(--mono);font-style:normal;font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-line);margin-top:.9em}
@@ -814,7 +814,7 @@ html.has-lightbox{overflow:hidden}
       <li data-caption="Charles &amp; Bethany golfing"><button type="button" class="snap" aria-label="View larger: Charles and Bethany golfing"><img src="assets/photo-golf2-thumb.webp" data-full="assets/photo-golf2.webp" alt="Charles and Bethany on a golf green, a blue flag behind them." width="480" height="480" loading="lazy" decoding="async"><i class="snap-zoom" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></i></button><span>Charles &amp; Bethany</span></li>
       <li data-caption="Ashley &amp; Bethany running on Halloween"><button type="button" class="snap" aria-label="View larger: Ashley and Bethany running on Halloween"><img src="assets/photo-runclub2-thumb.webp" data-full="assets/photo-runclub2.webp" alt="Bethany and Ashley running at night, one waving a golf club and the other a box of doughnuts." width="480" height="480" loading="lazy" decoding="async"><i class="snap-zoom" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></i></button><span>Ashley &amp; Bethany</span></li>
     </ul>
-    <p>Ashley joined run club for the running. Charles joined for Ashley. He has yet to catch her. Along the way, we fostered fourteen cats. Twelve found wonderful homes. Two found ours and stopped looking.</p>
+    <p>Ashley joined run club for the running. Charles joined for Ashley. He has yet to catch her. Along the way, we fostered twelve cats. Ten found wonderful homes. Two found ours and stopped looking.</p>
     <p>When we’re not home, we’re somewhere new, golfing our way around the world and leaving lost golf balls on several continents. So for the wedding, we didn’t want a typical venue. We wanted a cliff, an ocean, and everyone we love in one place.</p>
     <p>Your only job is to show up in linen. It’s going to be perfect. We checked.</p>
     <ul class="snaps" aria-label="A few photos of us">
@@ -1145,11 +1145,13 @@ var RSVP_ENDPOINT = "";
   /* ---- The painted plate: one image. It fades in once decoded; if it fails to load the
      drawn scene stays and the envelope still appears. ---- */
   var plate = $('plate'), plateBase = $('plateBase');
+  var ART = { 'envelope-sealed': 'assets/envelope-sealed.webp', 'seal': 'assets/seal.webp', 'envelope': 'assets/envelope.webp', 'boarding-pass': 'assets/boarding-pass.webp',
+    'polaroid': 'assets/polaroid.webp', 'passport-cover': 'assets/passport-cover.webp', 'pp-calendar': 'assets/pp-calendar.webp', 'pp-itinerary': 'assets/pp-itinerary.webp' };
   function sceneIn() {
     stage.classList.remove('is-loading'); stage.classList.add('is-in');
     ['boarding-pass', 'polaroid', 'passport-cover', 'pp-calendar', 'pp-itinerary'].forEach(decoded);
   }
-  function decoded(name) { var im = new Image(); im.src = 'assets/' + name + '.webp'; return (im.decode ? im.decode() : Promise.resolve()).catch(function () {}); }
+  function decoded(name) { var im = new Image(); im.src = ART[name]; return (im.decode ? im.decode() : Promise.resolve()).catch(function () {}); }
   function plateReady() { plate.classList.add('is-ready'); sceneIn(); }
   var plateDecoded = (plateBase.decode ? plateBase.decode().catch(function () {}) : Promise.resolve());
   plateDecoded.then(function () { if (plateBase.naturalWidth > 0) plate.classList.add('is-ready'); });
