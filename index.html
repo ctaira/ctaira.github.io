@@ -27,9 +27,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="image" href="assets/bali-cliff.webp" fetchpriority="high">
-<link rel="preload" as="image" href="assets/envelope-sealed.webp">
-<link rel="preload" as="image" href="assets/seal.webp">
-<link rel="preload" as="image" href="assets/envelope.webp">
+<link rel="preload" as="image" href="assets/envelope-sealed.webp" fetchpriority="high">
+<link rel="preload" as="image" href="assets/seal.webp" fetchpriority="high">
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500&family=Instrument+Serif:ital@0;1&family=Pinyon+Script&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500&family=Instrument+Serif:ital@0;1&family=Pinyon+Script&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
 <style>
@@ -143,8 +142,7 @@ button,input,select,textarea{font:inherit;color:inherit}
   -webkit-mask-image:linear-gradient(0deg,#000 35%,transparent 100%);mask-image:linear-gradient(0deg,#000 35%,transparent 100%)}
 .stage.is-static .scrim{display:none}
 /* the sea, in motion: a canvas laid over the water in the painting */
-.sea{position:absolute;left:0;top:0;z-index:0;pointer-events:none;opacity:0;transition:opacity 1.2s ease;
-  -webkit-mask-image:url("assets/sea-mask.png");mask-image:url("assets/sea-mask.png");-webkit-mask-size:100% 100%;mask-size:100% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat}
+.sea{position:absolute;left:0;top:0;z-index:0;pointer-events:none;opacity:0;transition:opacity 1.2s ease}
 .sea.is-on{opacity:1}
 .stage.is-static .sea{display:none}
 .cap-top{top:max(8.5%,calc(env(safe-area-inset-top) + 44px))}
@@ -232,7 +230,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 /* Envelope parts share size and centre; JS applies the same transform to each. */
 .env{width:var(--ew);height:var(--eh);margin-left:calc(var(--ew) / -2);margin-top:calc(var(--eh) / -2)}
 .env-back{z-index:2;background:#E3DBC9;border-radius:6px;box-shadow:0 16px 36px -10px rgba(45,35,20,.42),0 3px 8px rgba(45,35,20,.16)}
-.env-pocket{z-index:3;border-radius:6px;overflow:hidden;background:url("assets/envelope.webp") center/100% 100% no-repeat;
+.env-pocket{z-index:3;border-radius:6px;overflow:hidden;background:#EDE6D8 center/100% 100% no-repeat;
   clip-path:polygon(0 0,48.07% 57.45%,100% 0,100% 100%,0 100%);-webkit-clip-path:polygon(0 0,48.07% 57.45%,100% 0,100% 100%,0 100%)}
 .env-pocket .addr{
   position:absolute;left:8%;right:44%;bottom:7%;text-align:center;
@@ -244,7 +242,7 @@ button,input,select,textarea{font:inherit;color:inherit}
   will-change:transform;
 }
 .env-flap .flap-face{
-  position:absolute;inset:0;background:url("assets/envelope.webp") center/100% 100% no-repeat;
+  position:absolute;inset:0;background:#EDE6D8 center/100% 100% no-repeat;
   clip-path:polygon(0 0,100% 0,48.07% 57.45%);
   -webkit-clip-path:polygon(0 0,100% 0,48.07% 57.45%);
 }
@@ -276,7 +274,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 .stage.is-diving .plate,.stage.is-diving .sea,.stage.is-diving .scrim{opacity:0!important;transition:opacity .7s ease}
 /* Boarding pass ------------------------------------------------------------ */
 .bpass{
-  background:url("assets/boarding-pass.webp") center/100% 100% no-repeat;
+  background:center/100% 100% no-repeat;
   filter:drop-shadow(0 10px 14px rgba(36,39,34,.35));will-change:transform;
 }
 
@@ -349,8 +347,8 @@ button,input,select,textarea{font:inherit;color:inherit}
 .pp-base{z-index:1}
 /* painted pages */
 .pp-art{padding:0;background-position:center;background-size:cover;background-repeat:no-repeat}
-.pp-art.art-cal{background-image:url("assets/pp-calendar.webp");background-position:center 32%}
-.pp-art.art-itin{background-image:url("assets/pp-itinerary.webp");background-position:center 38%}
+.pp-art.art-cal{background-position:center 32%}
+.pp-art.art-itin{background-position:center 38%}
 .pp-cover{
   position:absolute;inset:0;z-index:40;transform-origin:0 50%;transform-style:preserve-3d;
   will-change:transform;
@@ -359,13 +357,21 @@ button,input,select,textarea{font:inherit;color:inherit}
   position:absolute;inset:0;border-radius:6px 10px 10px 6px;
   backface-visibility:hidden;-webkit-backface-visibility:hidden;
 }
-.pp-cover .face-front{background:#2E4636 url("assets/passport-cover.webp") center/100% 100% no-repeat}
+.pp-cover .face-front{background:#2E4636 center/100% 100% no-repeat}
 .pp-cover .face-front::after{content:"";position:absolute;left:0;top:0;bottom:0;width:9%;background:linear-gradient(90deg,rgba(0,0,0,.35),rgba(0,0,0,0));border-radius:6px 0 0 6px}
 .pp-cover .face-back{
   transform:rotateY(180deg);background:#E6DFD1;
   background-image:repeating-linear-gradient(45deg,rgba(63,91,69,.07) 0 2px,transparent 2px 14px);
 }
 .pp-cover .face-back::after{content:"";position:absolute;right:0;top:0;bottom:0;width:9%;background:linear-gradient(270deg,rgba(36,39,34,.18),rgba(36,39,34,0))}
+
+/* The artwork of the pieces and the open envelope arrives once the scene is up (the first frame needs only
+   the painting, the sealed envelope and the seal); the static page gets it at once. */
+.stage.is-in .env-pocket,.stage.is-in .env-flap .flap-face{background-image:url("assets/envelope.webp")}
+.stage.is-in .bpass{background-image:url("assets/boarding-pass.webp")}
+.stage.is-in .pp-cover .face-front{background-image:url("assets/passport-cover.webp")}
+.stage.is-in .pp-art.art-cal,.stage.is-static .pp-art.art-cal{background-image:url("assets/pp-calendar.webp")}
+.stage.is-in .pp-art.art-itin,.stage.is-static .pp-art.art-itin{background-image:url("assets/pp-itinerary.webp")}
 
 /* While the book plays, the page does not scroll: gestures step the book instead. */
 html.is-locked,html.is-locked body{overflow:hidden;overscroll-behavior:none}
@@ -671,25 +677,7 @@ html.has-lightbox{overflow:hidden}
     <div class="scene" id="scene">
 
       <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-        <filter id="waxGrain" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">
-          <feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="7" result="noise"/>
-          <feColorMatrix in="noise" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .16 0" result="grain"/>
-          <feComposite in="grain" in2="SourceGraphic" operator="in" result="grainIn"/>
-          <feBlend in="SourceGraphic" in2="grainIn" mode="multiply"/>
-        </filter>
-        <symbol id="catSit" overflow="visible"><g fill="currentColor"><ellipse cx="-8" cy="-10" rx="11" ry="10"/><path d="M-17 -12C-15 -23 -7 -31 4 -31L10 -31C12.5 -22 12.5 -10 10.5 0L-4 0Z"/><rect x="1" y="-17" width="9" height="17" rx="3.5"/><circle cx="7" cy="-34" r="8.2"/><path d="M1 -38L-.5 -47.5L7 -41.5Z"/><path d="M13 -38L14.5 -47.5L7 -41.5Z"/><path d="M-17 -5C-25 -3 -30 -9 -26 -16C-24 -19 -20 -18 -21 -14" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/><path d="M-14 0L10.5 0" stroke="currentColor" stroke-width="1"/></g></symbol>
-        <symbol id="planeIco" overflow="visible"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z" fill="currentColor"/></symbol>
-        <symbol id="fr5" overflow="visible"><g fill="#FFF8EA" stroke="#E3D5B8" stroke-width=".5"><path d="M0 0C-4.6 -2.7 -4.6 -8.8 0 -11.8C4.6 -8.8 4.6 -2.7 0 0Z" transform="rotate(0)"/><path d="M0 0C-4.6 -2.7 -4.6 -8.8 0 -11.8C4.6 -8.8 4.6 -2.7 0 0Z" transform="rotate(72)"/><path d="M0 0C-4.6 -2.7 -4.6 -8.8 0 -11.8C4.6 -8.8 4.6 -2.7 0 0Z" transform="rotate(144)"/><path d="M0 0C-4.6 -2.7 -4.6 -8.8 0 -11.8C4.6 -8.8 4.6 -2.7 0 0Z" transform="rotate(216)"/><path d="M0 0C-4.6 -2.7 -4.6 -8.8 0 -11.8C4.6 -8.8 4.6 -2.7 0 0Z" transform="rotate(288)"/></g><circle r="2.7" fill="#F1CC68"/></symbol>
-        <symbol id="sealDie" overflow="visible">
-          <circle cx="41" cy="41" r="30.5" fill="none" stroke="currentColor" stroke-width="1.3"/>
-          <circle cx="41" cy="41" r="27" fill="none" stroke="currentColor" stroke-width=".5"/>
-          <path d="M46.0 25.0Q56.0 16.0 68.0 21.0" fill="none" stroke="currentColor" stroke-width="1.04" stroke-linecap="round"/><path d="M48.2 23.2L50.1 24.5M48.2 23.2L47.6 21.0M50.5 21.7L53.5 24.3M50.5 21.7L49.9 17.8M52.9 20.6L55.3 23.3M52.9 20.6L52.7 16.9M55.3 19.8L57.1 22.6M55.3 19.8L55.6 16.4M57.7 19.3L59.1 22.1M57.7 19.3L58.4 16.3M60.2 19.2L61.1 21.9M60.2 19.2L61.2 16.6M62.8 19.5L63.2 22.0M62.8 19.5L64.0 17.2M65.4 20.1L65.5 22.3M65.4 20.1L66.7 18.2M68.0 21.0L67.9 23.0M68.0 21.0L69.3 19.5" fill="none" stroke="currentColor" stroke-width="0.80" stroke-linecap="round"/><path d="M44.0 24.0Q52.0 14.0 54.0 8.0" fill="none" stroke="currentColor" stroke-width="0.91" stroke-linecap="round"/><path d="M46.2 21.2L47.9 21.8M46.2 21.2L45.2 19.7M48.1 18.6L51.0 19.5M48.1 18.6L46.3 16.1M49.8 16.2L52.4 16.8M49.8 16.2L48.1 14.0M51.2 13.9L53.6 14.4M51.2 13.9L49.6 12.0M52.4 11.8L54.5 12.1M52.4 11.8L50.9 10.2M53.3 9.8L55.2 9.9M53.3 9.8L51.9 8.5M54.0 8.0L55.6 8.0M54.0 8.0L52.7 7.0" fill="none" stroke="currentColor" stroke-width="0.70" stroke-linecap="round"/>
-          <path d="M20.0 52.0Q14.0 58.0 14.0 66.0" fill="none" stroke="currentColor" stroke-width="0.91" stroke-linecap="round"/><path d="M18.2 54.1L16.9 53.6M18.2 54.1L18.9 55.2M16.7 56.2L14.5 55.7M16.7 56.2L18.2 57.9M15.5 58.5L13.5 58.3M15.5 58.5L17.0 59.8M14.7 60.9L12.9 60.9M14.7 60.9L16.1 61.8M14.2 63.4L12.7 63.6M14.2 63.4L15.5 64.0M14.0 66.0L12.8 66.4M14.0 66.0L15.2 66.4" fill="none" stroke="currentColor" stroke-width="0.70" stroke-linecap="round"/>
-          <text x="40" y="47.5" text-anchor="middle" font-family="Instrument Serif,Georgia,serif" font-size="18" fill="currentColor" letter-spacing="1">A<tspan font-size="9" dy="-1.5"> + </tspan><tspan dy="1.5">C</tspan></text>
-          <g transform="translate(31.0 66.0) scale(0.300 0.300)" fill="currentColor"><ellipse cx="-8" cy="-10" rx="11" ry="10"/><path d="M-17 -12C-15 -23 -7 -31 4 -31L10 -31C12.5 -22 12.5 -10 10.5 0L-4 0Z"/><rect x="1" y="-17" width="9" height="17" rx="3.5"/><circle cx="7" cy="-34" r="8.2"/><path d="M1 -38L-.5 -47.5L7 -41.5Z"/><path d="M13 -38L14.5 -47.5L7 -41.5Z"/><path d="M-17 -5C-25 -3 -30 -9 -26 -16C-24 -19 -20 -18 -21 -14" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/><path d="M-14 0L10.5 0" stroke="currentColor" stroke-width="1"/></g><g transform="translate(51.0 66.0) scale(-0.300 0.300)" fill="currentColor"><ellipse cx="-8" cy="-10" rx="11" ry="10"/><path d="M-17 -12C-15 -23 -7 -31 4 -31L10 -31C12.5 -22 12.5 -10 10.5 0L-4 0Z"/><rect x="1" y="-17" width="9" height="17" rx="3.5"/><circle cx="7" cy="-34" r="8.2"/><path d="M1 -38L-.5 -47.5L7 -41.5Z"/><path d="M13 -38L14.5 -47.5L7 -41.5Z"/><path d="M-17 -5C-25 -3 -30 -9 -26 -16C-24 -19 -20 -18 -21 -14" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/><path d="M-14 0L10.5 0" stroke="currentColor" stroke-width="1"/></g>
-          <path d="M22 66.4H60" stroke="currentColor" stroke-width=".7" stroke-linecap="round"/>
-        </symbol>
-        <symbol id="coverEmblem" overflow="visible">
+                                                <symbol id="coverEmblem" overflow="visible">
           <path d="M32.4 104.3 L33.4 96.5 L34.6 88.8 L35.8 81.3 L37.2 73.9 L38.6 66.6 L40.2 59.5 L41.8 52.5 L43.5 45.7 L45.3 39.0 L47.3 32.4 L44.7 31.6 L42.6 38.1 L40.5 44.8 L38.6 51.7 L36.7 58.7 L35.0 65.8 L33.3 73.1 L31.7 80.5 L30.3 88.1 L28.9 95.8 L27.6 103.7Z" fill="currentColor"/><path d="M34.7 95.8L27.9 94.8M35.9 87.3L29.5 86.2M37.3 79.0L31.2 77.8M38.8 70.8L33.1 69.6M40.4 62.8L35.1 61.6M42.1 55.0L37.1 53.8M43.9 47.4L39.3 46.1M45.8 39.9L41.7 38.7" stroke="currentColor" stroke-width="0.84" opacity=".55" stroke-linecap="round"/><path d="M46.0 32.0Q23.8 17.4 1.5 50.0" fill="none" stroke="currentColor" stroke-width="1.16" stroke-linecap="round"/><path d="M42.6 30.0L41.9 26.8M42.6 30.0L39.6 31.4M39.2 28.6L37.2 23.2M39.2 28.6L34.3 31.8M35.7 27.8L33.1 23.0M35.7 27.8L31.6 31.4M32.3 27.5L29.1 23.4M32.3 27.5L29.0 31.5M28.9 27.7L25.2 24.4M28.9 27.7L26.5 32.1M25.5 28.6L21.6 26.0M25.5 28.6L23.8 33.0M22.1 30.0L18.1 28.1M22.1 30.0L21.1 34.3M18.6 31.9L14.7 30.6M18.6 31.9L18.2 36.0M15.2 34.4L11.4 33.6M15.2 34.4L15.2 38.3M11.8 37.5L8.2 37.0M11.8 37.5L12.2 41.1M8.4 41.1L5.0 41.0M8.4 41.1L9.0 44.4M5.0 45.3L1.9 45.4M5.0 45.3L5.7 48.3M1.5 50.0L-1.3 50.3M1.5 50.0L2.4 52.8" fill="none" stroke="currentColor" stroke-width="0.89" stroke-linecap="round"/><path d="M46.0 32.0Q26.7 7.2 12.8 46.7" fill="none" stroke="currentColor" stroke-width="1.16" stroke-linecap="round"/><path d="M43.1 28.6L43.5 25.3M43.1 28.6L39.8 28.9M40.2 25.9L40.2 20.1M40.2 25.9L34.6 27.1M37.4 24.0L36.4 18.6M37.4 24.0L32.3 26.1M34.6 22.8L32.6 18.0M34.6 22.8L30.4 25.9M31.9 22.5L28.8 18.6M31.9 22.5L28.8 26.3M29.3 22.8L25.5 20.1M29.3 22.8L27.5 27.2M26.8 24.0L22.6 22.4M26.8 24.0L26.2 28.3M24.3 25.9L20.1 25.2M24.3 25.9L24.6 30.0M21.8 28.5L17.9 28.5M21.8 28.5L22.7 32.3M19.5 31.9L15.9 32.4M19.5 31.9L20.7 35.3M17.2 36.1L13.9 36.8M17.2 36.1L18.6 39.1M14.9 41.0L12.0 41.9M14.9 41.0L16.4 43.7M12.8 46.7L10.1 47.7M12.8 46.7L14.2 49.1" fill="none" stroke="currentColor" stroke-width="0.89" stroke-linecap="round"/><path d="M46.0 32.0Q33.2 -0.6 20.4 44.2" fill="none" stroke="currentColor" stroke-width="1.16" stroke-linecap="round"/><path d="M44.0 27.4L45.5 24.5M44.0 27.4L40.8 26.7M42.1 23.8L44.0 18.4M42.1 23.8L36.3 23.1M40.1 21.1L41.1 15.7M40.1 21.1L34.6 21.3M38.1 19.3L37.7 14.0M38.1 19.3L33.1 20.8M36.2 18.4L34.0 13.9M36.2 18.4L32.3 21.5M34.2 18.4L30.5 15.5M34.2 18.4L32.2 22.6M32.2 19.3L28.0 18.1M32.2 19.3L32.0 23.7M30.2 21.2L26.1 21.0M30.2 21.2L31.0 25.3M28.3 23.9L24.4 24.4M28.3 23.9L29.6 27.6M26.3 27.6L22.8 28.5M26.3 27.6L27.9 30.9M24.3 32.2L21.1 33.2M24.3 32.2L26.0 35.1M22.4 37.7L19.5 38.8M22.4 37.7L24.1 40.3M20.4 44.2L17.8 45.3M20.4 44.2L22.0 46.5" fill="none" stroke="currentColor" stroke-width="0.89" stroke-linecap="round"/><path d="M46.0 32.0Q42.1 -4.7 39.3 42.8" fill="none" stroke="currentColor" stroke-width="1.16" stroke-linecap="round"/><path d="M45.4 26.9L47.7 24.5M45.4 26.9L42.6 25.1M44.8 22.7L48.7 18.5M44.8 22.7L39.8 19.8M44.3 19.6L47.8 15.3M44.3 19.6L39.4 17.1M43.7 17.4L46.6 13.0M43.7 17.4L38.8 15.6M43.2 16.2L44.3 11.4M43.2 16.2L38.2 16.3M42.7 16.1L38.2 14.6M42.7 16.1L42.2 20.7M42.1 16.9L37.9 18.3M42.1 16.9L44.4 20.7M41.6 18.7L37.9 20.6M41.6 18.7L44.3 22.0M41.2 21.6L37.8 23.5M41.2 21.6L43.8 24.4M40.7 25.4L37.6 27.3M40.7 25.4L43.3 27.9M40.2 30.2L37.4 32.1M40.2 30.2L42.7 32.5M39.8 36.0L37.2 37.8M39.8 36.0L42.0 38.1M39.3 42.8L37.0 44.5M39.3 42.8L41.4 44.7" fill="none" stroke="currentColor" stroke-width="0.89" stroke-linecap="round"/><path d="M46.0 32.0Q51.8 -4.2 57.6 43.0" fill="none" stroke="currentColor" stroke-width="1.16" stroke-linecap="round"/><path d="M46.9 26.9L49.8 25.4M46.9 26.9L44.7 24.4M47.8 22.8L53.0 20.4M47.8 22.8L44.3 18.3M48.7 19.7L53.8 17.9M48.7 19.7L45.7 15.1M49.6 17.6L54.7 16.7M49.6 17.6L47.5 12.8M50.4 16.5L55.2 17.8M50.4 16.5L50.7 11.5M51.3 16.3L52.7 20.8M51.3 16.3L55.4 14.0M52.2 17.2L50.9 21.4M52.2 17.2L56.6 17.6M53.1 19.0L51.0 22.6M53.1 19.0L57.1 20.3M54.0 21.8L51.7 25.0M54.0 21.8L57.6 23.4M54.9 25.6L52.6 28.4M54.9 25.6L58.1 27.3M55.8 30.4L53.5 32.9M55.8 30.4L58.7 32.1M56.7 36.2L54.5 38.5M56.7 36.2L59.3 37.8M57.6 43.0L55.6 45.0M57.6 43.0L60.0 44.5" fill="none" stroke="currentColor" stroke-width="0.89" stroke-linecap="round"/><path d="M46.0 32.0Q60.3 0.7 70.7 44.6" fill="none" stroke="currentColor" stroke-width="1.16" stroke-linecap="round"/><path d="M48.2 27.6L51.4 27.1M48.2 27.6L46.9 24.6M50.3 24.1L56.1 23.8M50.3 24.1L48.7 18.6M52.4 21.6L57.9 22.1M52.4 21.6L51.7 16.1M54.4 19.9L59.4 21.6M54.4 19.9L55.1 14.7M56.4 19.0L60.2 22.3M56.4 19.0L58.8 14.7M58.4 19.1L60.3 23.4M58.4 19.1L62.2 16.4M60.3 20.1L60.4 24.5M60.3 20.1L64.6 19.0M62.1 21.9L61.2 26.0M62.1 21.9L66.3 22.0M63.9 24.7L62.5 28.3M63.9 24.7L67.8 25.3M65.7 28.3L64.0 31.5M65.7 28.3L69.2 29.3M67.4 32.9L65.6 35.7M67.4 32.9L70.6 34.0M69.1 38.3L67.3 40.8M69.1 38.3L71.9 39.5M70.7 44.6L68.9 46.8M70.7 44.6L73.2 45.8" fill="none" stroke="currentColor" stroke-width="0.89" stroke-linecap="round"/><path d="M46.0 32.0Q66.2 9.1 86.5 47.4" fill="none" stroke="currentColor" stroke-width="1.16" stroke-linecap="round"/><path d="M49.1 28.8L52.4 29.4M49.1 28.8L48.9 25.5M52.2 26.4L57.7 28.2M52.2 26.4L52.7 20.7M55.3 24.7L60.2 27.3M55.3 24.7L56.8 19.4M58.4 23.7L62.5 27.1M58.4 23.7L60.8 19.1M61.6 23.4L64.5 27.4M61.6 23.4L64.8 19.7M64.7 23.9L66.6 28.2M64.7 23.9L68.4 21.1M67.8 25.1L68.7 29.4M67.8 25.1L71.8 23.2M70.9 27.0L71.1 31.1M70.9 27.0L74.9 25.9M74.0 29.6L73.7 33.5M74.0 29.6L77.9 29.1M77.1 33.0L76.4 36.5M77.1 33.0L80.7 32.9M80.2 37.0L79.3 40.3M80.2 37.0L83.6 37.2M83.3 41.8L82.3 44.7M83.3 41.8L86.4 42.2M86.5 47.4L85.3 49.9M86.5 47.4L89.2 47.9" fill="none" stroke="currentColor" stroke-width="0.89" stroke-linecap="round"/><g fill="currentColor"><circle cx="43.7" cy="35.1" r="2.1"/><circle cx="48.1" cy="35.6" r="2.1"/><circle cx="46.0" cy="38.3" r="1.9"/></g><path d="M132.4 103.7 L131.1 95.8 L129.7 88.1 L128.3 80.5 L126.7 73.1 L125.0 65.8 L123.3 58.7 L121.4 51.7 L119.5 44.8 L117.4 38.1 L115.3 31.6 L112.7 32.4 L114.7 39.0 L116.5 45.7 L118.2 52.5 L119.8 59.5 L121.4 66.6 L122.8 73.9 L124.2 81.3 L125.4 88.8 L126.6 96.5 L127.6 104.3Z" fill="currentColor"/><path d="M132.1 94.8L125.3 95.8M130.5 86.2L124.1 87.3M128.8 77.8L122.7 79.0M126.9 69.6L121.2 70.8M124.9 61.6L119.6 62.8M122.9 53.8L117.9 55.0M120.7 46.1L116.1 47.4M118.3 38.7L114.2 39.9" stroke="currentColor" stroke-width="0.84" opacity=".55" stroke-linecap="round"/><path d="M114.0 32.0Q91.8 17.4 69.5 50.0" fill="none" stroke="currentColor" stroke-width="1.16" stroke-linecap="round"/><path d="M110.6 30.0L109.9 26.8M110.6 30.0L107.6 31.4M107.2 28.6L105.2 23.2M107.2 28.6L102.3 31.8M103.7 27.8L101.1 23.0M103.7 27.8L99.6 31.4M100.3 27.5L97.1 23.4M100.3 27.5L97.0 31.5M96.9 27.7L93.2 24.4M96.9 27.7L94.5 32.1M93.5 28.6L89.6 26.0M93.5 28.6L91.8 33.0M90.1 30.0L86.1 28.1M90.1 30.0L89.1 34.3M86.6 31.9L82.7 30.6M86.6 31.9L86.2 36.0M83.2 34.4L79.4 33.6M83.2 34.4L83.2 38.3M79.8 37.5L76.2 37.0M79.8 37.5L80.2 41.1M76.4 41.1L73.0 41.0M76.4 41.1L77.0 44.4M73.0 45.3L69.9 45.4M73.0 45.3L73.7 48.3M69.5 50.0L66.7 50.3M69.5 50.0L70.4 52.8" fill="none" stroke="currentColor" stroke-width="0.89" stroke-linecap="round"/><path d="M114.0 32.0Q94.7 7.2 80.8 46.7" fill="none" stroke="currentColor" stroke-width="1.16" stroke-linecap="round"/><path d="M111.1 28.6L111.5 25.3M111.1 28.6L107.8 28.9M108.2 25.9L108.2 20.1M108.2 25.9L102.6 27.1M105.4 24.0L104.4 18.6M105.4 24.0L100.3 26.1M102.6 22.8L100.6 18.0M102.6 22.8L98.4 25.9M99.9 22.5L96.8 18.6M99.9 22.5L96.8 26.3M97.3 22.8L93.5 20.1M97.3 22.8L95.5 27.2M94.8 24.0L90.6 22.4M94.8 24.0L94.2 28.3M92.3 25.9L88.1 25.2M92.3 25.9L92.6 30.0M89.8 28.5L85.9 28.5M89.8 28.5L90.7 32.3M87.5 31.9L83.9 32.4M87.5 31.9L88.7 35.3M85.2 36.1L81.9 36.8M85.2 36.1L86.6 39.1M82.9 41.0L80.0 41.9M82.9 41.0L84.4 43.7M80.8 46.7L78.1 47.7M80.8 46.7L82.2 49.1" fill="none" stroke="currentColor" stroke-width="0.89" stroke-linecap="round"/><path d="M114.0 32.0Q101.2 -0.6 88.4 44.2" fill="none" stroke="currentColor" stroke-width="1.16" stroke-linecap="round"/><path d="M112.0 27.4L113.5 24.5M112.0 27.4L108.8 26.7M110.1 23.8L112.0 18.4M110.1 23.8L104.3 23.1M108.1 21.1L109.1 15.7M108.1 21.1L102.6 21.3M106.1 19.3L105.7 14.0M106.1 19.3L101.1 20.8M104.2 18.4L102.0 13.9M104.2 18.4L100.3 21.5M102.2 18.4L98.5 15.5M102.2 18.4L100.2 22.6M100.2 19.3L96.0 18.1M100.2 19.3L100.0 23.7M98.2 21.2L94.1 21.0M98.2 21.2L99.0 25.3M96.3 23.9L92.4 24.4M96.3 23.9L97.6 27.6M94.3 27.6L90.8 28.5M94.3 27.6L95.9 30.9M92.3 32.2L89.1 33.2M92.3 32.2L94.0 35.1M90.4 37.7L87.5 38.8M90.4 37.7L92.1 40.3M88.4 44.2L85.8 45.3M88.4 44.2L90.0 46.5" fill="none" stroke="currentColor" stroke-width="0.89" stroke-linecap="round"/><path d="M114.0 32.0Q110.1 -4.7 107.3 42.8" fill="none" stroke="currentColor" stroke-width="1.16" stroke-linecap="round"/><path d="M113.4 26.9L115.7 24.5M113.4 26.9L110.6 25.1M112.8 22.7L116.7 18.5M112.8 22.7L107.8 19.8M112.3 19.6L115.8 15.3M112.3 19.6L107.4 17.1M111.7 17.4L114.6 13.0M111.7 17.4L106.8 15.6M111.2 16.2L112.3 11.4M111.2 16.2L106.2 16.3M110.7 16.1L106.2 14.6M110.7 16.1L110.2 20.7M110.1 16.9L105.9 18.3M110.1 16.9L112.4 20.7M109.6 18.7L105.9 20.6M109.6 18.7L112.3 22.0M109.2 21.6L105.8 23.5M109.2 21.6L111.8 24.4M108.7 25.4L105.6 27.3M108.7 25.4L111.3 27.9M108.2 30.2L105.4 32.1M108.2 30.2L110.7 32.5M107.8 36.0L105.2 37.8M107.8 36.0L110.0 38.1M107.3 42.8L105.0 44.5M107.3 42.8L109.4 44.7" fill="none" stroke="currentColor" stroke-width="0.89" stroke-linecap="round"/><path d="M114.0 32.0Q119.8 -4.2 125.6 43.0" fill="none" stroke="currentColor" stroke-width="1.16" stroke-linecap="round"/><path d="M114.9 26.9L117.8 25.4M114.9 26.9L112.7 24.4M115.8 22.8L121.0 20.4M115.8 22.8L112.3 18.3M116.7 19.7L121.8 17.9M116.7 19.7L113.7 15.1M117.6 17.6L122.7 16.7M117.6 17.6L115.5 12.8M118.4 16.5L123.2 17.8M118.4 16.5L118.7 11.5M119.3 16.3L120.7 20.8M119.3 16.3L123.4 14.0M120.2 17.2L118.9 21.4M120.2 17.2L124.6 17.6M121.1 19.0L119.0 22.6M121.1 19.0L125.1 20.3M122.0 21.8L119.7 25.0M122.0 21.8L125.6 23.4M122.9 25.6L120.6 28.4M122.9 25.6L126.1 27.3M123.8 30.4L121.5 32.9M123.8 30.4L126.7 32.1M124.7 36.2L122.5 38.5M124.7 36.2L127.3 37.8M125.6 43.0L123.6 45.0M125.6 43.0L128.0 44.5" fill="none" stroke="currentColor" stroke-width="0.89" stroke-linecap="round"/><path d="M114.0 32.0Q128.3 0.7 138.7 44.6" fill="none" stroke="currentColor" stroke-width="1.16" stroke-linecap="round"/><path d="M116.2 27.6L119.4 27.1M116.2 27.6L114.9 24.6M118.3 24.1L124.1 23.8M118.3 24.1L116.7 18.6M120.4 21.6L125.9 22.1M120.4 21.6L119.7 16.1M122.4 19.9L127.4 21.6M122.4 19.9L123.1 14.7M124.4 19.0L128.2 22.3M124.4 19.0L126.8 14.7M126.4 19.1L128.3 23.4M126.4 19.1L130.2 16.4M128.3 20.1L128.4 24.5M128.3 20.1L132.6 19.0M130.1 21.9L129.2 26.0M130.1 21.9L134.3 22.0M131.9 24.7L130.5 28.3M131.9 24.7L135.8 25.3M133.7 28.3L132.0 31.5M133.7 28.3L137.2 29.3M135.4 32.9L133.6 35.7M135.4 32.9L138.6 34.0M137.1 38.3L135.3 40.8M137.1 38.3L139.9 39.5M138.7 44.6L136.9 46.8M138.7 44.6L141.2 45.8" fill="none" stroke="currentColor" stroke-width="0.89" stroke-linecap="round"/><path d="M114.0 32.0Q134.2 9.1 154.5 47.4" fill="none" stroke="currentColor" stroke-width="1.16" stroke-linecap="round"/><path d="M117.1 28.8L120.4 29.4M117.1 28.8L116.9 25.5M120.2 26.4L125.7 28.2M120.2 26.4L120.7 20.7M123.3 24.7L128.2 27.3M123.3 24.7L124.8 19.4M126.4 23.7L130.5 27.1M126.4 23.7L128.8 19.1M129.6 23.4L132.5 27.4M129.6 23.4L132.8 19.7M132.7 23.9L134.6 28.2M132.7 23.9L136.4 21.1M135.8 25.1L136.7 29.4M135.8 25.1L139.8 23.2M138.9 27.0L139.1 31.1M138.9 27.0L142.9 25.9M142.0 29.6L141.7 33.5M142.0 29.6L145.9 29.1M145.1 33.0L144.4 36.5M145.1 33.0L148.7 32.9M148.2 37.0L147.3 40.3M148.2 37.0L151.6 37.2M151.3 41.8L150.3 44.7M151.3 41.8L154.4 42.2M154.5 47.4L153.3 49.9M154.5 47.4L157.2 47.9" fill="none" stroke="currentColor" stroke-width="0.89" stroke-linecap="round"/><g fill="currentColor"><circle cx="111.7" cy="35.1" r="2.1"/><circle cx="116.1" cy="35.6" r="2.1"/><circle cx="114.0" cy="38.3" r="1.9"/></g>
           <g transform="translate(64.0 103.0) scale(0.620 0.620)" fill="currentColor"><ellipse cx="-8" cy="-10" rx="11" ry="10"/><path d="M-17 -12C-15 -23 -7 -31 4 -31L10 -31C12.5 -22 12.5 -10 10.5 0L-4 0Z"/><rect x="1" y="-17" width="9" height="17" rx="3.5"/><circle cx="7" cy="-34" r="8.2"/><path d="M1 -38L-.5 -47.5L7 -41.5Z"/><path d="M13 -38L14.5 -47.5L7 -41.5Z"/><path d="M-17 -5C-25 -3 -30 -9 -26 -16C-24 -19 -20 -18 -21 -14" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/><path d="M-14 0L10.5 0" stroke="currentColor" stroke-width="1"/></g><g transform="translate(96.0 103.0) scale(-0.620 0.620)" fill="currentColor"><ellipse cx="-8" cy="-10" rx="11" ry="10"/><path d="M-17 -12C-15 -23 -7 -31 4 -31L10 -31C12.5 -22 12.5 -10 10.5 0L-4 0Z"/><rect x="1" y="-17" width="9" height="17" rx="3.5"/><circle cx="7" cy="-34" r="8.2"/><path d="M1 -38L-.5 -47.5L7 -41.5Z"/><path d="M13 -38L14.5 -47.5L7 -41.5Z"/><path d="M-17 -5C-25 -3 -30 -9 -26 -16C-24 -19 -20 -18 -21 -14" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/><path d="M-14 0L10.5 0" stroke="currentColor" stroke-width="1"/></g>
           <g transform="translate(80 104) scale(.62)"><g fill="currentColor"><path d="M0 0C-4.6 -2.7 -4.6 -8.8 0 -11.8C4.6 -8.8 4.6 -2.7 0 0Z" transform="rotate(0)"/><path d="M0 0C-4.6 -2.7 -4.6 -8.8 0 -11.8C4.6 -8.8 4.6 -2.7 0 0Z" transform="rotate(72)"/><path d="M0 0C-4.6 -2.7 -4.6 -8.8 0 -11.8C4.6 -8.8 4.6 -2.7 0 0Z" transform="rotate(144)"/><path d="M0 0C-4.6 -2.7 -4.6 -8.8 0 -11.8C4.6 -8.8 4.6 -2.7 0 0Z" transform="rotate(216)"/><path d="M0 0C-4.6 -2.7 -4.6 -8.8 0 -11.8C4.6 -8.8 4.6 -2.7 0 0Z" transform="rotate(288)"/></g></g>
@@ -724,7 +712,7 @@ html.has-lightbox{overflow:hidden}
 
       <!-- In the pocket, back to front: the passport (below, after the controls), the ticket, the photograph -->
       <div class="piece pc-ticket" id="pcTicket" aria-hidden="true"><div class="bpass" id="bpass"><span id="bpName" hidden></span><span id="bpSeats" hidden></span></div></div>
-      <div class="piece pc-photo" id="pcPhoto" aria-hidden="true"><div class="polaroid" id="polaroid"><img src="assets/polaroid.webp" alt="" width="879" height="879" decoding="async"><span class="pol-cap">Ashley &amp; Charles</span></div></div>
+      <div class="piece pc-photo" id="pcPhoto" aria-hidden="true"><div class="polaroid" id="polaroid"><img data-src="assets/polaroid.webp" alt="" width="879" height="879" decoding="async"><span class="pol-cap">Ashley &amp; Charles</span></div></div>
 
       <div class="veil" id="veil" aria-hidden="true"></div>
 
@@ -825,16 +813,16 @@ html.has-lightbox{overflow:hidden}
     <p>Our first date was an Ed Sheeran concert. You might say everything about it, and everything since, has been “Perfect.”</p>
     <p>But first, we have Bethany to thank. Friends with Ashley from run club and Charles from golf, she invited Ashley to a BBQ Charles was hosting, and the rest is history.</p>
     <ul class="snaps snaps-two" aria-label="Photos with Bethany">
-      <li data-caption="Charles &amp; Bethany golfing"><button type="button" class="snap" aria-label="View larger: Charles and Bethany golfing"><img src="assets/photo-golf2-thumb.webp" data-full="assets/photo-golf2.webp" alt="Charles and Bethany on a golf green, a blue flag behind them." width="480" height="480" loading="lazy" decoding="async"><i class="snap-zoom" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></i></button><span>Charles &amp; Bethany</span></li>
-      <li data-caption="Ashley &amp; Bethany running on Halloween"><button type="button" class="snap" aria-label="View larger: Ashley and Bethany running on Halloween"><img src="assets/photo-runclub2-thumb.webp" data-full="assets/photo-runclub2.webp" alt="Bethany and Ashley running at night, one waving a golf club and the other a box of doughnuts." width="480" height="480" loading="lazy" decoding="async"><i class="snap-zoom" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></i></button><span>Ashley &amp; Bethany</span></li>
+      <li data-caption="Charles &amp; Bethany golfing"><button type="button" class="snap" aria-label="View larger: Charles and Bethany golfing"><img data-src="assets/photo-golf2-thumb.webp" data-full="assets/photo-golf2.webp" alt="Charles and Bethany on a golf green, a blue flag behind them." width="480" height="480" loading="lazy" decoding="async"><i class="snap-zoom" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></i></button><span>Charles &amp; Bethany</span></li>
+      <li data-caption="Ashley &amp; Bethany running on Halloween"><button type="button" class="snap" aria-label="View larger: Ashley and Bethany running on Halloween"><img data-src="assets/photo-runclub2-thumb.webp" data-full="assets/photo-runclub2.webp" alt="Bethany and Ashley running at night, one waving a golf club and the other a box of doughnuts." width="480" height="480" loading="lazy" decoding="async"><i class="snap-zoom" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></i></button><span>Ashley &amp; Bethany</span></li>
     </ul>
     <p>Ashley joined run club for the running. Charles joined for Ashley. He has yet to catch her. Along the way, we fostered twelve cats. Ten found wonderful homes. Two found ours and stopped looking.</p>
     <p>When we’re not home, we’re somewhere new, golfing our way around the world and leaving lost golf balls on several continents. So for the wedding, we didn’t want a typical venue. We wanted a cliff, an ocean, and everyone we love in one place.</p>
     <p>Your only job is to show up. It’s going to be perfect. We checked.</p>
     <ul class="snaps" aria-label="A few photos of us">
-      <li data-caption="Run Club at Santa Monica"><button type="button" class="snap" aria-label="View larger: Run Club at Santa Monica"><img src="assets/photo-runclub-thumb.webp" data-full="assets/photo-runclub.webp" alt="Ashley and Charles, sweaty and smiling after run club on the Santa Monica boardwalk." width="480" height="480" loading="lazy" decoding="async"><i class="snap-zoom" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></i></button><span>Run club</span></li>
-      <li data-caption="The back nine at Torrey Pines"><button type="button" class="snap" aria-label="View larger: The back nine at Torrey Pines"><img src="assets/photo-golf-thumb.webp" data-full="assets/photo-golf.webp" alt="Ashley and Charles on the tee at Torrey Pines, the Pacific behind them." width="480" height="480" loading="lazy" decoding="async"><i class="snap-zoom" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></i></button><span>The back nine</span></li>
-      <li data-caption="Our two foster fails: Tuco &amp; Elsa"><button type="button" class="snap" aria-label="View larger: Our two foster fails, Tuco and Elsa"><img src="assets/photo-cats-thumb.webp" data-full="assets/photo-cats.webp" alt="The two foster fails, a white cat and a tabby, in matching red silk jackets in a fluffy cat bed." width="480" height="480" loading="lazy" decoding="async"><i class="snap-zoom" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></i></button><span>Our 2 foster fails</span></li>
+      <li data-caption="Run Club at Santa Monica"><button type="button" class="snap" aria-label="View larger: Run Club at Santa Monica"><img data-src="assets/photo-runclub-thumb.webp" data-full="assets/photo-runclub.webp" alt="Ashley and Charles, sweaty and smiling after run club on the Santa Monica boardwalk." width="480" height="480" loading="lazy" decoding="async"><i class="snap-zoom" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></i></button><span>Run club</span></li>
+      <li data-caption="The back nine at Torrey Pines"><button type="button" class="snap" aria-label="View larger: The back nine at Torrey Pines"><img data-src="assets/photo-golf-thumb.webp" data-full="assets/photo-golf.webp" alt="Ashley and Charles on the tee at Torrey Pines, the Pacific behind them." width="480" height="480" loading="lazy" decoding="async"><i class="snap-zoom" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></i></button><span>The back nine</span></li>
+      <li data-caption="Our two foster fails: Tuco &amp; Elsa"><button type="button" class="snap" aria-label="View larger: Our two foster fails, Tuco and Elsa"><img data-src="assets/photo-cats-thumb.webp" data-full="assets/photo-cats.webp" alt="The two foster fails, a white cat and a tabby, in matching red silk jackets in a fluffy cat bed." width="480" height="480" loading="lazy" decoding="async"><i class="snap-zoom" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></i></button><span>Our 2 foster fails</span></li>
     </ul>
     <p class="signoff">With all our love,<br>Ashley &amp; Charles
       <small>Los Angeles · September 2026</small>
@@ -874,11 +862,11 @@ html.has-lightbox{overflow:hidden}
       <div class="map-ivory" aria-hidden="true"></div>
       <svg class="map-rim" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="25.94,0.02 27.93,0.31 29.67,0.64 31.30,1.16 32.67,1.80 34.08,2.43 35.48,3.06 36.87,3.72 37.89,4.64 38.84,5.58 39.74,6.54 40.66,7.49 41.48,8.40 42.41,9.41 43.48,10.38 44.61,11.31 45.39,12.26 46.10,13.25 46.71,14.25 47.54,15.11 48.70,15.87 49.85,16.65 51.05,17.39 52.35,18.08 53.67,18.75 54.96,19.46 56.16,20.21 57.25,21.02 58.28,21.85 59.45,22.69 60.68,23.50 61.95,24.29 63.26,25.07 64.60,25.74 65.96,26.39 67.32,27.04 68.64,27.72 69.90,28.43 71.11,29.13 72.39,29.85 73.66,30.56 74.96,31.26 76.31,31.92 77.71,32.55 79.16,33.22 80.62,33.89 82.04,34.57 83.41,35.29 84.74,36.04 85.92,36.80 87.10,37.55 88.32,38.29 89.58,39.00 90.90,39.67 91.76,40.65 92.63,41.63 93.45,42.62 94.19,43.64 94.84,44.66 95.46,45.70 96.09,46.74 96.46,47.77 96.86,48.79 97.23,49.82 97.49,50.84 97.70,51.85 98.03,52.86 98.43,53.86 98.74,54.87 98.88,55.90 98.88,56.93 98.77,57.93 98.66,58.95 98.70,59.97 98.88,60.98 99.15,62.00 99.46,63.01 99.76,64.03 99.89,65.07 99.82,66.08 99.58,67.09 99.23,68.10 98.88,69.11 98.61,70.12 98.47,71.13 98.55,72.15 98.77,73.16 98.93,74.18 99.02,75.19 99.08,76.21 99.13,77.23 99.18,78.25 99.08,79.24 98.87,80.25 98.70,81.27 98.57,82.28 98.47,83.30 98.38,84.32 98.31,85.34 98.03,86.30 97.50,87.28 96.98,88.26 96.42,89.24 95.78,90.19 95.07,91.13 94.32,92.06 93.60,93.02 92.32,93.80 91.04,94.56 89.69,95.28 88.25,95.96 86.78,96.62 85.48,97.25 83.92,97.61 82.30,98.11 80.72,98.66 79.12,99.17 77.46,99.61 75.81,100.00 74.08,99.66 72.28,99.35 70.46,99.09 68.60,98.89 66.72,98.73 64.85,98.57 62.80,98.31 61.40,97.49 60.24,96.73 59.13,95.94 58.07,95.12 57.04,94.29 56.03,93.45 55.06,92.58 54.16,91.69 53.23,90.81 52.26,89.95 51.20,89.12 50.07,88.32 48.89,87.54 47.73,86.75 46.63,85.93 45.96,84.96 45.33,84.00 44.73,83.04 44.14,82.07 43.58,81.10 43.03,80.12 42.44,79.16 41.74,78.20 40.92,77.27 40.03,76.35 39.17,75.43 38.40,74.49 37.69,73.53 36.96,72.57 36.14,71.64 35.06,70.85 34.00,70.05 33.01,69.22 32.06,68.38 31.11,67.54 30.15,66.70 29.21,65.86 28.25,65.02 27.31,64.13 26.42,63.22 25.53,62.30 24.71,61.37 24.01,60.41 23.40,59.43 22.87,58.42 22.36,57.41 21.77,56.42 21.04,55.47 20.19,54.54 19.30,53.63 18.41,52.71 17.55,51.79 16.75,50.86 16.20,49.84 15.95,48.81 15.70,47.78 15.39,46.76 15.03,45.75 14.62,44.74 14.17,43.73 13.79,42.72 13.51,41.71 13.26,40.70 13.06,39.68 12.92,38.66 12.83,37.63 12.75,36.61 12.41,35.57 11.82,34.54 11.15,33.53 10.40,32.53 9.33,31.68 8.26,30.83 7.28,29.96 6.38,29.06 5.50,28.15 4.57,27.25 3.55,26.39 2.46,25.53 1.63,24.53 0.91,23.51 0.35,22.46 0.23,21.38 0.53,20.37 0.75,19.35 0.84,18.39 1.30,17.41 1.68,16.36 2.03,15.32 2.74,14.36 3.85,13.47 5.02,12.61 6.20,11.75 7.52,11.14 9.15,10.64 10.74,10.10 12.29,9.52 13.83,8.94 15.38,8.36 16.96,7.81 18.11,7.15 19.07,6.26 20.06,5.39 21.06,4.52 22.04,3.65 23.00,2.77 23.92,1.88 24.83,0.99" fill="none" stroke="#9B8B57" stroke-opacity=".85" stroke-width="1" vector-effect="non-scaling-stroke"/></svg>
       <h2 class="map-title"><span class="eyebrow mt-eyebrow">03 — The schedule</span><span class="mt-our">Our</span><span class="mt-script">Bali Weekend</span><span class="mt-date">August 27 – 28, 2027</span><i class="mt-rule"></i></h2>
-      <img class="mp mp-deco" data-in=".30,.40" src="assets/map-gate.webp" style="left:15.99%;top:35.39%;width:32.12%" alt="" loading="lazy" decoding="async">
-      <img class="mp mp-deco" data-in=".17,.24" src="assets/map-palms1.webp" style="left:50.63%;top:25.30%;width:8.82%" alt="" loading="lazy" decoding="async">
-      <img class="mp mp-deco" data-in=".44,.52" src="assets/map-palm2.webp" style="left:24.43%;top:50.32%;width:12.09%" alt="" loading="lazy" decoding="async">
-      <img class="mp mp-deco" data-in=".70,.78" src="assets/map-palms3.webp" style="left:41.81%;top:74.48%;width:11.96%" alt="" loading="lazy" decoding="async">
-      <img class="mp mp-deco" data-in=".47,.56" src="assets/map-compass.webp" style="left:83.38%;top:48.05%;width:16.62%" alt="" loading="lazy" decoding="async">
+      <img class="mp mp-deco" data-in=".30,.40" data-src="assets/map-gate.webp" style="left:15.99%;top:35.39%;width:32.12%" alt="" loading="lazy" decoding="async">
+      <img class="mp mp-deco" data-in=".17,.24" data-src="assets/map-palms1.webp" style="left:50.63%;top:25.30%;width:8.82%" alt="" loading="lazy" decoding="async">
+      <img class="mp mp-deco" data-in=".44,.52" data-src="assets/map-palm2.webp" style="left:24.43%;top:50.32%;width:12.09%" alt="" loading="lazy" decoding="async">
+      <img class="mp mp-deco" data-in=".70,.78" data-src="assets/map-palms3.webp" style="left:41.81%;top:74.48%;width:11.96%" alt="" loading="lazy" decoding="async">
+      <img class="mp mp-deco" data-in=".47,.56" data-src="assets/map-compass.webp" style="left:83.38%;top:48.05%;width:16.62%" alt="" loading="lazy" decoding="async">
       <svg class="map-path" viewBox="0 0 794 1407" aria-hidden="true">
         <defs>
           <mask id="mapMask" maskUnits="userSpaceOnUse" x="0" y="0" width="794" height="1407">
@@ -889,22 +877,22 @@ html.has-lightbox{overflow:hidden}
         <image id="mapCar" href="assets/map-car.webp" x="-28" y="-26" width="56" height="52" opacity="0"/>
       </svg>
       <div class="mp-ev" id="mev1">
-        <img class="mp mp-ill" src="assets/map-e1.webp" style="left:0.25%;top:6.97%;width:50.38%" alt="Cocktails and a lantern on the cliff terrace at Rock Bar, the sun setting over the sea." loading="lazy" decoding="async">
+        <img class="mp mp-ill" data-src="assets/map-e1.webp" style="left:0.25%;top:6.97%;width:50.38%" alt="Cocktails and a lantern on the cliff terrace at Rock Bar, the sun setting over the sea." loading="lazy" decoding="async">
         <span class="mp-badge" style="left:7.43%;top:15.49%">01</span>
         <div class="mp-text" style="left:3.5%;top:27.2%;width:44%"><b>August 27</b><b>5:30&nbsp;PM</b><i class="mt-rule"></i><strong>Welcome Party</strong><small>at Rock Bar</small></div>
       </div>
       <div class="mp-ev" id="mev2">
-        <img class="mp mp-ill" src="assets/map-e2.webp" style="left:53.15%;top:31.84%;width:32.75%" alt="A red and gold Chinese tea set with cherry blossom." loading="lazy" decoding="async">
+        <img class="mp mp-ill" data-src="assets/map-e2.webp" style="left:53.15%;top:31.84%;width:32.75%" alt="A red and gold Chinese tea set with cherry blossom." loading="lazy" decoding="async">
         <span class="mp-badge" style="left:56.3%;top:36.67%">02</span>
         <div class="mp-text" style="left:46%;top:46%;width:42%"><b>August 27</b><b>6:00&nbsp;PM</b><i class="mt-rule"></i><strong>Tea Ceremony</strong><small>at Rock Bar</small></div>
       </div>
       <div class="mp-ev" id="mev3">
-        <img class="mp mp-ill" src="assets/map-e3.webp" style="left:36.78%;top:54.44%;width:49.12%" alt="A flower-covered arch and white chairs above the ocean at sunset." loading="lazy" decoding="async">
+        <img class="mp mp-ill" data-src="assets/map-e3.webp" style="left:36.78%;top:54.44%;width:49.12%" alt="A flower-covered arch and white chairs above the ocean at sunset." loading="lazy" decoding="async">
         <span class="mp-badge" style="left:38.92%;top:54.94%">03</span>
         <div class="mp-text" style="left:41%;top:68.2%;width:42%"><b>August 28</b><b>4:30&nbsp;PM</b><i class="mt-rule"></i><strong>Ceremony</strong><small>AYANA SKY</small></div>
       </div>
       <div class="mp-ev" id="mev4">
-        <img class="mp mp-ill" src="assets/map-e4.webp" style="left:58.5%;top:71.2%;width:38.5%" alt="A candlelit dinner table under hanging lanterns and flowers." loading="lazy" decoding="async">
+        <img class="mp mp-ill" data-src="assets/map-e4.webp" style="left:58.5%;top:71.2%;width:38.5%" alt="A candlelit dinner table under hanging lanterns and flowers." loading="lazy" decoding="async">
         <span class="mp-badge" style="left:54.79%;top:83.94%">04</span>
         <div class="mp-text" style="left:50%;top:88.6%;width:44%"><b>August 28</b><b>Evening</b><i class="mt-rule"></i><strong>Reception</strong><small>Dinner &amp; Dancing</small></div>
       </div>
@@ -919,12 +907,12 @@ html.has-lightbox{overflow:hidden}
   <span class="eyebrow">04 — Dress code</span>
   <span class="eyebrow dress-day">Friday · The welcome party</span>
   <figure class="dress-plate" id="whitePlate">
-    <img src="assets/white-plate.webp" srcset="assets/white-plate-m.webp 720w, assets/white-plate.webp 1268w" sizes="min(92vw, 960px)" alt="Welcome party, all white attire. Eight guests in white: linen shirts with shorts or trousers, and white dresses and a jumpsuit. Sunset cocktails, ocean views, great company." width="1268" height="893" loading="lazy" decoding="async">
+    <img data-src="assets/white-plate.webp" data-srcset="assets/white-plate-m.webp 720w, assets/white-plate.webp 1268w" sizes="min(92vw, 960px)" alt="Welcome party, all white attire. Eight guests in white: linen shirts with shorts or trousers, and white dresses and a jumpsuit. Sunset cocktails, ocean views, great company." width="1268" height="893" loading="lazy" decoding="async">
   </figure>
   <p class="dress-copy">Join us for sunset cocktails and our tea ceremony at Rock Bar! We’d love for everyone to wear white — think relaxed, elevated, and beach chic.</p>
   <span class="eyebrow dress-day">Saturday · The wedding</span>
   <figure class="dress-plate" id="dressPlate">
-    <img src="assets/dress-plate.webp" srcset="assets/dress-plate-m.webp 720w, assets/dress-plate.webp 1335w" sizes="min(92vw, 960px)" alt="Tropical black tie. Ten guests in colourful formalwear: suits in sage, sky blue, navy, sand and terracotta; gowns in lilac floral, gold, green floral, coral and blush pink. Elevated attire, vibrant hues, destination-friendly." width="1335" height="943" loading="lazy" decoding="async">
+    <img data-src="assets/dress-plate.webp" data-srcset="assets/dress-plate-m.webp 720w, assets/dress-plate.webp 1335w" sizes="min(92vw, 960px)" alt="Tropical black tie. Ten guests in colourful formalwear: suits in sage, sky blue, navy, sand and terracotta; gowns in lilac floral, gold, green floral, coral and blush pink. Elevated attire, vibrant hues, destination-friendly." width="1335" height="943" loading="lazy" decoding="async">
   </figure>
   <p class="dress-copy">Tropical black tie attire is requested, with vibrant colors and tropical hues warmly encouraged. Lightweight fabrics and destination-friendly silhouettes are welcome. Above all, come dressed in your formal best and ready to celebrate with us.</p>
 </section>
@@ -935,7 +923,7 @@ html.has-lightbox{overflow:hidden}
 <section class="section" id="adults">
   <div class="inner">
     <span class="eyebrow">05 — A note on children</span>
-    <img class="arch-art" src="assets/faq-bunny.webp" alt="" width="268" height="142" loading="lazy" decoding="async">
+    <img class="arch-art" data-src="assets/faq-bunny.webp" alt="" width="268" height="142" loading="lazy" decoding="async">
     <h2>Adults only</h2>
     <p class="lede">With love for all the little ones in our lives, our wedding weekend will be an adults-only celebration. We hope the occasion feels like a little holiday for the grown-ups, too.</p>
     <p style="max-width:52ch;margin-left:auto;margin-right:auto">The weekend runs late, the cliffs are real, and the bar never quite closes. We would rather you had a few days that felt like a holiday of your own. We've kept the guest list to adults, and we hope you'll take that as an invitation to sleep in.</p>
@@ -964,35 +952,35 @@ html.has-lightbox{overflow:hidden}
     </header>
     <ol class="fq-list">
       <li class="fq">
-        <img class="fq-art" src="assets/faq-plane.webp" alt="A watercolor airliner among soft clouds, with a plumeria below." width="306" height="145" loading="lazy" decoding="async">
+        <img class="fq-art" data-src="assets/faq-plane.webp" alt="A watercolor airliner among soft clouds, with a plumeria below." width="306" height="145" loading="lazy" decoding="async">
         <div class="fq-body"><h3>When should I fly in?</h3><p>Into Denpasar (DPS), by Friday afternoon for the welcome party and tea ceremony at Rock Bar. It’s a long trip with a connection, so build in the time.</p></div>
       </li>
       <li class="fq">
-        <img class="fq-art" src="assets/faq-passport.webp" alt="A dark green passport among tropical leaves and plumeria." width="258" height="165" loading="lazy" decoding="async">
+        <img class="fq-art" data-src="assets/faq-passport.webp" alt="A dark green passport among tropical leaves and plumeria." width="258" height="165" loading="lazy" decoding="async">
         <div class="fq-body"><h3>Do I need a visa?</h3><p>US passports get a 30-day visa on arrival, plus a small tourist levy. Six months’ validity and a blank page. We’ll send the current rules in the spring.</p></div>
       </li>
       <li class="fq">
-        <img class="fq-art" src="assets/faq-resort.webp" alt="A Balinese cliffside resort above the sea." width="321" height="142" loading="lazy" decoding="async">
+        <img class="fq-art" data-src="assets/faq-resort.webp" alt="A Balinese cliffside resort above the sea." width="321" height="142" loading="lazy" decoding="async">
         <div class="fq-body"><h3>Where do I stay?</h3><p>On the estate. Rooms are held across AYANA Resort, AYANA Villas and RIMBA. Booking details follow your reply.</p></div>
       </li>
       <li class="fq">
-        <img class="fq-art" src="assets/faq-beach.webp" alt="A beach at sunset with a thatched umbrella and two lounge chairs." width="320" height="152" loading="lazy" decoding="async">
+        <img class="fq-art" data-src="assets/faq-beach.webp" alt="A beach at sunset with a thatched umbrella and two lounge chairs." width="320" height="152" loading="lazy" decoding="async">
         <div class="fq-body"><h3>What’s the weather like?</h3><p>Dry season, and the best of it. Around 84°F in the afternoon, 75°F at night, humid, and very little rain. The sun sets a little after 6 PM.</p></div>
       </li>
       <li class="fq">
-        <img class="fq-art" src="assets/faq-money.webp" alt="Rupiah notes and coins in a woven basket." width="282" height="142" loading="lazy" decoding="async">
+        <img class="fq-art" data-src="assets/faq-money.webp" alt="Rupiah notes and coins in a woven basket." width="282" height="142" loading="lazy" decoding="async">
         <div class="fq-body"><h3>What about money?</h3><p>Indonesia uses the rupiah. The resort takes cards for everything. A little cash is handy for taxis, markets and tips, and the airport ATMs are the easiest place to get it.</p></div>
       </li>
       <li class="fq">
-        <img class="fq-art" src="assets/faq-buggy.webp" alt="A cream resort buggy." width="288" height="137" loading="lazy" decoding="async">
+        <img class="fq-art" data-src="assets/faq-buggy.webp" alt="A cream resort buggy." width="288" height="137" loading="lazy" decoding="async">
         <div class="fq-body"><h3>Do I need a car?</h3><p>No. Everything is on the estate and the shuttle runs around the clock. Gojek, Grab or a taxi from the airport also work well.</p></div>
       </li>
       <li class="fq">
-        <img class="fq-art" src="assets/faq-bunny.webp" alt="A plush bunny among leaves and plumeria." width="268" height="142" loading="lazy" decoding="async">
+        <img class="fq-art" data-src="assets/faq-bunny.webp" alt="A plush bunny among leaves and plumeria." width="268" height="142" loading="lazy" decoding="async">
         <div class="fq-body"><h3>Are children invited?</h3><p>We love your little ones, but our wedding will be an adults-only celebration. We hope this gives you a chance to enjoy a relaxing getaway.</p></div>
       </li>
       <li class="fq">
-        <img class="fq-art" src="assets/faq-envelope.webp" alt="An ivory envelope marked RSVP with a gold wax seal." width="288" height="145" loading="lazy" decoding="async">
+        <img class="fq-art" data-src="assets/faq-envelope.webp" alt="An ivory envelope marked RSVP with a gold wax seal." width="288" height="145" loading="lazy" decoding="async">
         <div class="fq-body"><h3>When do I need to reply by?</h3><p>Please RSVP by January 31, 2027. This helps us with final planning and room blocks.</p></div>
       </li>
     </ol>
@@ -1005,8 +993,8 @@ html.has-lightbox{overflow:hidden}
      ======================================================================= -->
 <section class="section hope-sec" id="hope" aria-label="We hope to see you there">
   <ul class="snaps snaps-two hope-row" aria-label="Two more photos">
-    <li data-caption="To our next adventure…"><button type="button" class="snap" aria-label="View larger: To our next adventure"><img src="assets/photo-adventure-thumb.webp" data-full="assets/photo-adventure.webp" alt="Ashley laughing on Charles's back as he carries her along the beach." width="480" height="480" loading="lazy" decoding="async"><i class="snap-zoom" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></i></button><span class="hope-cap">To our next adventure…</span></li>
-    <li data-caption="We hope to see you there!"><button type="button" class="snap" aria-label="View larger: We hope to see you there"><img src="assets/photo-hope-thumb.webp" data-full="assets/photo-hope.webp" alt="Ashley and Charles, hand in hand on a sandy beach, looking out over the sea." width="480" height="480" loading="lazy" decoding="async"><i class="snap-zoom" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></i></button><span class="hope-cap">We hope to see you there!</span></li>
+    <li data-caption="To our next adventure…"><button type="button" class="snap" aria-label="View larger: To our next adventure"><img data-src="assets/photo-adventure-thumb.webp" data-full="assets/photo-adventure.webp" alt="Ashley laughing on Charles's back as he carries her along the beach." width="480" height="480" loading="lazy" decoding="async"><i class="snap-zoom" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></i></button><span class="hope-cap">To our next adventure…</span></li>
+    <li data-caption="We hope to see you there!"><button type="button" class="snap" aria-label="View larger: We hope to see you there"><img data-src="assets/photo-hope-thumb.webp" data-full="assets/photo-hope.webp" alt="Ashley and Charles, hand in hand on a sandy beach, looking out over the sea." width="480" height="480" loading="lazy" decoding="async"><i class="snap-zoom" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></i></button><span class="hope-cap">We hope to see you there!</span></li>
   </ul>
 </section>
 
@@ -1081,7 +1069,7 @@ html.has-lightbox{overflow:hidden}
      7 · FOOTER
      ======================================================================= -->
 <footer class="footer">
-  <img class="plaque" src="assets/plaque.webp" alt="Invitation thoughtfully created by Charles and Ashley." width="1240" height="566" loading="lazy" decoding="async">
+  <img class="plaque" data-src="assets/plaque.webp" alt="Invitation thoughtfully created by Charles and Ashley." width="1240" height="566" loading="lazy" decoding="async">
 </footer>
 
 <div class="lightbox" id="lightbox" hidden role="dialog" aria-modal="true" aria-label="Photo">
@@ -1163,13 +1151,14 @@ var RSVP_ENDPOINT = "";
     'polaroid': 'assets/polaroid.webp', 'passport-cover': 'assets/passport-cover.webp', 'pp-calendar': 'assets/pp-calendar.webp', 'pp-itinerary': 'assets/pp-itinerary.webp' };
   function sceneIn() {
     stage.classList.remove('is-loading'); stage.classList.add('is-in');
-    ['boarding-pass', 'polaroid', 'passport-cover', 'pp-calendar', 'pp-itinerary'].forEach(decoded);
+    var pim = polaroid.querySelector('img'); if (pim && !pim.src) pim.src = pim.getAttribute('data-src');
+    ['envelope', 'boarding-pass', 'polaroid', 'passport-cover', 'pp-calendar', 'pp-itinerary'].forEach(decoded);
   }
   function decoded(name) { var im = new Image(); im.src = ART[name]; return (im.decode ? im.decode() : Promise.resolve()).catch(function () {}); }
   function plateReady() { plate.classList.add('is-ready'); sceneIn(); }
   var plateDecoded = (plateBase.decode ? plateBase.decode().catch(function () {}) : Promise.resolve());
   plateDecoded.then(function () { if (plateBase.naturalWidth > 0) plate.classList.add('is-ready'); });
-  Promise.all([plateDecoded].concat(['envelope-sealed', 'seal', 'envelope'].map(decoded))).then(function () { if (plateBase.naturalWidth > 0) plateReady(); });
+  Promise.all([plateDecoded].concat(['envelope-sealed', 'seal'].map(decoded))).then(function () { if (plateBase.naturalWidth > 0) plateReady(); });
   plateBase.addEventListener('error', function () { plate.parentNode.removeChild(plate); sceneIn(); });
   setTimeout(function () { if (stage.classList.contains('is-loading')) sceneIn(); }, 6000);   /* never wait on a stalled image */
   var envParts = [envBack, envPocket, envFlap];
@@ -1561,8 +1550,8 @@ var RSVP_ENDPOINT = "";
        row nudged sideways by two slow sines, more so nearer the shore; the cliff and rocks are cut out
        so only the water sways. Starts after the painting has settled, and rests when off screen. ---- */
     var sea = $('sea'), seaCtx = sea.getContext('2d'), seaOff = null, seaOn = false, seaLast = 0;
-    var seaMask = new Image(); seaMask.src = 'assets/sea-mask.png';        /* water only; the cliff and rocks are cut out of the source too */
-    seaMask.onload = function () { if (seaOn) fitSea(); };
+    var seaMask = new Image();                                          /* water only: the cliff and rocks are cut out of the source; fetched when the water is about to start */
+    seaMask.onload = function () { if (seaOn) fitSea(); else startSea(); };
     var SEA = { x: 0, y: 715, w: 941, h: 615 };                        /* the water, in the painting's pixels */
     function fitSea() {
       if (!plateBase.naturalWidth) return;
@@ -1592,6 +1581,8 @@ var RSVP_ENDPOINT = "";
       }
     }
     function startSea() {
+      if (!seaMask.src) { seaMask.src = 'assets/sea-mask.png'; return; }   /* the mask arrives, then this runs again */
+      if (!seaMask.naturalWidth) return;
       fitSea();
       if (!seaOff) return;
       seaOn = true; sea.classList.add('is-on'); requestAnimationFrame(seaFrame);
@@ -1704,7 +1695,24 @@ var RSVP_ENDPOINT = "";
       }, true);
     })();
 
-    /* ---- Contents ---- */
+    /* ---- Images below the fold take their source as they come near, so the opening has the connection to
+     itself. A single-file build may hold their bytes in a map at the end of the file. ---- */
+  (function () {
+    var imgs = Array.prototype.slice.call(document.querySelectorAll('img[data-src]'));
+    function give(im) {
+      if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', function () { give(im); }); return; }   /* a single-file build's map comes last */
+      var u = im.getAttribute('data-src'), ss = im.getAttribute('data-srcset');
+      if (!u) return;
+      if (window.FULL && FULL[u]) { im.src = FULL[u]; }
+      else { if (ss) im.srcset = ss; im.src = u; }
+      im.removeAttribute('data-src'); im.removeAttribute('data-srcset');
+    }
+    if (!('IntersectionObserver' in window)) { imgs.forEach(give); return; }
+    var io = new IntersectionObserver(function (en) { en.forEach(function (e) { if (e.isIntersecting) { give(e.target); io.unobserve(e.target); } }); }, { rootMargin: '700px 0px' });
+    imgs.forEach(function (im) { if (im.id === 'lbImg' || im.closest('.polaroid')) return; io.observe(im); });
+  })();
+
+  /* ---- Contents ---- */
     var navBtn = $('navBtn'), nav = $('nav');
     function setNav(open) { nav.hidden = !open; navBtn.setAttribute('aria-expanded', open ? 'true' : 'false'); }
     navBtn.addEventListener('click', function () { setNav(nav.hidden); });
