@@ -477,6 +477,15 @@ html.has-lightbox{overflow:hidden}
 /* The date */
 .date-grid{display:grid;gap:clamp(24px,5vw,44px);align-items:start}
 .countdown{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;max-width:360px;margin-top:.4em}
+/* quiet links: calendar, directions */
+.quiet-links{margin:1.3em 0 0;display:flex;flex-wrap:wrap;justify-content:center;gap:.55em 1.5em}
+.qlink{font-family:var(--mono);font-size:14px;letter-spacing:.1em;text-transform:uppercase;color:var(--olive);text-decoration:none;border-bottom:1px solid rgba(155,139,87,.65);padding-bottom:2px;white-space:nowrap}
+.qlink:hover,.qlink:focus-visible{color:var(--ink);border-bottom-color:var(--olive);outline:none}
+.qlink::after{content:" ↗";font-size:.85em;letter-spacing:0}
+#icsLink::after{content:" ↓"}
+.mp-text small a{color:inherit;text-decoration:none;border-bottom:1px dotted rgba(89,96,68,.55)}
+.mp-text small a:hover{color:var(--ink);border-bottom-style:solid}
+.mp-maplink{display:none}
 .countdown div{border-top:1px solid rgba(89,96,68,.3);padding-top:.6em}
 .countdown b{display:block;font-family:var(--serif);font-weight:400;font-size:clamp(32px,7vw,46px);line-height:1;font-variant-numeric:tabular-nums}
 .countdown span{font-family:var(--mono);font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:var(--olive-soft)}
@@ -538,8 +547,8 @@ html.has-lightbox{overflow:hidden}
 /* Phones: each stop is a name pill. A tap on the pill or its number opens the date and time. */
 .mp-pill{display:none}
 @media (max-width:640px){
-  .mp-text{display:flex;justify-content:center}
-  .mp-text > :not(.mp-pill){display:none}
+  .mp-text{display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .mp-text > :not(.mp-pill):not(.mp-maplink){display:none}
   .mp-pill{display:inline-flex;flex-direction:column;align-items:center;font:inherit;color:inherit;cursor:pointer;white-space:nowrap;
     background:rgba(248,243,232,.92);border:1px solid rgba(155,139,87,.6);border-radius:1.6em;padding:.32em .8em;line-height:1.3;
     -webkit-tap-highlight-color:transparent;transition:padding .25s}
@@ -548,6 +557,8 @@ html.has-lightbox{overflow:hidden}
   .mp-pill[aria-expanded="true"]{padding:.45em 1em .5em}
   .mp-pill[aria-expanded="true"] .mp-when{display:block}
   .mp-pill .mp-where{margin-top:0;color:var(--olive)}
+  .mp-maplink{display:inline-block;margin-top:5px;font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--olive);background:rgba(248,243,232,.9);border:1px solid rgba(155,139,87,.6);border-radius:999px;padding:4px 11px;text-decoration:none}
+  .mp-maplink::after{content:" ↗";letter-spacing:0}
   .mp-pill:focus-visible{outline:2px solid var(--gold-line);outline-offset:3px}
   .mp-badge{cursor:pointer}
 }
@@ -847,6 +858,11 @@ html.has-lightbox{overflow:hidden}
           <div><b id="cdH">—</b><span>hours</span></div>
           <div><b id="cdM">—</b><span>min</span></div>
         </div>
+        <p class="quiet-links">
+          <a class="qlink" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Ashley+%26+Charles+%C2%B7+Wedding+weekend+in+Bali&amp;dates=20270827T093000Z%2F20270828T150000Z&amp;ctz=Asia%2FMakassar&amp;location=AYANA+Bali%2C+Jimbaran%2C+Bali%2C+Indonesia&amp;details=Friday+Aug+27%2C+5%3A30+PM%3A+welcome+party+at+Rock+Bar+(tea+ceremony+at+6%3A00+PM).%0ASaturday+Aug+28%2C+4%3A30+PM%3A+ceremony+at+AYANA+SKY%2C+then+dinner+and+dancing.%0Ahttps%3A%2F%2Fctaira.github.io" target="_blank" rel="noopener">Add to Google Calendar</a>
+          <a class="qlink" id="icsLink" href="#" download="ashley-and-charles-bali.ics">Apple / Outlook (.ics)</a>
+          <a class="qlink" href="https://www.google.com/maps/search/?api=1&amp;query=AYANA+Resort+Bali%2C+Jimbaran" target="_blank" rel="noopener">Directions to AYANA</a>
+        </p>
       </div>
       <p class="muted" style="max-width:36ch;margin-left:auto;margin-right:auto">Friday the 27th is the welcome party at Rock Bar, with our tea ceremony at six. Saturday the 28th is the ceremony and reception on the cliff. Sunday is yours.</p>
     </div>
@@ -879,17 +895,17 @@ html.has-lightbox{overflow:hidden}
       <div class="mp-ev" id="mev1">
         <img class="mp mp-ill" data-src="assets/map-e1.webp" style="left:0.25%;top:6.97%;width:50.38%" alt="Cocktails and a lantern on the cliff terrace at Rock Bar, the sun setting over the sea." loading="lazy" decoding="async">
         <span class="mp-badge" style="left:7.43%;top:15.49%">01</span>
-        <div class="mp-text" style="left:3.5%;top:27.2%;width:44%"><b>August 27</b><b>5:30&nbsp;PM</b><i class="mt-rule"></i><strong>Welcome Party</strong><small>at Rock Bar</small></div>
+        <div class="mp-text" style="left:3.5%;top:27.2%;width:44%"><b>August 27</b><b>5:30&nbsp;PM</b><i class="mt-rule"></i><strong>Welcome Party</strong><small><a href="https://www.google.com/maps/search/?api=1&amp;query=Rock+Bar+Bali%2C+AYANA+Resort%2C+Jimbaran" target="_blank" rel="noopener">at Rock Bar</a></small></div>
       </div>
       <div class="mp-ev" id="mev2">
         <img class="mp mp-ill" data-src="assets/map-e2.webp" style="left:53.15%;top:31.84%;width:32.75%" alt="A red and gold Chinese tea set with cherry blossom." loading="lazy" decoding="async">
         <span class="mp-badge" style="left:56.3%;top:36.67%">02</span>
-        <div class="mp-text" style="left:46%;top:46%;width:42%"><b>August 27</b><b>6:00&nbsp;PM</b><i class="mt-rule"></i><strong>Tea Ceremony</strong><small>at Rock Bar</small></div>
+        <div class="mp-text" style="left:46%;top:46%;width:42%"><b>August 27</b><b>6:00&nbsp;PM</b><i class="mt-rule"></i><strong>Tea Ceremony</strong><small><a href="https://www.google.com/maps/search/?api=1&amp;query=Rock+Bar+Bali%2C+AYANA+Resort%2C+Jimbaran" target="_blank" rel="noopener">at Rock Bar</a></small></div>
       </div>
       <div class="mp-ev" id="mev3">
         <img class="mp mp-ill" data-src="assets/map-e3.webp" style="left:36.78%;top:54.44%;width:49.12%" alt="A flower-covered arch and white chairs above the ocean at sunset." loading="lazy" decoding="async">
         <span class="mp-badge" style="left:38.92%;top:54.94%">03</span>
-        <div class="mp-text" style="left:41%;top:68.2%;width:42%"><b>August 28</b><b>4:30&nbsp;PM</b><i class="mt-rule"></i><strong>Ceremony</strong><small>AYANA SKY</small></div>
+        <div class="mp-text" style="left:41%;top:68.2%;width:42%"><b>August 28</b><b>4:30&nbsp;PM</b><i class="mt-rule"></i><strong>Ceremony</strong><small><a href="https://www.google.com/maps/search/?api=1&amp;query=AYANA+Resort+Bali%2C+Jimbaran" target="_blank" rel="noopener">AYANA SKY</a></small></div>
       </div>
       <div class="mp-ev" id="mev4">
         <img class="mp mp-ill" data-src="assets/map-e4.webp" style="left:58.5%;top:71.2%;width:38.5%" alt="A candlelit dinner table under hanging lanterns and flowers." loading="lazy" decoding="async">
@@ -1493,6 +1509,8 @@ var RSVP_ENDPOINT = "";
       pill.innerHTML = '<strong>' + tx.querySelector('strong').textContent + '</strong><span class="mp-when">' + bs[0].textContent + ' · ' + bs[1].textContent + (em ? ' · ' + em.textContent.replace(/[()]/g, '') : '') + '</span>'
         + (sm ? '<span class="mp-when mp-where">' + sm.textContent + '</span>' : '');
       tx.appendChild(pill); e.pill = pill;
+      var venue = sm && sm.querySelector('a');
+      if (venue) { var ml = document.createElement('a'); ml.className = 'mp-maplink'; ml.href = venue.href; ml.target = '_blank'; ml.rel = 'noopener'; ml.textContent = 'Map'; tx.appendChild(ml); }
     });
     function openStop(k) {   /* each pill folds and opens on its own */
       var pl = mapEvs[k].pill; pl.setAttribute('aria-expanded', pl.getAttribute('aria-expanded') === 'true' ? 'false' : 'true');
@@ -1710,6 +1728,17 @@ var RSVP_ENDPOINT = "";
     if (!('IntersectionObserver' in window)) { imgs.forEach(give); return; }
     var io = new IntersectionObserver(function (en) { en.forEach(function (e) { if (e.isIntersecting) { give(e.target); io.unobserve(e.target); } }); }, { rootMargin: '700px 0px' });
     imgs.forEach(function (im) { if (im.id === 'lbImg' || im.closest('.polaroid')) return; io.observe(im); });
+  })();
+
+  /* ---- Add to calendar: an .ics for Apple and Outlook, one event for the whole weekend ---- */
+  (function () {
+    var a = $('icsLink'); if (!a) return;
+    var lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Ashley and Charles//Bali 2027//EN', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH', 'BEGIN:VEVENT',
+      'UID:ashley-charles-bali-2027@ctaira.github.io', 'DTSTAMP:20260914T000000Z', 'DTSTART:20270827T093000Z', 'DTEND:20270828T150000Z',
+      'SUMMARY:Ashley & Charles · Wedding weekend in Bali', 'LOCATION:AYANA Bali\\, Jimbaran\\, Bali\\, Indonesia',
+      'DESCRIPTION:Friday Aug 27\\, 5:30 PM: welcome party at Rock Bar (tea ceremony at 6:00 PM).\\nSaturday Aug 28\\, 4:30 PM: ceremony at AYANA SKY\\, then dinner and dancing.\\nhttps://ctaira.github.io',
+      'URL:https://ctaira.github.io', 'END:VEVENT', 'END:VCALENDAR'];
+    a.href = 'data:text/calendar;charset=utf-8,' + encodeURIComponent(lines.join('\r\n') + '\r\n');
   })();
 
   /* ---- Contents ---- */
