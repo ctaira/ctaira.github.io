@@ -1350,10 +1350,14 @@ var RSVP_ENDPOINT = "";
     var playBtn = $('playBtn'), skipBtn = $('skipBtn'), pauseBtn = $('pauseBtn'), doneBtn = $('doneBtn'), plainLink = $('plainLink');
     var chapters = $('chapters'), againLink = $('againLink');
     var state = 'idle';
+    /* the plain route to the details is offered only to a guest who has already watched the film through */
+    var seen = false; try { seen = localStorage.getItem('ac-seen') === '1'; } catch (e) {}
+    function markSeen() { if (seen) return; seen = true; try { localStorage.setItem('ac-seen', '1'); } catch (e) {} }
     function setCtrl(st) {
       state = st;
+      if (st === 'done') markSeen();
       var running = st === 'playing' || st === 'paused';
-      playBtn.hidden = st !== 'idle'; plainLink.hidden = st !== 'idle';
+      playBtn.hidden = st !== 'idle'; plainLink.hidden = st !== 'idle' || !seen;
       skipBtn.hidden = !running; chapters.hidden = !running; doneBtn.hidden = st !== 'done'; againLink.hidden = st !== 'done';
       pauseBtn.hidden = !running;
       pauseBtn.textContent = st === 'paused' ? 'Resume' : 'Pause';
