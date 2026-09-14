@@ -164,6 +164,10 @@ button,input,select,textarea{font:inherit;color:inherit}
 .ctrl .ctrl-light,.ctrl .ctrl-light:hover{background:rgba(248,243,232,.96);color:var(--olive);border-color:rgba(155,139,87,.8)}
 .ctrl-plain{font-size:15px;color:var(--ink);text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(36,39,34,.4);
   background:rgba(242,237,227,.88);border-radius:999px;padding:7px 14px;}
+/* after the film: a soft "Watch again" above a wide "Continue" */
+.ctrl-soft{font-family:var(--sans);font-size:15px;color:var(--olive);text-decoration:none;background:rgba(248,243,232,.92);border:1px solid rgba(155,139,87,.35);border-radius:999px;padding:8px 18px;margin-bottom:2px}
+.ctrl-wide{width:min(92vw,440px);font-size:19px;padding:1em 1.6em;letter-spacing:.01em}
+.ctrl-arrow{display:inline-block;margin-left:.35em;font-weight:400;transform:translateY(1px)}
 .ctrl-skip{font-family:var(--mono);font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink);cursor:pointer;
   background:rgba(242,237,227,.9);border:1px solid rgba(36,39,34,.25);border-radius:999px;padding:9px 18px;}
 .ctrl button:focus-visible,.ctrl a:focus-visible{outline:2px solid var(--gold);outline-offset:4px}
@@ -735,8 +739,8 @@ html.has-lightbox{overflow:hidden}
         <a class="ctrl-plain" id="plainLink" href="#letter">Just show me the details</a>
         <ol class="chapters" id="chapters" aria-label="Chapters" hidden></ol>
         <div class="ctrl-row"><button class="ctrl-skip" id="pauseBtn" type="button" hidden>Pause</button><button class="ctrl-skip" id="skipBtn" type="button" hidden>Skip</button></div>
-        <button class="btn ctrl-main ctrl-light" id="doneBtn" type="button" hidden>See the details</button>
-        <a class="ctrl-plain" id="againLink" href="#" hidden>Watch again</a>
+        <a class="ctrl-soft" id="againLink" href="#" hidden>Watch again</a>
+        <button class="btn ctrl-main ctrl-light ctrl-wide" id="doneBtn" type="button" hidden>Continue <span class="ctrl-arrow" aria-hidden="true">↓</span></button>
       </div>
 
       <!-- Passport -->
