@@ -571,15 +571,10 @@ html.has-lightbox{overflow:hidden}
 .map-stage.is-static .mp-ill,.map-stage.is-static .mp-text{transform:none!important}
 
 /* Dress to impress: a wide pavilion, the models arriving in their own time */
-.dress,.faqs{padding-left:0;padding-right:0}
-.section.dress,.section.faqs{padding-top:56px}
-.dress .eyebrow{display:table;margin:0 auto 1.3em;padding:.6em 1.2em;color:var(--gold-line);background:rgba(248,243,232,.9);border:1px solid rgba(155,139,87,.7);border-radius:999px}
-/* each day is one card: its name, its painted panel, its words */
-.dress-card{width:min(94vw,1000px);margin:0 auto;padding:clamp(20px,3.2vw,34px) clamp(14px,2.6vw,30px) clamp(22px,3vw,32px);background:rgba(248,243,232,.9);border:1px solid rgba(155,139,87,.7);border-radius:clamp(22px,4vw,34px);box-sizing:border-box}
-.dress-card + .dress-card{margin-top:clamp(22px,4vh,40px)}
-.dress-day{display:block;text-align:center;font-family:var(--mono);font-size:14px;letter-spacing:.2em;text-transform:uppercase;color:var(--olive);margin:0 0 1.1em}
+.faqs{padding-left:0;padding-right:0}
+.section.faqs{padding-top:56px}
 .pav{
-  --pw2:min(96vw,1180px);--cap:calc(var(--pw2) * .12);
+  --pw2:min(96vw,1180px);--cap:calc(var(--pw2) * .12);--motif-h:calc(max(18px,calc(var(--pw2) * .026)) * 3.33);
   position:relative;width:var(--pw2);margin:var(--cap) auto 0;text-align:center;color:var(--olive);
   padding:calc(var(--pw2) * .015) calc(var(--pw2) * .05) calc(var(--pw2) * .045);
   background:rgba(248,243,232,.9);border:1px solid rgba(155,139,87,.75);border-top:0;
@@ -589,14 +584,16 @@ html.has-lightbox{overflow:hidden}
 /* the pavilion cap: an ogee arch with a raised centre, drawn once and stretched to the width */
 .pav::before{content:"";position:absolute;left:-1px;right:-1px;top:calc(var(--cap) * -1 + 1px);height:var(--cap);background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 140' preserveAspectRatio='none'%3E%3Cpath d='M0 140V72C0 42 40 30 120 27L400 22C452 20 482 9 500 0C518 9 548 20 600 22L880 27C960 30 1000 42 1000 72V140Z' fill='rgba(248,243,232,.9)'/%3E%3Cpath d='M0 140V72C0 42 40 30 120 27L400 22C452 20 482 9 500 0C518 9 548 20 600 22L880 27C960 30 1000 42 1000 72V140' fill='none' stroke='rgba(155,139,87,.75)' stroke-width='1.2' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E") center/100% 100% no-repeat;pointer-events:none}
 .pav.is-in{opacity:1;transform:none}
-.pav-motif{position:absolute;left:50%;width:max(18px,calc(var(--pw2) * .026));height:calc(max(18px,calc(var(--pw2) * .026)) * 3.33);transform:translateX(-50%);background:var(--motif) center/contain no-repeat;opacity:.85}
+.pav-motif{position:absolute;left:50%;width:max(18px,calc(var(--pw2) * .026));height:var(--motif-h);transform:translateX(-50%);background:var(--motif) center/contain no-repeat;opacity:.85}
 .pav-motif-top{top:calc(var(--cap) * -.72)}
 .pav-motif-bottom{bottom:6px;transform:translateX(-50%) scaleY(-1)}
-.dress-plate{width:100%;margin:0 auto;opacity:0;transform:translateY(12px);transition:opacity 1.3s ease,transform 1.3s ease}
-.dress-plate.is-in{opacity:1;transform:none}
-.dress-plate img{display:block;width:100%;height:auto;max-width:100%}
-.dress-plate.is-static{opacity:1;transform:none;transition:none}
-.dress-copy{display:block;max-width:58ch;margin:1.2em auto 0;padding:0 .5em;font-size:17px;line-height:1.55;color:var(--olive);text-align:center}
+/* Dress code: one card, two days. Words live in the page; only the figures are pictures. */
+.dress-block{text-align:center}
+.dress-day{display:block;font-family:var(--mono);font-size:13px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold-line);margin:0 0 .5em}
+.dress-title{font-family:var(--script);font-weight:400;font-size:clamp(34px,8.6vw,50px);line-height:1.1;color:var(--olive);margin:0 0 .35em}
+.dress-copy{max-width:46ch;margin:0 auto 1.4em;font-size:15px;line-height:1.55;color:var(--olive-soft)}
+.dress-figs{display:block;width:calc(100% + var(--arch-w) * .12);max-width:none;height:auto;margin:0 calc(var(--arch-w) * -.06)}
+.dress-divider{display:block;width:36px;height:120px;margin:clamp(22px,4vh,40px) auto;background:var(--motif) center/contain no-repeat;opacity:.9}
 .pav.is-static,.pav.is-static *{transition:none!important}
 @media (max-width:500px){.pav .fq-close{letter-spacing:.08em;padding-left:.08em}}
 
@@ -605,7 +602,7 @@ html.has-lightbox{overflow:hidden}
 .seats-box .lbl{font-family:var(--mono);font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:var(--olive-soft)}
 .seats-box .val{font-family:var(--serif);font-size:clamp(24px,4.6vw,30px);line-height:1.1;margin-top:.15em}
 .seats-box .num{font-family:var(--serif);font-size:clamp(48px,11vw,64px);line-height:.9;color:var(--olive)}
-.pav-tall{--pw2:min(92vw,900px);--cap:calc(var(--pw2) * .15);padding:calc(var(--pw2) * .01) calc(var(--pw2) * .06) calc(var(--pw2) * .05);border-radius:0 0 calc(var(--pw2) * .05) calc(var(--pw2) * .05);opacity:1;transform:none;transition:none}
+.pav-tall{--pw2:min(92vw,900px);--cap:calc(var(--pw2) * .15);padding:max(calc(var(--pw2) * .01),calc(var(--motif-h) * .48)) calc(var(--pw2) * .06) max(calc(var(--pw2) * .05),calc(var(--motif-h) + 14px));border-radius:0 0 calc(var(--pw2) * .05) calc(var(--pw2) * .05);opacity:1;transform:none;transition:none}
 .fq-head{margin:0 auto calc(var(--pw2) * .02)}
 .fq-eyebrow{display:block;font-family:var(--serif);font-size:max(14px,calc(var(--pw2) * .019));letter-spacing:.42em;text-transform:uppercase;padding-left:.42em;margin-bottom:.3em}
 .fq-head .script-line{font-size:max(34px,calc(var(--pw2) * .08))}
@@ -922,20 +919,24 @@ html.has-lightbox{overflow:hidden}
      4 · DRESS CODE
      ======================================================================= -->
 <section class="section dress" id="dress">
-  <span class="eyebrow">04 — Dress code</span>
-  <div class="dress-card">
-    <span class="dress-day">Friday · The welcome party</span>
-  <figure class="dress-plate" id="whitePlate">
-    <img data-src="assets/white-plate.webp" data-srcset="assets/white-plate-m.webp 720w, assets/white-plate.webp 1268w" sizes="min(92vw, 960px)" alt="Welcome party, all white attire. Eight guests in white: linen shirts with shorts or trousers, and white dresses and a jumpsuit. Sunset cocktails, ocean views, great company." width="1268" height="893" loading="lazy" decoding="async">
-  </figure>
-  <p class="dress-copy">Join us for sunset cocktails and our tea ceremony at Rock Bar! We’d love for everyone to wear white — think relaxed, elevated, and beach chic.</p>
-  </div>
-  <div class="dress-card">
-    <span class="dress-day">Saturday · The wedding</span>
-  <figure class="dress-plate" id="dressPlate">
-    <img data-src="assets/dress-plate.webp" data-srcset="assets/dress-plate-m.webp 720w, assets/dress-plate.webp 1335w" sizes="min(92vw, 960px)" alt="Tropical black tie. Ten guests in colourful formalwear: suits in sage, sky blue, navy, sand and terracotta; gowns in lilac floral, gold, green floral, coral and blush pink. Elevated attire, vibrant hues, destination-friendly." width="1335" height="943" loading="lazy" decoding="async">
-  </figure>
-  <p class="dress-copy">Tropical black tie attire is requested, with vibrant colors and tropical hues warmly encouraged. Lightweight fabrics and destination-friendly silhouettes are welcome. Above all, come dressed in your formal best and ready to celebrate with us.</p>
+  <div class="inner">
+    <span class="eyebrow">04 — Dress code</span>
+
+    <div class="dress-block">
+      <span class="dress-day">Friday · The welcome party</span>
+      <h2 class="dress-title">All White Attire</h2>
+      <p class="dress-copy">Join us for sunset cocktails and our tea ceremony at Rock Bar! We’d love for everyone to wear white — think relaxed, elevated, and beach chic.</p>
+      <img class="dress-figs" data-src="assets/figs-white.webp" alt="Eight guests in white: linen shirts with shorts or trousers, and white dresses and a jumpsuit." width="1200" height="456" loading="lazy" decoding="async">
+    </div>
+
+    <i class="dress-divider" aria-hidden="true"></i>
+
+    <div class="dress-block">
+      <span class="dress-day">Saturday · The wedding</span>
+      <h2 class="dress-title">Tropical Black Tie</h2>
+      <p class="dress-copy">Tropical black tie attire is requested, with vibrant colors and tropical hues warmly encouraged. Lightweight fabrics and destination-friendly silhouettes are welcome. Above all, come dressed in your formal best and ready to celebrate with us.</p>
+      <img class="dress-figs" data-src="assets/figs-tropical.webp" alt="Ten guests in colourful formalwear: suits in sage, sky blue, navy, ivory and rose, and gowns in lilac, gold, floral, coral and pink." width="1200" height="425" loading="lazy" decoding="async">
+    </div>
   </div>
 </section>
 
