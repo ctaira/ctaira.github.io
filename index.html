@@ -26,7 +26,7 @@
 <meta name="twitter:image" content="https://ctaira.github.io/assets/og.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="image" href="assets/bali-cliff.webp" fetchpriority="high">
+<link rel="preload" as="image" href="assets/bali-cliff.webp" imagesrcset="assets/bali-cliff-m.webp 800w, assets/bali-cliff.webp 941w" imagesizes="100vw" fetchpriority="high">
 <link rel="preload" as="image" href="assets/envelope-sealed.webp" fetchpriority="high">
 <link rel="preload" as="image" href="assets/seal.webp" fetchpriority="high">
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500&family=Instrument+Serif:ital@0;1&family=Pinyon+Script&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
@@ -402,7 +402,7 @@ html.is-locked,html.is-locked body{overflow:hidden;overscroll-behavior:none}
   --arch-w:min(88vw,620px);--arch-r:calc(var(--arch-w) / 2);
   --bloom:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-13 -13 26 26' fill='none' stroke='%239B8B57' stroke-width='1.1'%3E%3Cg%3E%3Cpath d='M0-11c4-6 9-4 6 2-2 4-4 6-6 9-2-3-4-5-6-9-3-6 2-8 6-2z'/%3E%3Cpath d='M0-11c4-6 9-4 6 2-2 4-4 6-6 9-2-3-4-5-6-9-3-6 2-8 6-2z' transform='rotate(72)'/%3E%3Cpath d='M0-11c4-6 9-4 6 2-2 4-4 6-6 9-2-3-4-5-6-9-3-6 2-8 6-2z' transform='rotate(144)'/%3E%3Cpath d='M0-11c4-6 9-4 6 2-2 4-4 6-6 9-2-3-4-5-6-9-3-6 2-8 6-2z' transform='rotate(216)'/%3E%3Cpath d='M0-11c4-6 9-4 6 2-2 4-4 6-6 9-2-3-4-5-6-9-3-6 2-8 6-2z' transform='rotate(288)'/%3E%3Ccircle r='1.6' fill='%239B8B57' stroke='none'/%3E%3C/g%3E%3C/svg%3E");
   --motif:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 120' fill='none' stroke='%239B8B57' stroke-width='1.1' stroke-linecap='round'%3E%3Cpath d='M18 0v36'/%3E%3Cg transform='translate(18 54)'%3E%3Cpath d='M0-11c4-6 9-4 6 2-2 4-4 6-6 9-2-3-4-5-6-9-3-6 2-8 6-2z'/%3E%3Cpath d='M0-11c4-6 9-4 6 2-2 4-4 6-6 9-2-3-4-5-6-9-3-6 2-8 6-2z' transform='rotate(72)'/%3E%3Cpath d='M0-11c4-6 9-4 6 2-2 4-4 6-6 9-2-3-4-5-6-9-3-6 2-8 6-2z' transform='rotate(144)'/%3E%3Cpath d='M0-11c4-6 9-4 6 2-2 4-4 6-6 9-2-3-4-5-6-9-3-6 2-8 6-2z' transform='rotate(216)'/%3E%3Cpath d='M0-11c4-6 9-4 6 2-2 4-4 6-6 9-2-3-4-5-6-9-3-6 2-8 6-2z' transform='rotate(288)'/%3E%3Ccircle r='1.6' fill='%239B8B57' stroke='none'/%3E%3C/g%3E%3Cpath d='M18 72v42'/%3E%3Ccircle cx='18' cy='117' r='1.8' fill='%239B8B57' stroke='none'/%3E%3C/svg%3E")}
-.bg-fixed{position:fixed;inset:0;z-index:-1;background:#E4D9C4 url("assets/bali-cliff.webp") 50% 46%/cover no-repeat}
+.bg-fixed{position:fixed;inset:0;z-index:-1;background:#E4D9C4 50% 46%/cover no-repeat}
 .section{padding:clamp(22px,5vh,56px) var(--gutter);color:var(--olive)}
 .section+.section{padding-top:0}
 .section>.inner{
@@ -700,7 +700,7 @@ html.has-lightbox{overflow:hidden}
 
 
       <div class="plate" id="plate" aria-hidden="true">
-        <img id="plateBase" src="assets/bali-cliff.webp" alt="" decoding="async" fetchpriority="high">
+        <img id="plateBase" src="assets/bali-cliff.webp" srcset="assets/bali-cliff-m.webp 800w, assets/bali-cliff.webp 941w" sizes="100vw" alt="" decoding="async" fetchpriority="high">
       </div>
       <canvas class="sea" id="sea" aria-hidden="true"></canvas>
       <div class="scrim scrim-top" id="scrimTop" aria-hidden="true"></div>
@@ -936,7 +936,7 @@ html.has-lightbox{overflow:hidden}
       <span class="dress-day">Saturday · The wedding</span>
       <h2 class="dress-title">Tropical Black Tie</h2>
       <p class="dress-copy">Tropical black tie attire is requested, with vibrant colors and tropical hues warmly encouraged. Lightweight fabrics and destination-friendly silhouettes are welcome. Above all, come dressed in your formal best and ready to celebrate with us.</p>
-      <img class="dress-figs" data-src="assets/figs-tropical.webp" alt="Ten guests in colourful formalwear: suits in sage, sky blue, navy, ivory and rose, and gowns in lilac, gold, floral, coral and pink." width="1200" height="419" loading="lazy" decoding="async">
+      <img class="dress-figs" data-src="assets/figs-tropical.webp" alt="Ten guests in colourful formalwear: suits in sage, sky blue, navy, ivory and rose, and gowns in lilac, gold, floral, coral and pink." width="1200" height="417" loading="lazy" decoding="async">
     </div>
   </div>
 </section>
@@ -1181,12 +1181,14 @@ var RSVP_ENDPOINT = "";
   function sceneIn() {
     stage.classList.remove('is-loading'); stage.classList.add('is-in');
     var pim = polaroid.querySelector('img'); if (pim && !pim.src) pim.src = pim.getAttribute('data-src');
-    ['envelope', 'boarding-pass', 'polaroid', 'passport-cover', 'pp-calendar', 'pp-itinerary'].forEach(decoded);
+    ['envelope', 'polaroid', 'boarding-pass', 'passport-cover', 'pp-calendar', 'pp-itinerary'].reduce(function (p, n) { return p.then(function () { return decoded(n); }); }, Promise.resolve())
+      .then(function () { if (window.startLazy) startLazy(); });
   }
   function decoded(name) { var im = new Image(); im.src = ART[name]; return (im.decode ? im.decode() : Promise.resolve()).catch(function () {}); }
   function plateReady() { plate.classList.add('is-ready'); sceneIn(); }
   var plateDecoded = (plateBase.decode ? plateBase.decode().catch(function () {}) : Promise.resolve());
   plateDecoded.then(function () { if (plateBase.naturalWidth > 0) plate.classList.add('is-ready'); });
+  plateDecoded.then(function () { var bgf = document.querySelector('.bg-fixed'); if (bgf && plateBase.currentSrc) bgf.style.backgroundImage = 'url("' + plateBase.currentSrc + '")'; });   /* the backdrop behind the details is the same file: no second fetch */
   Promise.all([plateDecoded].concat(['envelope-sealed', 'seal'].map(decoded))).then(function () { if (plateBase.naturalWidth > 0) plateReady(); });
   plateBase.addEventListener('error', function () { plate.parentNode.removeChild(plate); sceneIn(); });
   setTimeout(function () { if (stage.classList.contains('is-loading')) sceneIn(); }, 6000);   /* never wait on a stalled image */
@@ -1410,7 +1412,7 @@ var RSVP_ENDPOINT = "";
     }
     function lastStep() { return CPS.length; }
     function release(to, dur) {   /* on to the details: the camera goes on into the page as the page scrolls */
-      stopPlay();
+      stopPlay(); if (window.startLazy) startLazy();
       if (beat < END) { beat = END; draw(); }
       step = CPS.length; lock(false); setCtrl('off');
       cooldownUntil = performance.now() + 350;
@@ -1602,26 +1604,27 @@ var RSVP_ENDPOINT = "";
     function seaFrame(now) {
       if (!seaOn) return;
       requestAnimationFrame(seaFrame);
-      if (now - seaLast < 40 || !seaOff || document.hidden || playing || window.pageYOffset > vh) return;   /* rests while the opening plays */
+      if (now - seaLast < 55 || !seaOff || document.hidden || playing || window.pageYOffset > vh) return;   /* rests while the opening plays */
       seaLast = now;
       var t = now / 1000, Wc = sea.width, Hc = sea.height, k = Wc / 941;
       seaCtx.clearRect(0, 0, Wc, Hc);
-      for (var r = 0; r < Hc; r += 3) {
+      for (var r = 0; r < Hc; r += 5) {
         var depth = r / Hc;
         var amp = (0.5 + 2.2 * depth) * k;
         var dx = amp * Math.sin(r * 0.045 / k + t * 1.15) + amp * .6 * Math.sin(r * 0.019 / k - t * .7 + 1.3);
-        seaCtx.drawImage(seaOff, 0, r, Wc, 3, dx, r, Wc, 3);
+        seaCtx.drawImage(seaOff, 0, r, Wc, 5, dx, r, Wc, 5);
       }
     }
     function startSea() {
-      if (!seaMask.src) { seaMask.src = 'assets/sea-mask.png'; return; }   /* the mask arrives, then this runs again */
+      if (!seaMask.src) { seaMask.src = 'assets/sea-mask.webp'; return; }   /* the mask arrives, then this runs again */
       if (!seaMask.naturalWidth) return;
       fitSea();
       if (!seaOff) return;
       seaOn = true; sea.classList.add('is-on'); requestAnimationFrame(seaFrame);
     }
     window.addEventListener('resize', function () { if (seaOn) fitSea(); }, { passive: true });
-    plate.addEventListener('transitionend', function () { setTimeout(startSea, 2200); }, { once: true });   /* after the settle */
+    var lowEnd = (navigator.deviceMemory && navigator.deviceMemory <= 2) || (navigator.connection && navigator.connection.saveData) || (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 2);
+    if (!lowEnd) plate.addEventListener('transitionend', function () { setTimeout(startSea, 2200); }, { once: true });   /* after the settle; a weak or data-saving device keeps the water still */
 
     /* page scrolling, for the skip and the contents menu */
     var opening = null;
@@ -1741,8 +1744,13 @@ var RSVP_ENDPOINT = "";
       im.removeAttribute('data-src'); im.removeAttribute('data-srcset');
     }
     if (!('IntersectionObserver' in window)) { imgs.forEach(give); return; }
-    var io = new IntersectionObserver(function (en) { en.forEach(function (e) { if (e.isIntersecting) { give(e.target); io.unobserve(e.target); } }); }, { rootMargin: '700px 0px' });
-    imgs.forEach(function (im) { if (im.id === 'lbImg' || im.closest('.polaroid')) return; io.observe(im); });
+    var started = false;
+    window.startLazy = function () {   /* once the film's own artwork is in, or the guest goes on to the details */
+      if (started) return; started = true;
+      var io = new IntersectionObserver(function (en) { en.forEach(function (e) { if (e.isIntersecting) { give(e.target); io.unobserve(e.target); } }); }, { rootMargin: '600px 0px' });
+      imgs.forEach(function (im) { if (im.id === 'lbImg' || im.closest('.polaroid')) return; io.observe(im); });
+    };
+    setTimeout(startLazy, 20000);   /* and in any case before long */
   })();
 
   /* ---- Add to calendar: an .ics for Apple and Outlook, one event for the whole weekend ---- */
