@@ -488,9 +488,7 @@ html.has-lightbox{overflow:hidden}
 .qlink:hover,.qlink:focus-visible{color:var(--ink);border-bottom-color:var(--olive);outline:none}
 .qlink::after{content:" ↗";font-size:.85em;letter-spacing:0}
 #icsLink::after{content:" ↓"}
-.mp-text small a{color:inherit;text-decoration:none;border-bottom:1px dotted rgba(89,96,68,.55)}
-.mp-text small a:hover{color:var(--ink);border-bottom-style:solid}
-.mp-maplink{display:none}
+
 .countdown div{border-top:1px solid rgba(89,96,68,.3);padding-top:.6em}
 .countdown b{display:block;font-family:var(--serif);font-weight:400;font-size:clamp(32px,7vw,46px);line-height:1;font-variant-numeric:tabular-nums}
 .countdown span{font-family:var(--mono);font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:var(--olive-soft)}
@@ -553,7 +551,7 @@ html.has-lightbox{overflow:hidden}
 .mp-pill{display:none}
 @media (max-width:640px){
   .mp-text{display:flex;flex-direction:column;align-items:center;justify-content:center}
-  .mp-text > :not(.mp-pill):not(.mp-maplink){display:none}
+  .mp-text > :not(.mp-pill){display:none}
   .mp-pill{display:inline-flex;flex-direction:column;align-items:center;font:inherit;color:inherit;cursor:pointer;white-space:nowrap;
     background:rgba(248,243,232,.92);border:1px solid rgba(155,139,87,.6);border-radius:1.6em;padding:.32em .8em;line-height:1.3;
     -webkit-tap-highlight-color:transparent;transition:padding .25s}
@@ -562,8 +560,6 @@ html.has-lightbox{overflow:hidden}
   .mp-pill[aria-expanded="true"]{padding:.45em 1em .5em}
   .mp-pill[aria-expanded="true"] .mp-when{display:block}
   .mp-pill .mp-where{margin-top:0;color:var(--olive)}
-  .mp-maplink{display:inline-block;margin-top:5px;font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--olive);background:rgba(248,243,232,.9);border:1px solid rgba(155,139,87,.6);border-radius:999px;padding:4px 11px;text-decoration:none}
-  .mp-maplink::after{content:" ↗";letter-spacing:0}
   .mp-pill:focus-visible{outline:2px solid var(--gold-line);outline-offset:3px}
   .mp-badge{cursor:pointer}
 }
@@ -899,17 +895,17 @@ html.has-lightbox{overflow:hidden}
       <div class="mp-ev" id="mev1">
         <img class="mp mp-ill" data-src="assets/map-e1.webp" style="left:0.25%;top:6.97%;width:50.38%" alt="Cocktails and a lantern on the cliff terrace at Rock Bar, the sun setting over the sea." loading="lazy" decoding="async">
         <span class="mp-badge" style="left:7.43%;top:15.49%">01</span>
-        <div class="mp-text" style="left:3.5%;top:27.2%;width:44%"><b>August 27</b><b>5:30&nbsp;PM</b><i class="mt-rule"></i><strong>Welcome Party</strong><small><a href="https://www.google.com/maps/search/?api=1&amp;query=Rock+Bar+Bali%2C+AYANA+Resort%2C+Jimbaran" target="_blank" rel="noopener">at Rock Bar</a></small></div>
+        <div class="mp-text" style="left:3.5%;top:27.2%;width:44%"><b>August 27</b><b>5:30&nbsp;PM</b><i class="mt-rule"></i><strong>Welcome Party</strong><small>at Rock Bar</small></div>
       </div>
       <div class="mp-ev" id="mev2">
         <img class="mp mp-ill" data-src="assets/map-e2.webp" style="left:53.15%;top:31.84%;width:32.75%" alt="A red and gold Chinese tea set with cherry blossom." loading="lazy" decoding="async">
         <span class="mp-badge" style="left:56.3%;top:36.67%">02</span>
-        <div class="mp-text" style="left:46%;top:46%;width:42%"><b>August 27</b><b>6:00&nbsp;PM</b><i class="mt-rule"></i><strong>Tea Ceremony</strong><small><a href="https://www.google.com/maps/search/?api=1&amp;query=Rock+Bar+Bali%2C+AYANA+Resort%2C+Jimbaran" target="_blank" rel="noopener">at Rock Bar</a></small></div>
+        <div class="mp-text" style="left:46%;top:46%;width:42%"><b>August 27</b><b>6:00&nbsp;PM</b><i class="mt-rule"></i><strong>Tea Ceremony</strong><small>at Rock Bar</small></div>
       </div>
       <div class="mp-ev" id="mev3">
         <img class="mp mp-ill" data-src="assets/map-e3.webp" style="left:36.78%;top:54.44%;width:49.12%" alt="A flower-covered arch and white chairs above the ocean at sunset." loading="lazy" decoding="async">
         <span class="mp-badge" style="left:38.92%;top:54.94%">03</span>
-        <div class="mp-text" style="left:41%;top:68.2%;width:42%"><b>August 28</b><b>4:30&nbsp;PM</b><i class="mt-rule"></i><strong>Ceremony</strong><small><a href="https://www.google.com/maps/search/?api=1&amp;query=AYANA+Resort+Bali%2C+Jimbaran" target="_blank" rel="noopener">AYANA SKY</a></small></div>
+        <div class="mp-text" style="left:41%;top:68.2%;width:42%"><b>August 28</b><b>4:30&nbsp;PM</b><i class="mt-rule"></i><strong>Ceremony</strong><small>AYANA SKY</small></div>
       </div>
       <div class="mp-ev" id="mev4">
         <img class="mp mp-ill" data-src="assets/map-e4.webp" style="left:58.5%;top:71.2%;width:38.5%" alt="A candlelit dinner table under hanging lanterns and flowers." loading="lazy" decoding="async">
@@ -1530,8 +1526,6 @@ var RSVP_ENDPOINT = "";
       pill.innerHTML = '<strong>' + tx.querySelector('strong').textContent + '</strong><span class="mp-when">' + bs[0].textContent + ' · ' + bs[1].textContent + (em ? ' · ' + em.textContent.replace(/[()]/g, '') : '') + '</span>'
         + (sm ? '<span class="mp-when mp-where">' + sm.textContent + '</span>' : '');
       tx.appendChild(pill); e.pill = pill;
-      var venue = sm && sm.querySelector('a');
-      if (venue) { var ml = document.createElement('a'); ml.className = 'mp-maplink'; ml.href = venue.href; ml.target = '_blank'; ml.rel = 'noopener'; ml.textContent = 'Map'; tx.appendChild(ml); }
     });
     function openStop(k) {   /* each pill folds and opens on its own */
       var pl = mapEvs[k].pill; pl.setAttribute('aria-expanded', pl.getAttribute('aria-expanded') === 'true' ? 'false' : 'true');
