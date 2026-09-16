@@ -235,7 +235,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 .env{width:var(--ew);height:var(--eh);margin-left:calc(var(--ew) / -2);margin-top:calc(var(--eh) / -2)}
 .env-back{z-index:2;background:#E3DBC9;border-radius:6px;box-shadow:0 16px 36px -10px rgba(45,35,20,.42),0 3px 8px rgba(45,35,20,.16)}
 .env-pocket{z-index:3;border-radius:6px;overflow:hidden;background:#EDE6D8 center/100% 100% no-repeat;
-  clip-path:polygon(0 0,48.07% 57.45%,100% 0,100% 100%,0 100%);-webkit-clip-path:polygon(0 0,48.07% 57.45%,100% 0,100% 100%,0 100%)}
+  clip-path:polygon(0 0,49.96% 60.96%,100% 0,100% 100%,0 100%);-webkit-clip-path:polygon(0 0,49.96% 60.96%,100% 0,100% 100%,0 100%)}
 .env-pocket .addr{
   position:absolute;left:8%;right:44%;bottom:7%;text-align:center;
   font-family:var(--script);font-size:clamp(19px,5.2vw,26px);color:#6B6558;
@@ -247,11 +247,11 @@ button,input,select,textarea{font:inherit;color:inherit}
 }
 .env-flap .flap-face{
   position:absolute;inset:0;background:#EDE6D8 center/100% 100% no-repeat;
-  clip-path:polygon(0 0,100% 0,48.07% 57.45%);
-  -webkit-clip-path:polygon(0 0,100% 0,48.07% 57.45%);
+  clip-path:polygon(0 0,100% 0,49.96% 60.96%);
+  -webkit-clip-path:polygon(0 0,100% 0,49.96% 60.96%);
 }
-.seal{   /* the seal and its painted shadow, cut from the sealed artwork at this exact box */
-  position:absolute;left:35.750%;top:39.952%;width:24.833%;height:36.582%;
+.seal{   /* the wax alone, cut from the artwork at this exact box, with its own soft shadow */
+  position:absolute;left:35.669%;top:38.648%;width:25.088%;height:38.345%;
   will-change:transform;
 }
 .seal-art{position:absolute;inset:0;background:url("assets/seal.webp") center/100% 100% no-repeat}
@@ -420,6 +420,7 @@ html.is-locked,html.is-locked body{overflow:hidden;overscroll-behavior:none}
 .section>.inner::before{top:calc(var(--arch-r) * .09)}
 .section>.inner::after{bottom:calc(var(--arch-r) * .09);transform:translateX(-50%) scaleY(-1)}
 .arch-art{display:block;width:min(46%,170px);height:auto;margin:-.4em auto .9em}
+.tea-art{display:block;width:min(88%,520px);height:auto;margin:-.2em auto .6em}
 .eyebrow{font-family:var(--mono);font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-line);margin-bottom:1.1em;display:block}
 .section h2{font-size:clamp(32px,7vw,50px);margin-bottom:.45em;max-width:16ch;color:var(--olive)}
 .lede{font-size:clamp(18px,2.4vw,21px);line-height:1.45;max-width:36ch}
@@ -674,9 +675,10 @@ html.has-lightbox{overflow:hidden}
     <li><a href="#date"><small>02</small>The date</a></li>
     <li><a href="#weekend"><small>03</small>The schedule</a></li>
     <li><a href="#dress"><small>04</small>Dress code</a></li>
-    <li><a href="#adults"><small>05</small>Adults only</a></li>
-    <li><a href="#faq"><small>06</small>Questions</a></li>
-    <li><a href="#rsvp"><small>07</small>RSVP</a></li>
+    <li><a href="#tea"><small>05</small>Tea ceremony</a></li>
+    <li><a href="#adults"><small>06</small>Adults only</a></li>
+    <li><a href="#faq"><small>07</small>Questions</a></li>
+    <li><a href="#rsvp"><small>08</small>RSVP</a></li>
   </ol>
 </nav>
 
@@ -834,7 +836,8 @@ html.has-lightbox{overflow:hidden}
       <li data-caption="The back nine at Torrey Pines"><button type="button" class="snap" aria-label="View larger: The back nine at Torrey Pines"><img data-src="assets/photo-golf-thumb.webp" data-full="assets/photo-golf.webp" alt="Ashley and Charles on the tee at Torrey Pines, the Pacific behind them." width="480" height="480" loading="lazy" decoding="async"><i class="snap-zoom" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></i></button><span>The back nine</span></li>
     </ul>
     <p>For the wedding, we didn’t want a typical venue. Our favorite rounds have always been on cliffs above the ocean, so we went looking for a place that felt like our happy place, the golf course: a cliff, an ocean, and everyone we love in one place. Your only job is to show up. It’s going to be perfect. We checked.</p>
-    <ul class="snaps snaps-two" aria-label="Two more of us">
+    <ul class="snaps" aria-label="Three more of us">
+      <li><button type="button" class="snap" aria-label="View larger photo"><img data-src="assets/photo-concert-thumb.webp" data-full="assets/photo-concert.webp" alt="Ashley and Charles grinning in a selfie at a stadium concert, the stands lit blue and pink behind them." width="480" height="480" loading="lazy" decoding="async"><i class="snap-zoom" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></i></button><span aria-hidden="true"></span></li>
       <li><button type="button" class="snap" aria-label="View larger photo"><img data-src="assets/photo-run-thumb.webp" data-full="assets/photo-run.webp" alt="Ashley running along the shoreline in a white dress, Charles a step behind, both laughing." width="480" height="480" loading="lazy" decoding="async"><i class="snap-zoom" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></i></button><span aria-hidden="true"></span></li>
       <li><button type="button" class="snap" aria-label="View larger photo"><img data-src="assets/photo-embrace-thumb.webp" data-full="assets/photo-embrace.webp" alt="Charles holding Ashley from behind on the beach, both smiling at the camera." width="480" height="480" loading="lazy" decoding="async"><i class="snap-zoom" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></i></button><span aria-hidden="true"></span></li>
     </ul>
@@ -942,9 +945,20 @@ html.has-lightbox{overflow:hidden}
 <!-- =======================================================================
      5 · ADULTS ONLY
      ======================================================================= -->
+<section class="section tea" id="tea">
+  <div class="inner">
+    <span class="eyebrow">05 — Friday evening</span>
+    <img class="tea-art" data-src="assets/tea-ceremony.webp" alt="A red and gold tea set with double-happiness cups, two embroidered kneeling cushions, red envelopes, gold bangles and plum blossom." width="1100" height="708" loading="lazy" decoding="async">
+    <h2>The tea ceremony</h2>
+    <p class="lede">Rooted in centuries of Chinese tradition, the tea ceremony is a symbolic way of honoring our elders, expressing gratitude, and welcoming the joining of two families.</p>
+    <p style="max-width:52ch;margin-left:auto;margin-right:auto">Before the ceremony, Charles will take on the playful tradition of door games, proving his love and earning his way to Ashley. Together, we will then serve tea to our elders and receive their blessings as we begin our marriage.</p>
+    <p style="max-width:52ch;margin-left:auto;margin-right:auto">For us, it is a meaningful way to honor Ashley’s Chinese heritage while celebrating the coming together of our Chinese and Japanese families.</p>
+  </div>
+</section>
+
 <section class="section" id="adults">
   <div class="inner">
-    <span class="eyebrow">05 — A note on children</span>
+    <span class="eyebrow">06 — A note on children</span>
     <img class="arch-art" data-src="assets/adults-bunny.webp" alt="" width="820" height="689" loading="lazy" decoding="async">
     <h2>Adults only</h2>
     <p class="lede">With love for all the little ones in our lives, our wedding weekend will be an adults-only celebration. We hope the occasion feels like a little holiday for the grown-ups, too.</p>
@@ -967,7 +981,7 @@ html.has-lightbox{overflow:hidden}
   <div class="pav pav-tall" id="faqPav">
     <i class="pav-motif pav-motif-top" aria-hidden="true"></i>
     <header class="fq-head fq-reveal">
-      <span class="eyebrow">06 — Questions</span>
+      <span class="eyebrow">07 — Questions</span>
       <h2 class="script-line">You might be wondering</h2>
       <i class="mt-rule"></i>
       <p class="fq-sub">Here are a few details to help you plan your trip to Bali.</p>
@@ -1022,7 +1036,7 @@ html.has-lightbox{overflow:hidden}
 
 <section class="section rsvp" id="rsvp">
   <div class="inner">
-    <span class="eyebrow">07 — RSVP</span>
+    <span class="eyebrow">08 — RSVP</span>
     <h2>Will you come?</h2>
     <p class="deadline" id="deadline">Reply by January 31, 2027</p>
 
@@ -1253,7 +1267,7 @@ var RSVP_ENDPOINT = "";
       CPS = [0, T_TICKET, T_BOOK, T_PAGES, T_HOLD];
       var envTop = envY - eh / 2;
       /* the pocket's edge: a V from the envelope's top corners down to the notch */
-      V = { lx: -ew / 2, ly: envTop, nx: -ew * .0193, ny: envTop + eh * .5745, rx: ew / 2, ry: envTop };
+      V = { lx: -ew / 2, ly: envTop, nx: -ew * .0004, ny: envTop + eh * .6096, rx: ew / 2, ry: envTop };
       var tw = ew * .92, th = tw * .4374, pw0 = ew * .60, ph0 = pw0 * 1.16, s0 = ew * .50 / ppW;
       /* where each rests once the flap is open (sealed, each sits lower, wholly inside), where it is held, and how far it sinks when sealed */
       PH = piece(pcPhoto, polaroid, pw0, ph0, { x: ew * .07, y: envTop - eh * .16 + ph0 / 2, s: 1, r: 2 }, { x: 0, y: -vh * .03, s: Math.min(1.4, (vw - 24) / pw0, vh * .62 / ph0), r: 0 }, envTop, eh * .20);
