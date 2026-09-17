@@ -29,8 +29,8 @@
 <link rel="preload" as="image" href="assets/bali-cliff.webp" imagesrcset="assets/bali-cliff-m.webp 800w, assets/bali-cliff.webp 941w" imagesizes="100vw" fetchpriority="high">
 <link rel="preload" as="image" href="assets/envelope-sealed.webp" fetchpriority="high">
 <link rel="preload" as="image" href="assets/seal.webp" fetchpriority="high">
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500&family=Instrument+Serif:ital@0;1&family=Carattere&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-<noscript><link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500&family=Instrument+Serif:ital@0;1&family=Carattere&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500&family=Instrument+Serif:ital@0;1&family=EB+Garamond:wght@400;500&family=Carattere&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500&family=Instrument+Serif:ital@0;1&family=EB+Garamond:wght@400;500&family=Carattere&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
 <style>
 /* ---------------------------------------------------------------------------
    Tokens
@@ -148,7 +148,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 .cap-top{top:max(8.5%,calc(env(safe-area-inset-top) + 44px))}
 .cap-top::before{content:"";position:absolute;left:50%;top:50%;width:min(96vw,560px);height:150%;transform:translate(-50%,-50%);z-index:-1;
   background:radial-gradient(ellipse at center,rgba(244,239,229,.88) 0%,rgba(244,239,229,.72) 42%,rgba(244,239,229,0) 74%)}
-.cap .caps{display:block;font-family:var(--serif);font-size:clamp(15px,4vw,19px);letter-spacing:.34em;text-transform:uppercase;line-height:1.5;padding-left:.34em}
+.cap .caps{display:block;font-family:'EB Garamond',var(--serif);font-weight:500;font-size:clamp(15px,4vw,19px);letter-spacing:.34em;text-transform:uppercase;line-height:1.5;padding-left:.34em}
 .cap .rule{display:block;width:34px;height:1px;background:var(--husk);margin:.75em auto;opacity:.8}
 .cap .cap-sub{font-size:clamp(13px,3.4vw,15px);letter-spacing:.22em;padding-left:.22em}
 .cap .script{display:block;font-family:var(--script);font-size:clamp(30px,8.6vw,42px);line-height:1;color:var(--ink)}
@@ -235,7 +235,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 .env{width:var(--ew);height:var(--eh);margin-left:calc(var(--ew) / -2);margin-top:calc(var(--eh) / -2)}
 .env-back{z-index:2;background:#E3DBC9;border-radius:6px;box-shadow:0 16px 36px -10px rgba(45,35,20,.42),0 3px 8px rgba(45,35,20,.16)}
 .env-pocket{z-index:3;border-radius:6px;overflow:hidden;background:#EDE6D8 center/100% 100% no-repeat;
-  clip-path:polygon(0 0,49.96% 60.96%,100% 0,100% 100%,0 100%);-webkit-clip-path:polygon(0 0,49.96% 60.96%,100% 0,100% 100%,0 100%)}
+  clip-path:polygon(0 0,45.26% 55.27%,50% 50.63%,54.74% 55.27%,100% 0,100% 100%,0 100%);-webkit-clip-path:polygon(0 0,45.26% 55.27%,50% 50.63%,54.74% 55.27%,100% 0,100% 100%,0 100%)}
 .env-pocket .addr{
   position:absolute;left:8%;right:44%;bottom:7%;text-align:center;
   font-family:var(--script);font-size:clamp(19px,5.2vw,26px);color:#6B6558;
@@ -484,6 +484,7 @@ html.has-lightbox{overflow:hidden}
 
 /* The date */
 .date-grid{display:grid;gap:clamp(24px,5vw,44px);align-items:start}
+.date-art{display:block;width:min(78%,420px);height:auto;margin:clamp(18px,3vh,30px) auto .4em}
 .countdown{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;max-width:360px;margin-top:.4em}
 /* quiet links: calendar, directions */
 .quiet-links{margin:.7em 0 1.5em;display:flex;flex-wrap:wrap;justify-content:center;gap:.6em 1.5em}
@@ -608,7 +609,7 @@ html.has-lightbox{overflow:hidden}
 .fq-head .script-line{font-size:max(34px,calc(var(--pw2) * .08))}
 .fq-head .mt-rule{width:calc(var(--pw2) * .72);max-width:calc(100% - 8px);margin:.45em auto .6em}
 .fq-head .mt-rule::after{width:18px;height:18px;top:-9px;border-radius:0;background:var(--bloom) center/contain no-repeat}
-.fq-sub{font-family:var(--serif);font-size:max(13px,calc(var(--pw2) * .019));letter-spacing:.16em;text-transform:uppercase;line-height:1.65;max-width:none;margin:0 auto;padding-left:.16em}
+.fq-sub{font-family:'EB Garamond',var(--serif);font-weight:500;font-size:max(13px,calc(var(--pw2) * .019));letter-spacing:.16em;text-transform:uppercase;line-height:1.65;max-width:none;margin:0 auto;padding-left:.16em}
 .fq-list{list-style:none;margin:0;padding:0;text-align:left}
 .fq{position:relative;display:grid;grid-template-columns:32% 1fr;gap:calc(var(--pw2) * .035);align-items:center;padding:calc(var(--pw2) * .028) 0;border-top:1px solid rgba(155,139,87,.35)}
 .fq:first-child{border-top:0}
@@ -711,7 +712,7 @@ html.has-lightbox{overflow:hidden}
       <div class="scrim scrim-bottom" id="scrimBottom" aria-hidden="true"></div>
 
 
-      <div class="cap cap-top" id="capTop" aria-hidden="true"><span class="caps">A journey<br>to forever</span><i class="rule"></i><span class="script">Bali, Indonesia</span><i class="rule"></i><span class="caps cap-sub">You’re invited · August 28, 2027</span></div>
+      <div class="cap cap-top" id="capTop" aria-hidden="true"><span class="caps">A place<br>to celebrate</span><i class="rule"></i><span class="script">Bali, Indonesia</span><i class="rule"></i><span class="caps cap-sub">You’re invited · August 28, 2027</span></div>
 
 
       <!-- Envelope, open: back, pocket, flap. Same transform on all. -->
@@ -745,7 +746,7 @@ html.has-lightbox{overflow:hidden}
 
       <!-- Passport -->
       <div class="piece pc-book" id="pcBook"><div class="passport" id="passport">
-        <div class="pp-page pp-art art-itin pp-base" role="img" aria-label="August 27: welcome party at Rock Bar from 5:30 PM, with our tea ceremony at 6:00 PM, then drinks and dinner with cliffside views. August 28: wedding ceremony, reception."></div>
+        <div class="pp-page pp-art art-itin pp-base" role="img" aria-label="August 27: welcome party at Rock Bar from 5:00 PM, with our tea ceremony at 6:00 PM, then drinks and dinner with cliffside views. August 28: wedding ceremony, reception."></div>
         <div class="pp-leaf" data-leaf="1">
           <div class="pp-page leaf-front">
           <div class="pp-head">
@@ -870,6 +871,7 @@ html.has-lightbox{overflow:hidden}
           <div><b id="cdM">—</b><span>min</span></div>
         </div>
       </div>
+      <img class="date-art" data-src="assets/cat-parents.webp" alt="Two cats, a tabby and a white one with bows, sitting tail-in-tail on vintage suitcases beside a passport, a boarding pass, a pocket watch, two gold rings and frangipani, with a luggage tag reading Cat parents for life." width="900" height="805" loading="lazy" decoding="async">
       <p class="muted" style="max-width:36ch;margin-left:auto;margin-right:auto">Friday the 27th is the welcome party at Rock Bar, with our tea ceremony at six. Saturday the 28th is the ceremony and reception on the cliff. Sunday is yours.</p>
     </div>
   </div>
@@ -901,7 +903,7 @@ html.has-lightbox{overflow:hidden}
       <div class="mp-ev" id="mev1">
         <img class="mp mp-ill" data-src="assets/map-e1.webp" style="left:0.25%;top:6.97%;width:50.38%" alt="Cocktails and a lantern on the cliff terrace at Rock Bar, the sun setting over the sea." loading="lazy" decoding="async">
         <span class="mp-badge" style="left:7.43%;top:15.49%">01</span>
-        <div class="mp-text" style="left:3.5%;top:27.2%;width:44%"><b>August 27</b><b>5:30&nbsp;PM</b><i class="mt-rule"></i><strong>Welcome Party</strong><small>at Rock Bar</small></div>
+        <div class="mp-text" style="left:3.5%;top:27.2%;width:44%"><b>August 27</b><b>5:00&nbsp;PM</b><i class="mt-rule"></i><strong>Welcome Party</strong><small>at Rock Bar</small></div>
       </div>
       <div class="mp-ev" id="mev2">
         <img class="mp mp-ill" data-src="assets/map-e2.webp" style="left:53.15%;top:31.84%;width:32.75%" alt="A red and gold Chinese tea set with cherry blossom." loading="lazy" decoding="async">
@@ -911,7 +913,7 @@ html.has-lightbox{overflow:hidden}
       <div class="mp-ev" id="mev3">
         <img class="mp mp-ill" data-src="assets/map-e3.webp" style="left:36.78%;top:54.44%;width:49.12%" alt="A flower-covered arch and white chairs above the ocean at sunset." loading="lazy" decoding="async">
         <span class="mp-badge" style="left:38.92%;top:54.94%">03</span>
-        <div class="mp-text" style="left:41%;top:68.2%;width:42%"><b>August 28</b><b>4:30&nbsp;PM</b><i class="mt-rule"></i><strong>Ceremony</strong><small>AYANA SKY</small></div>
+        <div class="mp-text" style="left:41%;top:68.2%;width:42%"><b>August 28</b><b>4:30&nbsp;PM</b><i class="mt-rule"></i><strong>Wedding Ceremony</strong><small>AYANA SKY</small></div>
       </div>
       <div class="mp-ev" id="mev4">
         <img class="mp mp-ill" data-src="assets/map-e4.webp" style="left:58.5%;top:71.2%;width:38.5%" alt="A candlelit dinner table under hanging lanterns and flowers." loading="lazy" decoding="async">
@@ -1095,7 +1097,7 @@ html.has-lightbox{overflow:hidden}
       <p>Thank you. Your reply is in, and we'll be in touch with booking details for the estate and a few notes on getting to Bali.</p>
       <span class="confirm-lead">Save the weekend</span>
       <p class="quiet-links">
-        <a class="qlink" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Ashley+%26+Charles+%C2%B7+Wedding+weekend+in+Bali&amp;dates=20270827T093000Z%2F20270828T150000Z&amp;ctz=Asia%2FMakassar&amp;location=AYANA+Bali%2C+Jimbaran%2C+Bali%2C+Indonesia&amp;details=Friday+Aug+27%2C+5%3A30+PM%3A+welcome+party+at+Rock+Bar+(tea+ceremony+at+6%3A00+PM).%0ASaturday+Aug+28%2C+4%3A30+PM%3A+ceremony+at+AYANA+SKY%2C+then+dinner+and+dancing.%0Ahttps%3A%2F%2Fctaira.github.io" target="_blank" rel="noopener">Google Calendar</a>
+        <a class="qlink" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Ashley+%26+Charles+%C2%B7+Wedding+weekend+in+Bali&amp;dates=20270827T090000Z%2F20270828T150000Z&amp;ctz=Asia%2FMakassar&amp;location=AYANA+Bali%2C+Jimbaran%2C+Bali%2C+Indonesia&amp;details=Friday+Aug+27%2C+5%3A00+PM%3A+welcome+party+at+Rock+Bar+(tea+ceremony+at+6%3A00+PM).%0ASaturday+Aug+28%2C+4%3A30+PM%3A+ceremony+at+AYANA+SKY%2C+then+dinner+and+dancing.%0Ahttps%3A%2F%2Fctaira.github.io" target="_blank" rel="noopener">Google Calendar</a>
         <a class="qlink" id="icsLink" href="#" download="ashley-and-charles-bali.ics">Apple / Outlook</a>
         <a class="qlink" href="https://www.google.com/maps/search/?api=1&amp;query=AYANA+Resort+Bali%2C+Jimbaran" target="_blank" rel="noopener">Directions</a>
       </p>
@@ -1271,8 +1273,8 @@ var RSVP_ENDPOINT = "";
       T_HOLD = T_BOOK + (mobileSpread ? 12000 : 8400); END = T_HOLD; DIVE = END + 1000;   /* the film rests at END until the guest goes on */
       CPS = [0, T_TICKET, T_BOOK, T_PAGES, T_HOLD];
       var envTop = envY - eh / 2;
-      /* the pocket's edge: a V from the envelope's top corners down to the notch */
-      V = { lx: -ew / 2, ly: envTop, nx: -ew * .0004, ny: envTop + eh * .6096, rx: ew / 2, ry: envTop };
+      /* the pocket's edge: from the top corners down the side flaps to where the bottom flap's edges cross them, then up to the bottom flap's tip */
+      V = { lx: -ew / 2, ly: envTop, ax: -ew * .0474, ay: envTop + eh * .5527, nx: 0, ny: envTop + eh * .5063, bx: ew * .0474, by: envTop + eh * .5527, rx: ew / 2, ry: envTop };
       var tw = ew * .92, th = tw * .4374, pw0 = ew * .60, ph0 = pw0 * 1.16, s0 = ew * .50 / ppW;
       /* where each rests once the flap is open (sealed, each sits lower, wholly inside), where it is held, and how far it sinks when sealed */
       PH = piece(pcPhoto, polaroid, pw0, ph0, { x: ew * .07, y: envTop - eh * .16 + ph0 / 2, s: 1, r: 2 }, { x: 0, y: -vh * .03, s: Math.min(1.4, (vw - 24) / pw0, vh * .62 / ph0), r: 0 }, envTop, eh * .20);
@@ -1298,7 +1300,7 @@ var RSVP_ENDPOINT = "";
       if (r >= 1) { if (p.el.style.clipPath !== 'none') p.el.style.clipPath = 'none'; return; }
       var rel = r * (p.bh * s + eh), big = 6 * (p.bw + p.bh);
       function pt(sx, sy) { return ((sx - x) / s + p.bw / 2).toFixed(1) + 'px ' + ((sy + rel - y) / s + p.bh / 2).toFixed(1) + 'px'; }
-      p.el.style.clipPath = 'polygon(-' + big + 'px -' + big + 'px,' + big + 'px -' + big + 'px,' + pt(V.rx + big, V.ry) + ',' + pt(V.rx, V.ry) + ',' + pt(V.nx, V.ny) + ',' + pt(V.lx, V.ly) + ',' + pt(V.lx - big, V.ly) + ')';
+      p.el.style.clipPath = 'polygon(-' + big + 'px -' + big + 'px,' + big + 'px -' + big + 'px,' + pt(V.rx + big, V.ry) + ',' + pt(V.rx, V.ry) + ',' + pt(V.bx, V.by) + ',' + pt(V.nx, V.ny) + ',' + pt(V.ax, V.ay) + ',' + pt(V.lx, V.ly) + ',' + pt(V.lx - big, V.ly) + ')';
     }
     /* one piece over time: lifted over `up` ms, held for `hold` (with the slowest of zooms), set back over `back` */
     function lift(t, t0, up, hold, back) {
@@ -1774,9 +1776,9 @@ var RSVP_ENDPOINT = "";
   (function () {
     var a = $('icsLink'); if (!a) return;
     var lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Ashley and Charles//Bali 2027//EN', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH', 'BEGIN:VEVENT',
-      'UID:ashley-charles-bali-2027@ctaira.github.io', 'DTSTAMP:20260914T000000Z', 'DTSTART:20270827T093000Z', 'DTEND:20270828T150000Z',
+      'UID:ashley-charles-bali-2027@ctaira.github.io', 'DTSTAMP:20260914T000000Z', 'DTSTART:20270827T090000Z', 'DTEND:20270828T150000Z',
       'SUMMARY:Ashley & Charles · Wedding weekend in Bali', 'LOCATION:AYANA Bali\\, Jimbaran\\, Bali\\, Indonesia',
-      'DESCRIPTION:Friday Aug 27\\, 5:30 PM: welcome party at Rock Bar (tea ceremony at 6:00 PM).\\nSaturday Aug 28\\, 4:30 PM: ceremony at AYANA SKY\\, then dinner and dancing.\\nhttps://ctaira.github.io',
+      'DESCRIPTION:Friday Aug 27\\, 5:00 PM: welcome party at Rock Bar (tea ceremony at 6:00 PM).\\nSaturday Aug 28\\, 4:30 PM: ceremony at AYANA SKY\\, then dinner and dancing.\\nhttps://ctaira.github.io',
       'URL:https://ctaira.github.io', 'END:VEVENT', 'END:VCALENDAR'];
     a.href = 'data:text/calendar;charset=utf-8,' + encodeURIComponent(lines.join('\r\n') + '\r\n');
   })();
