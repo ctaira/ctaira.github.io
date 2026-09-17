@@ -235,7 +235,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 .env{width:var(--ew);height:var(--eh);margin-left:calc(var(--ew) / -2);margin-top:calc(var(--eh) / -2)}
 .env-back{z-index:2;background:#E3DBC9;border-radius:6px;box-shadow:0 16px 36px -10px rgba(45,35,20,.42),0 3px 8px rgba(45,35,20,.16)}
 .env-pocket{z-index:3;border-radius:6px;overflow:hidden;background:#EDE6D8 center/100% 100% no-repeat;
-  clip-path:polygon(0 0,45.26% 55.27%,50% 50.63%,54.74% 55.27%,100% 0,100% 100%,0 100%);-webkit-clip-path:polygon(0 0,45.26% 55.27%,50% 50.63%,54.74% 55.27%,100% 0,100% 100%,0 100%)}
+  clip-path:polygon(0 0,45.26% 55.27%,48.94% 51.67%,53.61% 56.55%,100% 0,100% 100%,0 100%);-webkit-clip-path:polygon(0 0,45.26% 55.27%,48.94% 51.67%,53.61% 56.55%,100% 0,100% 100%,0 100%)}
 .env-pocket .addr{
   position:absolute;left:8%;right:44%;bottom:7%;text-align:center;
   font-family:var(--script);font-size:clamp(19px,5.2vw,26px);color:#6B6558;
@@ -261,9 +261,9 @@ button,input,select,textarea{font:inherit;color:inherit}
 .env-pocket::after,.env-flap .flap-face::after{content:"";position:absolute;inset:0;background:url("assets/envelope-sealed.webp") center/100% 100% no-repeat;transition:opacity .4s ease;pointer-events:none}
 .stage.is-open .env-pocket::after,.stage.is-open .env-flap .flap-face::after{opacity:0}
 .env-pocket .addr{display:none}
-/* The seal stays whole and rides up on the flap; it is on the flap's front face, so it goes
-   out of sight as the flap turns over. */
-.env-flap .seal{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+/* The seal stays whole and rides up on the flap, and stays on its tip once the flap has turned
+   over, the way the printed envelope shows it. */
+.env-flap .seal{backface-visibility:visible;-webkit-backface-visibility:visible}
 /* The pieces in the pocket. Each has a wrapper that carries its motion and, while it is in the pocket,
    a clip that follows the pocket's edge; the piece itself carries its slight tilt. */
 .piece{position:absolute;left:50%;top:50%;will-change:transform}
@@ -1185,7 +1185,7 @@ var RSVP_ENDPOINT = "";
      Opening sequence
   ------------------------------------------------------------------------- */
   var stage = $('stage'), scene = $('scene'), skip = $('skip');
-  var envBack = $('envBack'), envPocket = $('envPocket'), envFlap = $('envFlap');
+  var envBack = $('envBack'), envPocket = $('envPocket'), envFlap = $('envFlap'), sealEl = $('seal');
   var bpass = $('bpass'), polaroid = $('polaroid'), passport = $('passport'), cover = $('ppCover');
   var pcTicket = $('pcTicket'), pcPhoto = $('pcPhoto'), pcBook = $('pcBook'), veil = $('veil');
   /* the leaves, first to last (the DOM holds them last to first so the first sits on top) */
@@ -1274,7 +1274,7 @@ var RSVP_ENDPOINT = "";
       CPS = [0, T_TICKET, T_BOOK, T_PAGES, T_HOLD];
       var envTop = envY - eh / 2;
       /* the pocket's edge: from the top corners down the side flaps to where the bottom flap's edges cross them, then up to the bottom flap's tip */
-      V = { lx: -ew / 2, ly: envTop, ax: -ew * .0474, ay: envTop + eh * .5527, nx: 0, ny: envTop + eh * .5063, bx: ew * .0474, by: envTop + eh * .5527, rx: ew / 2, ry: envTop };
+      V = { lx: -ew / 2, ly: envTop, ax: -ew * .0474, ay: envTop + eh * .5527, nx: -ew * .0106, ny: envTop + eh * .5167, bx: ew * .0361, by: envTop + eh * .5655, rx: ew / 2, ry: envTop };
       var tw = ew * .92, th = tw * .4374, pw0 = ew * .60, ph0 = pw0 * 1.16, s0 = ew * .50 / ppW;
       /* where each rests once the flap is open (sealed, each sits lower, wholly inside), where it is held, and how far it sinks when sealed */
       PH = piece(pcPhoto, polaroid, pw0, ph0, { x: ew * .07, y: envTop - eh * .16 + ph0 / 2, s: 1, r: 2 }, { x: 0, y: -vh * .03, s: Math.min(1.4, (vw - 24) / pw0, vh * .62 / ph0), r: 0 }, envTop, eh * .20);
@@ -1328,6 +1328,7 @@ var RSVP_ENDPOINT = "";
       var s2 = soft(seg(t, 0, 1500)), settle = soft(seg(t, 700, 1900));
       envFlap.style.transform = 'translateY(' + envY + 'px) rotateX(' + (-181 * s2) + 'deg)';
       envFlap.style.zIndex = s2 > .5 ? 1 : 7;
+      sealEl.style.transform = s2 > .5 ? 'scaleY(-1)' : '';   /* seen from behind once the flap is over: un-mirror it */
       envBack.style.transform = envPocket.style.transform = 'translateY(' + envY + 'px)';
 
       /* 1. the photograph: out of the pocket, to the centre, the slowest of zooms while it is held, and set back */
