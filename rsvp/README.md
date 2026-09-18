@@ -83,8 +83,10 @@ inbox unless `REPLY_TO` is set.
 1. **Invitations → Send a test invitation to me** emails you the invitation
    for the first row, so you can see it before anyone else does.
 2. **Invitations → Send invitations to unsent rows** emails every household
-   that has a code and an email but nothing in **sent**, then writes the
-   send time into **sent**. It asks before sending and tells you how many
+   that has a code and at least one address but nothing in **sent**, then
+   writes the send time into **sent**. Every person with an address gets
+   their own email, greeted by their first name; everyone in a household
+   gets the same link. It asks before sending and tells you how many
    emails your account can still send today.
 
 The invitation email carries the beach artwork inside it. The script fetches
