@@ -361,7 +361,10 @@ function writeLinks(households) {
   var src = ss().getSheetByName(GUEST_LIST), rows = src.getDataRange().getValues(), h = -1, c, r;
   for (r = 0; r < rows.length && h < 0; r++) for (c = 0; c < rows[r].length; c++) if (nameKey(rows[r][c]) === 'first name') { h = r; break; }
   var col = LINK_COLUMN - 1;
-  src.getRange(h + 1, col + 1).setValue('Invite link');
+  if (!clean(rows[h][col], 40)) src.getRange(h + 1, col + 1).setValue('Invite link');   /* keeps a header you have already given the column */
+  for (c = 0; c < rows[h].length; c++) {      /* links written earlier into another column are cleared, so there is one copy */
+    if (c !== col && /^(invite|unique) link$/.test(nameKey(rows[h][c]))) src.getRange(h + 1, c + 1, Math.max(1, src.getLastRow() - h), 1).clearContent();
+  }
   var byRow = {};
   households.forEach(function (hh) { hh.rows.forEach(function (rr) { byRow[rr] = hh.link; }); });
   var last = src.getLastRow(), out = [];
