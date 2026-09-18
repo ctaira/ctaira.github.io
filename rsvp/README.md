@@ -65,10 +65,10 @@ inbox unless `REPLY_TO` is set.
    send time into **sent**. It asks before sending and tells you how many
    emails your account can still send today.
 
-The invitation email shows the beach artwork from `assets/email-hero.jpg` on
-the live site, so publish the site and set `SITE_URL` before sending; mail
-clients fetch the picture from there. With images off, guests still see the
-headline as the picture's description, the note, and the button.
+The invitation email carries the beach artwork inside it. The script fetches
+`assets/email-hero-2x.jpg` from the live site once per run and embeds it, so
+publish the site and set `SITE_URL` before sending. With images off, guests
+still see the headline as the picture's description, the note, and the button.
 
 A personal Gmail account can send about 100 emails a day. If the list is
 longer, run the same menu item again the next day; rows already sent are
