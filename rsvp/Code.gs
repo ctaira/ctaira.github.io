@@ -200,7 +200,12 @@ function invitationEmail(guest) {
 /** The beach artwork, fetched once from the site and embedded in each email. */
 var heroBlob = null;
 function heroImage() {
-  if (!heroBlob) heroBlob = UrlFetchApp.fetch(SITE_URL + 'assets/email-hero-2x.jpg').getBlob().setName('email-hero.jpg');
+  if (!heroBlob) {
+    var path = 'assets/email-hero-2x.jpg';
+    try { heroBlob = UrlFetchApp.fetch(SITE_URL + path).getBlob(); }
+    catch (e) { heroBlob = UrlFetchApp.fetch(SITE_URL.replace(/^https:/, 'http:') + path).getBlob(); }   /* before the site's certificate is issued */
+    heroBlob.setName('email-hero.jpg');
+  }
   return heroBlob;
 }
 
