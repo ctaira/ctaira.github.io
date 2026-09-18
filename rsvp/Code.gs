@@ -180,19 +180,20 @@ function sendConfirmation(guest, reply) {
 function invitationEmail(guest) {
   var link = guestLink(guest.code), hero = SITE_URL + 'assets/email-hero.jpg', hero2x = SITE_URL + 'assets/email-hero-2x.jpg';
   var serif = "'EB Garamond',Garamond,Georgia,'Times New Roman',serif";
-  return '<div style="background:#E9E4D9;padding:24px 12px;font-family:' + serif + ';color:#2A2C27;line-height:1.5">' +
-    '<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="max-width:600px;width:100%;margin:0 auto;background:#FBF8F1;border-radius:6px;overflow:hidden">' +
+  /* Colours go on bgcolor attributes as well as styles: several mail clients drop background styles. */
+  return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#E9E4D9" style="background-color:#E9E4D9"><tr><td align="center" style="padding:24px 12px">' +
+    '<table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" bgcolor="#FBF8F1" style="max-width:600px;width:100%;background-color:#FBF8F1;font-family:' + serif + ';color:#2A2C27;line-height:1.5">' +
     '<tr><td style="padding:0"><a href="' + escapeHtml(link) + '" style="display:block;text-decoration:none">' +
-    '<img src="' + escapeHtml(hero) + '" srcset="' + escapeHtml(hero2x) + ' 2x" width="600" alt="Ashley &amp; Charles are getting married. Bali, Indonesia, August 28, 2027. We can\'t wait to celebrate with you. Open the invitation." style="display:block;width:100%;max-width:600px;height:auto;border:0;background:#EEF4F5;color:#2A2C27;font-size:18px;text-align:center"></a></td></tr>' +
-    '<tr><td style="padding:30px 36px 8px;text-align:center">' +
-    '<p style="margin:0 0 14px;font-size:19px">Dear ' + escapeHtml(guest.name) + ',</p>' +
-    '<p style="margin:0 0 20px;font-size:17px">Your invitation opens like a letter, so give it a moment. It carries your name and your seats.</p>' +
-    '<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto"><tr><td style="background:#596044;border:1px solid #9B8B57;border-radius:2px">' +
-    '<a href="' + escapeHtml(link) + '" style="display:inline-block;padding:14px 30px;color:#F8F3E8;text-decoration:none;font-family:' + serif + ';font-size:15px;letter-spacing:.18em;text-transform:uppercase">Open the invitation &rarr;</a></td></tr></table>' +
+    '<img src="' + escapeHtml(hero) + '" srcset="' + escapeHtml(hero2x) + ' 2x" width="600" alt="Ashley &amp; Charles are getting married. Bali, Indonesia, August 28, 2027. We can\'t wait to celebrate with you. Open the invitation." style="display:block;width:100%;max-width:600px;height:auto;border:0;background-color:#EEF4F5;color:#2A2C27;font-size:18px;text-align:center"></a></td></tr>' +
+    '<tr><td align="center" style="padding:30px 36px 8px;text-align:center">' +
+    '<p style="margin:0 0 14px;font-size:19px;color:#2A2C27">Dear ' + escapeHtml(guest.name) + ',</p>' +
+    '<p style="margin:0 0 20px;font-size:17px;color:#2A2C27">Your invitation opens like a letter, so give it a moment. It carries your name and your seats.</p>' +
+    '<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto"><tr><td bgcolor="#596044" style="background-color:#596044;border:1px solid #9B8B57;border-radius:2px">' +
+    '<a href="' + escapeHtml(link) + '" style="display:inline-block;padding:14px 30px;background-color:#596044;color:#F8F3E8;text-decoration:none;font-family:' + serif + ';font-size:15px;letter-spacing:.18em;text-transform:uppercase"><font color="#F8F3E8">Open the invitation &rarr;</font></a></td></tr></table>' +
     '<p style="margin:22px 0 0;font-size:15px;color:#5B5D55">Please reply by ' + escapeHtml(RSVP_DEADLINE) + '.</p>' +
     '<p style="margin:16px 0 0;font-size:13px;color:#7A7C74">Or copy this link: <a href="' + escapeHtml(link) + '" style="color:#3F5B45">' + escapeHtml(link) + '</a></p>' +
     '<p style="margin:26px 0 22px;font-family:Menlo,Consolas,monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#9B8B57">Ashley &amp; Charles &middot; AYANA Bali &middot; August 28, 2027</p>' +
-    '</td></tr></table></div>';
+    '</td></tr></table></td></tr></table>';
 }
 
 function sendInvitation(guest, toList) {
