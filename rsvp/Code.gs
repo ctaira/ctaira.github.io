@@ -13,7 +13,7 @@
  * Setup is in README.md next to this file.
  */
 
-var SITE_URL = 'https://example.com/';   // your site, with trailing slash; used to build invitation links
+var SITE_URL = 'https://ashleyandcharlesinbali.com/';   // the live site, with trailing slash; used to build invitation links and to load the email artwork
 var FROM_NAME = 'Ashley & Charles';       // sender name on every email (the address is the Google account running this)
 var REPLY_TO = '';                        // optional: where guest replies to the emails should go
 var INVITE_SUBJECT = 'Bali, 28 August 2027: your invitation';
@@ -220,7 +220,7 @@ function splitEmails(v) {
 /** Emails every Guests row that has a code and an email but no value in the "sent" column (F). */
 function sendInvitations() {
   var ui = SpreadsheetApp.getUi();
-  if (SITE_URL.indexOf('example.com') >= 0) { ui.alert('Set SITE_URL at the top of the script first.'); return; }
+  if (!/^https:\/\/[^/]+\/$/.test(SITE_URL)) { ui.alert('SITE_URL at the top of the script must be the live site with a trailing slash.'); return; }
   var sheet = ss().getSheetByName(GUESTS);
   var rows = sheet.getDataRange().getValues();
   var pending = [];
