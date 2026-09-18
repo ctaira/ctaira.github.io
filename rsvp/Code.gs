@@ -22,6 +22,7 @@ var RSVP_DEADLINE = 'January 31, 2027';
 var GUEST_LIST = 'Guest List';   // the couple's own list: one row per person, with "Linked to another guest?"
 var GUESTS = 'Households';       // built from it by the Invitations menu: one row per household
 var LINK_COLUMN = 9;             // Guest List column that receives each person's invite link (9 = I)
+var SCRIPT_VERSION = 4;          // shown in the Invitations menu's messages, so you can tell which copy is running
 var RESPONSES = 'Responses';
 var MAX_SEATS = 6;
 var CODE_ALPHABET = 'abcdefghjkmnpqrstuvwxyz23456789'; // no 0/o/1/l, so codes survive being read aloud
@@ -218,7 +219,13 @@ function onOpen() {
     .addItem('Fill missing codes and links', 'fillCodes')
     .addItem('Send invitations to unsent rows', 'sendInvitations')
     .addItem('Send a test invitation to me', 'sendTestInvitation')
+    .addSeparator()
+    .addItem('Which version is this?', 'showVersion')
     .addToUi();
+}
+
+function showVersion() {
+  SpreadsheetApp.getUi().alert('Script v' + SCRIPT_VERSION + '. Links go to column ' + LINK_COLUMN + ' of the ' + GUEST_LIST + ' tab.');
 }
 
 /** "Sam Nair <sam@x.com>, priya@x.com" -> [{ name: 'Sam Nair', email: 'sam@x.com' }, { name: '', email: 'priya@x.com' }] */
@@ -393,7 +400,7 @@ function buildHouseholds() {
   households.forEach(function (hh, i) { hh.link = SITE_URL + '?i=' + normaliseCode(now[i + 1][0]); });
   writeLinks(households);
   var dropped = Math.max(0, (old.length - 1) - kept);
-  ui.alert(households.length + ' households from the ' + GUEST_LIST + ' tab (' + kept + ' unchanged, ' + (households.length - kept) + ' new' + (dropped ? ', ' + dropped + ' old row' + (dropped === 1 ? '' : 's') + ' removed' : '') + '). Each person\'s link is in the ' + GUEST_LIST + ' tab under "Invite link". Check names, seats and emails on the ' + GUESTS + ' tab before sending.');
+  ui.alert('Script v' + SCRIPT_VERSION + ': ' + households.length + ' households from the ' + GUEST_LIST + ' tab (' + kept + ' unchanged, ' + (households.length - kept) + ' new' + (dropped ? ', ' + dropped + ' old row' + (dropped === 1 ? '' : 's') + ' removed' : '') + '). Each person\'s link is in the ' + GUEST_LIST + ' tab under "Invite link". Check names, seats and emails on the ' + GUESTS + ' tab before sending.');
 }
 
 /** Gives every household row a unique code and an invitation link. Never overwrites an existing code. */
