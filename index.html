@@ -1080,7 +1080,8 @@ html.has-lightbox{overflow:hidden}
 
       <div class="field" id="fEmail">
         <label for="email">Your email</label>
-        <input type="email" id="email" name="email" autocomplete="email" maxlength="120" placeholder="For a copy of your reply (optional)">
+        <input type="email" id="email" name="email" autocomplete="email" maxlength="120" placeholder="We'll send you a copy of your reply" required>
+        <p class="err">Please add an email so we can send you a copy.</p>
       </div>
 
       <div class="field" id="fDiet">
@@ -1848,7 +1849,8 @@ var RSVP_ENDPOINT = "";
      RSVP
   ------------------------------------------------------------------------- */
   var form = $('rsvpForm'), submitBtn = $('submitBtn'), formError = $('formError');
-  var fName = $('fName'), fAttending = $('fAttending'), fParty = $('fParty'), fDiet = $('fDiet');
+  var fName = $('fName'), fAttending = $('fAttending'), fParty = $('fParty'), fDiet = $('fDiet'), fEmail = $('fEmail');
+  function validEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v); }
   var partySel = $('party'), partyHint = $('partyHint');
 
   /* Party-size dropdown is capped at the invitation's seat count. Hidden when it's 1. */
@@ -1921,11 +1923,14 @@ var RSVP_ENDPOINT = "";
   }
 
   $('name').addEventListener('input', function () { if (this.value.trim()) fName.classList.remove('is-invalid'); });
+  $('email').addEventListener('input', function () { if (validEmail(this.value.trim())) fEmail.classList.remove('is-invalid'); });
 
   function validate() {
     var ok = true, first = null;
     var name = $('name').value.trim();
     fName.classList.toggle('is-invalid', !name); if (!name) { ok = false; first = first || $('name'); }
+    var email = $('email').value.trim(), emailOk = validEmail(email);
+    fEmail.classList.toggle('is-invalid', !emailOk); if (!emailOk) { ok = false; first = first || $('email'); }
     var att = attendingValue();
     fAttending.classList.toggle('is-invalid', !att); if (!att) { ok = false; first = first || radios[0]; }
     if (first) first.focus();

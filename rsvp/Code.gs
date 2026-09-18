@@ -84,8 +84,7 @@ function doPost(e) {
     var attending = ['both', 'saturday', 'no'].indexOf(data.attending) >= 0 ? data.attending : '';
     var name = clean(data.name, 80);
     var email = clean(data.email, 120);
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) email = '';   /* optional: a bad address is ignored, not fatal */
-    if (!attending || !name) return json({ ok: false, error: 'bad_request' });
+    if (!attending || !name || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return json({ ok: false, error: 'bad_request' });
     var party = attending === 'no' ? 0 : Math.max(1, Math.min(guest.seats, parseInt(data.party, 10) || 1));
 
     var sheet = ensureResponses();
@@ -107,8 +106,7 @@ function doPost(e) {
     ]);
     var emailed = false;
     try {
-      /* the copy goes to the address they typed, or else to the household's addresses on the sheet */
-      sendConfirmation(guest, { name: name, email: email || splitEmails(guest.email).join(','), attending: attending, party: party, dietary: dietary, note: note });
+      sendConfirmation(guest, { name: name, email: email, attending: attending, party: party, dietary: dietary, note: note });
       emailed = true;
     } catch (mailErr) {
       /* the reply is recorded either way; a failed receipt is not a failed RSVP */
