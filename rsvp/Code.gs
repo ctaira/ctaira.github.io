@@ -21,6 +21,7 @@ var CONFIRM_SUBJECT = 'We have your reply';
 var RSVP_DEADLINE = 'January 31, 2027';
 var GUEST_LIST = 'Guest List';   // the couple's own list: one row per person, with "Linked to another guest?"
 var GUESTS = 'Households';       // built from it by the Invitations menu: one row per household
+var LINK_COLUMN = 9;             // Guest List column that receives each person's invite link (9 = I)
 var RESPONSES = 'Responses';
 var MAX_SEATS = 6;
 var CODE_ALPHABET = 'abcdefghjkmnpqrstuvwxyz23456789'; // no 0/o/1/l, so codes survive being read aloud
@@ -354,14 +355,13 @@ function readHouseholds() {
   });
 }
 
-/** Writes each person's invitation link into the Guest List, in the column headed "Invite link"
-    (added at the end of the header row if there is none). Everyone in a household gets the same link. */
+/** Writes each person's invitation link into the Guest List, in LINK_COLUMN (column I unless changed),
+    and heads that column "Invite link". Everyone in a household gets the same link. */
 function writeLinks(households) {
   var src = ss().getSheetByName(GUEST_LIST), rows = src.getDataRange().getValues(), h = -1, c, r;
   for (r = 0; r < rows.length && h < 0; r++) for (c = 0; c < rows[r].length; c++) if (nameKey(rows[r][c]) === 'first name') { h = r; break; }
-  var col = -1;
-  for (c = 0; c < rows[h].length; c++) if (nameKey(rows[h][c]) === 'invite link') col = c;
-  if (col < 0) { col = rows[h].length; src.getRange(h + 1, col + 1).setValue('Invite link'); }
+  var col = LINK_COLUMN - 1;
+  src.getRange(h + 1, col + 1).setValue('Invite link');
   var byRow = {};
   households.forEach(function (hh) { hh.rows.forEach(function (rr) { byRow[rr] = hh.link; }); });
   var last = src.getLastRow(), out = [];
