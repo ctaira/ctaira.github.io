@@ -8,20 +8,32 @@ nobody can reply for more seats than they were given.
 
 ## 1. The sheet
 
-Create a Google Sheet. The quickest way is **File → Import → Upload** with
-`guests-template.csv` from this folder, then rename the tab to **Guests**
-and delete the two example rows. Or start blank, name the first tab
-**Guests**, and give it these headers in row 1:
+The guest list is your own **Wedding Planning** workbook, one row per person,
+with the columns it already has: **First Name**, **Last Name**, **Side (C/A)**,
+**Email Address** and **Linked to another guest?**. The script reads the tab
+called **Guest List** and groups people into households on its own:
 
-| A `code` | B `names` | C `seats` | D `email` | E `link` | F `sent` |
-|---|---|---|---|---|---|
+- anyone named in **Linked to another guest?** joins that person's household,
+  and anyone sharing an email address does too;
+- a first name like `Kevin's Girlfriend` or `Leo's Kimberly` joins Kevin's or
+  Leo's household;
+- a row counts as a guest only when it has a first name and a side (`A`, `C`
+  or `Both`), so note rows and section headings are skipped;
+- seats are the number of people in the household, and the passport reads
+  their names, e.g. `Jimmie, Dorothy & Tiffany Dong` or `Michael Lai & Lalita Lai`.
 
-Add one row per household. Fill in **names** (what the passport will say, e.g.
-`Sam & Priya Nair`) and **seats** (1 to 6). Put every adult's address in
-**email**, separated by commas, so each person in the household gets the
-same link. Leave **code**, **link** and **sent** empty; the script fills them.
+People who should be invited together but are not linked (siblings on
+separate rows, say) get separate invitations. Fill in **Linked to another
+guest?** for them and rebuild.
 
-A **Responses** tab is created automatically the first time the script runs.
+The workbook must be a native Google Sheet for the script to run in it. If it
+is still an `.xlsx`, open it in Drive and choose **File → Save as Google
+Sheets**, then work in the new copy.
+
+The script keeps its own tab, **Households**, with one row per household:
+`code`, `names`, `seats`, `email`, `link`, `sent` and `members`. Never edit
+this tab by hand; rebuild it from the menu. A **Responses** tab is created
+automatically the first time the script runs.
 
 ## 2. The script
 
@@ -42,15 +54,22 @@ that account first keeps everything in one place.
 Whenever you change the script later, use **Deploy → Manage deployments →
 Edit → Version: New version**, or the live URL keeps running the old code.
 
-## 3. Codes and links
+## 3. Households, codes and links
 
-Reload the sheet. An **Invitations** menu appears. Run **Fill missing codes
-and links**. Every household row now has a six-character code and a link
-like `https://ashleyandcharlesinbali.com/?i=k7m3qx`. The next step emails them out, or
-you can copy a link from column E to send by text.
+Reload the sheet. An **Invitations** menu appears.
 
-Rows you add later get codes the next time you run the menu item. Existing
-codes are never changed. To disable a link, delete its code.
+1. Run **Build households from Guest List**. The **Households** tab is
+   (re)built from the Guest List and every household gets a six-character
+   code and a link like `https://ashleyandcharlesinbali.com/?i=k7m3qx`.
+   Read the tab through once: names, seats and emails are what the
+   invitations will carry.
+2. Run it again whenever the Guest List changes. Households whose members
+   are unchanged keep their code and their sent date; a household whose
+   members changed gets a new row and a new code, and its old row is
+   removed. Existing codes are never rewritten.
+
+**Fill missing codes and links** is also on the menu for a Households tab
+you have edited by hand. To disable a link, delete its code.
 
 ## 4. Sending the invitations
 

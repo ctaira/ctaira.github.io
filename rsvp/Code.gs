@@ -19,7 +19,8 @@ var REPLY_TO = '';                        // optional: where guest replies to th
 var INVITE_SUBJECT = 'Bali, 28 August 2027: your invitation';
 var CONFIRM_SUBJECT = 'We have your reply';
 var RSVP_DEADLINE = 'January 31, 2027';
-var GUESTS = 'Guests';
+var GUEST_LIST = 'Guest List';   // the couple's own list: one row per person, with "Linked to another guest?"
+var GUESTS = 'Households';       // built from it by the Invitations menu: one row per household
 var RESPONSES = 'Responses';
 var MAX_SEATS = 6;
 var CODE_ALPHABET = 'abcdefghjkmnpqrstuvwxyz23456789'; // no 0/o/1/l, so codes survive being read aloud
@@ -222,6 +223,7 @@ function sendInvitation(guest, toList) {
 
 function onOpen() {
   SpreadsheetApp.getUi().createMenu('Invitations')
+    .addItem('Build households from Guest List', 'buildHouseholds')
     .addItem('Fill missing codes and links', 'fillCodes')
     .addItem('Send invitations to unsent rows', 'sendInvitations')
     .addItem('Send a test invitation to me', 'sendTestInvitation')
@@ -290,6 +292,83 @@ function randomCode() {
     out += CODE_ALPHABET.charAt(Math.floor(Math.random() * CODE_ALPHABET.length));
   }
   return out;
+}
+
+var HOUSEHOLD_HEADERS = ['code', 'names', 'seats', 'email', 'link', 'sent', 'members'];
+
+function nameKey(s) { return String(s || '').toLowerCase().replace(/[^a-z ]/g, ' ').replace(/\s+/g, ' ').trim(); }
+
+/** Reads the Guest List (one row per person) and groups people into households: anyone named in
+    "Linked to another guest?" joins that person's household, as does anyone sharing an email address.
+    Rows count as guests when they have a first name and a side (A, C or Both). */
+function readHouseholds() {
+  var src = ss().getSheetByName(GUEST_LIST);
+  if (!src) throw new Error('No tab called "' + GUEST_LIST + '".');
+  var rows = src.getDataRange().getValues(), h = -1, col = {}, r, c;
+  for (r = 0; r < rows.length && h < 0; r++) for (c = 0; c < rows[r].length; c++) if (nameKey(rows[r][c]) === 'first name') { h = r; break; }
+  if (h < 0) throw new Error('The "' + GUEST_LIST + '" tab has no "First Name" header.');
+  for (c = 0; c < rows[h].length; c++) {
+    var k = nameKey(rows[h][c]);
+    if (k.indexOf('first') === 0) col.first = c; else if (k.indexOf('last') === 0) col.last = c; else if (k.indexOf('side') === 0) col.side = c;
+    else if (k.indexOf('email') === 0) col.email = c; else if (k.indexOf('linked') === 0) col.linked = c;
+  }
+  var people = [];
+  for (r = h + 1; r < rows.length; r++) {
+    var first = clean(rows[r][col.first], 40), last = clean(rows[r][col.last], 40), side = clean(rows[r][col.side], 10).toUpperCase();
+    if (!first || !/^(A|C|BOTH)$/.test(side)) continue;
+    people.push({ i: people.length, first: first, last: last, full: (first + ' ' + last).trim(), emails: splitEmails(rows[r][col.email]),
+      linked: String(col.linked == null ? '' : rows[r][col.linked] || '').split(/[,;\/&]|\band\b/).map(function (x) { return x.trim(); }).filter(Boolean) });
+  }
+  var parent = people.map(function (_, i) { return i; });
+  function find(i) { while (parent[i] !== i) { parent[i] = parent[parent[i]]; i = parent[i]; } return i; }
+  function union(a, b) { a = find(a); b = find(b); if (a !== b) parent[b] = a; }
+  var byFull = {}, byFirst = {}, byEmail = {};
+  people.forEach(function (p) {
+    byFull[nameKey(p.full)] = p.i; (byFirst[nameKey(p.first)] = byFirst[nameKey(p.first)] || []).push(p.i);
+    p.emails.forEach(function (e) { e = e.toLowerCase(); if (byEmail[e] != null) union(p.i, byEmail[e]); else byEmail[e] = p.i; });
+  });
+  people.forEach(function (p) {
+    var poss = p.first.match(/^([A-Za-z]+)'s\b/);        /* "Kevin's Girlfriend", "Leo's Kimberly": joins Kevin, Leo */
+    if (poss) p.linked.push(poss[1]);
+    p.linked.forEach(function (name) {
+      var k = nameKey(name), j = byFull[k];
+      if (j == null && byFirst[k] && byFirst[k].length === 1) j = byFirst[k][0];
+      if (j != null && j !== p.i) union(p.i, j);
+    });
+  });
+  var groups = {}, order = [];
+  people.forEach(function (p) { var g = find(p.i); if (!groups[g]) { groups[g] = []; order.push(g); } groups[g].push(p); });
+  return order.map(function (g) {
+    var m = groups[g], lasts = m.map(function (p) { return p.last; });
+    var sameLast = m.length > 1 && lasts.every(function (l) { return l && l === lasts[0]; });
+    var parts = m.map(function (p) { return sameLast ? p.first : p.full; });
+    var names = parts.length > 1 ? parts.slice(0, -1).join(', ') + ' & ' + parts[parts.length - 1] : parts[0];
+    if (sameLast) names += ' ' + lasts[0];
+    var emails = [], seen = {};
+    m.forEach(function (p) { p.emails.forEach(function (e) { if (!seen[e.toLowerCase()]) { seen[e.toLowerCase()] = true; emails.push(e); } }); });
+    return { names: names.slice(0, 80), seats: Math.min(m.length, MAX_SEATS), email: emails.join(', '), members: m.map(function (p) { return p.full; }).sort().join(' | ') };
+  });
+}
+
+/** Rebuilds the Households tab from the Guest List. Codes and sent dates are kept for households whose
+    members have not changed; a household whose members changed gets a new row (and a new code). */
+function buildHouseholds() {
+  var ui = SpreadsheetApp.getUi();
+  var households = readHouseholds();
+  var sheet = ss().getSheetByName(GUESTS);
+  if (!sheet) { sheet = ss().insertSheet(GUESTS); sheet.appendRow(HOUSEHOLD_HEADERS); sheet.setFrozenRows(1); }
+  var old = sheet.getDataRange().getValues(), keep = {};
+  for (var r = 1; r < old.length; r++) if (old[r][6]) keep[old[r][6]] = { code: normaliseCode(old[r][0]), sent: old[r][5] };
+  var kept = 0, out = households.map(function (h) {
+    var k = keep[h.members]; if (k) kept++;
+    return [k ? k.code : '', h.names, h.seats, h.email, '', k ? k.sent : '', h.members];
+  });
+  if (old.length > 1) sheet.getRange(2, 1, old.length - 1, HOUSEHOLD_HEADERS.length).clearContent();
+  sheet.getRange(1, 1, 1, HOUSEHOLD_HEADERS.length).setValues([HOUSEHOLD_HEADERS]);
+  if (out.length) sheet.getRange(2, 1, out.length, HOUSEHOLD_HEADERS.length).setValues(out);
+  fillCodes();
+  var dropped = Math.max(0, (old.length - 1) - kept);
+  ui.alert(households.length + ' households from the ' + GUEST_LIST + ' tab (' + kept + ' unchanged, ' + (households.length - kept) + ' new' + (dropped ? ', ' + dropped + ' old row' + (dropped === 1 ? '' : 's') + ' removed' : '') + '). Check names, seats and emails on the ' + GUESTS + ' tab before sending.');
 }
 
 /** Gives every household row a unique code and an invitation link. Never overwrites an existing code. */
