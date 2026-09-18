@@ -17,6 +17,9 @@ called **Guest List** and groups people into households on its own:
   and anyone sharing an email address does too;
 - a first name like `Kevin's Girlfriend` or `Leo's Kimberly` joins Kevin's or
   Leo's household;
+- if the tab has a column headed **Room** or **Household**, everyone sharing
+  a value in it is one household (the room numbers from the Room List tab
+  work well here, copied across);
 - a row counts as a guest only when it has a first name and a side (`A`, `C`
   or `Both`), so note rows and section headings are skipped;
 - seats are the number of people in the household, and the passport reads

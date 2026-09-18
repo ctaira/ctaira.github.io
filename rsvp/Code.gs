@@ -311,19 +311,22 @@ function readHouseholds() {
     var k = nameKey(rows[h][c]);
     if (k.indexOf('first') === 0) col.first = c; else if (k.indexOf('last') === 0) col.last = c; else if (k.indexOf('side') === 0) col.side = c;
     else if (k.indexOf('email') === 0) col.email = c; else if (k.indexOf('linked') === 0) col.linked = c;
+    else if (k === 'room' || k === 'household') col.group = c;   /* optional: people sharing a value are one household */
   }
   var people = [];
   for (r = h + 1; r < rows.length; r++) {
     var first = clean(rows[r][col.first], 40), last = clean(rows[r][col.last], 40), side = clean(rows[r][col.side], 10).toUpperCase();
     if (!first || !/^(A|C|BOTH)$/.test(side)) continue;
     people.push({ i: people.length, first: first, last: last, full: (first + ' ' + last).trim(), emails: splitEmails(rows[r][col.email]),
+      group: col.group == null ? '' : clean(rows[r][col.group], 20).toLowerCase(),
       linked: String(col.linked == null ? '' : rows[r][col.linked] || '').split(/[,;\/&]|\band\b/).map(function (x) { return x.trim(); }).filter(Boolean) });
   }
   var parent = people.map(function (_, i) { return i; });
   function find(i) { while (parent[i] !== i) { parent[i] = parent[parent[i]]; i = parent[i]; } return i; }
   function union(a, b) { a = find(a); b = find(b); if (a !== b) parent[b] = a; }
-  var byFull = {}, byFirst = {}, byEmail = {};
+  var byFull = {}, byFirst = {}, byEmail = {}, byGroup = {};
   people.forEach(function (p) {
+    if (p.group) { if (byGroup[p.group] != null) union(p.i, byGroup[p.group]); else byGroup[p.group] = p.i; }
     byFull[nameKey(p.full)] = p.i; (byFirst[nameKey(p.first)] = byFirst[nameKey(p.first)] || []).push(p.i);
     p.emails.forEach(function (e) { e = e.toLowerCase(); if (byEmail[e] != null) union(p.i, byEmail[e]); else byEmail[e] = p.i; });
   });
