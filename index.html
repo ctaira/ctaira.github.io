@@ -1078,6 +1078,11 @@ html.has-lightbox{overflow:hidden}
         <p class="err">Let us know if you can make it.</p>
       </div>
 
+      <div class="field" id="fEmail">
+        <label for="email">Your email</label>
+        <input type="email" id="email" name="email" autocomplete="email" maxlength="120" placeholder="For a copy of your reply (optional)">
+      </div>
+
       <div class="field" id="fDiet">
         <label for="diet">Dietary needs</label>
         <input type="text" id="diet" name="diet" maxlength="200" placeholder="Anything the kitchen should know">
@@ -1945,6 +1950,7 @@ var RSVP_ENDPOINT = "";
     var party = declined ? 0 : (partyAllowed ? clamp(parseInt(partySel.value, 10) || 1, 1, seats) : 1);
     var payload = {
       name: $('name').value.trim(),
+      email: $('email').value.trim(),
       attending: attendingValue(),
       party: party,
       dietary: declined ? '' : $('diet').value.trim(),
