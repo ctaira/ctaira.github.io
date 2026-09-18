@@ -313,11 +313,12 @@ function readHouseholds() {
     else if (k.indexOf('email') === 0) col.email = c; else if (k.indexOf('linked') === 0) col.linked = c;
     else if (k === 'room' || k === 'household') col.group = c;   /* optional: people sharing a value are one household */
   }
+  for (c = 0; c < rows[h].length; c++) if (nameKey(rows[h][c]) === 'invite link') col.link = c;
   var people = [];
   for (r = h + 1; r < rows.length; r++) {
     var first = clean(rows[r][col.first], 40), last = clean(rows[r][col.last], 40), side = clean(rows[r][col.side], 10).toUpperCase();
     if (!first || !/^(A|C|BOTH)$/.test(side)) continue;
-    people.push({ i: people.length, first: first, last: last, full: (first + ' ' + last).trim(), emails: splitEmails(rows[r][col.email]),
+    people.push({ i: people.length, row: r + 1, first: first, last: last, full: (first + ' ' + last).trim(), emails: splitEmails(rows[r][col.email]),
       group: col.group == null ? '' : clean(rows[r][col.group], 20).toLowerCase(),
       linked: String(col.linked == null ? '' : rows[r][col.linked] || '').split(/[,;\/&]|\band\b/).map(function (x) { return x.trim(); }).filter(Boolean) });
   }
@@ -349,8 +350,23 @@ function readHouseholds() {
     if (sameLast) names += ' ' + lasts[0];
     var emails = [], seen = {};   /* one entry per person, "First Last <address>", so each can be written to by name */
     m.forEach(function (p) { p.emails.forEach(function (e) { if (!seen[e.toLowerCase()]) { seen[e.toLowerCase()] = true; emails.push(p.full + ' <' + e + '>'); } }); });
-    return { names: names.slice(0, 80), seats: Math.min(m.length, MAX_SEATS), email: emails.join(', '), members: m.map(function (p) { return p.full; }).sort().join(' | ') };
+    return { names: names.slice(0, 80), seats: Math.min(m.length, MAX_SEATS), email: emails.join(', '), members: m.map(function (p) { return p.full; }).sort().join(' | '), rows: m.map(function (p) { return p.row; }) };
   });
+}
+
+/** Writes each person's invitation link into the Guest List, in the column headed "Invite link"
+    (added at the end of the header row if there is none). Everyone in a household gets the same link. */
+function writeLinks(households) {
+  var src = ss().getSheetByName(GUEST_LIST), rows = src.getDataRange().getValues(), h = -1, c, r;
+  for (r = 0; r < rows.length && h < 0; r++) for (c = 0; c < rows[r].length; c++) if (nameKey(rows[r][c]) === 'first name') { h = r; break; }
+  var col = -1;
+  for (c = 0; c < rows[h].length; c++) if (nameKey(rows[h][c]) === 'invite link') col = c;
+  if (col < 0) { col = rows[h].length; src.getRange(h + 1, col + 1).setValue('Invite link'); }
+  var byRow = {};
+  households.forEach(function (hh) { hh.rows.forEach(function (rr) { byRow[rr] = hh.link; }); });
+  var last = src.getLastRow(), out = [];
+  for (r = h + 2; r <= last; r++) out.push([byRow[r] || '']);
+  if (out.length) src.getRange(h + 2, col + 1, out.length, 1).setValues(out);
 }
 
 /** Rebuilds the Households tab from the Guest List. Codes and sent dates are kept for households whose
@@ -370,8 +386,11 @@ function buildHouseholds() {
   sheet.getRange(1, 1, 1, HOUSEHOLD_HEADERS.length).setValues([HOUSEHOLD_HEADERS]);
   if (out.length) sheet.getRange(2, 1, out.length, HOUSEHOLD_HEADERS.length).setValues(out);
   fillCodes();
+  var now = sheet.getDataRange().getValues();
+  households.forEach(function (hh, i) { hh.link = SITE_URL + '?i=' + normaliseCode(now[i + 1][0]); });
+  writeLinks(households);
   var dropped = Math.max(0, (old.length - 1) - kept);
-  ui.alert(households.length + ' households from the ' + GUEST_LIST + ' tab (' + kept + ' unchanged, ' + (households.length - kept) + ' new' + (dropped ? ', ' + dropped + ' old row' + (dropped === 1 ? '' : 's') + ' removed' : '') + '). Check names, seats and emails on the ' + GUESTS + ' tab before sending.');
+  ui.alert(households.length + ' households from the ' + GUEST_LIST + ' tab (' + kept + ' unchanged, ' + (households.length - kept) + ' new' + (dropped ? ', ' + dropped + ' old row' + (dropped === 1 ? '' : 's') + ' removed' : '') + '). Each person\'s link is in the ' + GUEST_LIST + ' tab under "Invite link". Check names, seats and emails on the ' + GUESTS + ' tab before sending.');
 }
 
 /** Gives every household row a unique code and an invitation link. Never overwrites an existing code. */

@@ -65,7 +65,11 @@ Reload the sheet. An **Invitations** menu appears.
    (re)built from the Guest List and every household gets a six-character
    code and a link like `https://ashleyandcharlesinbali.com/?i=k7m3qx`.
    Read the tab through once: names, seats and emails are what the
-   invitations will carry.
+   invitations will carry. The same run writes every person's link into
+   the Guest List, in a column headed **Invite link** (added at the end of
+   the header row if there isn't one; drag it wherever you like, the
+   script finds it by its header). Everyone in a household has the same
+   link, so you can copy one from there to send by text.
 2. Run it again whenever the Guest List changes. Households whose members
    are unchanged keep their code and their sent date; a household whose
    members changed gets a new row and a new code, and its old row is
