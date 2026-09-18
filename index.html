@@ -251,14 +251,9 @@ button,input,select,textarea{font:inherit;color:inherit}
   clip-path:polygon(0 0,100% 0,49.96% 60.96%);
   -webkit-clip-path:polygon(0 0,100% 0,49.96% 60.96%);
 }
-/* The seal was pressed on the outside of the closed envelope, over the flap's tip. It stays exactly there:
-   as the flap opens it turns over in place, and once over it lies behind the pocket, whose V edge covers
-   the lower part of its back. Its layer sits above the flap while closed and between back and pocket once open. */
-.env-seal{z-index:8;pointer-events:none}
-.env-seal.is-under{z-index:2}
-.seal{
+.seal{   /* the wax alone, cut from the artwork at this exact box, with its own soft shadow */
   position:absolute;left:35.669%;top:38.648%;width:25.088%;height:38.345%;
-  transform-origin:50% 50%;backface-visibility:visible;-webkit-backface-visibility:visible;will-change:transform;
+  will-change:transform;
 }
 .seal-art{position:absolute;inset:0;background:url("assets/seal.webp") center/100% 100% no-repeat}
 /* The seal element (cut from the sealed artwork with its painted shadow) is on top from the first
@@ -267,7 +262,9 @@ button,input,select,textarea{font:inherit;color:inherit}
 .env-pocket::after,.env-flap .flap-face::after{content:"";position:absolute;inset:0;background:url("assets/envelope-sealed.webp") center/100% 100% no-repeat;transition:opacity .4s ease;pointer-events:none}
 .stage.is-open .env-pocket::after,.stage.is-open .env-flap .flap-face::after{opacity:0}
 .env-pocket .addr{display:none}
-.seal.is-behind .seal-art{filter:brightness(.94) contrast(.92)}   /* the underside of the wax: flatter, a shade darker */
+/* The seal is stuck to the front of the flap, at its tip, and never moves on it: it rides up as the
+   flap lifts and, once the flap has turned over, it faces away behind the paper. */
+.env-flap .seal{backface-visibility:hidden;-webkit-backface-visibility:hidden}
 /* The pieces in the pocket. Each has a wrapper that carries its motion and, while it is in the pocket,
    a clip that follows the pocket's edge; the piece itself carries its slight tilt. */
 .piece{position:absolute;left:50%;top:50%;will-change:transform}
@@ -750,7 +747,6 @@ html.has-lightbox{overflow:hidden}
 
       <!-- Envelope, open: back, pocket, flap. Same transform on all. -->
       <div class="env env-back" id="envBack" aria-hidden="true"></div>
-      <div class="env env-seal" id="sealWrap" aria-hidden="true"><div class="seal" id="seal"><div class="seal-art"></div></div></div>
 
       <div class="env env-pocket" id="envPocket" aria-hidden="true">
         <div class="addr"><span id="envName">Our dearest guest</span></div>
@@ -758,6 +754,7 @@ html.has-lightbox{overflow:hidden}
 
       <div class="env env-flap" id="envFlap" aria-hidden="true">
         <div class="flap-face"></div>
+        <div class="seal" id="seal"><div class="seal-art"></div></div>
       </div>
 
       <!-- In the pocket, back to front: the passport (below, after the controls), the ticket, the photograph -->
@@ -1221,7 +1218,7 @@ var RSVP_ENDPOINT = "https://script.google.com/macros/s/AKfycbwTMzokoyfvMZLOHn0f
      Opening sequence
   ------------------------------------------------------------------------- */
   var stage = $('stage'), scene = $('scene'), skip = $('skip');
-  var envBack = $('envBack'), envPocket = $('envPocket'), envFlap = $('envFlap'), sealEl = $('seal'), sealWrap = $('sealWrap');
+  var envBack = $('envBack'), envPocket = $('envPocket'), envFlap = $('envFlap'), sealEl = $('seal');
   var bpass = $('bpass'), polaroid = $('polaroid'), passport = $('passport'), cover = $('ppCover');
   var pcTicket = $('pcTicket'), pcPhoto = $('pcPhoto'), pcBook = $('pcBook'), veil = $('veil');
   /* the leaves, first to last (the DOM holds them last to first so the first sits on top) */
@@ -1364,10 +1361,7 @@ var RSVP_ENDPOINT = "https://script.google.com/macros/s/AKfycbwTMzokoyfvMZLOHn0f
       var s2 = soft(seg(t, 0, 1500)), settle = soft(seg(t, 700, 1900));
       envFlap.style.transform = 'translateY(' + envY + 'px) rotateX(' + (-181 * s2) + 'deg)';
       envFlap.style.zIndex = s2 > .5 ? 1 : 7;
-      sealEl.style.transform = 'rotateX(' + (-181 * s2) + 'deg)';   /* turns over in place with the flap */
-      sealEl.classList.toggle('is-behind', s2 > .5);                /* its back, upside down */
-      sealWrap.classList.toggle('is-under', s2 > .5);               /* behind the pocket once over */
-      envBack.style.transform = envPocket.style.transform = sealWrap.style.transform = 'translateY(' + envY + 'px)';
+      envBack.style.transform = envPocket.style.transform = 'translateY(' + envY + 'px)';
 
       /* 1. the photograph: out of the pocket, to the centre, the slowest of zooms while it is held, and set back */
       var k1 = lift(t, T_PHOTO, 1400, 1400, 1000);
