@@ -637,6 +637,7 @@ html.has-lightbox{overflow:hidden}
 .field input:focus-visible,.field select:focus-visible,.field textarea:focus-visible{outline:2px solid var(--gold-line);outline-offset:4px}
 .field select{appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--olive) 50%),linear-gradient(135deg,var(--olive) 50%,transparent 50%);background-position:calc(100% - 14px) 55%,calc(100% - 8px) 55%;background-size:6px 6px;background-repeat:no-repeat;padding-right:28px}
 .field textarea{min-height:3.2em;resize:vertical}
+.field textarea.grow{min-height:0;resize:none;overflow:hidden;line-height:1.4}   /* the name: one line that wraps to two when a household's names need it */
 .field fieldset{border:0;padding:0;margin:0;min-width:0}
 .field .err{display:none;font-family:var(--mono);font-size:14px;letter-spacing:.06em;color:#A2623F;margin-top:.5em}
 .field.is-invalid .err{display:block}
@@ -1056,7 +1057,7 @@ html.has-lightbox{overflow:hidden}
       <div class="field-row is-single" id="nameRow">
         <div class="field" id="fName">
           <label for="name">Your name</label>
-          <input type="text" id="name" name="name" autocomplete="name" maxlength="80" required>
+          <textarea id="name" name="name" class="grow" rows="1" autocomplete="name" maxlength="80" required></textarea>
           <p class="err">Please tell us who you are.</p>
         </div>
         <div class="field" id="fParty" hidden>
@@ -1179,6 +1180,7 @@ var RSVP_ENDPOINT = "";
     $('seatsNum').hidden = false;
     put('seatsLine', 'Admits ' + words[seats - 1] + (seats === 1 ? ' guest' : ' guests'));
     if (hasName && !$('name').value) $('name').value = guestName;
+    if (typeof growName === 'function') growName();
 
     /* MRZ line 1 carries the guest's name, OCR-B style. */
     var mrzName = (hasName ? guestName : 'GUEST').toUpperCase().replace(/&/g, ' AND ').replace(/[^A-Z ]/g, '').trim().replace(/ +/g, '<');
@@ -1922,7 +1924,9 @@ var RSVP_ENDPOINT = "";
     applyGuest(params.get('to') || '', isFinite(n) ? n : 1);
   }
 
-  $('name').addEventListener('input', function () { if (this.value.trim()) fName.classList.remove('is-invalid'); });
+  function growName() { var el = $('name'); el.style.height = 'auto'; el.style.height = el.scrollHeight + 'px'; }
+  $('name').addEventListener('input', function () { growName(); if (this.value.trim()) fName.classList.remove('is-invalid'); });
+  window.addEventListener('resize', growName);
   $('email').addEventListener('input', function () { if (validEmail(this.value.trim())) fEmail.classList.remove('is-invalid'); });
 
   function validate() {
@@ -1946,6 +1950,7 @@ var RSVP_ENDPOINT = "";
     el.focus({ preventScroll: true });
   }
 
+  $('name').addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); $('email').focus(); } });
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     formError.classList.remove('is-visible');
