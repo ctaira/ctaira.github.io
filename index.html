@@ -266,6 +266,8 @@ button,input,select,textarea{font:inherit;color:inherit}
    over, the way the printed envelope shows it. */
 .env-flap .seal{backface-visibility:visible;-webkit-backface-visibility:visible}
 .seal.is-behind .seal-art{filter:brightness(.94) contrast(.92)}   /* the underside of the wax: flatter, a shade darker */
+/* On the turned-over flap the seal sits just above the envelope's top edge, its lower part hidden behind the envelope. */
+.seal.is-behind{transform:translateY(calc(var(--eh) * -.5))}
 /* The pieces in the pocket. Each has a wrapper that carries its motion and, while it is in the pocket,
    a clip that follows the pocket's edge; the piece itself carries its slight tilt. */
 .piece{position:absolute;left:50%;top:50%;will-change:transform}
