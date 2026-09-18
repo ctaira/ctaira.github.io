@@ -102,12 +102,24 @@ longer, run the same menu item again the next day; rows already sent are
 skipped. Google Workspace accounts have a much higher limit. To resend to
 one household, clear its **sent** cell and run it again.
 
-## 5. Confirmation emails
+## 5. Replies
 
-Every reply triggers a confirmation to the address the guest entered, with
-what they said and their link, and a note that sending a new reply before
-the deadline replaces the old one. If the email can't be sent, the reply is
-still recorded; the guest just doesn't get the receipt.
+The reply form lists everyone in the household, and each person gets one
+answer: **Both days**, **Saturday**, or **Not coming**. The person replying
+must answer for themselves; anyone they leave blank can answer later from
+the same link. Each person's invitation link names them (the `&p=` part), so
+the form opens with their name filled in and their row marked *you*.
+
+Every reply lands on the **Responses** tab as one row per person answered:
+when, the household's code and names, who replied and their email, the
+person, their answer, dietary notes, the note, and a timestamp. A later
+reply for the same person supersedes the earlier one; the sheet keeps both.
+If the Guest List has a column headed **RSVP Status**, the script fills it
+with each person's latest answer after every reply.
+
+The replier gets a confirmation email listing each answer and naming
+anyone still to reply. If the email can't be sent, the reply is still
+recorded.
 
 ## 6. The site
 
@@ -127,9 +139,9 @@ sent. Useful for checking the design before the sheet exists.
 
 ## What lands in Responses
 
-One row per submission: received time, code, the invited names and seats from
-your list, then the name, email, attending choice (`both`, `saturday`, `no`),
-party size, dietary needs and note the guest entered, and the time their
-browser sent it. If someone replies twice, both rows are kept; the later one
-is their current answer. An accidental double-send of the same reply is
-dropped.
+One row per person answered, per submission: received time, the household's
+code and names, who replied and their email, the person, their answer
+(`Both days`, `Saturday only`, `Not coming`), dietary needs, the note, and
+the time their browser sent it. If someone replies twice, both sets of rows
+are kept; the later answer for each person is their current one. An
+accidental double-send of the same reply is dropped.

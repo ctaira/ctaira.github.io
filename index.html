@@ -650,6 +650,32 @@ html.has-lightbox{overflow:hidden}
 .pills span{display:inline-block;border:1px solid rgba(89,96,68,.45);border-radius:999px;padding:.5em .85em;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
 .pills input:checked+span{background:var(--olive);color:var(--ivory);border-color:var(--olive)}
 .pills input:focus-visible+span{outline:2px solid var(--gold-line);outline-offset:3px}
+/* one answer per person */
+#fWho fieldset{border:0;padding:0;margin:0;min-width:0}
+#fWho legend{font-family:var(--mono);font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:var(--olive-soft);padding:0;margin:0 0 .2em}
+.who .row{display:flex;align-items:center;justify-content:space-between;gap:1em;padding:.8em 0;border-bottom:1px solid rgba(89,96,68,.2)}
+.who .nm{font-family:var(--sans);font-size:17px;color:var(--olive);letter-spacing:0;text-transform:none}
+.who .nm em{display:none;font-family:var(--serif);font-style:italic;font-size:21px;line-height:1;color:var(--olive);margin-left:.5em}
+.who .row.is-me .nm em{display:inline}
+.who .opts{display:flex;gap:6px;flex:none}
+.who .opts label{margin:0;letter-spacing:0;text-transform:none;position:relative}
+.who .opts input{position:absolute;opacity:0;width:1px;height:1px;margin:0}
+.who .opts span{display:inline-block;padding:.45em .9em;border:1px solid var(--gold-line);border-radius:999px;font-family:var(--sans);font-size:14px;color:var(--olive);cursor:pointer;white-space:nowrap;transition:background .2s,color .2s}
+.who .opts input:checked+span{background:var(--olive);border-color:var(--olive);color:var(--ivory)}
+.who .opts input:focus-visible+span{outline:2px solid var(--gold-line);outline-offset:3px}
+.who .row.is-out .nm{color:var(--olive-soft)}
+.who .row.is-invalid .opts{outline:2px solid #A2623F;outline-offset:4px;border-radius:999px}
+#fWho .hint-line{margin-top:.7em}
+#fWho.is-invalid .hint-line{display:none}
+@media (max-width:560px){
+  .who .row{flex-direction:column;align-items:stretch;gap:.7em;padding:1.1em 0}
+  .who .nm{font-size:18px}
+  .who .opts{width:100%;gap:0;border:1px solid var(--gold-line);border-radius:999px;overflow:hidden}
+  .who .opts label{flex:1;min-width:0}
+  .who .opts span{display:block;text-align:center;padding:.75em .3em;font-size:15px;border:0;border-radius:0;border-left:1px solid rgba(155,139,87,.5)}
+  .who .opts label:first-child span{border-left:0}
+  #fWho .hint-line{margin-top:1em;line-height:1.5}
+}
 .hint-line{font-size:14px;color:var(--olive-soft);margin:.35em 0 0}
 .btn{display:inline-block;background:var(--olive);color:var(--ivory);border:1px solid var(--olive);padding:.9em 1.9em;border-radius:999px;font-weight:500;cursor:pointer;letter-spacing:.01em;transition:background .2s,opacity .2s}
 .btn:hover{background:#485038}
@@ -1062,23 +1088,15 @@ html.has-lightbox{overflow:hidden}
           <textarea id="name" name="name" class="grow" rows="1" autocomplete="name" maxlength="80" required></textarea>
           <p class="err">Please tell us who you are.</p>
         </div>
-        <div class="field" id="fParty" hidden>
-          <label for="party">Party size</label>
-          <select id="party" name="party"></select>
-          <p class="hint-line" id="partyHint"></p>
-        </div>
       </div>
 
-      <div class="field" id="fAttending">
+      <div class="field" id="fWho">
         <fieldset>
-          <legend>Attending</legend>
-          <div class="pills">
-            <label><input type="radio" name="attending" value="both"><span>Friday and Saturday</span></label>
-            <label><input type="radio" name="attending" value="saturday"><span>Saturday only</span></label>
-            <label><input type="radio" name="attending" value="no"><span>Can't make it</span></label>
-          </div>
+          <legend>Who’s coming</legend>
+          <div class="who" id="who"></div>
         </fieldset>
-        <p class="err">Let us know if you can make it.</p>
+        <p class="hint-line">Answer for everyone you can. Anyone left blank can reply later from this link.</p>
+        <p class="err" id="whoErr">Please let us know if you can make it.</p>
       </div>
 
       <div class="field" id="fEmail">
@@ -1160,14 +1178,17 @@ var RSVP_ENDPOINT = "https://script.google.com/macros/s/AKfycbwTMzokoyfvMZLOHn0f
   ------------------------------------------------------------------------- */
   var params = new URLSearchParams(location.search);
   var inviteCode = (params.get('i') || '').trim().toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 32);
+  var personIdx = parseInt(params.get('p'), 10); if (!(personIdx >= 1 && personIdx <= 12)) personIdx = 0;   /* which member of the household this link was sent to */
+  var members = [];
   var words = ['one', 'two', 'three', 'four', 'five', 'six'];
   var guestName = '', seats = 1;
   var padMrz = function (s) { s = s.slice(0, 44); while (s.length < 44) s += '<'; return s; };
 
   /* Writes a guest's name and seat count everywhere they appear: envelope, boarding
      pass, passport, MRZ, the adults-only box and the RSVP form. */
-  function applyGuest(name, n) {
+  function applyGuest(name, n, list) {
     guestName = String(name || '').replace(/\s+/g, ' ').trim().slice(0, 60);
+    members = Array.isArray(list) ? list.map(function (m) { return String(m || '').replace(/\s+/g, ' ').trim().slice(0, 60); }).filter(Boolean).slice(0, 12) : [];
     seats = isFinite(n) ? clamp(parseInt(n, 10) || 1, 1, 6) : 1;
     var hasName = guestName.length > 0;
     var displayName = hasName ? guestName : 'Our dearest guest';
@@ -1181,14 +1202,16 @@ var RSVP_ENDPOINT = "https://script.google.com/macros/s/AKfycbwTMzokoyfvMZLOHn0f
     put('seatsNum', String(seats));
     $('seatsNum').hidden = false;
     put('seatsLine', 'Admits ' + words[seats - 1] + (seats === 1 ? ' guest' : ' guests'));
-    if (hasName && !$('name').value) $('name').value = guestName;
+    /* the name field holds the person this link was sent to; a household link leaves it for them to type */
+    if (!$('name').value) $('name').value = members.length ? (personIdx && members[personIdx - 1]) || '' : (hasName ? guestName : '');
     if (typeof growName === 'function') growName();
+    if (typeof buildWho === 'function') buildWho();
 
     /* MRZ line 1 carries the guest's name, OCR-B style. */
     var mrzName = (hasName ? guestName : 'GUEST').toUpperCase().replace(/&/g, ' AND ').replace(/[^A-Z ]/g, '').trim().replace(/ +/g, '<');
     $('mrz1').textContent = padMrz('P<IDNBALI<<' + mrzName + '<<');
     $('mrz2').textContent = padMrz('AC28082027' + seats + 'IDN2708279<2708300<JIMBARAN<<');
-    if (typeof buildPartyOptions === 'function') buildPartyOptions();
+
   }
 
   /* -------------------------------------------------------------------------
@@ -1853,44 +1876,54 @@ var RSVP_ENDPOINT = "https://script.google.com/macros/s/AKfycbwTMzokoyfvMZLOHn0f
      RSVP
   ------------------------------------------------------------------------- */
   var form = $('rsvpForm'), submitBtn = $('submitBtn'), formError = $('formError');
-  var fName = $('fName'), fAttending = $('fAttending'), fParty = $('fParty'), fDiet = $('fDiet'), fEmail = $('fEmail');
+  var fName = $('fName'), fDiet = $('fDiet'), fEmail = $('fEmail'), fWho = $('fWho'), whoBox = $('who');
   function validEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v); }
-  var partySel = $('party'), partyHint = $('partyHint');
+  function nameKey(v) { return String(v || '').toLowerCase().replace(/[^a-z ]/g, ' ').replace(/\s+/g, ' ').trim(); }
+  var ANSWERS = [['both', 'Both days'], ['saturday', 'Saturday'], ['no', 'Not coming']];
 
-  /* Party-size dropdown is capped at the invitation's seat count. Hidden when it's 1. */
-  var partyAllowed = false;
-  function buildPartyOptions() {
-    partySel.innerHTML = '';
-    for (var n = 1; n <= seats; n++) {
-      var opt = document.createElement('option');
-      opt.value = n;
-      opt.textContent = n === 1 ? 'Just me' : n + ' of us';
-      if (n === seats) opt.selected = true;
-      partySel.appendChild(opt);
-    }
-    partyHint.textContent = 'Your invitation admits up to ' + words[seats - 1] + '.';
-    partyAllowed = seats > 1;
-    syncVisibility();
+  /* Which row is the person replying: the one this link was sent to, else the one whose name they typed. */
+  function myRow() {
+    if (personIdx && members[personIdx - 1]) return personIdx - 1;
+    var k = nameKey($('name').value), first = k.split(' ')[0];
+    for (var i = 0; i < members.length; i++) if (nameKey(members[i]) === k) return i;
+    var hits = [];
+    for (var j = 0; j < members.length; j++) if (first && nameKey(members[j]).split(' ')[0] === first) hits.push(j);
+    return hits.length === 1 ? hits[0] : -1;
   }
-
-  function attendingValue() {
-    var r = form.querySelector('input[name="attending"]:checked');
-    return r ? r.value : '';
+  function markMe() {
+    var me = myRow();
+    var rows = whoBox.querySelectorAll('.row');
+    for (var i = 0; i < rows.length; i++) rows[i].classList.toggle('is-me', i === me);
   }
-  function syncVisibility() {
-    var declined = attendingValue() === 'no';
-    fDiet.hidden = declined;
-    fParty.hidden = declined || !partyAllowed;
-    $('nameRow').classList.toggle('is-single', fParty.hidden);
-  }
-  var radios = form.querySelectorAll('input[name="attending"]');
-  for (var r = 0; r < radios.length; r++) {
-    radios[r].addEventListener('change', function () {
-      syncVisibility();
-      fAttending.classList.remove('is-invalid');
+  function buildWho() {
+    whoBox.innerHTML = '';
+    var list = members.length ? members : [guestName || 'You'];
+    list.forEach(function (m, i) {
+      var row = document.createElement('div'); row.className = 'row';
+      var nm = document.createElement('div'); nm.className = 'nm'; nm.textContent = m;
+      var em = document.createElement('em'); em.textContent = 'you'; nm.appendChild(em);
+      var opts = document.createElement('div'); opts.className = 'opts';
+      ANSWERS.forEach(function (a) {
+        var l = document.createElement('label'), inp = document.createElement('input'), sp = document.createElement('span');
+        inp.type = 'radio'; inp.name = 'who' + i; inp.value = a[0]; sp.textContent = a[1];
+        inp.addEventListener('change', function () { row.classList.toggle('is-out', a[0] === 'no'); row.classList.remove('is-invalid'); fWho.classList.remove('is-invalid'); syncVisibility(); });
+        l.appendChild(inp); l.appendChild(sp); opts.appendChild(l);
+      });
+      row.appendChild(nm); row.appendChild(opts); whoBox.appendChild(row);
     });
+    markMe();
   }
-  syncVisibility();
+  function answers() {
+    var list = members.length ? members : [guestName || $('name').value.trim()];
+    return list.map(function (m, i) { var r = form.querySelector('input[name="who' + i + '"]:checked'); return { name: m, answer: r ? r.value : '' }; });
+  }
+  function anyComing() { return answers().some(function (a) { return a.answer === 'both' || a.answer === 'saturday'; }); }
+  function syncVisibility() {
+    /* dietary needs only matter if someone is coming */
+    var given = answers().filter(function (a) { return a.answer; });
+    fDiet.hidden = given.length > 0 && !anyComing();
+  }
+  buildWho();
 
   /* ---- Who is this? With a backend, the invite code decides. Without one, ?to= and ?seats= do. */
   var gate = $('rsvpGate');
@@ -1911,7 +1944,7 @@ var RSVP_ENDPOINT = "https://script.google.com/macros/s/AKfycbwTMzokoyfvMZLOHn0f
         .then(function (r) { return r.json(); })
         .then(function (d) {
           if (d && d.ok) {
-            applyGuest(d.name, d.seats);
+            applyGuest(d.name, d.seats, d.members);
           } else {
             closeGate('code not found');
           }
@@ -1930,6 +1963,7 @@ var RSVP_ENDPOINT = "https://script.google.com/macros/s/AKfycbwTMzokoyfvMZLOHn0f
   $('name').addEventListener('input', function () { growName(); if (this.value.trim()) fName.classList.remove('is-invalid'); });
   window.addEventListener('resize', growName);
   $('email').addEventListener('input', function () { if (validEmail(this.value.trim())) fEmail.classList.remove('is-invalid'); });
+  $('name').addEventListener('input', markMe);
 
   function validate() {
     var ok = true, first = null;
@@ -1937,8 +1971,12 @@ var RSVP_ENDPOINT = "https://script.google.com/macros/s/AKfycbwTMzokoyfvMZLOHn0f
     fName.classList.toggle('is-invalid', !name); if (!name) { ok = false; first = first || $('name'); }
     var email = $('email').value.trim(), emailOk = validEmail(email);
     fEmail.classList.toggle('is-invalid', !emailOk); if (!emailOk) { ok = false; first = first || $('email'); }
-    var att = attendingValue();
-    fAttending.classList.toggle('is-invalid', !att); if (!att) { ok = false; first = first || radios[0]; }
+    var me = myRow(), rows = whoBox.querySelectorAll('.row'), ans = answers();
+    var need = me >= 0 ? me : (ans.some(function (a) { return a.answer; }) ? -1 : 0);   /* your own row, or at least one row if we can't tell which is you */
+    var whoOk = need < 0 || !!ans[need].answer;
+    fWho.classList.toggle('is-invalid', !whoOk);
+    for (var i = 0; i < rows.length; i++) rows[i].classList.toggle('is-invalid', !whoOk && i === need);
+    if (!whoOk) { ok = false; first = first || rows[need].querySelector('input'); }
     if (first) first.focus();
     return ok;
   }
@@ -1958,13 +1996,11 @@ var RSVP_ENDPOINT = "https://script.google.com/macros/s/AKfycbwTMzokoyfvMZLOHn0f
     formError.classList.remove('is-visible');
     if (!validate()) return;
 
-    var declined = attendingValue() === 'no';
-    var party = declined ? 0 : (partyAllowed ? clamp(parseInt(partySel.value, 10) || 1, 1, seats) : 1);
+    var people = answers(), declined = !anyComing();
     var payload = {
       name: $('name').value.trim(),
       email: $('email').value.trim(),
-      attending: attendingValue(),
-      party: party,
+      people: people,             /* one answer per member of the household; blank means not answered yet */
       dietary: declined ? '' : $('diet').value.trim(),
       note: $('note').value.trim(),
       code: inviteCode,           /* the backend looks this up and enforces the seat count */

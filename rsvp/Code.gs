@@ -6,7 +6,7 @@
  *   Responses  written by this script, one row per reply
  *
  * GET  ?i=CODE   -> { ok, name, seats, email }   used by the page to personalise
- * POST JSON body -> { ok, party, emailed }        validated against the Guests tab, appended to Responses,
+ * POST JSON body -> { ok, emailed }               validated against the Households tab, one Responses row per person,
  *                                                 and a confirmation is emailed to the guest
  *
  * The Invitations menu in the sheet fills codes and links, and sends the invitation emails.
@@ -22,13 +22,13 @@ var RSVP_DEADLINE = 'January 31, 2027';
 var GUEST_LIST = 'Guest List';   // the couple's own list: one row per person, with "Linked to another guest?"
 var GUESTS = 'Households';       // built from it by the Invitations menu: one row per household
 var LINK_COLUMN = 9;             // Guest List column that receives each person's invite link (9 = I)
-var SCRIPT_VERSION = 4;          // shown in the Invitations menu's messages, so you can tell which copy is running
+var SCRIPT_VERSION = 5;          // shown in the Invitations menu's messages, so you can tell which copy is running
 var RESPONSES = 'Responses';
 var MAX_SEATS = 6;
 var CODE_ALPHABET = 'abcdefghjkmnpqrstuvwxyz23456789'; // no 0/o/1/l, so codes survive being read aloud
 var CODE_LENGTH = 6;
-var RESPONSE_HEADERS = ['Received', 'Code', 'Invited', 'Seats', 'Name', 'Email', 'Attending', 'Party', 'Dietary', 'Note', 'Sent'];
-var ATTENDING_TEXT = { both: 'Friday and Saturday', saturday: 'Saturday only', no: "Can't make it" };
+var RESPONSE_HEADERS = ['Received', 'Code', 'Household', 'Replied by', 'Email', 'Person', 'Answer', 'Dietary', 'Note', 'Sent'];   // one row per person per reply
+var ATTENDING_TEXT = { both: 'Both days', saturday: 'Saturday only', no: 'Not coming' };
 
 function ss() { return SpreadsheetApp.getActive(); }
 
@@ -58,7 +58,8 @@ function findGuest(code) {
         code: code,
         name: clean(rows[i][1], 80),
         seats: Math.max(1, Math.min(MAX_SEATS, isNaN(seats) ? 1 : seats)),
-        email: clean(rows[i][3], 120)
+        email: clean(rows[i][3], 120),
+        members: String(rows[i][6] || '').split('|').map(function (m) { return clean(m, 60); }).filter(Boolean)
       };
     }
   }
@@ -72,7 +73,7 @@ function doGet(e) {
   if (!code) return json({ ok: true, service: 'rsvp' });
   var guest = findGuest(code);
   if (!guest) return json({ ok: false, error: 'not_found' });
-  return json({ ok: true, name: guest.name, seats: guest.seats, email: guest.email });
+  return json({ ok: true, name: guest.name, seats: guest.seats, members: guest.members });
 }
 
 function doPost(e) {
@@ -83,11 +84,19 @@ function doPost(e) {
     var guest = findGuest(data.code);
     if (!guest) return json({ ok: false, error: 'not_found' });
 
-    var attending = ['both', 'saturday', 'no'].indexOf(data.attending) >= 0 ? data.attending : '';
     var name = clean(data.name, 80);
     var email = clean(data.email, 120);
-    if (!attending || !name || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return json({ ok: false, error: 'bad_request' });
-    var party = attending === 'no' ? 0 : Math.max(1, Math.min(guest.seats, parseInt(data.party, 10) || 1));
+    if (!name || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return json({ ok: false, error: 'bad_request' });
+    /* one answer per household member; names must be the household's own, answers one of three, at least one given */
+    var list = guest.members.length ? guest.members : [guest.name];
+    var byName = {}; list.forEach(function (m) { byName[nameKey(m)] = m; });
+    var people = [], seen = {};
+    (Array.isArray(data.people) ? data.people : []).forEach(function (p) {
+      var who = byName[nameKey(p && p.name)], ans = p && ['both', 'saturday', 'no'].indexOf(p.answer) >= 0 ? p.answer : '';
+      if (who && !seen[who]) { seen[who] = true; people.push({ name: who, answer: ans }); }
+    });
+    if (!people.some(function (p) { return p.answer; })) return json({ ok: false, error: 'bad_request' });
+    var coming = people.some(function (p) { return p.answer === 'both' || p.answer === 'saturday'; });
 
     var sheet = ensureResponses();
     var sent = clean(data.submittedAt, 40);
@@ -95,25 +104,27 @@ function doPost(e) {
        client timestamp within the last few rows means we already have this one. */
     var last = sheet.getLastRow();
     if (sent && last > 1) {
-      var recent = sheet.getRange(Math.max(2, last - 9), 1, Math.min(10, last - 1), RESPONSE_HEADERS.length).getValues();
+      var recent = sheet.getRange(Math.max(2, last - 19), 1, Math.min(20, last - 1), RESPONSE_HEADERS.length).getValues();
       for (var i = 0; i < recent.length; i++) {
-        if (recent[i][1] === guest.code && String(recent[i][10]) === sent) return json({ ok: true, party: party, duplicate: true });
+        if (recent[i][1] === guest.code && String(recent[i][9]) === sent) return json({ ok: true, duplicate: true });
       }
     }
-    var dietary = attending === 'no' ? '' : clean(data.dietary, 200);
+    var dietary = coming ? clean(data.dietary, 200) : '';
     var note = clean(data.note, 1000);
-    sheet.appendRow([
-      new Date(), guest.code, guest.name, guest.seats,
-      name, email, attending, party, dietary, note, sent
-    ]);
+    var when = new Date();
+    var out = people.filter(function (p) { return p.answer; }).map(function (p) {
+      return [when, guest.code, guest.name, name, email, p.name, ATTENDING_TEXT[p.answer], dietary, note, sent];
+    });
+    sheet.getRange(sheet.getLastRow() + 1, 1, out.length, RESPONSE_HEADERS.length).setValues(out);
+    try { writeStatuses(); } catch (e) { /* the Guest List's status column is a convenience; the reply is recorded above */ }
     var emailed = false;
     try {
-      sendConfirmation(guest, { name: name, email: email, attending: attending, party: party, dietary: dietary, note: note });
+      sendConfirmation(guest, { name: name, email: email, people: people, coming: coming, dietary: dietary, note: note });
       emailed = true;
     } catch (mailErr) {
       /* the reply is recorded either way; a failed receipt is not a failed RSVP */
     }
-    return json({ ok: true, party: party, emailed: emailed });
+    return json({ ok: true, emailed: emailed });
   } catch (err) {
     return json({ ok: false, error: 'server', message: String(err) });
   } finally {
@@ -149,39 +160,59 @@ function mailOptions(to, subject, html, text) {
   return opts;
 }
 
-function guestLink(code) { return SITE_URL + '?i=' + code; }
+function guestLink(code, personIdx) { return SITE_URL + '?i=' + code + (personIdx ? '&p=' + personIdx : ''); }
 
 function sendConfirmation(guest, reply) {
   if (!reply.email) return;
-  var lines = [
-    ['Attending', ATTENDING_TEXT[reply.attending] || reply.attending],
-    ['Party', reply.attending === 'no' ? '' : (reply.party === 1 ? 'Just you' : reply.party + ' of you')],
-    ['Dietary', reply.dietary],
-    ['Note', reply.note]
-  ].filter(function (l) { return l[1]; });
+  var lines = reply.people.filter(function (p) { return p.answer; }).map(function (p) { return [p.name, ATTENDING_TEXT[p.answer]]; });
+  var unanswered = reply.people.filter(function (p) { return !p.answer; }).map(function (p) { return p.name; });
+  if (reply.dietary) lines.push(['Dietary', reply.dietary]);
+  if (reply.note) lines.push(['Note', reply.note]);
   var rows = lines.map(function (l) {
     return '<tr><td style="padding:6px 16px 6px 0;font-family:Menlo,Consolas,monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#5B5D55;vertical-align:top;white-space:nowrap">' + escapeHtml(l[0]) + '</td><td style="padding:6px 0;vertical-align:top">' + escapeHtml(l[1]) + '</td></tr>';
   }).join('');
-  var lead = reply.attending === 'no'
-    ? "Thank you for letting us know. We'll miss you, and we'll raise a glass to you from the cliff."
-    : "Thank you. Your reply is in, and we'll be in touch with booking details for the estate.";
+  var lead = reply.coming
+    ? "Thank you. Your reply is in, and we'll be in touch with booking details for the estate."
+    : "Thank you for letting us know. We'll miss you, and we'll raise a glass to you from the cliff.";
+  var later = unanswered.length ? '<p style="margin:14px 0 0;font-size:14px;color:#5B5D55">Still to reply: ' + escapeHtml(unanswered.join(', ')) + '. They can answer any time from the same invitation link.</p>' : '';
   var html = emailShell(
-    reply.attending === 'no' ? "We'll miss you" : "We can't wait",
+    reply.coming ? "We can't wait" : "We'll miss you",
     '<p style="margin:0 0 18px">' + escapeHtml(lead) + '</p>' +
-    '<table style="border-collapse:collapse;margin:0 0 6px">' + rows + '</table>' +
-    '<p style="margin:22px 0 0;font-size:14px;color:#5B5D55">Need to change something? Open your invitation again and send a new reply any time before ' + escapeHtml(RSVP_DEADLINE) + '. The latest one counts.</p>',
+    '<table style="border-collapse:collapse;margin:0 0 6px">' + rows + '</table>' + later +
+    '<p style="margin:22px 0 0;font-size:14px;color:#5B5D55">Need to change something? Open your invitation again and send a new reply any time before ' + escapeHtml(RSVP_DEADLINE) + '. The latest answer for each person counts.</p>',
     'Open your invitation', guestLink(guest.code)
   );
   var text = lead + '\n\n' + lines.map(function (l) { return l[0] + ': ' + l[1]; }).join('\n') +
+    (unanswered.length ? '\n\nStill to reply: ' + unanswered.join(', ') + '.' : '') +
     '\n\nTo change your reply before ' + RSVP_DEADLINE + ', open your invitation again: ' + guestLink(guest.code);
   MailApp.sendEmail(mailOptions(reply.email, CONFIRM_SUBJECT, html, text));
+}
+
+/** Fills the Guest List's "RSVP Status" column, if it has one, with each person's latest answer. */
+function writeStatuses() {
+  var src = ss().getSheetByName(GUEST_LIST), resp = ss().getSheetByName(RESPONSES);
+  if (!src || !resp) return;
+  var rows = src.getDataRange().getValues(), h = -1, c, r, col = -1;
+  for (r = 0; r < rows.length && h < 0; r++) for (c = 0; c < rows[r].length; c++) if (nameKey(rows[r][c]) === 'first name') { h = r; break; }
+  if (h < 0) return;
+  for (c = 0; c < rows[h].length; c++) if (nameKey(rows[h][c]) === 'rsvp status') col = c;
+  if (col < 0) return;
+  var codeOf = {}, hs = ss().getSheetByName(GUESTS).getDataRange().getValues();
+  for (r = 1; r < hs.length; r++) codeOf[hs[r][6]] = normaliseCode(hs[r][0]);
+  var latest = {}, rs = resp.getDataRange().getValues();      /* later rows win */
+  for (r = 1; r < rs.length; r++) latest[normaliseCode(rs[r][1]) + '|' + nameKey(rs[r][5])] = rs[r][6];
+  var atRow = {};
+  readHouseholds().forEach(function (house) { house.rows.forEach(function (rr, i) { atRow[rr] = { code: codeOf[house.members], name: house.fulls[i] }; }); });
+  var out = [], last = src.getLastRow();
+  for (r = h + 2; r <= last; r++) { var info = atRow[r]; out.push([info && info.code ? (latest[info.code + '|' + nameKey(info.name)] || '') : '']); }
+  if (out.length) src.getRange(h + 2, col + 1, out.length, 1).setValues(out);
 }
 
 /** The invitation email is the artwork alone, the whole picture a link to the household's invitation.
     The artwork travels inside the email (see heroImage), so nothing has to be fetched when it is opened.
     With images off, the picture's description shows in its place and is still the link. */
-function invitationEmail(guest) {
-  var link = guestLink(guest.code);
+function invitationEmail(guest, link) {
+  link = link || guestLink(guest.code);
   return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#E9E4D9" style="background-color:#E9E4D9"><tr><td align="center" style="padding:24px 12px">' +
     '<a href="' + escapeHtml(link) + '" style="display:block;text-decoration:none">' +
     '<img src="cid:hero" width="600" alt="Ashley &amp; Charles are getting married. Bali, Indonesia, August 28, 2027. We can\'t wait to celebrate with you. Open the invitation." style="display:block;width:100%;max-width:600px;height:auto;border:0;background-color:#EEF4F5;color:#2A2C27;font-family:Georgia,serif;font-size:18px;text-align:center">' +
@@ -203,9 +234,11 @@ function heroImage() {
 /** One invitation email to one person. `guest` is the household (code, names); `to` is { name, email }. */
 function sendInvitation(guest, to) {
   var salutation = (to.name || guest.name).split(' ')[0];
-  var html = invitationEmail(guest);
+  var idx = 0; (guest.members || []).forEach(function (m, i) { if (nameKey(m) === nameKey(to.name)) idx = i + 1; });   /* the link names the person */
+  var link = guestLink(guest.code, idx);
+  var html = invitationEmail(guest, link);
   var text = 'Dear ' + salutation + ',\n\nAshley & Charles are getting married in Bali, Indonesia on August 28, 2027, and we can\'t wait to celebrate with you. Your invitation is here: ' +
-    guestLink(guest.code) + '\n\nIt opens like a letter, so give it a moment. It carries your names and your seats.\n\nPlease reply by ' + RSVP_DEADLINE + '.\n\nAshley & Charles';
+    link + '\n\nIt opens like a letter, so give it a moment. It carries your names and your seats.\n\nPlease reply by ' + RSVP_DEADLINE + '.\n\nAshley & Charles';
   var opts = mailOptions(to.email, INVITE_SUBJECT, html, text);
   opts.inlineImages = { hero: heroImage() };
   MailApp.sendEmail(opts);
@@ -252,7 +285,7 @@ function sendInvitations() {
     var code = normaliseCode(rows[r][0]);
     var to = parseRecipients(rows[r][3]);
     var sent = rows[r][5];
-    if (code && to.length && !sent) { pending.push({ row: r + 1, code: code, name: clean(rows[r][1], 80), to: to }); people += to.length; }
+    if (code && to.length && !sent) { pending.push({ row: r + 1, code: code, name: clean(rows[r][1], 80), members: String(rows[r][6] || '').split('|').map(function (m) { return clean(m, 60); }).filter(Boolean), to: to }); people += to.length; }
   }
   if (!pending.length) { ui.alert('Nothing to send: every row with a code and an email is already marked as sent.'); return; }
   var quota = MailApp.getRemainingDailyQuota();
@@ -276,7 +309,7 @@ function sendTestInvitation() {
     var code = normaliseCode(rows[r][0]);
     if (code) {
       var first = parseRecipients(rows[r][3])[0];
-      sendInvitation({ code: code, name: clean(rows[r][1], 80) }, { name: first ? first.name : '', email: Session.getEffectiveUser().getEmail() });
+      sendInvitation({ code: code, name: clean(rows[r][1], 80), members: String(rows[r][6] || '').split('|').map(function (m) { return clean(m, 60); }).filter(Boolean) }, { name: first ? first.name : '', email: Session.getEffectiveUser().getEmail() });
       SpreadsheetApp.getUi().alert('Test sent to ' + Session.getEffectiveUser().getEmail() + ' using row ' + (r + 1) + '.');
       return;
     }
@@ -286,6 +319,14 @@ function sendTestInvitation() {
 
 function ensureResponses() {
   var sheet = ss().getSheetByName(RESPONSES);
+  if (sheet) {
+    /* an older layout: rewrite the header if the tab is empty, otherwise keep it aside and start a fresh one */
+    var head = sheet.getRange(1, 1, 1, RESPONSE_HEADERS.length).getValues()[0].map(function (v) { return String(v || ''); });
+    if (head.join('|') !== RESPONSE_HEADERS.join('|')) {
+      if (sheet.getLastRow() <= 1) { sheet.getRange(1, 1, 1, 20).clearContent(); sheet.getRange(1, 1, 1, RESPONSE_HEADERS.length).setValues([RESPONSE_HEADERS]); }
+      else { sheet.setName(RESPONSES + ' (old)'); sheet = null; }
+    }
+  }
   if (!sheet) {
     sheet = ss().insertSheet(RESPONSES);
     sheet.appendRow(RESPONSE_HEADERS);
@@ -358,7 +399,7 @@ function readHouseholds() {
     if (sameLast) names += ' ' + lasts[0];
     var emails = [], seen = {};   /* one entry per person, "First Last <address>", so each can be written to by name */
     m.forEach(function (p) { p.emails.forEach(function (e) { if (!seen[e.toLowerCase()]) { seen[e.toLowerCase()] = true; emails.push(p.full + ' <' + e + '>'); } }); });
-    return { names: names.slice(0, 80), seats: Math.min(m.length, MAX_SEATS), email: emails.join(', '), members: m.map(function (p) { return p.full; }).sort().join(' | '), rows: m.map(function (p) { return p.row; }) };
+    return { names: names.slice(0, 80), seats: Math.min(m.length, MAX_SEATS), email: emails.join(', '), members: m.map(function (p) { return p.full; }).sort().join(' | '), rows: m.map(function (p) { return p.row; }), fulls: m.map(function (p) { return p.full; }) };
   });
 }
 
@@ -373,7 +414,10 @@ function writeLinks(households) {
     if (c !== col && /^(invite|unique) link$/.test(nameKey(rows[h][c]))) src.getRange(h + 1, c + 1, Math.max(1, src.getLastRow() - h), 1).clearContent();
   }
   var byRow = {};
-  households.forEach(function (hh) { hh.rows.forEach(function (rr) { byRow[rr] = hh.link; }); });
+  households.forEach(function (hh) {
+    var sorted = hh.members.split(' | ');
+    hh.rows.forEach(function (rr, i) { var idx = sorted.indexOf(hh.fulls[i]); byRow[rr] = hh.link + (idx >= 0 ? '&p=' + (idx + 1) : ''); });
+  });
   var last = src.getLastRow(), out = [];
   for (r = h + 2; r <= last; r++) out.push([byRow[r] || '']);
   if (out.length) src.getRange(h + 2, col + 1, out.length, 1).setValues(out);
