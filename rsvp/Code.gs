@@ -176,16 +176,29 @@ function sendConfirmation(guest, reply) {
   MailApp.sendEmail(mailOptions(reply.email, CONFIRM_SUBJECT, html, text));
 }
 
+/** The invitation email: the artwork on top (a link in itself), then a personal note and a button that works with images off. */
+function invitationEmail(guest) {
+  var link = guestLink(guest.code), hero = SITE_URL + 'assets/email-hero.jpg', hero2x = SITE_URL + 'assets/email-hero-2x.jpg';
+  var serif = "'EB Garamond',Garamond,Georgia,'Times New Roman',serif";
+  return '<div style="background:#E9E4D9;padding:24px 12px;font-family:' + serif + ';color:#2A2C27;line-height:1.5">' +
+    '<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="max-width:600px;width:100%;margin:0 auto;background:#FBF8F1;border-radius:6px;overflow:hidden">' +
+    '<tr><td style="padding:0"><a href="' + escapeHtml(link) + '" style="display:block;text-decoration:none">' +
+    '<img src="' + escapeHtml(hero) + '" srcset="' + escapeHtml(hero2x) + ' 2x" width="600" alt="Ashley &amp; Charles are getting married. Bali, Indonesia, August 28, 2027. We can\'t wait to celebrate with you. Open the invitation." style="display:block;width:100%;max-width:600px;height:auto;border:0;background:#EEF4F5;color:#2A2C27;font-size:18px;text-align:center"></a></td></tr>' +
+    '<tr><td style="padding:30px 36px 8px;text-align:center">' +
+    '<p style="margin:0 0 14px;font-size:19px">Dear ' + escapeHtml(guest.name) + ',</p>' +
+    '<p style="margin:0 0 20px;font-size:17px">Your invitation opens like a letter, so give it a moment. It carries your name and your seats.</p>' +
+    '<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto"><tr><td style="background:#596044;border:1px solid #9B8B57;border-radius:2px">' +
+    '<a href="' + escapeHtml(link) + '" style="display:inline-block;padding:14px 30px;color:#F8F3E8;text-decoration:none;font-family:' + serif + ';font-size:15px;letter-spacing:.18em;text-transform:uppercase">Open the invitation &rarr;</a></td></tr></table>' +
+    '<p style="margin:22px 0 0;font-size:15px;color:#5B5D55">Please reply by ' + escapeHtml(RSVP_DEADLINE) + '.</p>' +
+    '<p style="margin:16px 0 0;font-size:13px;color:#7A7C74">Or copy this link: <a href="' + escapeHtml(link) + '" style="color:#3F5B45">' + escapeHtml(link) + '</a></p>' +
+    '<p style="margin:26px 0 22px;font-family:Menlo,Consolas,monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#9B8B57">Ashley &amp; Charles &middot; AYANA Bali &middot; August 28, 2027</p>' +
+    '</td></tr></table></div>';
+}
+
 function sendInvitation(guest, toList) {
-  var html = emailShell(
-    'You\'re invited',
-    '<p style="margin:0 0 14px">Dear ' + escapeHtml(guest.name) + ',</p>' +
-    '<p style="margin:0 0 14px">We\'re getting married on a cliff above the Indian Ocean, and we would love you to be there. Your invitation is below. It opens like a letter, so give it a moment, and it carries your name and your seats.</p>' +
-    '<p style="margin:0">Please reply by ' + escapeHtml(RSVP_DEADLINE) + '.</p>',
-    'Open your invitation', guestLink(guest.code)
-  );
-  var text = 'Dear ' + guest.name + ',\n\nWe\'re getting married on a cliff above the Indian Ocean, and we would love you to be there. Your invitation is here: ' +
-    guestLink(guest.code) + '\n\nPlease reply by ' + RSVP_DEADLINE + '.\n\nAshley & Charles';
+  var html = invitationEmail(guest);
+  var text = 'Dear ' + guest.name + ',\n\nAshley & Charles are getting married in Bali, Indonesia on August 28, 2027, and we can\'t wait to celebrate with you. Your invitation is here: ' +
+    guestLink(guest.code) + '\n\nIt opens like a letter, so give it a moment. It carries your name and your seats.\n\nPlease reply by ' + RSVP_DEADLINE + '.\n\nAshley & Charles';
   MailApp.sendEmail(mailOptions(toList.join(','), INVITE_SUBJECT, html, text));
 }
 
