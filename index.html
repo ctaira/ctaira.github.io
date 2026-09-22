@@ -436,7 +436,7 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
 .section a{color:var(--olive);text-decoration-color:var(--gold-line);text-underline-offset:3px}
 /* every arch reads centred */
 .section>.inner{text-align:center}
-.section h2,.lede,.letter p,.note,.seats-box,.travel,.countdown,.date-grid,.gate,.confirm,.rsvp form,.letter .signoff{margin-left:auto;margin-right:auto}
+.section h2,.lede,.letter p,.note,.travel,.countdown,.date-grid,.gate,.confirm,.rsvp form,.letter .signoff{margin-left:auto;margin-right:auto}
 .note{border-left:0;border-top:1px solid var(--gold-line);padding:1em 0 0}
 .travel{justify-items:center}
 .rsvp form,.rsvp .field{text-align:left}
@@ -608,10 +608,6 @@ html.has-lightbox{overflow:hidden}
 @media (max-width:500px){.pav .fq-close{letter-spacing:.08em;padding-left:.08em}}
 
 /* Adults only */
-.seats-box{border:1px solid var(--gold-line);border-radius:999px;padding:1.1em 1.8em;margin-top:2.2em;max-width:420px;display:grid;grid-template-columns:1fr auto;gap:1em;align-items:center}
-.seats-box .lbl{font-family:var(--mono);font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:var(--olive-soft)}
-.seats-box .val{font-family:var(--serif);font-size:clamp(24px,4.6vw,30px);line-height:1.1;margin-top:.15em}
-.seats-box .num{font-family:var(--serif);font-size:clamp(48px,11vw,64px);line-height:.9;color:var(--olive)}
 .pav-tall{--pw2:min(92vw,900px);--cap:calc(var(--pw2) * .15);padding:calc(var(--cap) + max(calc(var(--pw2) * .01),calc(var(--motif-h) * .48))) calc(var(--pw2) * .06) max(calc(var(--pw2) * .05),calc(var(--motif-h) + 14px));border-radius:0 0 calc(var(--pw2) * .05) calc(var(--pw2) * .05);opacity:1;transform:none;transition:none}
 .fq-head{margin:0 auto calc(var(--pw2) * .02)}
 .fq-head .script-line{font-size:max(34px,calc(var(--pw2) * .08))}
@@ -1006,14 +1002,6 @@ html.has-lightbox{overflow:hidden}
     <h2>Adults only</h2>
     <p class="sec-copy">With love for all the little ones in our lives, our wedding weekend will be an adults-only celebration. We hope the occasion feels like a little holiday for the grown-ups, too.</p>
     <p class="sec-copy">The weekend runs late, the cliffs are real, and the bar never quite closes. We would rather you had a few days that felt like a holiday of your own. We've kept the guest list to adults, and we hope you'll take that as an invitation to sleep in.</p>
-
-    <div class="seats-box" role="note">
-      <div>
-        <div class="lbl">Your invitation</div>
-        <div class="val" id="seatsLine">Admits one guest</div>
-      </div>
-      <div class="num" id="seatsNum" aria-hidden="true">1</div>
-    </div>
   </div>
 </section>
 
@@ -1188,7 +1176,6 @@ var RSVP_ENDPOINT = "https://script.google.com/macros/s/AKfycbyAEPD6B1uDkxXeg7pF
   var inviteCode = (params.get('i') || '').trim().toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 32);
   var personIdx = parseInt(params.get('p'), 10); if (!(personIdx >= 1 && personIdx <= 12)) personIdx = 0;   /* which member of the household this link was sent to */
   var members = [];
-  var words = ['one', 'two', 'three', 'four', 'five', 'six'];
   var guestName = '', seats = 1;
   var padMrz = function (s) { s = s.slice(0, 44); while (s.length < 44) s += '<'; return s; };
 
@@ -1207,9 +1194,6 @@ var RSVP_ENDPOINT = "https://script.google.com/macros/s/AKfycbyAEPD6B1uDkxXeg7pF
     put('bpName', hasName ? guestName.toUpperCase() : 'GUEST');
     put('ppSeats', seats + (seats === 1 ? ' guest' : ' guests'));
     put('bpSeats', String(seats));
-    put('seatsNum', String(seats));
-    $('seatsNum').hidden = false;
-    put('seatsLine', 'Admits ' + words[seats - 1] + (seats === 1 ? ' guest' : ' guests'));
     /* the name field holds the person this link was sent to; a household link leaves it for them to type */
     if (!$('name').value) $('name').value = members.length ? (personIdx && members[personIdx - 1]) || '' : (hasName ? guestName : '');
     if (typeof growName === 'function') growName();
@@ -1949,8 +1933,6 @@ var RSVP_ENDPOINT = "https://script.google.com/macros/s/AKfycbyAEPD6B1uDkxXeg7pF
     form.hidden = true;
     $('deadline').hidden = true;
     gate.hidden = false;
-    $('seatsLine').textContent = 'Seats are on your invitation link';
-    $('seatsNum').hidden = true;
     console.warn('RSVP gated:', reason);
   }
   if (RSVP_ENDPOINT) {
