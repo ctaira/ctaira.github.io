@@ -682,6 +682,8 @@ html.has-lightbox{overflow:hidden}
 .btn[disabled]{opacity:.55;cursor:default}
 .rsvp form .btn{display:block;margin:.6em auto 0}
 .rsvp .form-error{margin-left:auto;margin-right:auto;text-align:center}
+.send-err{display:none;font-family:var(--mono);font-size:14px;letter-spacing:.06em;color:#A2623F;text-align:center;max-width:44ch;margin:1.4em auto 0}   /* why the reply did not go: sits right above the button, where the eye is */
+.send-err.is-visible{display:block}
 .form-error{display:none;margin-top:1.2em;font-size:14.5px;color:#A2623F;max-width:44ch}
 .form-error.is-visible{display:block}
 .confirm{display:none;max-width:48ch}
@@ -1115,6 +1117,7 @@ html.has-lightbox{overflow:hidden}
         <textarea id="note" name="note" maxlength="1000" placeholder="Optional"></textarea>
       </div>
 
+      <p class="send-err" id="sendErr" role="alert"></p>
       <button class="btn" type="submit" id="submitBtn">Send reply</button>
       <p class="form-error" id="formError">Something went wrong sending your reply. Please try again, or message us directly.</p>
     </form>
@@ -1874,7 +1877,7 @@ var RSVP_ENDPOINT = "https://script.google.com/macros/s/AKfycbwTMzokoyfvMZLOHn0f
   /* -------------------------------------------------------------------------
      RSVP
   ------------------------------------------------------------------------- */
-  var form = $('rsvpForm'), submitBtn = $('submitBtn'), formError = $('formError');
+  var form = $('rsvpForm'), submitBtn = $('submitBtn'), formError = $('formError'), sendErr = $('sendErr');
   var fName = $('fName'), fDiet = $('fDiet'), fEmail = $('fEmail'), fWho = $('fWho'), whoBox = $('who');
   function validEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v); }
   function nameKey(v) { return String(v || '').toLowerCase().replace(/[^a-z ]/g, ' ').replace(/\s+/g, ' ').trim(); }
@@ -1905,7 +1908,17 @@ var RSVP_ENDPOINT = "https://script.google.com/macros/s/AKfycbwTMzokoyfvMZLOHn0f
       ANSWERS.forEach(function (a) {
         var l = document.createElement('label'), inp = document.createElement('input'), sp = document.createElement('span');
         inp.type = 'radio'; inp.name = 'who' + i; inp.value = a[0]; sp.textContent = a[1];
-        inp.addEventListener('change', function () { row.classList.toggle('is-out', a[0] === 'no'); row.classList.remove('is-invalid'); fWho.classList.remove('is-invalid'); syncVisibility(); });
+        /* tapping the answer that is already chosen clears it: a radio cannot do that by itself */
+        l.addEventListener('pointerdown', function () { l.dataset.was = inp.checked ? '1' : ''; });
+        inp.addEventListener('click', function () {
+          if (l.dataset.was === '1') { l.dataset.was = ''; inp.checked = false; inp.dispatchEvent(new Event('change', { bubbles: true })); }
+        });
+        inp.addEventListener('change', function () {
+          var cur = form.querySelector('input[name="who' + i + '"]:checked');
+          row.classList.toggle('is-out', !!cur && cur.value === 'no');
+          if (cur) { row.classList.remove('is-invalid'); fWho.classList.remove('is-invalid'); }
+          syncVisibility();
+        });
         l.appendChild(inp); l.appendChild(sp); opts.appendChild(l);
       });
       row.appendChild(nm); row.appendChild(opts); whoBox.appendChild(row);
@@ -1975,10 +1988,18 @@ var RSVP_ENDPOINT = "https://script.google.com/macros/s/AKfycbwTMzokoyfvMZLOHn0f
     var whoOk = need < 0 || !!ans[need].answer;
     fWho.classList.toggle('is-invalid', !whoOk);
     for (var i = 0; i < rows.length; i++) rows[i].classList.toggle('is-invalid', !whoOk && i === need);
-    if (!whoOk) { ok = false; first = first || rows[need].querySelector('input'); }
-    if (first) first.focus();
+    if (!whoOk) ok = false;
+    /* the reason goes right above the button, where the tap happened; the field itself is marked too */
+    var why = !whoOk ? (me >= 0 ? 'Please let us know if you can make it before you send.' : 'Please answer for at least one person before you send.')
+      : (!ok ? 'Please fill in the highlighted fields above.' : '');
+    sendErr.textContent = why;
+    sendErr.classList.toggle('is-visible', !!why);
+    if (first) first.focus();   /* a missing name or email: take them to it. A missing answer: the message and the outlined row say it */
     return ok;
   }
+  function clearSendErr() { sendErr.classList.remove('is-visible'); }
+  form.addEventListener('input', clearSendErr);
+  form.addEventListener('change', clearSendErr);
 
   function showConfirmation(declined, emailed) {
     form.hidden = true;
