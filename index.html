@@ -1958,19 +1958,23 @@ var RSVP_ENDPOINT = "https://script.google.com/macros/s/AKfycbyAEPD6B1uDkxXeg7pF
     if (!inviteCode) {
       closeGate('no invite code in the URL');
     } else {
-      fetch(RSVP_ENDPOINT + (RSVP_ENDPOINT.indexOf('?') < 0 ? '?' : '&') + 'i=' + encodeURIComponent(inviteCode), { method: 'GET' })
-        .then(function (r) { return r.json(); })
-        .then(function (d) {
-          if (d && d.ok) {
-            applyGuest(d.name, d.seats, d.members);
-          } else {
-            closeGate('code not found');
-          }
-        })
-        .catch(function (err) {
-          /* Lookup failed (offline, script error). Leave the form open; the backend still validates on submit. */
-          console.warn('Invitation lookup failed', err);
-        });
+      /* The script's web app can answer a request with a transient error for a minute or two after it is
+         redeployed or edited, so a failed lookup is retried a few times before the page gives up on it. */
+      var lookupUrl = RSVP_ENDPOINT + (RSVP_ENDPOINT.indexOf('?') < 0 ? '?' : '&') + 'i=' + encodeURIComponent(inviteCode);
+      (function lookup(attempt) {
+        fetch(lookupUrl, { method: 'GET', cache: 'no-store' })
+          .then(function (r) { return r.json(); })
+          .then(function (d) {
+            if (d && d.ok) applyGuest(d.name, d.seats, d.members);
+            else if (d && d.error === 'not_found') closeGate('code not found');
+            else throw new Error(d && d.error ? d.error : 'bad reply');
+          })
+          .catch(function (err) {
+            if (attempt < 4) { setTimeout(function () { lookup(attempt + 1); }, attempt * 2500); return; }
+            /* Still nothing (offline, script down). Leave the form open; the backend validates on submit. */
+            console.warn('Invitation lookup failed', err);
+          });
+      })(1);
     }
   } else {
     var n = parseInt(params.get('seats'), 10);
