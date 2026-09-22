@@ -376,7 +376,8 @@ button,input,select,textarea{font:inherit;color:inherit}
 
 /* The artwork of the pieces and the open envelope arrives once the scene is up (the first frame needs only
    the painting, the sealed envelope and the seal); the static page gets it at once. */
-.stage.is-in .env-pocket,.stage.is-in .env-flap .flap-face{background-image:url("assets/envelope.webp")}
+.stage.is-in .env-pocket{background-image:url("assets/envelope.webp")}
+.stage.is-in .env-flap .flap-face{background-image:url("assets/flap.webp")}   /* the flap alone: its tip is clean paper, with no trace of the pocket edges that run under it in the envelope art */
 .stage.is-in .bpass{background-image:url("assets/boarding-pass.webp")}
 .stage.is-in .pp-cover .face-front{background-image:url("assets/passport-cover.webp")}
 .stage.is-in .pp-art.art-cal,.stage.is-static .pp-art.art-cal{background-image:url("assets/pp-calendar.webp")}
@@ -1235,12 +1236,12 @@ var RSVP_ENDPOINT = "https://script.google.com/macros/s/AKfycbwTMzokoyfvMZLOHn0f
   /* ---- The painted plate: one image. It fades in once decoded; if it fails to load the
      drawn scene stays and the envelope still appears. ---- */
   var plate = $('plate'), plateBase = $('plateBase');
-  var ART = { 'envelope-sealed': 'assets/envelope-sealed.webp', 'seal': 'assets/seal.webp', 'envelope': 'assets/envelope.webp', 'boarding-pass': 'assets/boarding-pass.webp',
+  var ART = { 'envelope-sealed': 'assets/envelope-sealed.webp', 'seal': 'assets/seal.webp', 'envelope': 'assets/envelope.webp', 'flap': 'assets/flap.webp', 'boarding-pass': 'assets/boarding-pass.webp',
     'polaroid': 'assets/polaroid.webp', 'passport-cover': 'assets/passport-cover.webp', 'pp-calendar': 'assets/pp-calendar.webp', 'pp-itinerary': 'assets/pp-itinerary.webp' };
   function sceneIn() {
     stage.classList.remove('is-loading'); stage.classList.add('is-in');
     var pim = polaroid.querySelector('img'); if (pim && !pim.src) pim.src = pim.getAttribute('data-src');
-    ['envelope', 'polaroid', 'boarding-pass', 'passport-cover', 'pp-calendar', 'pp-itinerary'].reduce(function (p, n) { return p.then(function () { return decoded(n); }); }, Promise.resolve())
+    ['envelope', 'flap', 'polaroid', 'boarding-pass', 'passport-cover', 'pp-calendar', 'pp-itinerary'].reduce(function (p, n) { return p.then(function () { return decoded(n); }); }, Promise.resolve())
       .then(function () { if (window.startLazy) startLazy(); });
   }
   function decoded(name) { var im = new Image(); im.src = ART[name]; return (im.decode ? im.decode() : Promise.resolve()).catch(function () {}); }
