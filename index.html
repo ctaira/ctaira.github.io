@@ -660,7 +660,7 @@ html.has-lightbox{overflow:hidden}
 .who-lbl{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-line);margin:1.3em 0 .1em}
 .who-lbl:first-child{margin-top:0}
 .who-me .row{padding-top:.2em}
-.who .nm .paw{height:2.1em;width:auto;vertical-align:-.7em;margin:-.9em .35em -.5em 0}
+.who .nm .paw{height:2.1em;width:auto;vertical-align:-.45em;margin:-.9em 0 -.5em .3em}
 #fName .who-me:not(:empty)+.err{margin-top:.5em}
 .who .opts{display:flex;gap:6px;flex:none}
 .who .opts label{margin:0;letter-spacing:0;text-transform:none;position:relative}
@@ -1915,7 +1915,7 @@ var RSVP_ENDPOINT = "https://script.google.com/macros/s/AKfycbyAEPD6B1uDkxXeg7pF
       var m = list[i], mine = grouped && i === me;
       var row = document.createElement('div'); row.className = 'row'; row.dataset.i = i;
       var nm = document.createElement('div'); nm.className = 'nm'; nm.textContent = m;
-      if (mine) { var paw = document.createElement('img'); paw.className = 'paw'; paw.src = 'assets/paw.webp'; paw.alt = ''; paw.decoding = 'async'; nm.insertBefore(paw, nm.firstChild); }   /* the paw marks the person this link belongs to */
+      if (mine) { var paw = document.createElement('img'); paw.className = 'paw'; paw.src = 'assets/paw.webp'; paw.alt = ''; paw.decoding = 'async'; nm.appendChild(paw); }   /* the paw marks the person this link belongs to */
       var opts = document.createElement('div'); opts.className = 'opts';
       ANSWERS.forEach(function (a) {
         var l = document.createElement('label'), inp = document.createElement('input'), sp = document.createElement('span');
