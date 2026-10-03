@@ -23,13 +23,14 @@ var RSVP_DEADLINE = 'January 31, 2027';
 var GUEST_LIST = 'Guest List';   // the couple's own list: one row per person, with "Linked to another guest?"
 var GUESTS = 'Households';       // built from it by the Invitations menu: one row per household
 var LINK_COLUMN = 9;             // Guest List column that receives each person's invite link (9 = I)
-var SCRIPT_VERSION = 7;          // shown in the Invitations menu's messages, so you can tell which copy is running
+var SCRIPT_VERSION = 8;          // shown in the Invitations menu's messages, so you can tell which copy is running
 var RESPONSES = 'Responses';
 var MAX_SEATS = 6;
 var CODE_ALPHABET = 'abcdefghjkmnpqrstuvwxyz23456789'; // no 0/o/1/l, so codes survive being read aloud
 var CODE_LENGTH = 6;
 var RESPONSE_HEADERS = ['Received', 'Code', 'Household', 'Replied by', 'Email', 'Person', 'Answer', 'Dietary', 'Note', 'Sent'];   // one row per person per reply
 var ATTENDING_TEXT = { both: 'Both days', saturday: 'Saturday only', no: 'Not coming' };
+var ATTENDING_KEY = { 'Both days': 'both', 'Saturday only': 'saturday', 'Not coming': 'no' };
 
 function ss() { return SpreadsheetApp.getActive(); }
 
@@ -67,6 +68,20 @@ function findGuest(code) {
   return null;
 }
 
+/** The latest recorded answer for each member of a household, as { name: 'both' | 'saturday' | 'no' }.
+    Later Responses rows win, so a changed mind replaces the earlier answer. */
+function latestAnswers(code) {
+  var out = {}, sheet = ss().getSheetByName(RESPONSES);
+  if (!sheet) return out;
+  var rows = sheet.getDataRange().getValues();
+  for (var i = 1; i < rows.length; i++) {
+    if (normaliseCode(rows[i][1]) !== code) continue;
+    var key = ATTENDING_KEY[String(rows[i][6] || '')];
+    if (key) out[clean(rows[i][5], 60)] = key;
+  }
+  return out;
+}
+
 /* ---- Web app ------------------------------------------------------------ */
 
 function doGet(e) {
@@ -74,7 +89,7 @@ function doGet(e) {
   if (!code) return json({ ok: true, service: 'rsvp' });
   var guest = findGuest(code);
   if (!guest) return json({ ok: false, error: 'not_found' });
-  return json({ ok: true, name: guest.name, seats: guest.seats, members: guest.members });
+  return json({ ok: true, name: guest.name, seats: guest.seats, members: guest.members, answers: latestAnswers(guest.code) });
 }
 
 function doPost(e) {
@@ -149,7 +164,7 @@ function emailShell(title, bodyHtml, buttonText, buttonUrl) {
     : '';
   return '<div style="background:#E9E4D9;padding:32px 16px;font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif;color:#2A2C27;line-height:1.55">' +
     '<div style="max-width:560px;margin:0 auto;background:#F2EDE3;padding:36px 32px;border-radius:6px">' +
-    '<p style="margin:0 0 6px;font-family:Menlo,Consolas,monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#8C6E4F">Ashley &amp; Charles &middot; AYANA Bali &middot; 28 August 2027</p>' +
+    '<p style="margin:0 0 6px;font-family:Menlo,Consolas,monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#8C6E4F">Ashley &amp; Charles &middot; AYANA Bali &middot; August 28, 2027</p>' +
     '<h1 style="margin:0 0 20px;font-family:Georgia,Times New Roman,serif;font-weight:400;font-size:30px;line-height:1.1">' + escapeHtml(title) + '</h1>' +
     bodyHtml + button +
     '</div></div>';
@@ -168,19 +183,21 @@ function sendConfirmation(guest, reply) {
   /* the link leads back to the person who replied, so the page opens on their own row rather than the household view */
   var idx = 0; (guest.members || []).forEach(function (m, i) { if (nameKey(m) === nameKey(reply.name)) idx = i + 1; });
   var back = guestLink(guest.code, idx);
-  var lines = reply.people.filter(function (p) { return p.answer; }).map(function (p) { return [p.name, ATTENDING_TEXT[p.answer]]; });
-  var unanswered = reply.people.filter(function (p) { return !p.answer; }).map(function (p) { return p.name; });
+  /* the whole household's standing, read back from the sheet: what this reply changed and what was already in */
+  var current = latestAnswers(guest.code), all = guest.members.length ? guest.members : [guest.name];
+  var lines = all.filter(function (m) { return current[m]; }).map(function (m) { return [m, ATTENDING_TEXT[current[m]]]; });
+  var unanswered = all.filter(function (m) { return !current[m]; });
   if (reply.dietary) lines.push(['Dietary', reply.dietary]);
   if (reply.note) lines.push(['Note', reply.note]);
   var rows = lines.map(function (l) {
-    return '<tr><td style="padding:6px 16px 6px 0;font-family:Menlo,Consolas,monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#5B5D55;vertical-align:top;white-space:nowrap">' + escapeHtml(l[0]) + '</td><td style="padding:6px 0;vertical-align:top">' + escapeHtml(l[1]) + '</td></tr>';
+    return '<tr><td style="padding:6px 16px 6px 0;font-family:Menlo,Consolas,monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#5B5D55;vertical-align:top">' + escapeHtml(l[0]) + '</td><td style="padding:6px 0;vertical-align:top">' + escapeHtml(l[1]) + '</td></tr>';
   }).join('');
-  var lead = reply.coming
+  var lead = lines.some(function (l) { return l[1] !== 'Not coming'; })
     ? "Thank you. Your reply is in, and we'll be in touch with booking details for the estate."
     : "Thank you for letting us know. We'll miss you, and we'll raise a glass to you from the cliff.";
-  var later = unanswered.length ? '<p style="margin:14px 0 0;font-size:14px;color:#5B5D55">Still to reply: ' + escapeHtml(unanswered.join(', ')) + '. They can answer any time from the same invitation link.</p>' : '';
+  var later = unanswered.length ? '<p style="margin:14px 0 0;font-size:14px;color:#5B5D55">Still to reply: ' + escapeHtml(unanswered.join(', ')) + '. They can answer any time from their own invitation.</p>' : '';
   var html = emailShell(
-    reply.coming ? "We can't wait" : "We'll miss you",
+    lines.some(function (l) { return l[1] !== 'Not coming'; }) ? "We can't wait" : "We'll miss you",
     '<p style="margin:0 0 18px">' + escapeHtml(lead) + '</p>' +
     '<table style="border-collapse:collapse;margin:0 0 6px">' + rows + '</table>' + later +
     '<p style="margin:22px 0 0;font-size:14px;color:#5B5D55">Need to change something? Open your invitation again and send a new reply any time before ' + escapeHtml(RSVP_DEADLINE) + '. The latest answer for each person counts.</p>',
@@ -189,7 +206,8 @@ function sendConfirmation(guest, reply) {
   var text = lead + '\n\n' + lines.map(function (l) { return l[0] + ': ' + l[1]; }).join('\n') +
     (unanswered.length ? '\n\nStill to reply: ' + unanswered.join(', ') + '.' : '') +
     '\n\nTo change your reply before ' + RSVP_DEADLINE + ', open your invitation again: ' + back;
-  MailApp.sendEmail(mailOptions(reply.email, reply.coming ? CONFIRM_SUBJECT_COMING : CONFIRM_SUBJECT_NOT, html, text));
+  var anyComing = lines.some(function (l) { return l[1] !== 'Not coming'; });
+  MailApp.sendEmail(mailOptions(reply.email, anyComing ? CONFIRM_SUBJECT_COMING : CONFIRM_SUBJECT_NOT, html, text));
 }
 
 /** Fills the Guest List's "RSVP Status" column, if it has one, with each person's latest answer. */
