@@ -23,7 +23,7 @@ var RSVP_DEADLINE = 'January 31, 2027';
 var GUEST_LIST = 'Guest List';   // the couple's own list: one row per person, with "Linked to another guest?"
 var GUESTS = 'Households';       // built from it by the Invitations menu: one row per household
 var LINK_COLUMN = 9;             // Guest List column that receives each person's invite link (9 = I)
-var SCRIPT_VERSION = 8;          // shown in the Invitations menu's messages, so you can tell which copy is running
+var SCRIPT_VERSION = 9;          // shown in the Invitations menu's messages, so you can tell which copy is running
 var RESPONSES = 'Responses';
 var MAX_SEATS = 6;
 var CODE_ALPHABET = 'abcdefghjkmnpqrstuvwxyz23456789'; // no 0/o/1/l, so codes survive being read aloud
@@ -274,6 +274,8 @@ function onOpen() {
   SpreadsheetApp.getUi().createMenu('Invitations')
     .addItem('Build households from Guest List', 'buildHouseholds')
     .addItem('Fill missing codes and links', 'fillCodes')
+    .addItem('Send the next unsent household', 'sendNextHousehold')
+    .addItem('Send the selected household', 'sendSelectedHousehold')
     .addItem('Send invitations to unsent rows', 'sendInvitations')
     .addItem('Send a test invitation to me', 'sendTestInvitation')
     .addSeparator()
@@ -297,20 +299,62 @@ function parseRecipients(v) {
 }
 function splitEmails(v) { return parseRecipients(v).map(function (r) { return r.email; }); }
 
+/** The households still to send, read from the Households tab: one entry per row with a code, addresses and no sent date. */
+function pendingHouseholds(sheet, rows) {
+  var pending = [];
+  for (var r = 1; r < rows.length; r++) {
+    var code = normaliseCode(rows[r][0]), to = parseRecipients(rows[r][3]), sent = rows[r][5];
+    if (code && to.length && !sent) pending.push({ row: r + 1, code: code, name: clean(rows[r][1], 80), members: String(rows[r][6] || '').split('|').map(function (m) { return clean(m, 60); }).filter(Boolean), to: to });
+  }
+  return pending;
+}
+/** One household, whole: every recipient emailed, then the row's sent date written. Returns the number of emails. */
+function sendHousehold(sheet, h) {
+  for (var j = 0; j < h.to.length; j++) sendInvitation(h, h.to[j]);
+  sheet.getRange(h.row, 6).setValue(new Date());
+  return h.to.length;
+}
+
+/** One at a time, in sheet order: the first household not yet marked sent. Check Sent in Gmail, then run again. */
+function sendNextHousehold() {
+  var ui = SpreadsheetApp.getUi(), sheet = ss().getSheetByName(GUESTS);
+  var pending = pendingHouseholds(sheet, sheet.getDataRange().getValues());
+  if (!pending.length) { ui.alert('Nothing left to send: every household with an email is marked as sent.'); return; }
+  var h = pending[0];
+  var answer = ui.alert('Send to ' + h.name + '?', h.to.map(function (t) { return t.name + ' <' + t.email + '>'; }).join('\n') + '\n\n' + (pending.length - 1) + ' household(s) will remain after this one.', ui.ButtonSet.YES_NO);
+  if (answer !== ui.Button.YES) return;
+  if (MailApp.getRemainingDailyQuota() < h.to.length) { ui.alert('Not enough of today\'s email limit left for this household (' + h.to.length + ' emails). Try again tomorrow.'); return; }
+  var n = sendHousehold(sheet, h);
+  ui.alert('Sent ' + n + ' email(s) to ' + h.name + '. ' + (pending.length - 1) + ' household(s) still to send.');
+}
+
+/** The household on the row you have selected in the Households tab, whether or not it is marked sent. */
+function sendSelectedHousehold() {
+  var ui = SpreadsheetApp.getUi(), sheet = ss().getSheetByName(GUESTS), active = ss().getActiveSheet();
+  if (!active || active.getName() !== GUESTS) { ui.alert('Select a row on the ' + GUESTS + ' tab first.'); return; }
+  var r = active.getActiveRange().getRow();
+  if (r < 2) { ui.alert('Select a household row, not the header.'); return; }
+  var rows = sheet.getDataRange().getValues(), row = rows[r - 1];
+  var code = normaliseCode(row[0]), to = parseRecipients(row[3]);
+  if (!code) { ui.alert('That row has no code yet. Run "Fill missing codes and links" first.'); return; }
+  if (!to.length) { ui.alert('That row has no email address to send to.'); return; }
+  var h = { row: r, code: code, name: clean(row[1], 80), members: String(row[6] || '').split('|').map(function (m) { return clean(m, 60); }).filter(Boolean), to: to };
+  var warn = row[5] ? '\n\nThis household is already marked as sent on ' + row[5] + '. Sending again will email them a second time.' : '';
+  var answer = ui.alert('Send to ' + h.name + '?', h.to.map(function (t) { return t.name + ' <' + t.email + '>'; }).join('\n') + warn, ui.ButtonSet.YES_NO);
+  if (answer !== ui.Button.YES) return;
+  if (MailApp.getRemainingDailyQuota() < h.to.length) { ui.alert('Not enough of today\'s email limit left for this household.'); return; }
+  var n = sendHousehold(sheet, h);
+  ui.alert('Sent ' + n + ' email(s) to ' + h.name + '.');
+}
+
 /** Emails every household row that has a code and addresses but no value in "sent" (F): one email per person,
     each greeted by their own first name, all carrying the household's link. */
 function sendInvitations() {
   var ui = SpreadsheetApp.getUi();
   if (!/^https:\/\/[^/]+\/$/.test(SITE_URL)) { ui.alert('SITE_URL at the top of the script must be the live site with a trailing slash.'); return; }
   var sheet = ss().getSheetByName(GUESTS);
-  var rows = sheet.getDataRange().getValues();
-  var pending = [], people = 0;
-  for (var r = 1; r < rows.length; r++) {
-    var code = normaliseCode(rows[r][0]);
-    var to = parseRecipients(rows[r][3]);
-    var sent = rows[r][5];
-    if (code && to.length && !sent) { pending.push({ row: r + 1, code: code, name: clean(rows[r][1], 80), members: String(rows[r][6] || '').split('|').map(function (m) { return clean(m, 60); }).filter(Boolean), to: to }); people += to.length; }
-  }
+  var pending = pendingHouseholds(sheet, sheet.getDataRange().getValues()), people = 0;
+  pending.forEach(function (h) { people += h.to.length; });
   if (!pending.length) { ui.alert('Nothing to send: every row with a code and an email is already marked as sent.'); return; }
   var quota = MailApp.getRemainingDailyQuota();
   var answer = ui.alert('Send invitations', pending.length + ' household(s), ' + people + ' email(s), have not been sent an invitation. Your account can send ' + quota + ' more emails today. Send now?', ui.ButtonSet.YES_NO);
@@ -318,8 +362,7 @@ function sendInvitations() {
   var done = 0, stopped = false;
   for (var i = 0; i < pending.length && !stopped; i++) {
     if (MailApp.getRemainingDailyQuota() < pending[i].to.length) { stopped = true; break; }   /* a household is sent whole or not at all */
-    for (var j = 0; j < pending[i].to.length; j++) sendInvitation(pending[i], pending[i].to[j]);
-    sheet.getRange(pending[i].row, 6).setValue(new Date());
+    sendHousehold(sheet, pending[i]);
     done++;
   }
   ui.alert('Sent ' + done + ' of ' + pending.length + ' household(s).' + (done < pending.length ? ' The rest are still unsent; run this again tomorrow when the daily limit resets.' : ''));
