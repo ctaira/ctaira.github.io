@@ -444,7 +444,7 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
 
 /* Letter */
 .letter p{max-width:58ch}
-@media (max-width:500px){.letter p{font-size:16px;line-height:1.5;margin-bottom:.85em}.letter .salutation{font-size:32px}.letter p.signoff small{font-size:12px;letter-spacing:.12em}}
+@media (max-width:500px){.letter p{font-size:16px;line-height:1.5;margin-bottom:.85em}.letter .salutation{font-size:32px}}
 /* Snapshots tucked into the letter: three prints, each a little askew, captions in the mono */
 .snaps{list-style:none;margin:2.2em auto 1.2em;padding:0;display:flex;justify-content:center;align-items:flex-start;gap:clamp(8px,2.4vw,22px);max-width:none}
 .snaps li{width:32%;max-width:250px;background:#FBF8F1;padding:4% 4% 0;box-shadow:0 10px 24px -12px rgba(36,39,34,.55),0 1px 0 rgba(155,139,87,.35);transform:rotate(-2.5deg);transition:transform .35s ease}
@@ -464,9 +464,9 @@ hr.rule{border:0;border-top:1px solid rgba(89,96,68,.2);margin:2.5em 0}
 .hope-row li:nth-child(1){transform:rotate(-2.2deg)}
 .hope-row li:nth-child(2){transform:rotate(1.6deg) translateY(8px)}
 .snaps span.hope-cap{font-family:var(--script);font-size:clamp(17px,4.8vw,26px);letter-spacing:0;text-transform:none;line-height:1;color:var(--olive);padding:.5em 0 .55em}
-.snaps span{display:block;font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--olive-soft);text-align:center;padding:.6em 0 .7em;line-height:1.3}
-.snaps-tag span{font-size:13px;color:var(--olive);padding:1.15em 0 1.45em}   /* the deep white foot of a real polaroid */
-@media (max-width:500px){.snaps{gap:5px}.snaps li{width:33%;padding:3.5% 3.5% 0}.snaps-two li,.snaps-one li{width:46%}.snaps span{font-size:10.5px;letter-spacing:.02em;padding:.5em 0 .6em}.snaps-tag span{font-size:11px;padding:1.1em 0 1.35em}.snap-zoom{width:18px;height:18px;right:3px;top:3px}.snap-zoom svg{width:10px;height:10px}}
+.snaps span{display:block;font-family:var(--script);font-size:clamp(16px,4.2vw,21px);letter-spacing:0;word-spacing:.12em;color:var(--olive);text-align:center;padding:.35em 0 .5em;line-height:1.15}
+.snaps-tag span{font-family:var(--mono);font-size:13px;letter-spacing:.04em;color:var(--olive-soft);padding:1.15em 0 1.45em}   /* the deep white foot of a real polaroid */
+@media (max-width:500px){.snaps{gap:5px}.snaps li{width:33%;padding:3.5% 3.5% 0}.snaps-two li,.snaps-one li{width:46%}.snaps span{font-size:15px;padding:.3em 0 .45em}.snaps-tag span{font-size:11px;padding:1.1em 0 1.35em}.snap-zoom{width:18px;height:18px;right:3px;top:3px}.snap-zoom svg{width:10px;height:10px}}
 .snaps .snap{display:block;position:relative;width:100%;padding:0;border:0;background:none;cursor:zoom-in;-webkit-tap-highlight-color:transparent}
 .snap-zoom{position:absolute;right:5px;top:5px;width:24px;height:24px;border-radius:50%;background:rgba(248,243,232,.92);color:var(--olive);border:1px solid rgba(155,139,87,.6);display:grid;place-items:center;box-shadow:0 2px 6px rgba(36,39,34,.25)}
 .snap-zoom svg{width:14px;height:14px}
@@ -487,7 +487,6 @@ html.has-lightbox{overflow:hidden}
 @media (max-width:640px){.lb-arrow{width:40px;height:40px;font-size:30px;background:rgba(36,39,34,.45);border-color:rgba(248,243,232,.5)}.lb-prev{left:8px}.lb-next{right:8px}}
 .letter .salutation{font-family:var(--script);font-size:clamp(34px,6.5vw,46px);line-height:1.1;margin-bottom:.6em}
 .letter .signoff{font-family:var(--serif);font-style:italic;font-size:clamp(24px,4.6vw,32px);margin-top:1.4em;line-height:1.2}
-.letter .signoff small{display:block;font-family:var(--mono);font-style:normal;font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-line);margin-top:.9em}
 
 /* The date */
 .date-grid{display:grid;gap:clamp(24px,5vw,44px);align-items:start}
@@ -622,7 +621,7 @@ html.has-lightbox{overflow:hidden}
 .fq-head .script-line{font-size:max(34px,calc(var(--pw2) * .08))}
 .fq-head .mt-rule{width:calc(var(--pw2) * .72);max-width:calc(100% - 8px);margin:.45em auto .6em}
 .fq-head .mt-rule::after{width:18px;height:18px;top:-9px;border-radius:0;background:var(--bloom) center/contain no-repeat}
-.fq-sub{font-family:'EB Garamond',var(--serif);font-weight:500;font-size:max(13px,calc(var(--pw2) * .019));letter-spacing:.16em;text-transform:uppercase;line-height:1.65;max-width:none;margin:0 auto;padding-left:.16em}
+.fq-sub{font-family:var(--serif);font-style:italic;font-size:max(17px,calc(var(--pw2) * .022));letter-spacing:0;line-height:1.45;max-width:none;margin:0 auto;color:var(--olive-soft)}
 .fq-list{list-style:none;margin:0;padding:0;text-align:left}
 .fq{position:relative;display:grid;grid-template-columns:32% 1fr;gap:calc(var(--pw2) * .035);align-items:center;padding:calc(var(--pw2) * .028) 0;border-top:1px solid rgba(155,139,87,.35)}
 .fq:first-child{border-top:0}
@@ -649,7 +648,7 @@ html.has-lightbox{overflow:hidden}
 .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-bottom-color:var(--gold-line)}
 .field input:focus-visible,.field select:focus-visible,.field textarea:focus-visible{outline:2px solid var(--gold-line);outline-offset:4px}
 .field select{appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--olive) 50%),linear-gradient(135deg,var(--olive) 50%,transparent 50%);background-position:calc(100% - 14px) 55%,calc(100% - 8px) 55%;background-size:6px 6px;background-repeat:no-repeat;padding-right:28px}
-.field textarea{min-height:3.2em;resize:vertical}
+.field textarea{min-height:3.2em;resize:none}
 .field textarea.grow{min-height:0;resize:none;overflow:hidden;line-height:1.4}   /* the name: one line that wraps to two when a household's names need it */
 .field fieldset{border:0;padding:0;margin:0;min-width:0}
 .field .err{display:none;font-family:var(--mono);font-size:14px;letter-spacing:.06em;color:#A2623F;margin-top:.5em}
@@ -889,7 +888,7 @@ html.has-lightbox{overflow:hidden}
     <p>Ashley joined run club for the running. Charles joined for Ashley. He has yet to catch her. Along the way, we fostered twelve cats. Ten found wonderful homes. Two found ours and stopped looking. When we’re not home, we’re somewhere new, golfing our way around the world and leaving lost golf balls on several continents.</p>
     <ul class="snaps" aria-label="A few photos of us">
       <li data-caption="Run Club at Santa Monica"><button type="button" class="snap" aria-label="View larger: Run Club at Santa Monica"><img data-src="assets/photo-runclub-thumb.webp" data-full="assets/photo-runclub.webp" alt="Ashley and Charles, sweaty and smiling after run club on the Santa Monica boardwalk." width="480" height="480" loading="lazy" decoding="async"><i class="snap-zoom" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></i></button><span>Run club</span></li>
-      <li data-caption="Our two foster fails: Tuco &amp; Elsa"><button type="button" class="snap" aria-label="View larger: Our two foster fails, Tuco and Elsa"><img data-src="assets/photo-cats-thumb.webp" data-full="assets/photo-cats.webp" alt="The two foster fails, a white cat and a tabby, in matching red silk jackets in a fluffy cat bed." width="480" height="480" loading="lazy" decoding="async"><i class="snap-zoom" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></i></button><span>Our 2 foster fails</span></li>
+      <li data-caption="Our two foster fails: Tuco &amp; Elsa"><button type="button" class="snap" aria-label="View larger: Our two foster fails, Tuco and Elsa"><img data-src="assets/photo-cats-thumb.webp" data-full="assets/photo-cats.webp" alt="The two foster fails, a white cat and a tabby, in matching red silk jackets in a fluffy cat bed." width="480" height="480" loading="lazy" decoding="async"><i class="snap-zoom" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></i></button><span>Foster fails</span></li>
       <li data-caption="The back nine at Torrey Pines"><button type="button" class="snap" aria-label="View larger: The back nine at Torrey Pines"><img data-src="assets/photo-golf-thumb.webp" data-full="assets/photo-golf.webp" alt="Ashley and Charles on the tee at Torrey Pines, the Pacific behind them." width="480" height="480" loading="lazy" decoding="async"><i class="snap-zoom" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></i></button><span>The back nine</span></li>
     </ul>
     <p>For the wedding, we didn’t want a typical venue. Our favorite rounds have always been on cliffs above the ocean, so we went looking for a place that felt like our happy place, the golf course: a cliff, an ocean, and everyone we love in one place. Your only job is to show up. It’s going to be perfect. We checked.</p>
@@ -898,7 +897,6 @@ html.has-lightbox{overflow:hidden}
       <li data-caption="#DongWithDating"><button type="button" class="snap" aria-label="View larger: #DongWithDating"><img data-src="assets/photo-embrace-thumb.webp" data-full="assets/photo-embrace.webp" alt="Charles holding Ashley from behind on the beach, both smiling at the camera." width="480" height="480" loading="lazy" decoding="async"><i class="snap-zoom" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></i></button><span>#DongWithDating</span></li>
     </ul>
     <p class="signoff">With all our love,<br>Ashley &amp; Charles
-      <small>Los Angeles · September&nbsp;2026</small>
     </p>
   </div>
 </section>
@@ -983,7 +981,7 @@ html.has-lightbox{overflow:hidden}
     <div class="dress-block">
       <span class="dress-day">Friday · The welcome party</span>
       <h2 class="dress-title">All White Attire</h2>
-      <p class="dress-copy">Join us for sunset cocktails at Rock Bar! We’d love for everyone to wear white — think relaxed, elevated, and beach chic.</p>
+      <p class="dress-copy">Join us for sunset cocktails at Rock Bar! We’d love for everyone to wear white. Think relaxed, elevated, and beach chic.</p>
       <img class="dress-figs" data-src="assets/figs-white.webp" alt="Eight guests in white: linen shirts with shorts or trousers, and white dresses and a jumpsuit." width="1200" height="430" loading="lazy" decoding="async">
     </div>
 
