@@ -1936,7 +1936,7 @@ var RSVP_ENDPOINT = "https://script.google.com/macros/s/AKfycbyAEPD6B1uDkxXeg7pF
       row.appendChild(nm); row.appendChild(opts); (mine ? whoMe : whoBox).appendChild(row);
     });
     $('whoHint').hidden = list.length < 2;   /* the note only makes sense when there is someone else to answer for */
-    $('whoHint').textContent = grouped ? 'Answer for anyone you can. The rest can reply later from their own link.' : 'Answer for everyone you can. Anyone left blank can reply later from this link.';
+    $('whoHint').textContent = grouped ? 'Reply for them if you know their plans. Otherwise they can answer from their own invitation.' : 'Answer for everyone you can. Anyone left blank can reply later from this link.';
     markMe();
   }
   function answers() {
