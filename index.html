@@ -659,8 +659,7 @@ html.has-lightbox{overflow:hidden}
 #fWho.is-grouped legend{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .who-lbl{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-line);margin:1.3em 0 .1em}
 .who-lbl:first-child{margin-top:0}
-.who-lbl small{font-size:inherit;letter-spacing:inherit;color:var(--olive-soft);margin-left:.9em}
-.who-lbl small::before{content:'· '}
+.who-me .row{padding:.75em 0 0;border-bottom:0;justify-content:flex-start}
 .who .opts{display:flex;gap:6px;flex:none}
 .who .opts label{margin:0;letter-spacing:0;text-transform:none;position:relative}
 .who .opts input{position:absolute;opacity:0;width:1px;height:1px;margin:0}
@@ -1083,8 +1082,9 @@ html.has-lightbox{overflow:hidden}
     <form id="rsvpForm" novalidate>
       <div class="field-row is-single" id="nameRow">
         <div class="field" id="fName">
-          <label for="name">Your name</label>
+          <label for="name" id="nameLabel">Your name</label>
           <textarea id="name" name="name" class="grow" rows="1" autocomplete="name" maxlength="80" required></textarea>
+          <div class="who who-me" id="whoMe"></div>
           <p class="err">Please tell us who you are.</p>
         </div>
       </div>
@@ -1872,7 +1872,7 @@ var RSVP_ENDPOINT = "https://script.google.com/macros/s/AKfycbyAEPD6B1uDkxXeg7pF
      RSVP
   ------------------------------------------------------------------------- */
   var form = $('rsvpForm'), submitBtn = $('submitBtn'), formError = $('formError'), sendErr = $('sendErr');
-  var fName = $('fName'), fDiet = $('fDiet'), fEmail = $('fEmail'), fWho = $('fWho'), whoBox = $('who');
+  var fName = $('fName'), fDiet = $('fDiet'), fEmail = $('fEmail'), fWho = $('fWho'), whoBox = $('who'), whoMe = $('whoMe');
   function validEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v); }
   function nameKey(v) { return String(v || '').toLowerCase().replace(/[^a-z ]/g, ' ').replace(/\s+/g, ' ').trim(); }
   var ANSWERS = [['both', 'Both days'], ['saturday', 'Saturday'], ['no', 'Not coming']];
@@ -1888,7 +1888,7 @@ var RSVP_ENDPOINT = "https://script.google.com/macros/s/AKfycbyAEPD6B1uDkxXeg7pF
   }
   function markMe() {
     var me = myRow();
-    var rows = whoBox.querySelectorAll('.row');
+    var rows = form.querySelectorAll('.who .row');
     for (var i = 0; i < rows.length; i++) rows[i].classList.toggle('is-me', +rows[i].dataset.i === me);
   }
   function label(text, note) {
@@ -1897,19 +1897,19 @@ var RSVP_ENDPOINT = "https://script.google.com/macros/s/AKfycbyAEPD6B1uDkxXeg7pF
     return l;
   }
   function buildWho() {
-    whoBox.innerHTML = '';
+    whoBox.innerHTML = ''; whoMe.innerHTML = '';
     var list = members.length ? members : [guestName || 'You'];
-    /* The person this link was sent to comes first, under "Your reply"; everyone else follows, marked optional. */
+    /* When the link names a person, their answer sits right under their name ("Your name and reply") and
+       everyone else in the household follows under "Also in your party". Otherwise it is one flat list. */
     var me = personIdx && members[personIdx - 1] ? personIdx - 1 : -1;
-    var order = list.map(function (_, i) { return i; });
-    if (me >= 0 && list.length > 1) order = [me].concat(order.filter(function (i) { return i !== me; }));
-    var grouped = me >= 0 && list.length > 1;
-    whoBox.classList.toggle('is-grouped', grouped);
-    fWho.classList.toggle('is-grouped', grouped);   /* the group labels carry the structure, so the legend steps back for sighted readers */
-    order.forEach(function (i, k) {
-      var m = list[i];
-      if (grouped && k === 0) whoBox.appendChild(label('Your reply'));
-      if (grouped && k === 1) whoBox.appendChild(label('Also in your party', 'optional'));
+    var grouped = me >= 0;
+    $('nameLabel').textContent = grouped ? 'Your name and reply' : 'Your name';
+    fWho.classList.toggle('is-grouped', grouped);   /* the group label carries the structure, so the legend steps back for sighted readers */
+    fWho.hidden = grouped && list.length < 2;       /* nobody else to answer for */
+    var others = list.map(function (_, i) { return i; }).filter(function (i) { return i !== me; });
+    if (grouped && others.length) whoBox.appendChild(label('Also in your party'));
+    (grouped ? [me].concat(others) : others).forEach(function (i) {
+      var m = list[i], mine = grouped && i === me;
       var row = document.createElement('div'); row.className = 'row'; row.dataset.i = i;
       var nm = document.createElement('div'); nm.className = 'nm'; nm.textContent = m;
       var opts = document.createElement('div'); opts.className = 'opts';
@@ -1929,9 +1929,10 @@ var RSVP_ENDPOINT = "https://script.google.com/macros/s/AKfycbyAEPD6B1uDkxXeg7pF
         });
         l.appendChild(inp); l.appendChild(sp); opts.appendChild(l);
       });
-      row.appendChild(nm); row.appendChild(opts); whoBox.appendChild(row);
+      if (!mine) row.appendChild(nm);   /* the reader's own name is the field above */
+      row.appendChild(opts); (mine ? whoMe : whoBox).appendChild(row);
     });
-    $('whoHint').hidden = list.length < 2;   /* the note only makes sense when there is more than one row */
+    $('whoHint').hidden = list.length < 2;   /* the note only makes sense when there is someone else to answer for */
     $('whoHint').textContent = grouped ? 'Answer for anyone you can. The rest can reply later from their own link.' : 'Answer for everyone you can. Anyone left blank can reply later from this link.';
     markMe();
   }
@@ -1995,10 +1996,11 @@ var RSVP_ENDPOINT = "https://script.google.com/macros/s/AKfycbyAEPD6B1uDkxXeg7pF
     fName.classList.toggle('is-invalid', !name); if (!name) { ok = false; first = first || $('name'); }
     var email = $('email').value.trim(), emailOk = validEmail(email);
     fEmail.classList.toggle('is-invalid', !emailOk); if (!emailOk) { ok = false; first = first || $('email'); }
-    var me = myRow(), rows = whoBox.querySelectorAll('.row'), ans = answers();
+    var me = myRow(), rows = form.querySelectorAll('.who .row'), ans = answers();
     var need = me >= 0 ? me : (ans.some(function (a) { return a.answer; }) ? -1 : 0);   /* your own row, or at least one row if we can't tell which is you */
     var whoOk = need < 0 || !!ans[need].answer;
-    fWho.classList.toggle('is-invalid', !whoOk);
+    var needMine = need >= 0 && !!whoMe.querySelector('.row[data-i="' + need + '"]');   /* the reader's own row lives under their name */
+    fWho.classList.toggle('is-invalid', !whoOk && !needMine);
     for (var i = 0; i < rows.length; i++) rows[i].classList.toggle('is-invalid', !whoOk && +rows[i].dataset.i === need);
     if (!whoOk) ok = false;
     /* the reason goes right above the button, where the tap happened; the field itself is marked too */
