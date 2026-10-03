@@ -328,6 +328,8 @@ button,input,select,textarea{font:inherit;color:inherit}
 }
 .pp-data dt{font-family:var(--mono);font-size:.68em;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);padding-top:.35em}
 .pp-data dd{margin:0;font-family:var(--sans);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pp-data #ppName{white-space:normal;overflow:visible;text-overflow:clip;line-height:1.2}   /* a household's names wrap to a second line rather than cut off */
+.pp-data #ppName.is-long{font-size:.9em}
 .pp-data dd small{font-weight:400;color:var(--ink-soft)}
 .mrz{
   container-type:inline-size;margin-top:auto;padding-top:.6em;
@@ -1206,7 +1208,7 @@ var RSVP_ENDPOINT = "https://script.google.com/macros/s/AKfycbyAEPD6B1uDkxXeg7pF
     var displayName = hasName ? guestName : 'Our dearest guest';
     /* some of these leave the DOM under reduced motion, so write only to what is there */
     function put(id, text) { var el = $(id); if (el) el.textContent = text; }
-    put('ppName', displayName);
+    put('ppName', displayName); if ($('ppName')) $('ppName').classList.toggle('is-long', displayName.length > 30);
     put('envName', displayName);
     put('bpName', hasName ? guestName.toUpperCase() : 'GUEST');
     put('ppSeats', seats + (seats === 1 ? ' guest' : ' guests'));
