@@ -656,9 +656,11 @@ html.has-lightbox{overflow:hidden}
 #fWho legend{font-family:var(--mono);font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:var(--olive-soft);padding:0;margin:0 0 .2em}
 .who .row{display:flex;align-items:center;justify-content:space-between;gap:1em;padding:.8em 0;border-bottom:1px solid rgba(89,96,68,.2)}
 .who .nm{font-family:var(--sans);font-size:17px;color:var(--olive);letter-spacing:0;text-transform:none}
-.who .nm em{display:none;margin-left:.45em;vertical-align:-.2em;line-height:0}
-.who .nm em svg{width:23px;height:23px;display:inline-block}
-.who .row.is-me .nm em{display:inline-block}
+#fWho.is-grouped legend{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.who-lbl{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-line);margin:1.3em 0 .1em}
+.who-lbl:first-child{margin-top:0}
+.who-lbl small{font-size:inherit;letter-spacing:inherit;color:var(--olive-soft);margin-left:.9em}
+.who-lbl small::before{content:'· '}
 .who .opts{display:flex;gap:6px;flex:none}
 .who .opts label{margin:0;letter-spacing:0;text-transform:none;position:relative}
 .who .opts input{position:absolute;opacity:0;width:1px;height:1px;margin:0}
@@ -1874,8 +1876,6 @@ var RSVP_ENDPOINT = "https://script.google.com/macros/s/AKfycbyAEPD6B1uDkxXeg7pF
   function validEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v); }
   function nameKey(v) { return String(v || '').toLowerCase().replace(/[^a-z ]/g, ' ').replace(/\s+/g, ' ').trim(); }
   var ANSWERS = [['both', 'Both days'], ['saturday', 'Saturday'], ['no', 'Not coming']];
-  /* the five-petal flower from the section dividers, marking the row that belongs to whoever opened this link */
-  var FLOWER = '<svg viewBox="-13 -13 26 26" fill="none" stroke="#9B8B57" stroke-width="1.7" aria-hidden="true"><g>' + [0, 72, 144, 216, 288].map(function (a) { return '<path d="M0-11c4-6 9-4 6 2-2 4-4 6-6 9-2-3-4-5-6-9-3-6 2-8 6-2z" transform="rotate(' + a + ')"/>'; }).join('') + '</g><circle r="1.6" fill="#9B8B57" stroke="none"/></svg>';
 
   /* Which row is the person replying: the one this link was sent to, else the one whose name they typed. */
   function myRow() {
@@ -1889,15 +1889,29 @@ var RSVP_ENDPOINT = "https://script.google.com/macros/s/AKfycbyAEPD6B1uDkxXeg7pF
   function markMe() {
     var me = myRow();
     var rows = whoBox.querySelectorAll('.row');
-    for (var i = 0; i < rows.length; i++) rows[i].classList.toggle('is-me', i === me);
+    for (var i = 0; i < rows.length; i++) rows[i].classList.toggle('is-me', +rows[i].dataset.i === me);
+  }
+  function label(text, note) {
+    var l = document.createElement('div'); l.className = 'who-lbl'; l.textContent = text;
+    if (note) { var sm = document.createElement('small'); sm.textContent = note; l.appendChild(sm); }
+    return l;
   }
   function buildWho() {
     whoBox.innerHTML = '';
     var list = members.length ? members : [guestName || 'You'];
-    list.forEach(function (m, i) {
-      var row = document.createElement('div'); row.className = 'row';
+    /* The person this link was sent to comes first, under "Your reply"; everyone else follows, marked optional. */
+    var me = personIdx && members[personIdx - 1] ? personIdx - 1 : -1;
+    var order = list.map(function (_, i) { return i; });
+    if (me >= 0 && list.length > 1) order = [me].concat(order.filter(function (i) { return i !== me; }));
+    var grouped = me >= 0 && list.length > 1;
+    whoBox.classList.toggle('is-grouped', grouped);
+    fWho.classList.toggle('is-grouped', grouped);   /* the group labels carry the structure, so the legend steps back for sighted readers */
+    order.forEach(function (i, k) {
+      var m = list[i];
+      if (grouped && k === 0) whoBox.appendChild(label('Your reply'));
+      if (grouped && k === 1) whoBox.appendChild(label('Also in your party', 'optional'));
+      var row = document.createElement('div'); row.className = 'row'; row.dataset.i = i;
       var nm = document.createElement('div'); nm.className = 'nm'; nm.textContent = m;
-      var em = document.createElement('em'); em.innerHTML = FLOWER + '<span class="sr-only">(your reply)</span>'; nm.appendChild(em);
       var opts = document.createElement('div'); opts.className = 'opts';
       ANSWERS.forEach(function (a) {
         var l = document.createElement('label'), inp = document.createElement('input'), sp = document.createElement('span');
@@ -1917,7 +1931,8 @@ var RSVP_ENDPOINT = "https://script.google.com/macros/s/AKfycbyAEPD6B1uDkxXeg7pF
       });
       row.appendChild(nm); row.appendChild(opts); whoBox.appendChild(row);
     });
-    $('whoHint').hidden = list.length < 2;   /* the "answer for everyone" note only makes sense when there is more than one row */
+    $('whoHint').hidden = list.length < 2;   /* the note only makes sense when there is more than one row */
+    $('whoHint').textContent = grouped ? 'Answer for anyone you can. The rest can reply later from their own link.' : 'Answer for everyone you can. Anyone left blank can reply later from this link.';
     markMe();
   }
   function answers() {
@@ -1984,7 +1999,7 @@ var RSVP_ENDPOINT = "https://script.google.com/macros/s/AKfycbyAEPD6B1uDkxXeg7pF
     var need = me >= 0 ? me : (ans.some(function (a) { return a.answer; }) ? -1 : 0);   /* your own row, or at least one row if we can't tell which is you */
     var whoOk = need < 0 || !!ans[need].answer;
     fWho.classList.toggle('is-invalid', !whoOk);
-    for (var i = 0; i < rows.length; i++) rows[i].classList.toggle('is-invalid', !whoOk && i === need);
+    for (var i = 0; i < rows.length; i++) rows[i].classList.toggle('is-invalid', !whoOk && +rows[i].dataset.i === need);
     if (!whoOk) ok = false;
     /* the reason goes right above the button, where the tap happened; the field itself is marked too */
     var why = !whoOk ? (me >= 0 ? 'Please let us know if you can make it before you send.' : 'Please answer for at least one person before you send.')
