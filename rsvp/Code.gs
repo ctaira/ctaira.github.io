@@ -23,7 +23,7 @@ var RSVP_DEADLINE = 'January 31, 2027';
 var GUEST_LIST = 'Guest List';   // the couple's own list: one row per person, with "Linked to another guest?"
 var GUESTS = 'Households';       // built from it by the Invitations menu: one row per household
 var LINK_COLUMN = 9;             // Guest List column that receives each person's invite link (9 = I)
-var SCRIPT_VERSION = 6;          // shown in the Invitations menu's messages, so you can tell which copy is running
+var SCRIPT_VERSION = 7;          // shown in the Invitations menu's messages, so you can tell which copy is running
 var RESPONSES = 'Responses';
 var MAX_SEATS = 6;
 var CODE_ALPHABET = 'abcdefghjkmnpqrstuvwxyz23456789'; // no 0/o/1/l, so codes survive being read aloud
@@ -165,6 +165,9 @@ function guestLink(code, personIdx) { return SITE_URL + '?i=' + code + (personId
 
 function sendConfirmation(guest, reply) {
   if (!reply.email) return;
+  /* the link leads back to the person who replied, so the page opens on their own row rather than the household view */
+  var idx = 0; (guest.members || []).forEach(function (m, i) { if (nameKey(m) === nameKey(reply.name)) idx = i + 1; });
+  var back = guestLink(guest.code, idx);
   var lines = reply.people.filter(function (p) { return p.answer; }).map(function (p) { return [p.name, ATTENDING_TEXT[p.answer]]; });
   var unanswered = reply.people.filter(function (p) { return !p.answer; }).map(function (p) { return p.name; });
   if (reply.dietary) lines.push(['Dietary', reply.dietary]);
@@ -181,11 +184,11 @@ function sendConfirmation(guest, reply) {
     '<p style="margin:0 0 18px">' + escapeHtml(lead) + '</p>' +
     '<table style="border-collapse:collapse;margin:0 0 6px">' + rows + '</table>' + later +
     '<p style="margin:22px 0 0;font-size:14px;color:#5B5D55">Need to change something? Open your invitation again and send a new reply any time before ' + escapeHtml(RSVP_DEADLINE) + '. The latest answer for each person counts.</p>',
-    'Open your invitation', guestLink(guest.code)
+    'Open your invitation', back
   );
   var text = lead + '\n\n' + lines.map(function (l) { return l[0] + ': ' + l[1]; }).join('\n') +
     (unanswered.length ? '\n\nStill to reply: ' + unanswered.join(', ') + '.' : '') +
-    '\n\nTo change your reply before ' + RSVP_DEADLINE + ', open your invitation again: ' + guestLink(guest.code);
+    '\n\nTo change your reply before ' + RSVP_DEADLINE + ', open your invitation again: ' + back;
   MailApp.sendEmail(mailOptions(reply.email, reply.coming ? CONFIRM_SUBJECT_COMING : CONFIRM_SUBJECT_NOT, html, text));
 }
 
