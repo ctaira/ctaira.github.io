@@ -660,7 +660,8 @@ html.has-lightbox{overflow:hidden}
 .who-lbl{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-line);margin:1.3em 0 .1em}
 .who-lbl:first-child{margin-top:0}
 .who-me .row{padding-top:.2em}
-.who .nm .paw{height:2.1em;width:auto;vertical-align:-.45em;margin:-.9em 0 -.5em .3em}
+.who .nm{display:flex;align-items:center;flex-wrap:wrap}
+.who .nm .paw{height:2.1em;width:auto;margin:-1em 0 -1em .3em}   /* centred on the name's text line; the negative margins keep the row no taller */
 #fName .who-me:not(:empty)+.err{margin-top:.5em}
 .who .opts{display:flex;gap:6px;flex:none}
 .who .opts label{margin:0;letter-spacing:0;text-transform:none;position:relative}
