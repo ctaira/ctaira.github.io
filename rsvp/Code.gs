@@ -192,12 +192,15 @@ function sendConfirmation(guest, reply) {
   var rows = lines.map(function (l) {
     return '<tr><td style="padding:6px 16px 6px 0;font-family:Menlo,Consolas,monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#5B5D55;vertical-align:top">' + escapeHtml(l[0]) + '</td><td style="padding:6px 0;vertical-align:top">' + escapeHtml(l[1]) + '</td></tr>';
   }).join('');
-  var lead = lines.some(function (l) { return l[1] !== 'Not coming'; })
+  /* the greeting follows the person who replied: their own answer if they are in the household, else what this reply said */
+  var mine = ''; all.forEach(function (m) { if (nameKey(m) === nameKey(reply.name)) mine = current[m] || ''; });
+  var coming = mine ? mine !== 'no' : reply.coming;
+  var lead = coming
     ? "Thank you. Your reply is in, and we'll be in touch with booking details for the estate."
     : "Thank you for letting us know. We'll miss you, and we'll raise a glass to you from the cliff.";
   var later = unanswered.length ? '<p style="margin:14px 0 0;font-size:14px;color:#5B5D55">Still to reply: ' + escapeHtml(unanswered.join(', ')) + '. They can answer any time from their own invitation.</p>' : '';
   var html = emailShell(
-    lines.some(function (l) { return l[1] !== 'Not coming'; }) ? "We can't wait" : "We'll miss you",
+    coming ? "We can't wait" : "We'll miss you",
     '<p style="margin:0 0 18px">' + escapeHtml(lead) + '</p>' +
     '<table style="border-collapse:collapse;margin:0 0 6px">' + rows + '</table>' + later +
     '<p style="margin:22px 0 0;font-size:14px;color:#5B5D55">Need to change something? Open your invitation again and send a new reply any time before ' + escapeHtml(RSVP_DEADLINE) + '. The latest answer for each person counts.</p>',
@@ -206,8 +209,7 @@ function sendConfirmation(guest, reply) {
   var text = lead + '\n\n' + lines.map(function (l) { return l[0] + ': ' + l[1]; }).join('\n') +
     (unanswered.length ? '\n\nStill to reply: ' + unanswered.join(', ') + '.' : '') +
     '\n\nTo change your reply before ' + RSVP_DEADLINE + ', open your invitation again: ' + back;
-  var anyComing = lines.some(function (l) { return l[1] !== 'Not coming'; });
-  MailApp.sendEmail(mailOptions(reply.email, anyComing ? CONFIRM_SUBJECT_COMING : CONFIRM_SUBJECT_NOT, html, text));
+  MailApp.sendEmail(mailOptions(reply.email, coming ? CONFIRM_SUBJECT_COMING : CONFIRM_SUBJECT_NOT, html, text));
 }
 
 /** Fills the Guest List's "RSVP Status" column, if it has one, with each person's latest answer. */
