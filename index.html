@@ -659,7 +659,8 @@ html.has-lightbox{overflow:hidden}
 #fWho.is-grouped legend{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .who-lbl{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-line);margin:1.3em 0 .1em}
 .who-lbl:first-child{margin-top:0}
-.who-me .row{padding:.75em 0 0;border-bottom:0;justify-content:flex-start}
+.who-me .row{padding-top:.2em}
+#fName .who-me:not(:empty)+.err{margin-top:.5em}
 .who .opts{display:flex;gap:6px;flex:none}
 .who .opts label{margin:0;letter-spacing:0;text-transform:none;position:relative}
 .who .opts input{position:absolute;opacity:0;width:1px;height:1px;margin:0}
@@ -1904,6 +1905,7 @@ var RSVP_ENDPOINT = "https://script.google.com/macros/s/AKfycbyAEPD6B1uDkxXeg7pF
     var me = personIdx && members[personIdx - 1] ? personIdx - 1 : -1;
     var grouped = me >= 0;
     $('nameLabel').textContent = grouped ? 'Your name and reply' : 'Your name';
+    $('name').hidden = grouped;   /* the link already names them: their row below shows the name, the box keeps it for the reply */
     fWho.classList.toggle('is-grouped', grouped);   /* the group label carries the structure, so the legend steps back for sighted readers */
     fWho.hidden = grouped && list.length < 2;       /* nobody else to answer for */
     var others = list.map(function (_, i) { return i; }).filter(function (i) { return i !== me; });
@@ -1929,8 +1931,7 @@ var RSVP_ENDPOINT = "https://script.google.com/macros/s/AKfycbyAEPD6B1uDkxXeg7pF
         });
         l.appendChild(inp); l.appendChild(sp); opts.appendChild(l);
       });
-      if (!mine) row.appendChild(nm);   /* the reader's own name is the field above */
-      row.appendChild(opts); (mine ? whoMe : whoBox).appendChild(row);
+      row.appendChild(nm); row.appendChild(opts); (mine ? whoMe : whoBox).appendChild(row);
     });
     $('whoHint').hidden = list.length < 2;   /* the note only makes sense when there is someone else to answer for */
     $('whoHint').textContent = grouped ? 'Answer for anyone you can. The rest can reply later from their own link.' : 'Answer for everyone you can. Anyone left blank can reply later from this link.';
