@@ -660,8 +660,6 @@ html.has-lightbox{overflow:hidden}
 .who-lbl{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-line);margin:1.3em 0 .1em}
 .who-lbl:first-child{margin-top:0}
 .who-me .row{padding-top:.2em}
-#nameLabel.has-paw{display:flex;align-items:center;gap:.55em;margin-bottom:.55em}
-#nameLabel .paw{height:34px;width:auto;margin:-10px 0}   /* centred on the label text; the label's own margin keeps it off the row below */
 #fName .who-me:not(:empty)+.err{margin-top:.5em}
 .who .opts{display:flex;gap:6px;flex:none}
 .who .opts label{margin:0;letter-spacing:0;text-transform:none;position:relative}
@@ -1907,8 +1905,6 @@ var RSVP_ENDPOINT = "https://script.google.com/macros/s/AKfycbyAEPD6B1uDkxXeg7pF
     var me = personIdx && members[personIdx - 1] ? personIdx - 1 : -1;
     var grouped = me >= 0;
     $('nameLabel').textContent = grouped ? 'Your name and reply' : 'Your name';
-    $('nameLabel').classList.toggle('has-paw', grouped);
-    if (grouped) { var paw = document.createElement('img'); paw.className = 'paw'; paw.src = 'assets/paw.webp'; paw.alt = ''; paw.decoding = 'async'; $('nameLabel').appendChild(paw); }   /* the paw sits with the label that names the reader */
     $('name').hidden = grouped;   /* the link already names them: their row below shows the name, the box keeps it for the reply */
     fWho.classList.toggle('is-grouped', grouped);   /* the group label carries the structure, so the legend steps back for sighted readers */
     fWho.hidden = grouped && list.length < 2;       /* nobody else to answer for */
