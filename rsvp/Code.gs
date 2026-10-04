@@ -23,7 +23,7 @@ var RSVP_DEADLINE = 'January 31, 2027';
 var GUEST_LIST = 'Guest List';   // the couple's own list: one row per person, with "Linked to another guest?"
 var GUESTS = 'Households';       // built from it by the Invitations menu: one row per household
 var LINK_COLUMN = 9;             // Guest List column that receives each person's invite link (9 = I)
-var SCRIPT_VERSION = 12;          // shown in the Invitations menu's messages, so you can tell which copy is running
+var SCRIPT_VERSION = 13;          // shown in the Invitations menu's messages, so you can tell which copy is running
 var RESPONSES = 'Responses';
 var MAX_SEATS = 6;
 var CODE_ALPHABET = 'abcdefghjkmnpqrstuvwxyz23456789'; // no 0/o/1/l, so codes survive being read aloud
@@ -427,7 +427,7 @@ function sendNextHousehold() {
   if (answer !== ui.Button.YES) return;
   if (MailApp.getRemainingDailyQuota() < h.to.length) { ui.alert('Not enough of today\'s email limit left for this household (' + h.to.length + ' emails). Try again tomorrow.'); return; }
   var n = sendHousehold(sheet, h);
-  ui.alert('Sent ' + n + ' email(s) to ' + h.name + '. ' + (pending.length - 1) + ' household(s) still to send.');
+  ui.alert((n ? 'Sent ' + n + ' email(s) to ' + h.name + '.' : 'Everyone in ' + h.name + ' with an address had already been sent an invitation, so no email went out; the household is now marked sent.') + ' ' + (pending.length - 1) + ' household(s) still to send.');
 }
 
 /** The household on the row you have selected in the Households tab, whether or not it is marked sent. */
@@ -446,7 +446,7 @@ function sendSelectedHousehold() {
   if (answer !== ui.Button.YES) return;
   if (MailApp.getRemainingDailyQuota() < h.to.length) { ui.alert('Not enough of today\'s email limit left for this household.'); return; }
   var n = sendHousehold(sheet, h);
-  ui.alert('Sent ' + n + ' email(s) to ' + h.name + '.');
+  ui.alert(n ? 'Sent ' + n + ' email(s) to ' + h.name + '.' : 'Everyone in ' + h.name + ' with an address had already been sent an invitation (see the Guest List\'s "Invite sent" column), so no email went out; the household is now marked sent.');
 }
 
 /** Emails every household row that has a code and addresses but no value in "sent" (F): one email per person,
