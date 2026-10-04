@@ -16,6 +16,8 @@
 var SITE_URL = 'https://ashleyandcharlesinbali.com/';   // the live site, with trailing slash; used to build invitation links and to load the email artwork
 var FROM_NAME = 'Ashley & Charles';       // sender name on every email (the address is the Google account running this)
 var CC_INVITES = 'ashley.plus.charles@gmail.com';   // every invitation is copied here, unless this account is the one sending
+var CONFIRM_FROM = 'charles.h.taira@gmail.com';   // RSVP confirmations go out from here, if it is a verified "Send mail as" alias on the account that owns the deployment; otherwise from that account
+var CONFIRM_CC = 'ashleydong97@gmail.com, ashley.plus.charles@gmail.com';   // every confirmation is copied here
 var REPLY_TO = '';                        // empty: replies go to whoever sent. Invitations sent from the menu go out as the person who clicked it, so each of you can send to your own side from your own account.
 var INVITE_SUBJECT = 'Ashley & Charles are Getting Married | Bali 2027';
 var CONFIRM_SUBJECT_COMING = 'See you in Bali';
@@ -24,7 +26,7 @@ var RSVP_DEADLINE = 'January 31, 2027';
 var GUEST_LIST = 'Guest List';   // the couple's own list: one row per person, with "Linked to another guest?"
 var GUESTS = 'Households';       // built from it by the Invitations menu: one row per household
 var LINK_COLUMN = 9;             // Guest List column that receives each person's invite link (9 = I)
-var SCRIPT_VERSION = 19;          // shown in the Invitations menu's messages, so you can tell which copy is running
+var SCRIPT_VERSION = 20;          // shown in the Invitations menu's messages, so you can tell which copy is running
 var RESPONSES = 'Responses';
 var MAX_SEATS = 6;
 var CODE_ALPHABET = 'abcdefghjkmnpqrstuvwxyz23456789'; // no 0/o/1/l, so codes survive being read aloud
@@ -210,7 +212,20 @@ function sendConfirmation(guest, reply) {
   var text = lead + '\n\n' + lines.map(function (l) { return l[0] + ': ' + l[1]; }).join('\n') +
     (unanswered.length ? '\n\nStill to reply: ' + unanswered.join(', ') + '.' : '') +
     '\n\nTo change your reply before ' + RSVP_DEADLINE + ', open your invitation again: ' + back;
-  MailApp.sendEmail(mailOptions(reply.email, coming ? CONFIRM_SUBJECT_COMING : CONFIRM_SUBJECT_NOT, html, text));
+  var opts = mailOptions(reply.email, coming ? CONFIRM_SUBJECT_COMING : CONFIRM_SUBJECT_NOT, html, text);
+  if (CONFIRM_CC) opts.cc = CONFIRM_CC;
+  sendAs(opts, CONFIRM_FROM);
+}
+
+/** Sends from `from` when it is one of this account's verified "Send mail as" aliases (through the Gmail service,
+    which can set the From address); otherwise plainly, from the account itself. */
+function sendAs(opts, from) {
+  var ok = false;
+  if (from) { try { ok = GmailApp.getAliases().some(function (a) { return String(a).toLowerCase() === from.toLowerCase(); }); } catch (e) { ok = false; } }
+  if (!ok) { MailApp.sendEmail(opts); return; }
+  var o = { htmlBody: opts.htmlBody, name: opts.name, from: from };
+  if (opts.cc) o.cc = opts.cc; if (opts.replyTo) o.replyTo = opts.replyTo; if (opts.inlineImages) o.inlineImages = opts.inlineImages;
+  GmailApp.sendEmail(opts.to, opts.subject, opts.body, o);
 }
 
 /** Fills the Guest List's "RSVP Status" column, if it has one, with each person's latest answer. */
