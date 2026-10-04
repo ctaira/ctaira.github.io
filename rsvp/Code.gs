@@ -23,7 +23,7 @@ var RSVP_DEADLINE = 'January 31, 2027';
 var GUEST_LIST = 'Guest List';   // the couple's own list: one row per person, with "Linked to another guest?"
 var GUESTS = 'Households';       // built from it by the Invitations menu: one row per household
 var LINK_COLUMN = 9;             // Guest List column that receives each person's invite link (9 = I)
-var SCRIPT_VERSION = 11;          // shown in the Invitations menu's messages, so you can tell which copy is running
+var SCRIPT_VERSION = 12;          // shown in the Invitations menu's messages, so you can tell which copy is running
 var RESPONSES = 'Responses';
 var MAX_SEATS = 6;
 var CODE_ALPHABET = 'abcdefghjkmnpqrstuvwxyz23456789'; // no 0/o/1/l, so codes survive being read aloud
@@ -295,6 +295,7 @@ function onOpen() {
   SpreadsheetApp.getUi().createMenu('Invitations')
     .addItem('Build households from Guest List', 'buildHouseholds')
     .addItem('Fill missing codes and links', 'fillCodes')
+    .addItem('Send to the selected guests (Guest List rows)', 'sendSelectedGuests')
     .addItem('Send the next unsent household', 'sendNextHousehold')
     .addItem('Send the selected household', 'sendSelectedHousehold')
     .addItem('Send invitations to unsent rows', 'sendInvitations')
@@ -329,11 +330,91 @@ function pendingHouseholds(sheet, rows) {
   }
   return pending;
 }
-/** One household, whole: every recipient emailed, then the row's sent date written. Returns the number of emails. */
+/** The Guest List's columns, found by header, plus the "Invite sent" column (made at the end if missing). */
+function guestListColumns(makeSent) {
+  var src = ss().getSheetByName(GUEST_LIST), rows = src.getDataRange().getValues(), h = -1, c, col = {};
+  for (var r = 0; r < rows.length && h < 0; r++) for (c = 0; c < rows[r].length; c++) if (nameKey(rows[r][c]) === 'first name') { h = r; break; }
+  if (h < 0) return null;
+  for (c = 0; c < rows[h].length; c++) {
+    var k = nameKey(rows[h][c]);
+    if (k.indexOf('first') === 0) col.first = c; else if (k.indexOf('last') === 0) col.last = c; else if (k.indexOf('email') === 0) col.email = c;
+    else if (/^(invite|unique) link$/.test(k)) col.link = c; else if (k === 'invite sent') col.sent = c;
+  }
+  if (col.sent == null && makeSent) { col.sent = src.getLastColumn(); src.getRange(h + 1, col.sent + 1).setValue('Invite sent'); rows = src.getDataRange().getValues(); }
+  return { sheet: src, rows: rows, header: h, col: col };
+}
+/** Addresses already stamped "Invite sent" on the Guest List, lower-cased. */
+function stampedEmails() {
+  var g = guestListColumns(false), out = {};
+  if (!g || g.col.sent == null || g.col.email == null) return out;
+  for (var r = g.header + 1; r < g.rows.length; r++) if (g.rows[r][g.col.sent]) parseRecipients(g.rows[r][g.col.email]).forEach(function (x) { out[x.email.toLowerCase()] = true; });
+  return out;
+}
+/** Stamps the Guest List rows whose address is among these, so the per-person and per-household sends agree. */
+function stampGuests(emails) {
+  var g = guestListColumns(true); if (!g || g.col.email == null) return;
+  var want = {}; emails.forEach(function (e) { want[e.toLowerCase()] = true; });
+  for (var r = g.header + 1; r < g.rows.length; r++) {
+    if (g.rows[r][g.col.sent]) continue;
+    var hit = parseRecipients(g.rows[r][g.col.email]).some(function (x) { return want[x.email.toLowerCase()]; });
+    if (hit) g.sheet.getRange(r + 1, g.col.sent + 1).setValue(new Date());
+  }
+}
+/** One household, whole: every recipient not already sent to is emailed, then the row's sent date written. Returns the number of emails. */
 function sendHousehold(sheet, h) {
-  for (var j = 0; j < h.to.length; j++) sendInvitation(h, h.to[j]);
+  var done = stampedEmails(), sent = [];
+  for (var j = 0; j < h.to.length; j++) { if (done[h.to[j].email.toLowerCase()]) continue; sendInvitation(h, h.to[j]); sent.push(h.to[j].email); }
   sheet.getRange(h.row, 6).setValue(new Date());
-  return h.to.length;
+  if (sent.length) stampGuests(sent);
+  return sent.length;
+}
+
+/** Hand-picked: the people on the rows you have selected on the Guest List tab, one email each, to their own
+    address with their own link. Marks each in an "Invite sent" column; a household is marked sent once everyone
+    in it with an address has had theirs. */
+function sendSelectedGuests() {
+  var ui = SpreadsheetApp.getUi(), active = ss().getActiveSheet();
+  if (!active || active.getName() !== GUEST_LIST) { ui.alert('Select one or more rows on the ' + GUEST_LIST + ' tab first.'); return; }
+  var g = guestListColumns(true); if (!g) { ui.alert('The ' + GUEST_LIST + ' tab has no "First Name" header.'); return; }
+  if (g.col.link == null) { ui.alert('The ' + GUEST_LIST + ' tab has no "Invite link" column. Run "Build households from Guest List" first.'); return; }
+  var range = active.getActiveRange(), r0 = range.getRow(), n = range.getNumRows();
+  var picks = [], skipped = [];
+  for (var r = r0; r < r0 + n; r++) {
+    if (r <= g.header + 1 || r > g.rows.length) continue;
+    var row = g.rows[r - 1], name = clean((row[g.col.first] || '') + ' ' + (row[g.col.last] || ''), 80);
+    if (!name.trim()) continue;
+    var to = parseRecipients(row[g.col.email])[0];
+    var m = String(row[g.col.link] || '').match(/[?&]i=([a-z0-9]{6})/);
+    if (!to) { skipped.push(name + ' (no email)'); continue; }
+    if (!m) { skipped.push(name + ' (no invite link)'); continue; }
+    var guest = findGuest(m[1]);
+    if (!guest) { skipped.push(name + ' (household not found)'); continue; }
+    picks.push({ row: r, name: name, email: to.email, guest: guest, already: !!row[g.col.sent] });
+  }
+  if (!picks.length) { ui.alert('Nothing to send on the selected row(s).' + (skipped.length ? '\n\nSkipped: ' + skipped.join(', ') : '')); return; }
+  var lines = picks.map(function (x) { return x.name + ' <' + x.email + '>' + (x.already ? '  (already sent: this would be a second email)' : ''); });
+  var answer = ui.alert('Send to ' + picks.length + ' guest(s)?', lines.join('\n') + (skipped.length ? '\n\nSkipped: ' + skipped.join(', ') : ''), ui.ButtonSet.YES_NO);
+  if (answer !== ui.Button.YES) return;
+  if (MailApp.getRemainingDailyQuota() < picks.length) { ui.alert('Not enough of today\'s email limit left for ' + picks.length + ' email(s).'); return; }
+  var sent = 0;
+  picks.forEach(function (x) {
+    sendInvitation(x.guest, { name: x.name, email: x.email });
+    g.sheet.getRange(x.row, g.col.sent + 1).setValue(new Date()); sent++;
+  });
+  settleHouseholds(picks.map(function (x) { return x.guest.code; }));
+  ui.alert('Sent ' + sent + ' email(s).');
+}
+/** A household whose every addressed member is stamped on the Guest List is marked sent on the Households tab. */
+function settleHouseholds(codes) {
+  var sheet = ss().getSheetByName(GUESTS), rows = sheet.getDataRange().getValues(), done = stampedEmails(), seen = {};
+  codes.forEach(function (code) {
+    if (seen[code]) return; seen[code] = true;
+    for (var r = 1; r < rows.length; r++) {
+      if (normaliseCode(rows[r][0]) !== code || rows[r][5]) continue;
+      var to = parseRecipients(rows[r][3]);
+      if (to.length && to.every(function (t) { return done[t.email.toLowerCase()]; })) sheet.getRange(r + 1, 6).setValue(new Date());
+    }
+  });
 }
 
 /** One at a time, in sheet order: the first household not yet marked sent. Check Sent in Gmail, then run again. */
