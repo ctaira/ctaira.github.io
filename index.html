@@ -498,6 +498,8 @@ html.has-lightbox{overflow:hidden}
 .countdown{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;max-width:360px;margin-top:.4em}
 /* quiet links: calendar, directions */
 .quiet-links{margin:.7em 0 1.5em;display:flex;flex-wrap:wrap;justify-content:center;gap:.6em 1.5em}
+.confirm-copy{font-size:15px;color:var(--olive-soft)}
+.confirm-copy b{font-weight:500;color:var(--olive)}
 .confirm-lead{display:block;font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-line);margin-top:1.6em}
 .qlink{font-family:var(--mono);font-size:14px;letter-spacing:.1em;text-transform:uppercase;color:var(--olive);text-decoration:none;border-bottom:1px solid rgba(155,139,87,.65);padding-bottom:2px;white-space:nowrap}
 .qlink:hover,.qlink:focus-visible{color:var(--ink);border-bottom-color:var(--olive);outline:none}
@@ -1140,6 +1142,7 @@ html.has-lightbox{overflow:hidden}
     <div class="confirm" id="confirmYes">
       <h3>We can't wait.</h3>
       <p>Thank you. Your reply is in, and we'll be in touch with booking details for the estate and a few notes on getting to Bali.</p>
+      <p class="confirm-copy" hidden>A copy of your reply is on its way from <b>ashley.plus.charles@gmail.com</b>. If it lands in your spam folder, marking it “Not spam” helps our later emails reach you.</p>
       <span class="confirm-lead">Save the weekend</span>
       <p class="quiet-links">
         <a class="qlink" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Ashley+%26+Charles+%C2%B7+Wedding+weekend+in+Bali&amp;dates=20270827T050000Z%2F20270828T150000Z&amp;ctz=Asia%2FMakassar&amp;location=AYANA+Bali%2C+Jimbaran%2C+Bali%2C+Indonesia&amp;details=Friday+Aug+27%2C+1%3A00+PM%3A+tea+ceremony+at+AYANA+Rimba+(optional)%2C+then+the+welcome+party+at+Rock+Bar+from+4%3A30+PM.%0ASaturday+Aug+28%2C+4%3A30+PM%3A+ceremony+at+AYANA+SKY%2C+then+dinner+and+dancing.%0Ahttps%3A%2F%2Fashleyandcharlesinbali.com" target="_blank" rel="noopener">Google Calendar</a>
@@ -1152,6 +1155,7 @@ html.has-lightbox{overflow:hidden}
       <h3>We'll miss you.</h3>
       <p>Thank you for letting us know. We understand completely, and we'll raise a glass to you from the cliff.</p>
       <p>If anything changes before the end of January, just open your invitation again and send a new reply.</p>
+      <p class="confirm-copy" hidden>A copy of your reply is on its way from <b>ashley.plus.charles@gmail.com</b>. If it lands in your spam folder, marking it “Not spam” helps our later emails reach you.</p>
       <span class="mono">With love · Ashley &amp; Charles</span>
     </div>
 
@@ -2081,6 +2085,7 @@ var RSVP_ENDPOINT = "https://script.google.com/macros/s/AKfycbw67OYinQn86DRyjkKN
     form.hidden = true;
     $('deadline').hidden = true;
     var el = $(declined ? 'confirmNo' : 'confirmYes');
+    var copy = el.querySelector('.confirm-copy'); if (copy) copy.hidden = !emailed;   /* promised only once the script says the email went out */
     el.classList.add('is-visible');
     el.setAttribute('tabindex', '-1');
     el.focus({ preventScroll: true });
