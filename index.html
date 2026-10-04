@@ -1487,6 +1487,16 @@ var RSVP_ENDPOINT = "https://script.google.com/macros/s/AKfycbw67OYinQn86DRyjkKN
       tweenBook(DIVE, 1100);
       scrollTween(to, dur || 900, 300);
     }
+    /* The lock holds the page at the top while the film plays. iOS can let a flick carry the page past it
+       anyway, and then every swipe up is swallowed while the lock is still on. If the page has moved while
+       locked, the lock has already lost: let go and give the page back to the browser. */
+    function unstick() {
+      if (!locked || window.pageYOffset < 40) return false;
+      stopPlay(); if (window.startLazy) startLazy();
+      if (beat < END) { beat = END; draw(); }
+      step = CPS.length; lock(false); setCtrl('off'); cooldownUntil = 0;
+      return true;
+    }
     function playFrom(n) {   /* play chapter n and everything after it */
       lock(true); setCtrl('playing');
       (function part(k) {
@@ -1527,6 +1537,7 @@ var RSVP_ENDPOINT = "https://script.google.com/macros/s/AKfycbw67OYinQn86DRyjkKN
     var wheelSum = 0, wheelReset = 0;
     window.addEventListener('wheel', function (e) {
       if (e.ctrlKey) return;                                  /* a trackpad pinch: the browser zooms */
+      if (unstick()) return;
       if (!locked) {
         if (performance.now() < cooldownUntil) { e.preventDefault(); return; }   /* the inertia of the gesture that just released the page */
         cancelOpen();                                                               /* otherwise the guest's scroll wins over any glide in progress */
@@ -1546,6 +1557,7 @@ var RSVP_ENDPOINT = "https://script.google.com/macros/s/AKfycbw67OYinQn86DRyjkKN
     window.addEventListener('touchmove', function (e) {
       if (touchY == null || e.touches.length > 1 || zoomed()) return;
       var dy = touchY - e.touches[0].clientY;
+      if (unstick()) return;
       if (!locked) { if (performance.now() >= cooldownUntil) cancelOpen(); return; }
       if (e.cancelable) e.preventDefault();
       if (touchFired || performance.now() < cooldownUntil) return;
@@ -1782,6 +1794,7 @@ var RSVP_ENDPOINT = "https://script.google.com/macros/s/AKfycbw67OYinQn86DRyjkKN
     /* after the film, the scene's controls appear whenever the guest is back at the top; nothing locks.
        The stage is sticky, so this goes by scroll position rather than by intersection. */
     function stageWatch() {
+      unstick();
       if (locked || state === 'playing' || state === 'paused' || opening || playing || step !== lastStep()) return;
       var y = window.pageYOffset, nb = END + (DIVE - END) * clamp(y / (vh * .5), 0, 1);   /* the camera's way into the page follows the scroll */
       if (nb !== beat) { beat = nb; draw(); }
