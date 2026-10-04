@@ -24,7 +24,7 @@ var RSVP_DEADLINE = 'January 31, 2027';
 var GUEST_LIST = 'Guest List';   // the couple's own list: one row per person, with "Linked to another guest?"
 var GUESTS = 'Households';       // built from it by the Invitations menu: one row per household
 var LINK_COLUMN = 9;             // Guest List column that receives each person's invite link (9 = I)
-var SCRIPT_VERSION = 18;          // shown in the Invitations menu's messages, so you can tell which copy is running
+var SCRIPT_VERSION = 19;          // shown in the Invitations menu's messages, so you can tell which copy is running
 var RESPONSES = 'Responses';
 var MAX_SEATS = 6;
 var CODE_ALPHABET = 'abcdefghjkmnpqrstuvwxyz23456789'; // no 0/o/1/l, so codes survive being read aloud
@@ -304,10 +304,18 @@ function onOpen() {
     .addItem('Send invitations to unsent rows', 'sendInvitations')
     .addItem('Send a test invitation to me', 'sendTestInvitation')
     .addSeparator()
+    .addItem('How many emails can I still send today?', 'showQuota')
     .addItem('Which version is this?', 'showVersion')
     .addToUi();
 }
 
+/** Gmail's sending allowance for the account running the menu: a rolling 24-hour window, counted per recipient. */
+function showQuota() {
+  var left = MailApp.getRemainingDailyQuota(), me = '';
+  try { me = Session.getEffectiveUser().getEmail(); } catch (e) {}
+  var perInvite = CC_INVITES && me.toLowerCase() !== CC_INVITES.toLowerCase() ? 2 : 1;
+  SpreadsheetApp.getUi().alert((me ? me + ' can' : 'You can') + ' send ' + left + ' more email(s) right now. Each invitation counts ' + perInvite + (perInvite === 2 ? ' (the guest plus the CC)' : '') + ', so that is about ' + Math.floor(left / perInvite) + ' invitation(s). The allowance comes back on a rolling 24-hour basis, roughly a day after each email went out.');
+}
 function showVersion() {
   SpreadsheetApp.getUi().alert('Script v' + SCRIPT_VERSION + '. Links go to column ' + LINK_COLUMN + ' of the ' + GUEST_LIST + ' tab.');
 }
