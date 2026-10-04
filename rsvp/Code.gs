@@ -23,7 +23,7 @@ var RSVP_DEADLINE = 'January 31, 2027';
 var GUEST_LIST = 'Guest List';   // the couple's own list: one row per person, with "Linked to another guest?"
 var GUESTS = 'Households';       // built from it by the Invitations menu: one row per household
 var LINK_COLUMN = 9;             // Guest List column that receives each person's invite link (9 = I)
-var SCRIPT_VERSION = 9;          // shown in the Invitations menu's messages, so you can tell which copy is running
+var SCRIPT_VERSION = 10;          // shown in the Invitations menu's messages, so you can tell which copy is running
 var RESPONSES = 'Responses';
 var MAX_SEATS = 6;
 var CODE_ALPHABET = 'abcdefghjkmnpqrstuvwxyz23456789'; // no 0/o/1/l, so codes survive being read aloud
@@ -240,7 +240,9 @@ function invitationEmail(guest, link) {
   return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#E9E4D9" style="background-color:#E9E4D9"><tr><td align="center" style="padding:24px 12px">' +
     '<a href="' + escapeHtml(link) + '" style="display:block;text-decoration:none">' +
     '<img src="cid:hero" width="600" alt="Ashley &amp; Charles are getting married. Bali, Indonesia, August 28, 2027. We can\'t wait to celebrate with you. Open the invitation." style="display:block;width:100%;max-width:600px;height:auto;border:0;background-color:#EEF4F5;color:#2A2C27;font-family:Georgia,serif;font-size:18px;text-align:center">' +
-    '</a></td></tr></table>';
+    '</a>' +
+    '<p style="margin:14px 0 0;font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif;font-size:13px;line-height:1.5;color:#7A7C74">Open your invitation: <a href="' + escapeHtml(link) + '" style="color:#3F5B45">' + escapeHtml(link) + '</a></p>' +   /* a plain link under the artwork, so an email with images blocked still has something to tap */
+    '</td></tr></table>';
 }
 
 /** The beach artwork, fetched once from the site and embedded in each email. */
