@@ -24,7 +24,7 @@ var RSVP_DEADLINE = 'January 31, 2027';
 var GUEST_LIST = 'Guest List';   // the couple's own list: one row per person, with "Linked to another guest?"
 var GUESTS = 'Households';       // built from it by the Invitations menu: one row per household
 var LINK_COLUMN = 9;             // Guest List column that receives each person's invite link (9 = I)
-var SCRIPT_VERSION = 16;          // shown in the Invitations menu's messages, so you can tell which copy is running
+var SCRIPT_VERSION = 17;          // shown in the Invitations menu's messages, so you can tell which copy is running
 var RESPONSES = 'Responses';
 var MAX_SEATS = 6;
 var CODE_ALPHABET = 'abcdefghjkmnpqrstuvwxyz23456789'; // no 0/o/1/l, so codes survive being read aloud
@@ -251,7 +251,7 @@ function invitationEmail(guest, link, salutation) {
     '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;background:#F7F3EA;border-radius:6px"><tr><td style="padding:36px 32px 28px">' +
       '<p style="margin:0 0 6px;' + font + 'font-family:Menlo,Consolas,monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#8C6E4F">Ashley &amp; Charles &middot; AYANA Bali &middot; August 28, 2027</p>' +
       '<p style="margin:0 0 18px;' + font + 'font-size:17px;line-height:1.55;color:#2A2C27">Dear ' + escapeHtml(salutation || 'friends') + ',</p>' +
-      '<p style="margin:0 0 14px;' + font + 'font-size:17px;line-height:1.55;color:#2A2C27">We invite you to join us in Bali for our wedding celebration. Within your invitation below, you&rsquo;ll find details for the weekend, along with helpful information for planning your time in Bali.</p>' +
+      '<p style="margin:0 0 14px;' + font + 'font-size:17px;line-height:1.55;color:#2A2C27">We are thrilled to invite you to celebrate with us in Bali. Within your invitation below, you&rsquo;ll find details for the weekend, along with helpful information for planning your time in Bali.</p>' +
       '<p style="margin:0 0 24px;' + font + 'font-size:17px;line-height:1.55;color:#2A2C27">We look forward to celebrating together and kindly ask that you RSVP by ' + escapeHtml(RSVP_DEADLINE) + '.</p>' +
       '<p style="margin:0 0 30px;text-align:center"><a href="' + escapeHtml(link) + '" style="display:inline-block;background:#242722;color:#F2EDE3;text-decoration:none;padding:15px 30px;border-radius:999px;' + font + 'font-size:13px;letter-spacing:.16em;text-transform:uppercase;font-weight:600">Open the invitation</a></p>' +
       '<a href="' + escapeHtml(link) + '" style="display:block;text-decoration:none"><img src="cid:hero" width="536" alt="Ashley &amp; Charles are getting married. Bali, Indonesia, August 28, 2027. We can\'t wait to celebrate with you." style="display:block;width:100%;max-width:536px;height:auto;border:0;border-radius:4px"></a>' +
@@ -283,7 +283,7 @@ function sendInvitation(guest, to) {
   var idx = 0; (guest.members || []).forEach(function (m, i) { if (nameKey(m) === nameKey(to.name)) idx = i + 1; });   /* the link names the person */
   var link = guestLink(guest.code, idx);
   var html = invitationEmail(guest, link, salutation);
-  var text = 'Dear ' + salutation + ',\n\nWe invite you to join us in Bali for our wedding celebration. Within your invitation, you\u2019ll find details for the weekend, along with helpful information for planning your time in Bali:\n' +
+  var text = 'Dear ' + salutation + ',\n\nWe are thrilled to invite you to celebrate with us in Bali. Within your invitation, you\u2019ll find details for the weekend, along with helpful information for planning your time in Bali:\n' +
     link + '\n\nWe look forward to celebrating together and kindly ask that you RSVP by ' + RSVP_DEADLINE + '.\n\nFriday, August 27 & Saturday, August 28, 2027\nAYANA Bali, Jimbaran, Bali, Indonesia\n\nQuestions? Just reply to this email.\n\nAshley & Charles';
   var opts = mailOptions(to.email, INVITE_SUBJECT, html, text);
   var me = ''; try { me = Session.getEffectiveUser().getEmail(); } catch (e) {}
