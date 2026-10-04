@@ -15,7 +15,7 @@
 
 var SITE_URL = 'https://ashleyandcharlesinbali.com/';   // the live site, with trailing slash; used to build invitation links and to load the email artwork
 var FROM_NAME = 'Ashley & Charles';       // sender name on every email (the address is the Google account running this)
-var REPLY_TO = '';                        // optional: where guest replies to the emails should go
+var REPLY_TO = 'charles.h.taira@gmail.com';   // where guest replies to the emails should go
 var INVITE_SUBJECT = 'Ashley & Charles are getting married in Bali';
 var CONFIRM_SUBJECT_COMING = 'See you in Bali';
 var CONFIRM_SUBJECT_NOT = "We'll miss you in Bali";
@@ -23,7 +23,7 @@ var RSVP_DEADLINE = 'January 31, 2027';
 var GUEST_LIST = 'Guest List';   // the couple's own list: one row per person, with "Linked to another guest?"
 var GUESTS = 'Households';       // built from it by the Invitations menu: one row per household
 var LINK_COLUMN = 9;             // Guest List column that receives each person's invite link (9 = I)
-var SCRIPT_VERSION = 10;          // shown in the Invitations menu's messages, so you can tell which copy is running
+var SCRIPT_VERSION = 11;          // shown in the Invitations menu's messages, so you can tell which copy is running
 var RESPONSES = 'Responses';
 var MAX_SEATS = 6;
 var CODE_ALPHABET = 'abcdefghjkmnpqrstuvwxyz23456789'; // no 0/o/1/l, so codes survive being read aloud
@@ -235,9 +235,17 @@ function writeStatuses() {
 /** The invitation email is the artwork alone, the whole picture a link to the household's invitation.
     The artwork travels inside the email (see heroImage), so nothing has to be fetched when it is opened.
     With images off, the picture's description shows in its place and is still the link. */
-function invitationEmail(guest, link) {
+function invitationEmail(guest, link, salutation) {
   link = link || guestLink(guest.code);
+  var font = 'font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif;';
+  /* a short note in real text above the artwork: it reads naturally, and it keeps the email from looking like a picture with a link */
+  var note = '<div style="max-width:600px;margin:0 auto 18px;text-align:left;' + font + 'font-size:16px;line-height:1.55;color:#2A2C27">' +
+    '<p style="margin:0 0 12px">Dear ' + escapeHtml(salutation || 'friends') + ',</p>' +
+    '<p style="margin:0 0 12px">We\'re getting married in Bali on August 28, 2027, and we would love for you to be there. Your invitation is below. It opens like a letter, so give it a moment to load.</p>' +
+    '<p style="margin:0 0 12px">Please reply by ' + escapeHtml(RSVP_DEADLINE) + '. If anything in it isn\'t clear, just write back to this email.</p>' +
+    '<p style="margin:0">With love,<br>Ashley &amp; Charles</p></div>';
   return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#E9E4D9" style="background-color:#E9E4D9"><tr><td align="center" style="padding:24px 12px">' +
+    note +
     '<a href="' + escapeHtml(link) + '" style="display:block;text-decoration:none">' +
     '<img src="cid:hero" width="600" alt="Ashley &amp; Charles are getting married. Bali, Indonesia, August 28, 2027. We can\'t wait to celebrate with you. Open the invitation." style="display:block;width:100%;max-width:600px;height:auto;border:0;background-color:#EEF4F5;color:#2A2C27;font-family:Georgia,serif;font-size:18px;text-align:center">' +
     '</a>' +
@@ -262,9 +270,9 @@ function sendInvitation(guest, to) {
   var salutation = (to.name || guest.name).split(' ')[0];
   var idx = 0; (guest.members || []).forEach(function (m, i) { if (nameKey(m) === nameKey(to.name)) idx = i + 1; });   /* the link names the person */
   var link = guestLink(guest.code, idx);
-  var html = invitationEmail(guest, link);
-  var text = 'Dear ' + salutation + ',\n\nAshley & Charles are getting married in Bali, Indonesia on August 28, 2027, and we can\'t wait to celebrate with you. Your invitation is here: ' +
-    link + '\n\nIt opens like a letter, so give it a moment. It carries your names and your seats.\n\nPlease reply by ' + RSVP_DEADLINE + '.\n\nAshley & Charles';
+  var html = invitationEmail(guest, link, salutation);
+  var text = 'Dear ' + salutation + ',\n\nWe\'re getting married in Bali on August 28, 2027, and we would love for you to be there. Your invitation is here: ' +
+    link + '\n\nIt opens like a letter, so give it a moment to load.\n\nPlease reply by ' + RSVP_DEADLINE + '. If anything in it isn\'t clear, just write back to this email.\n\nWith love,\nAshley & Charles';
   var opts = mailOptions(to.email, INVITE_SUBJECT, html, text);
   opts.inlineImages = { hero: heroImage() };
   MailApp.sendEmail(opts);
