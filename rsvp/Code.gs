@@ -15,6 +15,7 @@
 
 var SITE_URL = 'https://ashleyandcharlesinbali.com/';   // the live site, with trailing slash; used to build invitation links and to load the email artwork
 var FROM_NAME = 'Ashley & Charles';       // sender name on every email (the address is the Google account running this)
+var CC_INVITES = 'ashley.plus.charles@gmail.com';   // every invitation is copied here, unless this account is the one sending
 var REPLY_TO = '';                        // empty: replies go to whoever sent. Invitations sent from the menu go out as the person who clicked it, so each of you can send to your own side from your own account.
 var INVITE_SUBJECT = 'Ashley & Charles are getting married in Bali';
 var CONFIRM_SUBJECT_COMING = 'See you in Bali';
@@ -23,7 +24,7 @@ var RSVP_DEADLINE = 'January 31, 2027';
 var GUEST_LIST = 'Guest List';   // the couple's own list: one row per person, with "Linked to another guest?"
 var GUESTS = 'Households';       // built from it by the Invitations menu: one row per household
 var LINK_COLUMN = 9;             // Guest List column that receives each person's invite link (9 = I)
-var SCRIPT_VERSION = 14;          // shown in the Invitations menu's messages, so you can tell which copy is running
+var SCRIPT_VERSION = 15;          // shown in the Invitations menu's messages, so you can tell which copy is running
 var RESPONSES = 'Responses';
 var MAX_SEATS = 6;
 var CODE_ALPHABET = 'abcdefghjkmnpqrstuvwxyz23456789'; // no 0/o/1/l, so codes survive being read aloud
@@ -285,6 +286,8 @@ function sendInvitation(guest, to) {
   var text = 'Dear ' + salutation + ',\n\nWe would be delighted to welcome you to Bali for our wedding celebration. Within your invitation, you\u2019ll find details for the weekend, along with helpful information for planning your time in Bali:\n' +
     link + '\n\nWe look forward to celebrating together and kindly ask that you RSVP by ' + RSVP_DEADLINE + '.\n\nFriday, August 27 & Saturday, August 28, 2027\nAYANA Bali, Jimbaran, Bali, Indonesia\n\nQuestions? Just reply to this email.\n\nAshley & Charles';
   var opts = mailOptions(to.email, INVITE_SUBJECT, html, text);
+  var me = ''; try { me = Session.getEffectiveUser().getEmail(); } catch (e) {}
+  if (CC_INVITES && me.toLowerCase() !== CC_INVITES.toLowerCase()) opts.cc = CC_INVITES;
   opts.inlineImages = { hero: heroImage() };
   MailApp.sendEmail(opts);
 }
