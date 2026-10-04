@@ -238,18 +238,29 @@ function writeStatuses() {
 function invitationEmail(guest, link, salutation) {
   link = link || guestLink(guest.code);
   var font = 'font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif;';
-  /* a short note in real text above the artwork: it reads naturally, and it keeps the email from looking like a picture with a link */
-  var note = '<div style="max-width:600px;margin:0 auto 18px;text-align:left;' + font + 'font-size:16px;line-height:1.55;color:#2A2C27">' +
-    '<p style="margin:0 0 12px">Dear ' + escapeHtml(salutation || 'friends') + ',</p>' +
-    '<p style="margin:0 0 12px">We\'re getting married in Bali on August 28, 2027, and we would love for you to be there. Your invitation is below. It opens like a letter, so give it a moment to load.</p>' +
-    '<p style="margin:0 0 12px">Please reply by ' + escapeHtml(RSVP_DEADLINE) + '. If anything in it isn\'t clear, just write back to this email.</p>' +
-    '<p style="margin:0">With love,<br>Ashley &amp; Charles</p></div>';
-  return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#E9E4D9" style="background-color:#E9E4D9"><tr><td align="center" style="padding:24px 12px">' +
-    note +
-    '<a href="' + escapeHtml(link) + '" style="display:block;text-decoration:none">' +
-    '<img src="cid:hero" width="600" alt="Ashley &amp; Charles are getting married. Bali, Indonesia, August 28, 2027. We can\'t wait to celebrate with you. Open the invitation." style="display:block;width:100%;max-width:600px;height:auto;border:0;background-color:#EEF4F5;color:#2A2C27;font-family:Georgia,serif;font-size:18px;text-align:center">' +
-    '</a>' +
-    '<p style="margin:14px 0 0;font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif;font-size:13px;line-height:1.5;color:#7A7C74">Open your invitation: <a href="' + escapeHtml(link) + '" style="color:#3F5B45">' + escapeHtml(link) + '</a></p>' +   /* a plain link under the artwork, so an email with images blocked still has something to tap */
+  var cal = 'https://calendar.google.com/calendar/render?action=TEMPLATE&text=Ashley+%26+Charles+%C2%B7+Wedding+weekend+in+Bali&dates=20270827T050000Z%2F20270828T150000Z&ctz=Asia%2FMakassar&location=AYANA+Bali%2C+Jimbaran%2C+Bali%2C+Indonesia&details=Friday+Aug+27%2C+1%3A00+PM%3A+tea+ceremony+at+AYANA+Rimba+(optional)%2C+then+the+welcome+party+at+Rock+Bar+from+4%3A30+PM.%0ASaturday+Aug+28%2C+4%3A30+PM%3A+ceremony+at+AYANA+SKY%2C+then+dinner+and+dancing.%0Ahttps%3A%2F%2Fashleyandcharlesinbali.com';
+  var maps = 'https://www.google.com/maps/search/?api=1&query=AYANA+Resort+Bali%2C+Jimbaran';
+  var label = font + 'font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#3F5B45;text-decoration:none;font-weight:600;white-space:nowrap';
+  var row = function (title, lines, action, url) {
+    return '<tr><td style="padding:16px 0;border-top:1px solid #E3DED2;' + font + 'font-size:15px;line-height:1.5;color:#2A2C27;vertical-align:top">' + title + '<br><span style="color:#5B5D55">' + lines + '</span></td>' +
+      '<td align="right" style="padding:16px 0 16px 16px;border-top:1px solid #E3DED2;vertical-align:middle"><a href="' + url + '" style="' + label + '">' + action + '</a></td></tr>';
+  };
+  /* Mostly text, with the artwork below it: the greeting and the ask come first, the way an invitation card service lays it out */
+  return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#E9E4D9" style="background-color:#E9E4D9"><tr><td align="center" style="padding:28px 12px">' +
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;background:#F7F3EA;border-radius:6px"><tr><td style="padding:36px 32px 28px">' +
+      '<p style="margin:0 0 6px;' + font + 'font-family:Menlo,Consolas,monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#8C6E4F">Ashley &amp; Charles &middot; AYANA Bali &middot; August 28, 2027</p>' +
+      '<p style="margin:0 0 18px;' + font + 'font-size:17px;line-height:1.55;color:#2A2C27">Dear ' + escapeHtml(salutation || 'friends') + ',</p>' +
+      '<p style="margin:0 0 14px;' + font + 'font-size:17px;line-height:1.55;color:#2A2C27">We\'re getting married in Bali, and we would love for you to be there. Your invitation is below, along with everything you need to plan the trip.</p>' +
+      '<p style="margin:0 0 24px;' + font + 'font-size:17px;line-height:1.55;color:#2A2C27">Please let us know whether you can make it by ' + escapeHtml(RSVP_DEADLINE) + '.</p>' +
+      '<p style="margin:0 0 30px;text-align:center"><a href="' + escapeHtml(link) + '" style="display:inline-block;background:#242722;color:#F2EDE3;text-decoration:none;padding:15px 30px;border-radius:999px;' + font + 'font-size:13px;letter-spacing:.16em;text-transform:uppercase;font-weight:600">Open the invitation</a></p>' +
+      '<a href="' + escapeHtml(link) + '" style="display:block;text-decoration:none"><img src="cid:hero" width="536" alt="Ashley &amp; Charles are getting married. Bali, Indonesia, August 28, 2027. We can\'t wait to celebrate with you." style="display:block;width:100%;max-width:536px;height:auto;border:0;border-radius:4px"></a>' +
+      '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:28px">' +
+        row('Friday, August 27 &amp; Saturday, August 28, 2027', 'Tea ceremony and welcome party, then the wedding on the cliff', 'Add to calendar', cal) +
+        row('AYANA Bali', 'Jimbaran, Bali, Indonesia', 'View location', maps) +
+      '</table>' +
+      '<p style="margin:24px 0 0;' + font + 'font-size:13px;line-height:1.5;color:#7A7C74">Or copy this link: <a href="' + escapeHtml(link) + '" style="color:#3F5B45">' + escapeHtml(link) + '</a></p>' +
+      '<p style="margin:14px 0 0;' + font + 'font-size:13px;line-height:1.5;color:#7A7C74">Questions? Just reply to this email.</p>' +
+    '</td></tr></table>' +
     '</td></tr></table>';
 }
 
@@ -271,8 +282,8 @@ function sendInvitation(guest, to) {
   var idx = 0; (guest.members || []).forEach(function (m, i) { if (nameKey(m) === nameKey(to.name)) idx = i + 1; });   /* the link names the person */
   var link = guestLink(guest.code, idx);
   var html = invitationEmail(guest, link, salutation);
-  var text = 'Dear ' + salutation + ',\n\nWe\'re getting married in Bali on August 28, 2027, and we would love for you to be there. Your invitation is here: ' +
-    link + '\n\nIt opens like a letter, so give it a moment to load.\n\nPlease reply by ' + RSVP_DEADLINE + '. If anything in it isn\'t clear, just write back to this email.\n\nWith love,\nAshley & Charles';
+  var text = 'Dear ' + salutation + ',\n\nWe\'re getting married in Bali, and we would love for you to be there. Your invitation is here, along with everything you need to plan the trip:\n' +
+    link + '\n\nPlease let us know whether you can make it by ' + RSVP_DEADLINE + '.\n\nFriday, August 27 & Saturday, August 28, 2027\nAYANA Bali, Jimbaran, Bali, Indonesia\n\nQuestions? Just reply to this email.\n\nAshley & Charles';
   var opts = mailOptions(to.email, INVITE_SUBJECT, html, text);
   opts.inlineImages = { hero: heroImage() };
   MailApp.sendEmail(opts);
