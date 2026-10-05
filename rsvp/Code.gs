@@ -16,8 +16,8 @@
 var SITE_URL = 'https://ashleyandcharlesinbali.com/';   // the live site, with trailing slash; used to build invitation links and to load the email artwork
 var FROM_NAME = 'Ashley & Charles';       // sender name on every email (the address is the Google account running this)
 var CC_INVITES = 'ashley.plus.charles@gmail.com';   // every invitation is copied here, unless this account is the one sending
-var CONFIRM_FROM = 'charles.h.taira@gmail.com';   // RSVP confirmations go out from here, if it is a verified "Send mail as" alias on the account that owns the deployment; otherwise from that account
-var CONFIRM_CC = 'ashleydong97@gmail.com, ashley.plus.charles@gmail.com';   // every confirmation is copied here
+var CONFIRM_FROM = '';                    // RSVP confirmations go out from the account that owns the deployment (the wedding account). Set a verified "Send mail as" alias here to send from it instead.
+var CONFIRM_CC = 'ashleydong97@gmail.com, charles.h.taira@gmail.com';   // every confirmation is copied here, so you both see each reply in your own inboxes
 var REPLY_TO = '';                        // empty: replies go to whoever sent. Invitations sent from the menu go out as the person who clicked it, so each of you can send to your own side from your own account.
 var INVITE_SUBJECT = 'Ashley & Charles are Getting Married | Bali 2027';
 var CONFIRM_SUBJECT_COMING = 'See you in Bali';
@@ -26,7 +26,7 @@ var RSVP_DEADLINE = 'January 31, 2027';
 var GUEST_LIST = 'Guest List';   // the couple's own list: one row per person, with "Linked to another guest?"
 var GUESTS = 'Households';       // built from it by the Invitations menu: one row per household
 var LINK_COLUMN = 9;             // Guest List column that receives each person's invite link (9 = I)
-var SCRIPT_VERSION = 21;          // shown in the Invitations menu's messages, so you can tell which copy is running
+var SCRIPT_VERSION = 22;          // shown in the Invitations menu's messages, so you can tell which copy is running
 var RESPONSES = 'Responses';
 var MAX_SEATS = 6;
 var CODE_ALPHABET = 'abcdefghjkmnpqrstuvwxyz23456789'; // no 0/o/1/l, so codes survive being read aloud
