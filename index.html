@@ -677,6 +677,7 @@ html.has-lightbox{overflow:hidden}
 .who-me .row{padding-top:.2em}
 .who-me .row.is-unnamed .nm{display:none}   /* the picker above already says who: just their reply */
 .who-me .row.is-unnamed{justify-content:flex-start;padding-top:.5em}
+#rsvpForm.is-unnamed #nameRow ~ *{display:none}   /* a household link asks who you are first; the rest follows the answer */
 #fName .who-me:not(:empty)+.err{margin-top:.5em}
 .who .opts{display:flex;gap:6px;flex:none}
 .who .opts label{margin:0;letter-spacing:0;text-transform:none;position:relative}
@@ -1988,6 +1989,7 @@ var RSVP_ENDPOINT = "https://script.google.com/macros/s/AKfycbxMlL1VRaa93cj5FcDg
       $('nameLabel').htmlFor = 'namePick';
     } else $('nameLabel').htmlFor = 'name';
     $('name').hidden = grouped || (picking && pickedIdx !== -2);   /* the link or the picker already names them */
+    form.classList.toggle('is-unnamed', picking && pickedIdx === -1);
     fWho.classList.toggle('is-grouped', grouped);   /* the group label carries the structure, so the legend steps back for sighted readers */
     fWho.hidden = grouped && list.length < 2;       /* nobody else to answer for */
     var others = list.map(function (_, i) { return i; }).filter(function (i) { return i !== me; });
