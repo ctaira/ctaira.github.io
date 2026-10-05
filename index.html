@@ -1107,6 +1107,7 @@ html.has-lightbox{overflow:hidden}
       <div class="field-row is-single" id="nameRow">
         <div class="field" id="fName">
           <label for="name" id="nameLabel">Your name</label>
+          <select id="namePick" aria-label="Your name" hidden></select>
           <textarea id="name" name="name" class="grow" rows="1" autocomplete="name" maxlength="80" required></textarea>
           <div class="who who-me" id="whoMe"></div>
           <p class="err">Please tell us who you are.</p>
@@ -1961,15 +1962,30 @@ var RSVP_ENDPOINT = "https://script.google.com/macros/s/AKfycbxMlL1VRaa93cj5FcDg
     if (note) { var sm = document.createElement('small'); sm.textContent = note; l.appendChild(sm); }
     return l;
   }
+  var pickedIdx = -1;   /* household link: the member chosen from the picker, -2 for "Someone else", -1 for nothing yet */
   function buildWho() {
+    var keep = typeof answers === 'function' && members.length ? answers() : [];   /* answers already given survive a rebuild */
     whoBox.innerHTML = ''; whoMe.innerHTML = '';
     var list = members.length ? members : [guestName || 'You'];
     /* When the link names a person, their answer sits right under their name ("Your name and reply") and
        everyone else in the household follows under "Also in your party". Otherwise it is one flat list. */
-    var me = personIdx && members[personIdx - 1] ? personIdx - 1 : -1;
+    /* A household link doesn't say who is holding the phone, so the names are offered to pick from. Once picked,
+       the form takes the shape a personal link gives it. "Someone else" opens the box for a reply typed on the
+       household's behalf, with everyone in one flat list. */
+    var pick = $('namePick'), picking = !(personIdx && members[personIdx - 1]) && list.length > 1;
+    var me = personIdx && members[personIdx - 1] ? personIdx - 1 : (picking ? pickedIdx : -1);
     var grouped = me >= 0;
-    $('nameLabel').textContent = grouped ? 'Your name and reply' : 'Your name';
-    $('name').hidden = grouped;   /* the link already names them: their row below shows the name, the box keeps it for the reply */
+    $('nameLabel').textContent = grouped && !picking ? 'Your name and reply' : 'Your name';
+    pick.hidden = !picking;
+    if (picking) {
+      pick.innerHTML = '';
+      [['', 'Choose your name\u2026']].concat(list.map(function (m) { return [m, m]; })).concat([['*', 'Someone else']]).forEach(function (o) {
+        var op = document.createElement('option'); op.value = o[0]; op.textContent = o[1]; pick.appendChild(op);
+      });
+      pick.value = grouped ? list[me] : (pickedIdx === -2 ? '*' : '');
+      $('nameLabel').htmlFor = 'namePick';
+    } else $('nameLabel').htmlFor = 'name';
+    $('name').hidden = grouped || (picking && pickedIdx !== -2);   /* the link or the picker already names them */
     fWho.classList.toggle('is-grouped', grouped);   /* the group label carries the structure, so the legend steps back for sighted readers */
     fWho.hidden = grouped && list.length < 2;       /* nobody else to answer for */
     var others = list.map(function (_, i) { return i; }).filter(function (i) { return i !== me; });
@@ -2000,6 +2016,7 @@ var RSVP_ENDPOINT = "https://script.google.com/macros/s/AKfycbxMlL1VRaa93cj5FcDg
       }
       row.appendChild(nm); row.appendChild(opts); (mine ? whoMe : whoBox).appendChild(row);
     });
+    keep.forEach(function (k, i) { if (k.answer) { var r = form.querySelector('input[name="who' + i + '"][value="' + k.answer + '"]'); if (r) { r.checked = true; r.closest('.row').classList.toggle('is-out', k.answer === 'no'); } } });
     $('whoHint').hidden = list.length < 2;   /* the note only makes sense when there is someone else to answer for */
     var anyPrior = list.some(function (m) { return !!prior[m]; });
     $('whoHint').textContent = (anyPrior ? 'Replies already sent are shown. Change anything and send again. ' : '') + (grouped ? 'Feel free to RSVP on behalf of the guests in your party, or they may respond individually through their own invitation.' : 'Answer for everyone you can. Anyone left blank can reply later from this link.');
@@ -2055,6 +2072,15 @@ var RSVP_ENDPOINT = "https://script.google.com/macros/s/AKfycbxMlL1VRaa93cj5FcDg
   }
 
   function growName() { var el = $('name'); el.style.height = 'auto'; el.style.height = el.scrollHeight + 'px'; }
+  $('namePick').addEventListener('change', function () {
+    var v = this.value, box = $('name');
+    pickedIdx = v === '*' ? -2 : (v ? members.indexOf(v) : -1);
+    box.value = pickedIdx >= 0 ? v : '';
+    buildWho();
+    fName.classList.remove('is-invalid'); fWho.classList.remove('is-invalid');
+    var rows = form.querySelectorAll('.who .row'); for (var i = 0; i < rows.length; i++) rows[i].classList.remove('is-invalid');
+    if (pickedIdx === -2) { growName(); box.focus(); }
+  });
   $('name').addEventListener('input', function () { growName(); if (this.value.trim()) fName.classList.remove('is-invalid'); });
   window.addEventListener('resize', growName);
   $('email').addEventListener('input', function () { if (validEmail(this.value.trim())) fEmail.classList.remove('is-invalid'); });
@@ -2063,7 +2089,7 @@ var RSVP_ENDPOINT = "https://script.google.com/macros/s/AKfycbxMlL1VRaa93cj5FcDg
   function validate() {
     var ok = true, first = null;
     var name = $('name').value.trim();
-    fName.classList.toggle('is-invalid', !name); if (!name) { ok = false; first = first || $('name'); }
+    fName.classList.toggle('is-invalid', !name); if (!name) { ok = false; first = first || ($('namePick').hidden ? $('name') : $('namePick')); }
     var email = $('email').value.trim(), emailOk = validEmail(email);
     fEmail.classList.toggle('is-invalid', !emailOk); if (!emailOk) { ok = false; first = first || $('email'); }
     var me = myRow(), rows = form.querySelectorAll('.who .row'), ans = answers();
