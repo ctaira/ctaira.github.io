@@ -675,6 +675,8 @@ html.has-lightbox{overflow:hidden}
 .who-lbl{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-line);margin:1.3em 0 .1em}
 .who-lbl:first-child{margin-top:0}
 .who-me .row{padding-top:.2em}
+.who-me .row.is-unnamed .nm{display:none}   /* the picker above already says who: just their reply */
+.who-me .row.is-unnamed{justify-content:flex-start;padding-top:.5em}
 #fName .who-me:not(:empty)+.err{margin-top:.5em}
 .who .opts{display:flex;gap:6px;flex:none}
 .who .opts label{margin:0;letter-spacing:0;text-transform:none;position:relative}
@@ -1975,7 +1977,7 @@ var RSVP_ENDPOINT = "https://script.google.com/macros/s/AKfycbxMlL1VRaa93cj5FcDg
     var pick = $('namePick'), picking = !(personIdx && members[personIdx - 1]) && list.length > 1;
     var me = personIdx && members[personIdx - 1] ? personIdx - 1 : (picking ? pickedIdx : -1);
     var grouped = me >= 0;
-    $('nameLabel').textContent = grouped && !picking ? 'Your name and reply' : 'Your name';
+    $('nameLabel').textContent = grouped ? 'Your name and reply' : 'Your name';
     pick.hidden = !picking;
     if (picking) {
       pick.innerHTML = '';
@@ -1992,7 +1994,7 @@ var RSVP_ENDPOINT = "https://script.google.com/macros/s/AKfycbxMlL1VRaa93cj5FcDg
     if (grouped && others.length) whoBox.appendChild(label('Also in your party'));
     (grouped ? [me].concat(others) : others).forEach(function (i) {
       var m = list[i], mine = grouped && i === me;
-      var row = document.createElement('div'); row.className = 'row'; row.dataset.i = i;
+      var row = document.createElement('div'); row.className = 'row' + (mine && picking ? ' is-unnamed' : ''); row.dataset.i = i;
       var nm = document.createElement('div'); nm.className = 'nm'; nm.textContent = m;
       var opts = document.createElement('div'); opts.className = 'opts';
       ANSWERS.forEach(function (a) {
