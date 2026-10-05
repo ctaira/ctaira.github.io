@@ -26,7 +26,7 @@ var RSVP_DEADLINE = 'January 31, 2027';
 var GUEST_LIST = 'Guest List';   // the couple's own list: one row per person, with "Linked to another guest?"
 var GUESTS = 'Households';       // built from it by the Invitations menu: one row per household
 var LINK_COLUMN = 9;             // Guest List column that receives each person's invite link (9 = I)
-var SCRIPT_VERSION = 20;          // shown in the Invitations menu's messages, so you can tell which copy is running
+var SCRIPT_VERSION = 21;          // shown in the Invitations menu's messages, so you can tell which copy is running
 var RESPONSES = 'Responses';
 var MAX_SEATS = 6;
 var CODE_ALPHABET = 'abcdefghjkmnpqrstuvwxyz23456789'; // no 0/o/1/l, so codes survive being read aloud
@@ -92,7 +92,40 @@ function doGet(e) {
   if (!code) return json({ ok: true, service: 'rsvp' });
   var guest = findGuest(code);
   if (!guest) return json({ ok: false, error: 'not_found' });
+  try { stampOpen(guest.code, parseInt(e.parameter.p, 10) || 0); } catch (err) { Logger.log('open stamp failed: ' + err); }   /* never in the way of the lookup */
   return json({ ok: true, name: guest.name, seats: guest.seats, members: guest.members, answers: latestAnswers(guest.code) });
+}
+
+/** Each time an invitation page loads, the Guest List row it was sent to gets a "First opened" date and time
+    (kept from the first visit), a "Last opened" one (the most recent visit) and its "Opens" count goes up by
+    one. The row is found by its link in the "Invite link" column: the code picks the household, the link's
+    p= picks the person. A link without p= counts for the whole household. The three columns are added at the
+    end of the Guest List the first time they are needed. Your own test opens count too, so read it as a
+    nudge list rather than a record. */
+function stampOpen(code, person) {
+  var lock = LockService.getScriptLock();
+  if (!lock.tryLock(5000)) return;          /* two people opening at once: the second stamp is skipped rather than miscounted */
+  try {
+    var g = guestListColumns(false); if (!g || g.col.link == null) return;
+    var c, col = {};
+    for (c = 0; c < g.rows[g.header].length; c++) { var k = nameKey(g.rows[g.header][c]); if (k === 'first opened') col.first = c; else if (k === 'last opened') col.last = c; else if (k === 'opens') col.count = c; }
+    var next = g.sheet.getLastColumn();
+    if (col.first == null) { col.first = next++; g.sheet.getRange(g.header + 1, col.first + 1).setValue('First opened'); }
+    if (col.last == null) { col.last = next++; g.sheet.getRange(g.header + 1, col.last + 1).setValue('Last opened'); }
+    if (col.count == null) { col.count = next++; g.sheet.getRange(g.header + 1, col.count + 1).setValue('Opens'); }
+    var now = new Date(), tail = '?i=' + code, when = 'M/d/yyyy h:mm am/pm';
+    for (var r = g.header + 1; r < g.rows.length; r++) {
+      var link = String(g.rows[r][g.col.link] || ''), at = link.indexOf(tail);
+      if (at < 0) continue;
+      var rest = link.slice(at + tail.length), m = rest.match(/^&p=(\d+)/);
+      if (rest && !m) continue;                                        /* another code that merely starts with this one */
+      if (person && (!m || parseInt(m[1], 10) !== person)) continue;
+      var first = col.first < g.rows[r].length ? g.rows[r][col.first] : '', n = col.count < g.rows[r].length ? parseInt(g.rows[r][col.count], 10) : 0;
+      if (!first) g.sheet.getRange(r + 1, col.first + 1).setValue(now).setNumberFormat(when);
+      g.sheet.getRange(r + 1, col.last + 1).setValue(now).setNumberFormat(when);
+      g.sheet.getRange(r + 1, col.count + 1).setValue((isNaN(n) ? 0 : n) + 1);
+    }
+  } finally { lock.releaseLock(); }
 }
 
 function doPost(e) {

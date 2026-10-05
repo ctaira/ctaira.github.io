@@ -2033,7 +2033,7 @@ var RSVP_ENDPOINT = "https://script.google.com/macros/s/AKfycbw67OYinQn86DRyjkKN
     } else {
       /* The script's web app can answer a request with a transient error for a minute or two after it is
          redeployed or edited, so a failed lookup is retried a few times before the page gives up on it. */
-      var lookupUrl = RSVP_ENDPOINT + (RSVP_ENDPOINT.indexOf('?') < 0 ? '?' : '&') + 'i=' + encodeURIComponent(inviteCode);
+      var lookupUrl = RSVP_ENDPOINT + (RSVP_ENDPOINT.indexOf('?') < 0 ? '?' : '&') + 'i=' + encodeURIComponent(inviteCode) + (personIdx ? '&p=' + personIdx : '');
       (function lookup(attempt) {
         fetch(lookupUrl, { method: 'GET', cache: 'no-store' })
           .then(function (r) { return r.json(); })
