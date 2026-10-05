@@ -676,7 +676,9 @@ html.has-lightbox{overflow:hidden}
 .who-lbl:first-child{margin-top:0}
 .who-me .row{padding-top:.2em}
 .who-me .row.is-unnamed .nm{display:none}   /* the picker above already says who: just their reply */
-.who-me .row.is-unnamed{justify-content:flex-start;padding-top:.5em}
+.who-me .row.is-unnamed{padding-top:.2em}
+.who-me .row.is-unnamed select{width:auto;max-width:58%;flex:0 1 auto;font-size:17px;padding-right:30px}   /* the picker takes the name's place in its own row */
+@media (max-width:560px){.who-me .row.is-unnamed select{max-width:none;font-size:18px}}
 #rsvpForm.is-unnamed #nameRow ~ *{display:none}   /* a household link asks who you are first; the rest follows the answer */
 #fName .who-me:not(:empty)+.err{margin-top:.5em}
 .who .opts{display:flex;gap:6px;flex:none}
@@ -1968,6 +1970,7 @@ var RSVP_ENDPOINT = "https://script.google.com/macros/s/AKfycbxMlL1VRaa93cj5FcDg
   var pickedIdx = -1;   /* household link: the member chosen from the picker, -2 for "Someone else", -1 for nothing yet */
   function buildWho() {
     var keep = typeof answers === 'function' && members.length ? answers() : [];   /* answers already given survive a rebuild */
+    if ($('namePick').parentNode !== fName) fName.insertBefore($('namePick'), $('name'));   /* back under the label until a row claims it */
     whoBox.innerHTML = ''; whoMe.innerHTML = '';
     var list = members.length ? members : [guestName || 'You'];
     /* When the link names a person, their answer sits right under their name ("Your name and reply") and
@@ -2018,7 +2021,7 @@ var RSVP_ENDPOINT = "https://script.google.com/macros/s/AKfycbxMlL1VRaa93cj5FcDg
       if (prior[m]) {   /* an answer already sent, by them or by someone in their party: shown, and open to change */
         var pre = opts.querySelector('input[value="' + prior[m] + '"]'); if (pre) { pre.checked = true; row.classList.toggle('is-out', prior[m] === 'no'); }
       }
-      row.appendChild(nm); row.appendChild(opts); (mine ? whoMe : whoBox).appendChild(row);
+      row.appendChild(mine && picking ? pick : nm); row.appendChild(opts); (mine ? whoMe : whoBox).appendChild(row);   /* the chosen person's row carries the picker as its name */
     });
     keep.forEach(function (k, i) { if (k.answer) { var r = form.querySelector('input[name="who' + i + '"][value="' + k.answer + '"]'); if (r) { r.checked = true; r.closest('.row').classList.toggle('is-out', k.answer === 'no'); } } });
     $('whoHint').hidden = list.length < 2;   /* the note only makes sense when there is someone else to answer for */
