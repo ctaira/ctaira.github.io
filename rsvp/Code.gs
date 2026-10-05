@@ -26,7 +26,7 @@ var RSVP_DEADLINE = 'January 31, 2027';
 var GUEST_LIST = 'Guest List';   // the couple's own list: one row per person, with "Linked to another guest?"
 var GUESTS = 'Households';       // built from it by the Invitations menu: one row per household
 var LINK_COLUMN = 9;             // Guest List column that receives each person's invite link (9 = I)
-var SCRIPT_VERSION = 22;          // shown in the Invitations menu's messages, so you can tell which copy is running
+var SCRIPT_VERSION = 23;          // shown in the Invitations menu's messages, so you can tell which copy is running
 var RESPONSES = 'Responses';
 var MAX_SEATS = 6;
 var CODE_ALPHABET = 'abcdefghjkmnpqrstuvwxyz23456789'; // no 0/o/1/l, so codes survive being read aloud
@@ -396,7 +396,7 @@ function guestListColumns(makeSent) {
   if (h < 0) return null;
   for (c = 0; c < rows[h].length; c++) {
     var k = nameKey(rows[h][c]);
-    if (k.indexOf('first') === 0) col.first = c; else if (k.indexOf('last') === 0) col.last = c; else if (k.indexOf('email') === 0) col.email = c;
+    if (k === 'first name') col.first = c; else if (k === 'last name') col.last = c; else if (k.indexOf('email') === 0) col.email = c;
     else if (/^(invite|unique) link$/.test(k)) col.link = c; else if (k === 'invite sent') col.sent = c;
   }
   if (col.sent == null && makeSent) { col.sent = src.getLastColumn(); src.getRange(h + 1, col.sent + 1).setValue('Invite sent'); rows = src.getDataRange().getValues(); }
@@ -586,7 +586,7 @@ function readHouseholds() {
   if (h < 0) throw new Error('The "' + GUEST_LIST + '" tab has no "First Name" header.');
   for (c = 0; c < rows[h].length; c++) {
     var k = nameKey(rows[h][c]);
-    if (k.indexOf('first') === 0) col.first = c; else if (k.indexOf('last') === 0) col.last = c; else if (k.indexOf('side') === 0) col.side = c;
+    if (k === 'first name') col.first = c; else if (k === 'last name') col.last = c; else if (k.indexOf('side') === 0) col.side = c;   /* exact: 'First opened' / 'Last opened' are not name columns */
     else if (k.indexOf('email') === 0) col.email = c; else if (k.indexOf('linked') === 0) col.linked = c;
     else if (k === 'room' || k === 'household') col.group = c;   /* optional: people sharing a value are one household */
   }
