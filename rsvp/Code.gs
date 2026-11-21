@@ -24,7 +24,7 @@ var CONFIRM_SUBJECT_COMING = 'See you in Bali';
 var CONFIRM_SUBJECT_NOT = "We'll miss you in Bali";
 var RSVP_DEADLINE = 'January 31, 2027';
 var REMIND_SUBJECT = 'A little reminder to RSVP | Ashley & Charles, Bali 2027';
-var REMIND_CC = '';              // reminders go to the guest alone: a copy would double what each one costs against the daily email limit
+var REMIND_CC = 'charles.h.taira@gmail.com, ashleydong97@gmail.com, ashley.plus.charles@gmail.com';   // every reminder is copied here, except to whichever of these is sending it (its Sent folder already has it)
 var REMIND_GAP_DAYS = 7;         // "everyone who hasn't replied" skips anyone reminded in the last week, so a second round later on is possible but a double click is not
 var GUEST_LIST = 'Guest List';   // the couple's own list: one row per person, with "Linked to another guest?"
 var GUESTS = 'Households';       // built from it by the Invitations menu: one row per household
@@ -771,10 +771,17 @@ function sendReminder(e, to, subjectPrefix) {
     'Please RSVP by ' + RSVP_DEADLINE + '. It only takes a minute, and it helps us plan rooms and the weekend:\n' + e.link +
     '\n\nAlready replied? Thank you, and please ignore this note. Questions? Just reply to this email.\n\nAshley & Charles';
   var opts = mailOptions(to || e.email, (subjectPrefix || '') + REMIND_SUBJECT, reminderEmail(salutation, e.link), text);
-  if (REMIND_CC && !to) opts.cc = REMIND_CC;
+  var cc = remindCc(); if (cc.length && !to) opts.cc = cc.join(', ');
   opts.inlineImages = { reminder: reminderImage() };
   MailApp.sendEmail(opts);
 }
+
+/** The copies on each reminder, leaving out the account doing the sending. Each one counts against the daily limit. */
+function remindCc() {
+  var me = ''; try { me = Session.getEffectiveUser().getEmail().toLowerCase(); } catch (err) {}
+  return splitEmails(REMIND_CC).filter(function (x) { return x.toLowerCase() !== me; });
+}
+function reminderCost() { return 1 + remindCc().length; }   /* the guest plus each copy */
 
 /** The Guest List's "Reminder sent" column, added at the end the first time it is needed. */
 function reminderColumn() {
@@ -810,7 +817,7 @@ function sendSelectedReminders() {
   if (!list.length) { ui.alert('Nobody on the selected row(s) is waiting on a reminder: they have replied, have no email address, or were never sent an invitation.'); return; }
   var answer = ui.alert('Send a reminder to ' + list.length + ' email(s)?', list.map(function (e) { return describe(e) + (e.reminded ? ': this would be another reminder' : ''); }).join('\n'), ui.ButtonSet.YES_NO);
   if (answer !== ui.Button.YES) return;
-  if (MailApp.getRemainingDailyQuota() < list.length) { ui.alert('Not enough of today\'s email limit left for ' + list.length + ' email(s). Try again tomorrow, or select fewer rows.'); return; }
+  if (MailApp.getRemainingDailyQuota() < list.length * reminderCost()) { ui.alert('Not enough of today\'s email limit left for ' + list.length + ' reminder(s): with the copies, each one counts ' + reminderCost() + '. Try again tomorrow, or select fewer rows.'); return; }
   list.forEach(function (e) { sendReminder(e); stampReminders([e]); });
   ui.alert('Sent ' + list.length + ' reminder(s). Each person\'s "Reminder sent" date is on the ' + GUEST_LIST + ' tab.');
 }
@@ -821,11 +828,11 @@ function sendAllReminders() {
   var ui = SpreadsheetApp.getUi(), cutoff = new Date(Date.now() - REMIND_GAP_DAYS * 864e5);
   var all = unrepliedGuests(), due = all.filter(function (e) { return !e.reminded || new Date(e.reminded) < cutoff; });
   if (!due.length) { ui.alert(all.length ? 'Everyone who hasn\'t replied was reminded in the last ' + REMIND_GAP_DAYS + ' days. Nothing to send.' : 'Everyone invited has replied. Nothing to send.'); return; }
-  var left = MailApp.getRemainingDailyQuota(), now = due.slice(0, Math.max(0, left - 2));   /* keep a couple back for confirmations and replies */
-  if (!now.length) { ui.alert('Today\'s email limit is used up. ' + due.length + ' reminder(s) are waiting; run this again tomorrow.'); return; }
+  var left = MailApp.getRemainingDailyQuota(), cost = reminderCost(), now = due.slice(0, Math.max(0, Math.floor((left - 2) / cost)));   /* each reminder counts the guest plus its copies; keep a couple back for replies */
+  if (!now.length) { ui.alert('Not enough of today\'s email limit is left for a reminder and its ' + (cost - 1) + ' copies. ' + due.length + ' reminder(s) are waiting; run this again tomorrow.'); return; }
   var later = due.length - now.length;
   var answer = ui.alert('Send ' + now.length + ' reminder(s) now?',
-    now.map(describe).join('\n') + (later ? '\n\n' + later + ' more will wait for tomorrow: today\'s email limit allows ' + now.length + '.' : ''), ui.ButtonSet.YES_NO);
+    now.map(describe).join('\n') + '\n\nEach is copied to ' + (remindCc().join(', ') || 'nobody') + '.' + (later ? '\n\n' + later + ' more will wait for tomorrow: with the copies, today\'s email limit allows ' + now.length + '.' : ''), ui.ButtonSet.YES_NO);
   if (answer !== ui.Button.YES) return;
   var sent = 0;
   try { now.forEach(function (e) { sendReminder(e); stampReminders([e]); sent++; }); }
