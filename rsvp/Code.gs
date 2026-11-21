@@ -23,10 +23,13 @@ var INVITE_SUBJECT = 'Ashley & Charles are Getting Married | Bali 2027';
 var CONFIRM_SUBJECT_COMING = 'See you in Bali';
 var CONFIRM_SUBJECT_NOT = "We'll miss you in Bali";
 var RSVP_DEADLINE = 'January 31, 2027';
+var REMIND_SUBJECT = 'A little reminder to RSVP | Ashley & Charles, Bali 2027';
+var REMIND_CC = '';              // reminders go to the guest alone: a copy would double what each one costs against the daily email limit
+var REMIND_GAP_DAYS = 7;         // "everyone who hasn't replied" skips anyone reminded in the last week, so a second round later on is possible but a double click is not
 var GUEST_LIST = 'Guest List';   // the couple's own list: one row per person, with "Linked to another guest?"
 var GUESTS = 'Households';       // built from it by the Invitations menu: one row per household
 var LINK_COLUMN = 9;             // Guest List column that receives each person's invite link (9 = I)
-var SCRIPT_VERSION = 23;          // shown in the Invitations menu's messages, so you can tell which copy is running
+var SCRIPT_VERSION = 24;          // shown in the Invitations menu's messages, so you can tell which copy is running
 var RESPONSES = 'Responses';
 var MAX_SEATS = 6;
 var CODE_ALPHABET = 'abcdefghjkmnpqrstuvwxyz23456789'; // no 0/o/1/l, so codes survive being read aloud
@@ -34,6 +37,7 @@ var CODE_LENGTH = 6;
 var RESPONSE_HEADERS = ['Received', 'Code', 'Household', 'Replied by', 'Email', 'Person', 'Answer', 'Dietary', 'Note', 'Sent'];   // one row per person per reply
 var ATTENDING_TEXT = { both: 'Both days', saturday: 'Saturday only', no: 'Not coming' };
 var ATTENDING_KEY = { 'Both days': 'both', 'Saturday only': 'saturday', 'Not coming': 'no' };
+var ANSWER_LABEL = { both: 'Both days', saturday: 'Saturday only', no: 'Unable to attend' };   /* what guests read in their email; the sheet keeps ATTENDING_TEXT */
 
 function ss() { return SpreadsheetApp.getActive(); }
 
@@ -221,7 +225,7 @@ function sendConfirmation(guest, reply) {
   var back = guestLink(guest.code, idx);
   /* the whole household's standing, read back from the sheet: what this reply changed and what was already in */
   var current = latestAnswers(guest.code), all = guest.members.length ? guest.members : [guest.name];
-  var lines = all.filter(function (m) { return current[m]; }).map(function (m) { return [m, ATTENDING_TEXT[current[m]]]; });
+  var lines = all.filter(function (m) { return current[m]; }).map(function (m) { return [m, ANSWER_LABEL[current[m]]]; });
   var unanswered = all.filter(function (m) { return !current[m]; });
   if (reply.dietary) lines.push(['Dietary', reply.dietary]);
   if (reply.note) lines.push(['Note', reply.note]);
@@ -351,6 +355,11 @@ function onOpen() {
     .addItem('Send the selected household', 'sendSelectedHousehold')
     .addItem('Send invitations to unsent rows', 'sendInvitations')
     .addItem('Send a test invitation to me', 'sendTestInvitation')
+    .addSeparator()
+    .addItem('Who hasn\'t replied yet?', 'showUnreplied')
+    .addItem('Send a test reminder to me', 'sendTestReminder')
+    .addItem('Send reminders to the selected guests (Guest List rows)', 'sendSelectedReminders')
+    .addItem('Send reminders to everyone who hasn\'t replied', 'sendAllReminders')
     .addSeparator()
     .addItem('How many emails can I still send today?', 'showQuota')
     .addItem('Which version is this?', 'showVersion')
@@ -696,3 +705,131 @@ function fillCodes() {
     sheet.getRange(r + 1, 5).setValue(SITE_URL + '?i=' + code);
   }
 }
+
+/* ---- Reminders ------------------------------------------------------------ */
+
+/** The reminder artwork (Tuco & Elsa on the beach), fetched once from the site and embedded in each email. */
+var reminderBlob = null;
+function reminderImage() {
+  if (!reminderBlob) { reminderBlob = UrlFetchApp.fetch(SITE_URL + 'assets/email-reminder.jpg').getBlob(); reminderBlob.setName('reminder.jpg'); }
+  return reminderBlob;
+}
+
+/** Everyone on the Guest List who was sent an invitation, has an email address, and has no answer recorded for
+    themselves yet. Answers come from the Responses tab (the latest per person), so a partner who answered for
+    them counts. People sharing one address are folded into one email. Each entry:
+    { email, names: [full names], firsts, code, link, rows: [sheet rows], side, reminded: Date|'' } */
+function unrepliedGuests() {
+  var g = guestListColumns(false); if (!g || g.col.link == null) return [];
+  var h = g.rows[g.header], c, col = { side: null, reminded: null };
+  for (c = 0; c < h.length; c++) { var k = nameKey(h[c]); if (k.indexOf('side') === 0) col.side = c; else if (k === 'reminder sent') col.reminded = c; }
+  var answers = {}, rs = ss().getSheetByName(RESPONSES);
+  if (rs) rs.getDataRange().getValues().slice(1).forEach(function (r) { if (ATTENDING_KEY[String(r[6] || '')]) answers[normaliseCode(r[1]) + '|' + nameKey(r[5])] = true; });
+  var houses = {}, byKey = {}, out = [];
+  for (var r = g.header + 1; r < g.rows.length; r++) {
+    var row = g.rows[r];
+    var name = clean((row[g.col.first] || '') + ' ' + (row[g.col.last] || ''), 80);
+    var to = parseRecipients(row[g.col.email])[0];
+    var m = String(row[g.col.link] || '').match(/[?&]i=([a-z0-9]{6})(?:&p=(\d+))?/);
+    if (!name || !to || !m || (g.col.sent != null && !row[g.col.sent])) continue;   /* no address, no link, or never invited */
+    var code = m[1], idx = parseInt(m[2], 10) || 0;
+    if (!houses[code]) houses[code] = findGuest(code);
+    var guest = houses[code]; if (!guest) continue;
+    var member = guest.members[idx - 1] || name;
+    if (answers[code + '|' + nameKey(member)]) continue;
+    var key = to.email.toLowerCase() + '|' + code, reminded = col.reminded != null ? row[col.reminded] : '';
+    if (!byKey[key]) { byKey[key] = { email: to.email, names: [], firsts: [], code: code, idxs: [], rows: [], side: col.side != null ? clean(row[col.side], 10).toUpperCase() : '', reminded: reminded }; out.push(byKey[key]); }
+    var e = byKey[key]; e.names.push(member); e.firsts.push(clean(row[g.col.first], 40)); e.idxs.push(idx); e.rows.push(r + 1);
+    if (reminded && (!e.reminded || reminded > e.reminded)) e.reminded = reminded;
+  }
+  out.forEach(function (e) { e.link = guestLink(e.code, e.idxs.length === 1 ? e.idxs[0] : 0); });   /* a shared address gets the household link, which asks who is replying */
+  return out;
+}
+
+function joinNames(list) { return list.length < 2 ? (list[0] || '') : list.slice(0, -1).join(', ') + ' and ' + list[list.length - 1]; }
+
+function reminderEmail(salutation, link) {
+  var font = 'font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif;';
+  var p = 'margin:0 0 14px;' + font + 'font-size:17px;line-height:1.55;color:#2A2C27';
+  return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#E9E4D9" style="background-color:#E9E4D9"><tr><td align="center" style="padding:28px 12px">' +
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;background:#F7F3EA;border-radius:6px"><tr><td style="padding:36px 32px 28px">' +
+      '<p style="margin:0 0 6px;font-family:Menlo,Consolas,monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#8C6E4F">Ashley &amp; Charles &middot; AYANA Bali &middot; August 28, 2027</p>' +
+      '<p style="' + p + ';margin-bottom:18px">Dear ' + escapeHtml(salutation || 'friends') + ',</p>' +
+      '<p style="' + p + '">A gentle nudge from us, and from Tuco &amp; Elsa: we would love to know if you can join us in Bali.</p>' +
+      '<p style="' + p + ';margin-bottom:24px">Please RSVP by ' + escapeHtml(RSVP_DEADLINE) + '. It only takes a minute, and it helps us plan rooms and the weekend.</p>' +
+      '<a href="' + escapeHtml(link) + '" style="display:block;text-decoration:none"><img src="cid:reminder" width="536" alt="We\'re pawsitively awaiting your reply. A little reminder from Tuco &amp; Elsa. Please RSVP by ' + escapeHtml(RSVP_DEADLINE) + '. Open the invitation." style="display:block;width:100%;max-width:536px;height:auto;border:0;border-radius:4px"></a>' +
+      '<p style="margin:24px 0 0;' + font + 'font-size:13px;line-height:1.5;color:#7A7C74">Or copy this link: <a href="' + escapeHtml(link) + '" style="color:#3F5B45">' + escapeHtml(link) + '</a></p>' +
+      '<p style="margin:14px 0 0;' + font + 'font-size:13px;line-height:1.5;color:#7A7C74">Already replied? Thank you, and please ignore this note. Questions? Just reply to this email.</p>' +
+    '</td></tr></table>' +
+    '</td></tr></table>';
+}
+
+/** One reminder to one address. `e` is an entry from unrepliedGuests(); `to` overrides the address (for a test). */
+function sendReminder(e, to, subjectPrefix) {
+  var salutation = joinNames(e.firsts);
+  var text = 'Dear ' + salutation + ',\n\nA gentle nudge from us, and from Tuco & Elsa: we would love to know if you can join us in Bali.\n\n' +
+    'Please RSVP by ' + RSVP_DEADLINE + '. It only takes a minute, and it helps us plan rooms and the weekend:\n' + e.link +
+    '\n\nAlready replied? Thank you, and please ignore this note. Questions? Just reply to this email.\n\nAshley & Charles';
+  var opts = mailOptions(to || e.email, (subjectPrefix || '') + REMIND_SUBJECT, reminderEmail(salutation, e.link), text);
+  if (REMIND_CC && !to) opts.cc = REMIND_CC;
+  opts.inlineImages = { reminder: reminderImage() };
+  MailApp.sendEmail(opts);
+}
+
+/** The Guest List's "Reminder sent" column, added at the end the first time it is needed. */
+function reminderColumn() {
+  var g = guestListColumns(false), h = g.rows[g.header];
+  for (var c = 0; c < h.length; c++) if (nameKey(h[c]) === 'reminder sent') return { sheet: g.sheet, col: c + 1 };
+  var col = g.sheet.getLastColumn() + 1; g.sheet.getRange(g.header + 1, col).setValue('Reminder sent');
+  return { sheet: g.sheet, col: col };
+}
+function stampReminders(list) {
+  var rc = reminderColumn(), now = new Date();
+  list.forEach(function (e) { e.rows.forEach(function (r) { rc.sheet.getRange(r, rc.col).setValue(now).setNumberFormat('M/d/yyyy'); }); });
+}
+function describe(e) { return joinNames(e.names) + ' <' + e.email + '>' + (e.reminded ? '  (reminded ' + Utilities.formatDate(new Date(e.reminded), 'America/Los_Angeles', 'MMM d') + ')' : ''); }
+
+function showUnreplied() {
+  var list = unrepliedGuests(), people = 0; list.forEach(function (e) { people += e.names.length; });
+  SpreadsheetApp.getUi().alert(people + ' guest(s) in ' + list.length + ' email(s) have not replied yet', list.map(describe).join('\n') || 'Everyone invited has replied.');
+}
+
+function sendTestReminder() {
+  var me = Session.getEffectiveUser().getEmail(), list = unrepliedGuests();
+  var e = list[0] || { email: me, names: ['Test Guest'], firsts: ['Test'], link: SITE_URL };
+  sendReminder(e, me, '[Test] ');
+  SpreadsheetApp.getUi().alert('Test reminder sent to ' + me + (list[0] ? ', written as if to ' + joinNames(e.names) + '. Nothing was stamped.' : '.'));
+}
+
+function sendSelectedReminders() {
+  var ui = SpreadsheetApp.getUi(), active = ss().getActiveSheet();
+  if (!active || active.getName() !== GUEST_LIST) { ui.alert('Select one or more rows on the ' + GUEST_LIST + ' tab first.'); return; }
+  var range = active.getActiveRange(), r0 = range.getRow(), n = range.getNumRows(), picked = {};
+  for (var r = r0; r < r0 + n; r++) picked[r] = true;
+  var list = unrepliedGuests().filter(function (e) { return e.rows.some(function (r) { return picked[r]; }); });
+  if (!list.length) { ui.alert('Nobody on the selected row(s) is waiting on a reminder: they have replied, have no email address, or were never sent an invitation.'); return; }
+  var answer = ui.alert('Send a reminder to ' + list.length + ' email(s)?', list.map(function (e) { return describe(e) + (e.reminded ? ': this would be another reminder' : ''); }).join('\n'), ui.ButtonSet.YES_NO);
+  if (answer !== ui.Button.YES) return;
+  if (MailApp.getRemainingDailyQuota() < list.length) { ui.alert('Not enough of today\'s email limit left for ' + list.length + ' email(s). Try again tomorrow, or select fewer rows.'); return; }
+  list.forEach(function (e) { sendReminder(e); stampReminders([e]); });
+  ui.alert('Sent ' + list.length + ' reminder(s). Each person\'s "Reminder sent" date is on the ' + GUEST_LIST + ' tab.');
+}
+
+/** Everyone who hasn't replied and wasn't reminded in the last REMIND_GAP_DAYS days, as many as today's email
+    limit allows. Running it again later picks up where it stopped. */
+function sendAllReminders() {
+  var ui = SpreadsheetApp.getUi(), cutoff = new Date(Date.now() - REMIND_GAP_DAYS * 864e5);
+  var all = unrepliedGuests(), due = all.filter(function (e) { return !e.reminded || new Date(e.reminded) < cutoff; });
+  if (!due.length) { ui.alert(all.length ? 'Everyone who hasn\'t replied was reminded in the last ' + REMIND_GAP_DAYS + ' days. Nothing to send.' : 'Everyone invited has replied. Nothing to send.'); return; }
+  var left = MailApp.getRemainingDailyQuota(), now = due.slice(0, Math.max(0, left - 2));   /* keep a couple back for confirmations and replies */
+  if (!now.length) { ui.alert('Today\'s email limit is used up. ' + due.length + ' reminder(s) are waiting; run this again tomorrow.'); return; }
+  var later = due.length - now.length;
+  var answer = ui.alert('Send ' + now.length + ' reminder(s) now?',
+    now.map(describe).join('\n') + (later ? '\n\n' + later + ' more will wait for tomorrow: today\'s email limit allows ' + now.length + '.' : ''), ui.ButtonSet.YES_NO);
+  if (answer !== ui.Button.YES) return;
+  var sent = 0;
+  try { now.forEach(function (e) { sendReminder(e); stampReminders([e]); sent++; }); }
+  catch (err) { ui.alert('Stopped after ' + sent + ' reminder(s): ' + err.message + '\n\nEveryone already sent is stamped, so running this again carries on from here.'); return; }
+  ui.alert('Sent ' + sent + ' reminder(s).' + (later ? ' ' + later + ' still to go: run this again tomorrow and it carries on from there.' : ' That is everyone.'));
+}
+
