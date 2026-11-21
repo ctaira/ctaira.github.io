@@ -25,6 +25,7 @@ var CONFIRM_SUBJECT_NOT = "We'll miss you in Bali";
 var RSVP_DEADLINE = 'January 31, 2027';
 var REMIND_SUBJECT = 'A little reminder to RSVP | Ashley & Charles, Bali 2027';
 var REMIND_CC = 'charles.h.taira@gmail.com, ashleydong97@gmail.com, ashley.plus.charles@gmail.com';   // every reminder is copied here, except to whichever of these is sending it (its Sent folder already has it)
+var REMIND_SIDES = { 'charles.h.taira@gmail.com': 'C', 'ashleydong97@gmail.com': 'A' };   // run from one of these accounts, "everyone who hasn't replied" means that side only (plus anyone marked Both); from any other account, both sides
 var REMIND_GAP_DAYS = 7;         // "everyone who hasn't replied" skips anyone reminded in the last week, so a second round later on is possible but a double click is not
 var GUEST_LIST = 'Guest List';   // the couple's own list: one row per person, with "Linked to another guest?"
 var GUESTS = 'Households';       // built from it by the Invitations menu: one row per household
@@ -717,7 +718,7 @@ function reminderImage() {
 
 /** Everyone on the Guest List who was sent an invitation, has an email address, and has no answer recorded for
     themselves yet. Answers come from the Responses tab (the latest per person), so a partner who answered for
-    them counts. People sharing one address are folded into one email. Each entry:
+    them counts. Anyone with "Skip" in the "Reminder sent" column is left out. People sharing one address are folded into one email. Each entry:
     { email, names: [full names], firsts, code, link, rows: [sheet rows], side, reminded: Date|'' } */
 function unrepliedGuests() {
   var g = guestListColumns(false); if (!g || g.col.link == null) return [];
@@ -738,6 +739,7 @@ function unrepliedGuests() {
     var member = guest.members[idx - 1] || name;
     if (answers[code + '|' + nameKey(member)]) continue;
     var key = to.email.toLowerCase() + '|' + code, reminded = col.reminded != null ? row[col.reminded] : '';
+    if (/^\s*skip/i.test(String(reminded))) continue;   /* "Skip" in the Reminder sent column: never remind this person */
     if (!byKey[key]) { byKey[key] = { email: to.email, names: [], firsts: [], code: code, idxs: [], rows: [], side: col.side != null ? clean(row[col.side], 10).toUpperCase() : '', reminded: reminded }; out.push(byKey[key]); }
     var e = byKey[key]; e.names.push(member); e.firsts.push(clean(row[g.col.first], 40)); e.idxs.push(idx); e.rows.push(r + 1);
     if (reminded && (!e.reminded || reminded > e.reminded)) e.reminded = reminded;
@@ -782,6 +784,13 @@ function remindCc() {
   return splitEmails(REMIND_CC).filter(function (x) { return x.toLowerCase() !== me; });
 }
 function reminderCost() { return 1 + remindCc().length; }   /* the guest plus each copy */
+/** The side of the list this account sends reminders to ('C', 'A'), or '' for everyone. */
+function remindSide() {
+  var me = ''; try { me = Session.getEffectiveUser().getEmail().toLowerCase(); } catch (err) {}
+  var side = ''; Object.keys(REMIND_SIDES).forEach(function (k) { if (k.toLowerCase() === me) side = REMIND_SIDES[k]; });
+  return side;
+}
+function sideName(side) { return side === 'C' ? 'Charles\'s side (C)' : side === 'A' ? 'Ashley\'s side (A)' : 'both sides'; }
 
 /** The Guest List's "Reminder sent" column, added at the end the first time it is needed. */
 function reminderColumn() {
@@ -797,8 +806,9 @@ function stampReminders(list) {
 function describe(e) { return joinNames(e.names) + ' <' + e.email + '>' + (e.reminded ? '  (reminded ' + Utilities.formatDate(new Date(e.reminded), 'America/Los_Angeles', 'MMM d') + ')' : ''); }
 
 function showUnreplied() {
-  var list = unrepliedGuests(), people = 0; list.forEach(function (e) { people += e.names.length; });
-  SpreadsheetApp.getUi().alert(people + ' guest(s) in ' + list.length + ' email(s) have not replied yet', list.map(describe).join('\n') || 'Everyone invited has replied.');
+  var list = unrepliedGuests(), people = 0, by = {}; list.forEach(function (e) { people += e.names.length; by[e.side || '?'] = (by[e.side || '?'] || 0) + 1; });
+  var sides = Object.keys(by).sort().map(function (k) { return k + ': ' + by[k]; }).join(', ');
+  SpreadsheetApp.getUi().alert(people + ' guest(s) in ' + list.length + ' email(s) have not replied yet (emails by side: ' + sides + ')', list.map(function (e) { return e.side + '  ' + describe(e); }).join('\n') || 'Everyone invited has replied.');
 }
 
 function sendTestReminder() {
@@ -814,7 +824,7 @@ function sendSelectedReminders() {
   var range = active.getActiveRange(), r0 = range.getRow(), n = range.getNumRows(), picked = {};
   for (var r = r0; r < r0 + n; r++) picked[r] = true;
   var list = unrepliedGuests().filter(function (e) { return e.rows.some(function (r) { return picked[r]; }); });
-  if (!list.length) { ui.alert('Nobody on the selected row(s) is waiting on a reminder: they have replied, have no email address, or were never sent an invitation.'); return; }
+  if (!list.length) { ui.alert('Nobody on the selected row(s) is waiting on a reminder: they have replied, have no email address, were never sent an invitation, or are marked Skip.'); return; }
   var answer = ui.alert('Send a reminder to ' + list.length + ' email(s)?', list.map(function (e) { return describe(e) + (e.reminded ? ': this would be another reminder' : ''); }).join('\n'), ui.ButtonSet.YES_NO);
   if (answer !== ui.Button.YES) return;
   if (MailApp.getRemainingDailyQuota() < list.length * reminderCost()) { ui.alert('Not enough of today\'s email limit left for ' + list.length + ' reminder(s): with the copies, each one counts ' + reminderCost() + '. Try again tomorrow, or select fewer rows.'); return; }
@@ -826,12 +836,14 @@ function sendSelectedReminders() {
     limit allows. Running it again later picks up where it stopped. */
 function sendAllReminders() {
   var ui = SpreadsheetApp.getUi(), cutoff = new Date(Date.now() - REMIND_GAP_DAYS * 864e5);
-  var all = unrepliedGuests(), due = all.filter(function (e) { return !e.reminded || new Date(e.reminded) < cutoff; });
-  if (!due.length) { ui.alert(all.length ? 'Everyone who hasn\'t replied was reminded in the last ' + REMIND_GAP_DAYS + ' days. Nothing to send.' : 'Everyone invited has replied. Nothing to send.'); return; }
+  var side = remindSide();
+  var all = unrepliedGuests().filter(function (e) { return !side || e.side === side || e.side === 'BOTH'; });
+  var due = all.filter(function (e) { return !e.reminded || new Date(e.reminded) < cutoff; });
+  if (!due.length) { ui.alert(all.length ? 'Everyone on ' + sideName(side) + ' who hasn\'t replied was reminded in the last ' + REMIND_GAP_DAYS + ' days. Nothing to send.' : 'Everyone invited on ' + sideName(side) + ' has replied. Nothing to send.'); return; }
   var left = MailApp.getRemainingDailyQuota(), cost = reminderCost(), now = due.slice(0, Math.max(0, Math.floor((left - 2) / cost)));   /* each reminder counts the guest plus its copies; keep a couple back for replies */
   if (!now.length) { ui.alert('Not enough of today\'s email limit is left for a reminder and its ' + (cost - 1) + ' copies. ' + due.length + ' reminder(s) are waiting; run this again tomorrow.'); return; }
   var later = due.length - now.length;
-  var answer = ui.alert('Send ' + now.length + ' reminder(s) now?',
+  var answer = ui.alert('Send ' + now.length + ' reminder(s) to ' + sideName(side) + ' now?',
     now.map(describe).join('\n') + '\n\nEach is copied to ' + (remindCc().join(', ') || 'nobody') + '.' + (later ? '\n\n' + later + ' more will wait for tomorrow: with the copies, today\'s email limit allows ' + now.length + '.' : ''), ui.ButtonSet.YES_NO);
   if (answer !== ui.Button.YES) return;
   var sent = 0;
