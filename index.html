@@ -647,7 +647,7 @@ html.has-lightbox{overflow:hidden}
 .rsvp>.inner{padding-left:calc(var(--arch-w) * .07);padding-right:calc(var(--arch-w) * .07)}
 .field{margin-bottom:1em}
 .field-row{display:grid;gap:0 1.4em}
-.field-row.is-single{grid-template-columns:1fr!important}   /* the name alone spans the row */
+.field-row.is-single{grid-template-columns:minmax(0,1fr)!important}   /* the name alone spans the row; minmax keeps the name picker from widening it */
 @media (min-width:480px){.field-row{grid-template-columns:1fr 1fr}}
 .field label,.field legend{display:block;font-family:var(--mono);font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:var(--olive-soft);margin-bottom:.25em;padding:0}
 .field input,.field select,.field textarea{width:100%;background:transparent;border:0;border-bottom:1px solid rgba(89,96,68,.4);padding:.4em 0;border-radius:0;color:var(--olive)}
@@ -677,7 +677,8 @@ html.has-lightbox{overflow:hidden}
 .who-me .row{padding-top:.2em}
 .who-me .row.is-unnamed .nm{display:none}   /* the picker above already says who: just their reply */
 .who-me .row.is-unnamed{padding-top:.2em}
-.who-me .row.is-unnamed select{width:auto;max-width:58%;flex:0 1 auto;font-size:17px;padding-right:30px}   /* the picker takes the name's place in its own row */
+.who-me .row.is-unnamed select{width:auto;max-width:58%;flex:0 1 auto;min-width:0;text-overflow:ellipsis;font-size:17px;padding-right:22px;background-position:calc(100% - 8px) 55%,calc(100% - 2px) 55%}
+.who-me .row.is-unnamed{gap:.75em}   /* the picker takes the name's place in its own row */
 @media (max-width:560px){.who-me .row.is-unnamed select{max-width:none;font-size:18px}}
 #rsvpForm.is-unnamed #nameRow ~ *{display:none}   /* a household link asks who you are first; the rest follows the answer */
 #fName .who-me:not(:empty)+.err{margin-top:.5em}
@@ -695,8 +696,9 @@ html.has-lightbox{overflow:hidden}
   .who .row{flex-direction:column;align-items:stretch;gap:.7em;padding:1.1em 0}
   .who .nm{font-size:18px}
   .who .opts{width:100%;gap:0;border:1px solid var(--gold-line);border-radius:999px;overflow:hidden}
-  .who .opts label{flex:1;min-width:0}
-  .who .opts span{display:block;text-align:center;padding:.75em .3em;font-size:15px;border:0;border-radius:0;border-left:1px solid rgba(155,139,87,.5)}
+  .who .opts label{flex:1 1 auto;min-width:0;display:flex}   /* segments take the width their words need, so "Unable to attend" is never cut */
+  .who .opts span{display:flex;align-items:center;justify-content:center;flex:1;text-align:center;padding:.75em .45em;font-size:15px;line-height:1.25;white-space:normal;border:0;border-radius:0;border-left:1px solid rgba(155,139,87,.5)}
+  @media (max-width:360px){.who .opts span{font-size:13.5px;padding:.8em .3em}}
   #email::placeholder,#diet::placeholder{font-size:14px}   /* the whole sentence fits a narrow screen */
   .who .opts label:first-child span{border-left:0}
   #fWho .hint-line{margin-top:1em;line-height:1.5}
@@ -1068,7 +1070,7 @@ html.has-lightbox{overflow:hidden}
       </li>
       <li class="fq">
         <img class="fq-art" data-src="assets/faq-buggy.webp" alt="A cream resort buggy." width="560" height="394" loading="lazy" decoding="async">
-        <div class="fq-body"><h3>Do I need a car?</h3><p>No. Everything is on the estate and the shuttle runs around the clock. Gojek, Grab or a taxi from the airport also work well.</p></div>
+        <div class="fq-body"><h3>Do I need a car?</h3><p>No. AYANA’s shuttle makes it easy to get around the estate. For travel to and from the airport, or to explore beyond the estate, Gojek, Grab, and taxis are convenient options.</p></div>
       </li>
       <li class="fq">
         <img class="fq-art" data-src="assets/faq-bunny.webp" alt="A plush bunny among leaves and plumeria." width="560" height="470" loading="lazy" decoding="async">
@@ -1100,7 +1102,7 @@ html.has-lightbox{overflow:hidden}
 <section class="section rsvp" id="rsvp">
   <div class="inner">
     <span class="eyebrow">08 — RSVP</span>
-    <h2>Will you come?</h2>
+    <h2>Will you join us?</h2>
     <p class="deadline" id="deadline">Reply by January 31, 2027</p>
 
     <div class="gate" id="rsvpGate" hidden>
@@ -1946,7 +1948,7 @@ var RSVP_ENDPOINT = "https://script.google.com/macros/s/AKfycbxMlL1VRaa93cj5FcDg
   var fName = $('fName'), fDiet = $('fDiet'), fEmail = $('fEmail'), fWho = $('fWho'), whoBox = $('who'), whoMe = $('whoMe');
   function validEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v); }
   function nameKey(v) { return String(v || '').toLowerCase().replace(/[^a-z ]/g, ' ').replace(/\s+/g, ' ').trim(); }
-  var ANSWERS = [['both', 'Both days'], ['saturday', 'Saturday'], ['no', 'Not coming']];
+  var ANSWERS = [['both', 'Both days'], ['saturday', 'Saturday'], ['no', 'Unable to attend']];
 
   /* Which row is the person replying: the one this link was sent to, else the one whose name they typed. */
   function myRow() {
