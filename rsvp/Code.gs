@@ -25,12 +25,13 @@ var CONFIRM_SUBJECT_NOT = "We'll miss you in Bali";
 var RSVP_DEADLINE = 'January 31, 2027';
 var REMIND_SUBJECT = 'A little reminder to RSVP | Ashley & Charles, Bali 2027';
 var REMIND_CC = 'charles.h.taira@gmail.com, ashleydong97@gmail.com, ashley.plus.charles@gmail.com';   // every reminder is copied here, except to whichever of these is sending it (its Sent folder already has it)
-var REMIND_SIDES = { 'charles.h.taira@gmail.com': 'C', 'ashleydong97@gmail.com': 'A' };   // run from one of these accounts, "everyone who hasn't replied" means that side only (plus anyone marked Both); from any other account, both sides
+var REMIND_SIDES = { 'charles.h.taira@gmail.com': 'C', 'ashleydong97@gmail.com': 'A' };   // run from one of these accounts, "everyone who hasn't replied" means that side only; from any other account, both sides
+var REMIND_BOTH_SIDE = 'A';      // guests marked Both are reminded with this side (Ashley's)
 var REMIND_GAP_DAYS = 7;         // "everyone who hasn't replied" skips anyone reminded in the last week, so a second round later on is possible but a double click is not
 var GUEST_LIST = 'Guest List';   // the couple's own list: one row per person, with "Linked to another guest?"
 var GUESTS = 'Households';       // built from it by the Invitations menu: one row per household
 var LINK_COLUMN = 9;             // Guest List column that receives each person's invite link (9 = I)
-var SCRIPT_VERSION = 24;          // shown in the Invitations menu's messages, so you can tell which copy is running
+var SCRIPT_VERSION = 25;          // shown in the Invitations menu's messages, so you can tell which copy is running
 var RESPONSES = 'Responses';
 var MAX_SEATS = 6;
 var CODE_ALPHABET = 'abcdefghjkmnpqrstuvwxyz23456789'; // no 0/o/1/l, so codes survive being read aloud
@@ -837,7 +838,7 @@ function sendSelectedReminders() {
 function sendAllReminders() {
   var ui = SpreadsheetApp.getUi(), cutoff = new Date(Date.now() - REMIND_GAP_DAYS * 864e5);
   var side = remindSide();
-  var all = unrepliedGuests().filter(function (e) { return !side || e.side === side || e.side === 'BOTH'; });
+  var all = unrepliedGuests().filter(function (e) { return !side || (e.side === 'BOTH' ? REMIND_BOTH_SIDE : e.side) === side; });
   var due = all.filter(function (e) { return !e.reminded || new Date(e.reminded) < cutoff; });
   if (!due.length) { ui.alert(all.length ? 'Everyone on ' + sideName(side) + ' who hasn\'t replied was reminded in the last ' + REMIND_GAP_DAYS + ' days. Nothing to send.' : 'Everyone invited on ' + sideName(side) + ' has replied. Nothing to send.'); return; }
   var left = MailApp.getRemainingDailyQuota(), cost = reminderCost(), now = due.slice(0, Math.max(0, Math.floor((left - 2) / cost)));   /* each reminder counts the guest plus its copies; keep a couple back for replies */
